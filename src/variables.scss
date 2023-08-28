@@ -1,0 +1,9 @@
+/* Variables and mixins declared here will be available in all other SCSS files */ /* https://github.com/jgthms/bulma/issues/1293 */
+$body-overflow-y: auto;
+
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
+$family-sans-serif: "Raleway";
+$weight-bold: 900;
+
+$primary: #0f3760;
+$light-blue: #cfedff;
