@@ -7,7 +7,7 @@ export async function load(){
     // const post = await import(`../${params.slug}.md`)
     const body = await getLessonGroups();
     const content = await Promise.all(body)
-    // console.log(content)
+    console.log(content)
     return {
       content
     }

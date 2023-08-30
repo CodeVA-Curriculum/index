@@ -40,20 +40,49 @@ const fetchMarkdownPosts = async () => {
 function getLessonGroups() {
   const posts = import.meta.glob('$content/*/meta.md'  )
 
+  // console.log(posts)
+
   let body = []
+  // @ts-ignore
   let paths = []
 // console.log(posts)
   for (const path in posts) {
-      paths.push(path);
+      // paths.push(path);
       // @ts-ignore
-      body.push(posts[path]().then(({metadata}) => {
+      body.push(posts[path]().then((obj) => {
         return { 
-            ...metadata,
-            path: path.slice("/src/content/".length, -3)
+            // @ts-ignore
+            ...obj.metadata,
+            path: path.slice("/src/content/".length, -3),
+            // @ts-ignore
+            content: obj.default
          }
     }))
   }
+  // console.log(body)
   return body;
 }
 
-export {fetchMarkdownPosts, getLessonGroups}
+// @ts-ignore
+async function importDocument(doc) {
+    
+  let body = [];
+  for (const path in doc) {
+    // @ts-ignore
+    body.push(doc[path]().then((obj) => {
+      return { 
+          // @ts-ignore
+          ...obj.metadata,
+          path: path.slice("/src/content/".length, -3),
+          // @ts-ignore
+          content: obj.default
+      }
+    }))
+  }
+  // const { title, type, authors } = post.metadata
+  // const content = post.default
+
+  return body[0]
+}
+
+export {fetchMarkdownPosts, getLessonGroups, importDocument}
