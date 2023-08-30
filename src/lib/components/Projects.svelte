@@ -1,25 +1,34 @@
 <script lang='ts'>
-   let elems:number[] = [0, 0, 0, 0, 0, 0] 
+    export let elems:any = []
+//    let elems:number[] = [0, 0, 0, 0, 0, 0] 
 </script>
 
 <div class='projects'>
     {#each elems as el}
-        <div class='orb'>
+        <a class='orb' href="/">
             <img alt='a placeholder' src='https://placekitten.com/400/400' >
-            <a href='/'><p>Title of Resource</p></a>
-        </div>
+            <p>{el.title}</p>
+        </a>
     {/each}
 </div>
 
 <style>
     .orb {
         display: inline-block;
-        width: 160px;
-        margin: 10px 10px;
+        width: 200px;
+        padding: 1rem 1rem;
+        margin: 1rem 1rem;
         text-align: center;
+        vertical-align: top;
+        border-radius: 20px;
+    }
+    .orb:hover {
+        background-color: whitesmoke;
     }
     .orb > img {
         border-radius: 80px;
+        width: 160px;
+        
     }
     .projects {
         text-align: center;

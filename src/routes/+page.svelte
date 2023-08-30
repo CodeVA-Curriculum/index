@@ -1,5 +1,6 @@
 <script>
     import logo from '$lib/assets/CodeVA_Logo_Primary.png';
+    import {base} from '$app/paths'
     import Projects from '$lib/components/Projects.svelte'
 </script>
 
@@ -10,8 +11,8 @@
             <img alt="The CodeVA logo" src={logo} />
             <h1 class="title my-5">Curriculum Website</h1>
             <div class='buttons is-centered pt-5'>
-                <a class='button is-large is-primary'>Our Projects</a>
-                <a class='button is-large'>About CodeVA</a>
+                <a href='{base}/lessons' class='button is-large is-primary'>Lessons</a>
+                <a href='{base}/about' class='button is-large'>About CodeVA</a>
             </div>
         </div>
         
@@ -20,7 +21,7 @@
 
 <style>
     img {
-        max-width: 50%;
+        max-width: 80%;
         margin: 0 auto;
         padding-left: 6rem;
     }

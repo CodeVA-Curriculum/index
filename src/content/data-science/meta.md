@@ -5,7 +5,7 @@ type: group
 contents:
     - ./unplugged.md
     - ./codap.md
-    - ./unplugged.md
+    - ./python.md
 ---
 
 TODO: description of resource.
