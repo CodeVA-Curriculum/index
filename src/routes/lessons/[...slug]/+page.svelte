@@ -2,14 +2,20 @@
 <script>
     export let data;
     import DocumentHeader from '$lib/components/DocumentHeader.svelte';
+
+    import {onMount} from 'svelte'
+
+    onMount(()=>{
+        console.log(data)
+    })
 </script>
 
 <div class='document section content'>
-    <DocumentHeader meta={data} />
+    <DocumentHeader meta={data.metadata} />
     <hr>
     <div class='columns'>
         <div class='column is-two-thirds'>
-            <svelte:component this={data.content} />
+            {@html data.content}
         </div>
         <div class='column'>
             <div class='sidebar'>

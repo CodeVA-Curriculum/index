@@ -38,7 +38,7 @@ const fetchMarkdownPosts = async () => {
 // }
 
 function getLessonGroups() {
-  const posts = import.meta.glob('$content/*/meta.md'  )
+  const posts = import.meta.glob('$content/**/meta.md'  )
 
   // console.log(posts)
 
