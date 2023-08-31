@@ -35,7 +35,7 @@
                 About
             </a>
             <a class="navbar-item"
-                href='{base}/projects'
+                href='{base}/lessons'
             >
                 Our Projects
             </a>
