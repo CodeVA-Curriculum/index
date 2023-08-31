@@ -47,7 +47,7 @@ function getLessonGroups() {
   let paths = []
 // console.log(posts)
   for (const path in posts) {
-      // paths.push(path);
+      paths.push(path);
       // @ts-ignore
       body.push(posts[path]().then((obj) => {
         return { 

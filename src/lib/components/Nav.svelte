@@ -37,7 +37,12 @@
             <a class="navbar-item"
                 href='{base}/lessons'
             >
-                Our Projects
+                Lesson Plans
+            </a>
+            <a class="navbar-item"
+                href='{base}/'
+            >
+                Curriculum Resources
             </a>
         </div>
     </div>

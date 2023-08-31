@@ -1,11 +1,12 @@
 <script lang='ts'>
+    import {base} from '$app/paths'
     export let elems:any = []
 //    let elems:number[] = [0, 0, 0, 0, 0, 0] 
 </script>
 
 <div class='projects'>
     {#each elems as el}
-        <a class='orb' href="/">
+        <a class='orb' href="{base}/lessons/{el.path}">
             <img alt='a placeholder' src='https://placekitten.com/400/400' >
             <p>{el.title}</p>
         </a>
