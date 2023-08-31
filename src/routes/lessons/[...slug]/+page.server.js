@@ -20,6 +20,23 @@ function validatePath(path) {
   }
 }
 
+async function parseFrontmatter(path) {
+  let frontmatter;
+  // console.log(path.substring(1))
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkFrontmatter, ['yaml'])
+    .use(() => (tree) => {
+      frontmatter = YAML.parse(tree.children[0].value)
+      frontmatter.path = path
+    })
+    .use(remarkRehype)
+    .use(rehypeFormat)
+    .use(rehypeStringify)
+    .process(await read(path.substring(1)))
+  return frontmatter
+}
+
 async function parseFile(path) {
   let frontmatter;
   const file = await unified()
@@ -27,6 +44,7 @@ async function parseFile(path) {
     .use(remarkFrontmatter, ['yaml'])
     .use(() => (tree) => {
       frontmatter = YAML.parse(tree.children[0].value)
+      frontmatter.path = path
     })
     .use(remarkGfm)
     .use(remarkRehype)
@@ -34,10 +52,34 @@ async function parseFile(path) {
     .use(rehypeStringify)
     .process(await read('src/content/'+path+'.md'))
 
+    // TODO: if the file is not a group, find its parents
+    const possibleParents = await import.meta.glob('$content/**/meta.md')
+    let actualParents = []
+    for(const parent in possibleParents) {
+      const parentFrontmatter = await parseFrontmatter(parent)
+      for(let i=0;i<parentFrontmatter.contents.length;i++) {
+        const parentPath = parentFrontmatter.path
+        const docName = parentFrontmatter.contents[i].replace('./', parentPath.substring(0, parentPath.indexOf('/meta.md'))+'/')
+        if(docName == '/src/content/'+path+'.md') {
+          console.log('Found parent at', parentPath)
+          // get parent object info
+          possibleParents[parentPath]().then((obj) => {
+            actualParents.push({
+              ...obj.metadata,
+              path: parentPath.substring('/src/content/'.length, parentPath.length-'meta.md'.length),
+              // content: obj.default
+            })
+          })
+        }
+      }
+    }
+    // console.log(actualParents)
+    frontmatter.parents = actualParents;
+
     return {
       file: file,
       frontmatter: frontmatter,
-      type: path.includes('meta') ? 'group' : 'document'
+      type: path.includes('meta') ? 'group' : 'document',
     };
 }
 
@@ -45,9 +87,11 @@ export async function load({ params }){
   const path = validatePath(params.slug)
   if(path) {
     const data = await parseFile(path)
+    console.log(data.frontmatter.parents)
     return {
       content: data.file.toString(),
-      metadata: data.frontmatter
+      metadata: data.frontmatter,
+      path: data.path
     }
   } else {
     throw error(404, {

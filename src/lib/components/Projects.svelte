@@ -6,6 +6,7 @@
 
 <div class='projects'>
     {#each elems as el}
+    <!-- {console.log(el.path)} -->
         <a class='orb' href="{base}/lessons/{el.path}">
             <img alt='a placeholder' src='https://placekitten.com/400/400' >
             <p>{el.title}</p>

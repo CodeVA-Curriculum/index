@@ -1,27 +1,32 @@
 <script lang='ts'>
     import Breadcrumb from "./Breadcrumb.svelte";
+    import {base} from '$app/paths'
 
     interface Metadata {
         title:string,
-        authors:string
+        authors:string,
+        path:string,
+        parents?:string[]
     }
 
     export let meta:Metadata;
+
+    // TODO: render nodes
     
     let nodes = [
         {
-            title: "Project-Based Data Science",
-            link: "/"
+            title: '. .',
+            link: `${base}/lessons`
         },
         {
             title: meta.title,
-            link: "/"
+            link: meta.path       
         }
     ]
 </script>
 
 <div class='document-header content'>
-    <Breadcrumb nodes={nodes} here={meta.title} />
+    <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} />
     <div class='columns'>
         <div class='column is-one-quarter'>
             <img alt="a placeholder" src="https://placekitten.com/400/400">
@@ -29,7 +34,15 @@
         <div class='column ml-5'>
             <h1>{meta.title}</h1>
             <p class='heading'>by {meta.authors}</p>
-            <p>Part of the <i>Project-Based Data Science</i> project.</p>
+            {#if meta.parents.length > 0}
+            <p>Part of the 
+                {#each meta.parents as parent, i}
+                {#if i!=0},{/if}
+                {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
+                <a data-sveltekit-reload href='{base}/lessons/{parent.path}'><i>{parent.title}</i></a>
+                {/each}
+                project{meta.parents.length>1 ? 's' : ''}.</p>
+            {/if}
             <div class='metadata'>
                 <p><strong>Subject: </strong>Computer Science</p>
                 <p><strong>Level: </strong>High School</p>

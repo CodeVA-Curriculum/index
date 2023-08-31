@@ -53,7 +53,7 @@ function getLessonGroups() {
         return { 
             // @ts-ignore
             ...obj.metadata,
-            path: path.slice("/src/content/".length, -3),
+            path: path.slice("/src/content/".length, -7),
             // @ts-ignore
             content: obj.default
          }
