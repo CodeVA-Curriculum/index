@@ -21,7 +21,9 @@ function validatePath(path) {
 }
 
 async function parseFrontmatter(path) {
-  let frontmatter;
+  let frontmatter = {
+    path: ''
+  };
   // console.log(path.substring(1))
   const file = await unified()
     .use(remarkParse)
@@ -52,29 +54,18 @@ async function parseFile(path) {
     .use(rehypeStringify)
     .process(await read('src/content/'+path+'.md'))
 
-    // TODO: if the file is not a group, find its parents
-    const possibleParents = await import.meta.glob('$content/**/meta.md')
-    let actualParents = []
-    for(const parent in possibleParents) {
-      const parentFrontmatter = await parseFrontmatter(parent)
-      for(let i=0;i<parentFrontmatter.contents.length;i++) {
-        const parentPath = parentFrontmatter.path
-        const docName = parentFrontmatter.contents[i].replace('./', parentPath.substring(0, parentPath.indexOf('/meta.md'))+'/')
-        if(docName == '/src/content/'+path+'.md') {
-          console.log('Found parent at', parentPath)
-          // get parent object info
-          possibleParents[parentPath]().then((obj) => {
-            actualParents.push({
-              ...obj.metadata,
-              path: parentPath.substring('/src/content/'.length, parentPath.length-'meta.md'.length),
-              // content: obj.default
-            })
-          })
-        }
-      }
+    // Find parents of document or group
+    frontmatter.parents = await findParentFrontmatter(path);
+
+    // TODO: If element frontmatter has a `contents`field, find child elements
+    if(frontmatter.contents) {
+      frontmatter.children = await findChildFrontmatter(frontmatter)
+    } else {
+      frontmatter.children = []
     }
-    // console.log(actualParents)
-    frontmatter.parents = actualParents;
+
+    // TODO: if frontmatter indicates inheritance, inherit all null fields from indicated meta file.
+
 
     return {
       file: file,
@@ -83,15 +74,53 @@ async function parseFile(path) {
     };
 }
 
+async function findChildFrontmatter(frontmatter) {
+  let children = []
+  const thisPath = frontmatter.path.replace('/meta', '/')
+  for(let i=0;i<frontmatter.contents.length;i++) {
+    //TODO: treat child directories and child files differently
+    const childPath= frontmatter.contents[i].replace('./', '')
+    const childFrontmatter = await parseFrontmatter('/src/content/'+thisPath+childPath)
+    children.push(childFrontmatter)
+  }
+  // console.log(children)
+  return children
+}
+
+async function findParentFrontmatter(path) {
+  const possibleParents = await import.meta.glob('$content/**/meta.md')
+  let actualParents = []
+  for(const parent in possibleParents) {
+    const parentFrontmatter = await parseFrontmatter(parent)
+    for(let i=0;i<parentFrontmatter.contents.length;i++) {
+      const parentPath = parentFrontmatter.path
+      const docName = parentFrontmatter.contents[i].replace('./', parentPath.substring(0, parentPath.indexOf('/meta.md'))+'/')
+      if(docName == '/src/content/'+path+'.md') {
+        console.log('Found parent at', parentPath)
+        // get parent object info
+        possibleParents[parentPath]().then((obj) => {
+          actualParents.push({
+            ...obj.metadata,
+            path: parentPath.substring('/src/content/'.length, parentPath.length-'meta.md'.length),
+            // content: obj.default // Do not include parent content
+          })
+        })
+      }
+    }
+  }
+  return actualParents;
+}
+
 export async function load({ params }){
   const path = validatePath(params.slug)
   if(path) {
     const data = await parseFile(path)
-    console.log(data.frontmatter.parents)
+    console.log(data.frontmatter)
     return {
       content: data.file.toString(),
       metadata: data.frontmatter,
-      path: data.path
+      path: data.path,
+      type: data.type
     }
   } else {
     throw error(404, {

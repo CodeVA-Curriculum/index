@@ -36,3 +36,14 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Terms
+
+| Term | Definition |
+| element | Any document or group in the `src/content` folder. All elements are represented by `.md` files, and must either include or inherit `title` and `authors` values in YAML frontmatter |
+| document | An element without child elements (e.g., a lesson plan) |
+| group | An element with child elements, usually represented by a `meta.md` file. Child elements are included in a `contents` field in YAML frontmatter. |
+
+## Search
+
+The website allows for "queries" (it's a static site, so they aren't *really* queries). The way this works is a little silly--the `library/search` path loads up the metadata for every single element in the whole `src/content` directory. This allows the search page to render page based on queries, displaying a subset of the materials in the library. The search page *also updates* the URL based on the inputs from the user, allowing a user to visit a particular URL with a set of materials pre-filtered.

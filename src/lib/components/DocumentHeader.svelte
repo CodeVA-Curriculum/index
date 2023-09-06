@@ -16,7 +16,7 @@
     let nodes = [
         {
             title: '. .',
-            link: `${base}/lessons`
+            link: `${base}/library`
         },
         {
             title: meta.title,
@@ -39,7 +39,7 @@
                 {#each meta.parents as parent, i}
                 {#if i!=0},{/if}
                 {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
-                <a data-sveltekit-reload href='{base}/lessons/{parent.path}'><i>{parent.title}</i></a>
+                <a data-sveltekit-reload href='{base}/library/{parent.path}'><i>{parent.title}</i></a>
                 {/each}
                 project{meta.parents.length>1 ? 's' : ''}.</p>
             {/if}

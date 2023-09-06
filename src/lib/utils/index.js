@@ -1,3 +1,5 @@
+import {base} from '$app/paths'
+
 const fetchMarkdownPosts = async () => {
     const allPostFiles = import.meta.glob('/content/*.md')
     const iterablePostFiles = Object.entries(allPostFiles)
@@ -85,4 +87,8 @@ async function importDocument(doc) {
   return body[0]
 }
 
-export {fetchMarkdownPosts, getLessonGroups, importDocument}
+function srcToUrl(path) {
+  return '/'+base+'library'+path.replace('/src/content', '').replace('.md', '')
+}
+
+export {fetchMarkdownPosts, getLessonGroups, importDocument, srcToUrl}

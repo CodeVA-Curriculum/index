@@ -1,20 +1,63 @@
 <script lang='ts'>
+    import {page} from '$app/stores'
+    import {goto} from '$app/navigation'
+    import {onMount} from 'svelte'
+    import Fa from 'svelte-fa'
+    import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
+    import {slide} from 'svelte/transition'
+
     let url:string = '/'
+    let loaded:boolean=false;
+    let term:string="";
+    let expanded:boolean=false;
+
     // TODO: Change the URL based on search parameters
+    function updateUrl(word:string):null {
+        if(loaded=true) {
+            $page.url.searchParams.set('term',word); 
+            goto(`?${$page.url.searchParams.toString()}`);
+        }
+        return null
+    }
+    function toggle():null {
+        expanded = !expanded
+        return null
+    }
+
+    onMount(()=>{
+        loaded=true;
+    })
 </script>
 
 <div class='searchbox my-5'>
     <div class='field has-addons'>
         <div class='control is-expanded'>
-            <input class='input is-large' type='text' placeholder="Search for lessons...">
+            <input bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">
         </div>
         <div class='control'>
-            <a href='{url}' class='button is-large is-primary'>Search</a>
+            <button on:click={toggle} data-tooltip="Filters" href='{url}' class='has-tooltip-arrow filter-button button is-large'>
+                <Fa icon={faFilter} />
+                <Fa class='ml-3' icon={faCaretDown} />
+            </button>
+        </div>
+        <div class='control'>
+            <button on:click={updateUrl(term)} class='button is-large is-primary'>Search</button>
+        </div>
+        
+    </div>
+    {#if expanded}
+    <div transition:slide class='card'>
+        <div class='card-content'>
+            filters
         </div>
     </div>
+    {/if}
 </div>
 
 <style>
+    .filter-button {
+        border-color: none;
+    }
     .searchbox {
         margin-right: auto;
         margin-left: auto;

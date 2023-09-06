@@ -11,7 +11,7 @@
             <img alt="The CodeVA logo" src={logo} />
             <h1 class="title my-5">Curriculum Website</h1>
             <div class='buttons is-centered pt-5'>
-                <a href='{base}/lessons' class='button is-large is-primary'>Lessons</a>
+                <a href='{base}/library' class='button is-large is-primary'>Our Library</a>
                 <a href='{base}/about' class='button is-large'>About CodeVA</a>
             </div>
         </div>

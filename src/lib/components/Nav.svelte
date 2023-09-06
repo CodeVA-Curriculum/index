@@ -35,15 +35,15 @@
                 About
             </a>
             <a class="navbar-item"
-                href='{base}/lessons'
+                href='{base}/library'
             >
-                Lesson Plans
+                Our Library
             </a>
-            <a class="navbar-item"
+            <!-- <a class="navbar-item"
                 href='{base}/'
             >
                 Curriculum Resources
-            </a>
+            </a> -->
         </div>
     </div>
 </nav>

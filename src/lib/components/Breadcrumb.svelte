@@ -9,9 +9,9 @@
 </script>
 <div class="breadcrumb" aria-label="breadcrumbs">
     <ul>
-        <li><a href="{base}/lessons">Home</a></li>
+        <li><a href="{base}/library">Home</a></li>
         {#each nodes as node}
-        <li class={node.title == here ? 'is-active' : ''}><a href="{base}/lessons/{node.path}">{node.title}</a></li>
+        <li class={node.title == here ? 'is-active' : ''}><a href="{base}/library/{node.path}">{node.title}</a></li>
         {/each}
     </ul>
 </div>
