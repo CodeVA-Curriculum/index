@@ -2,9 +2,11 @@
     export let data:any;
     import Search from '$lib/components/Search.svelte';
     import {onMount} from 'svelte'
+    import ElementCard from '$lib/components/ElementCard.svelte';
+    import {page} from '$app/stores'
 
-    onMount(() => {
-        console.log(data)
+    onMount(()=>{
+        // console.log($page.url.searchParams.get('term'))
     })
 </script>
 
@@ -19,7 +21,13 @@
     </div>
     
     <div class='section'>
-        <p><i>No Results</i></p>
+        {#if data.results && data.results.length > 0}
+            {#each data.results as result}
+            <ElementCard data={result} />
+            {/each}
+        {:else}
+            <p><i>No Results</i></p>
+        {/if}
     </div>
 </div>
 

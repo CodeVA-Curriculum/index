@@ -1,6 +1,9 @@
 <script>
     export let data;
     import {onMount} from 'svelte'
+    import Fa from 'svelte-fa'
+    import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
+    import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {srcToUrl} from '$lib/utils'
     // onMount(()=>{
     //     console.log(srcToUrl(data.path))
@@ -17,9 +20,16 @@
                 <h2><a href={srcToUrl(data.path)}>{data.title}</a></h2>
                 <p class='heading'>by {data.authors}</p>
                 <div class='buttons'>
-                    <button class='button is-small'>Read More</button>
-                    <button class='button is-small'>PDF</button>
-                    <button class='button is-small'>Google Drive</button>
+                    <a class='button is-small is-primary' href={srcToUrl(data.path)}>Read More</a>
+                    <button class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
+                        Google Drive
+                        <Fa class='ml-2' icon={faGoogleDrive} />
+                    </button>
+                    <button data-tooltip="Download PDF" class='has-tooltip-arrow has-tooltip-bottom button is-small'>
+                        PDF
+                        <Fa class='ml-2' icon={faCloudArrowDown} />
+                    </button>
+                    
                 </div>
             </div>
         </div>

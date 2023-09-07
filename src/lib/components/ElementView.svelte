@@ -20,8 +20,10 @@
     <div class='columns'>
         <div class='column is-two-thirds'>
             {@html data.content}
+            
+            
             {#each data.metadata.children as child}
-            <ElementCard data={child} />
+                <ElementCard data={child} />
             {/each}
         </div>
         <div class='column ml-3'>

@@ -9,6 +9,7 @@ import rehypeStringify from 'rehype-stringify'
 import YAML from 'yaml'
 import {error} from '@sveltejs/kit'
 import * as fs from 'fs'
+import { parseFrontmatter } from '$lib/utils/libParse.js'
 
 function validatePath(path) {
   if(fs.existsSync(`src/content/${path}.md`)) {
@@ -18,25 +19,6 @@ function validatePath(path) {
   } else {
     return false
   }
-}
-
-async function parseFrontmatter(path) {
-  let frontmatter = {
-    path: ''
-  };
-  // console.log(path.substring(1))
-  const file = await unified()
-    .use(remarkParse)
-    .use(remarkFrontmatter, ['yaml'])
-    .use(() => (tree) => {
-      frontmatter = YAML.parse(tree.children[0].value)
-      frontmatter.path = path
-    })
-    .use(remarkRehype)
-    .use(rehypeFormat)
-    .use(rehypeStringify)
-    .process(await read(path.substring(1)))
-  return frontmatter
 }
 
 async function parseFile(path) {

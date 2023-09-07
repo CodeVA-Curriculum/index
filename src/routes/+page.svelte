@@ -21,7 +21,7 @@
 
 <style>
     img {
-        max-width: 80%;
+        max-width: 60%;
         margin: 0 auto;
         padding-left: 6rem;
     }
