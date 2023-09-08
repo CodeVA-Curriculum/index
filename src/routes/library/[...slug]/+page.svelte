@@ -1,6 +1,8 @@
 <!-- Lesson group page -->
-<script>
-    export let data;
+<script lang='ts'>
+    import type {Element} from './+page.server'
+    export let data:Element;
+
     import ElementView from '$lib/components/ElementView.svelte';
     import FileTreeView from '$lib/components/FileTreeView.svelte';
 

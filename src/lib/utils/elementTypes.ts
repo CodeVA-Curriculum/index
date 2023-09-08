@@ -1,9 +1,18 @@
-interface Element {
-    title:string,
+interface Frontmatter {
+    title:string|null,
     authors:string,
     path:string,
     subject:string,
-    grade:string|number
+    grade:string|number,
+    parents:Frontmatter[],
+    children:Frontmatter[]
 }
 
-export type {Element}
+interface Element {
+    content:string,
+    metadata:Frontmatter,
+    path:string,
+    type:string
+  }
+
+export type {Frontmatter, Element}

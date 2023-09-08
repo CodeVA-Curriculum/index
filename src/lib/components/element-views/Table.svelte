@@ -1,8 +1,8 @@
 <script lang='ts'>
     import {base} from '$app/paths'
-    import type {Element} from '$lib/utils/elementTypes'
+    import type {Frontmatter} from '$lib/utils/elementTypes'
 
-    export let groups:Element[]=[]
+    export let groups:Frontmatter[]=[]
 </script>
 
 <table class='table element-table has-text-left'>

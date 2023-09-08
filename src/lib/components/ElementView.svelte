@@ -2,7 +2,6 @@
     import DocumentHeader from "./DocumentHeader.svelte";
     import ElementCard from "./ElementCard.svelte";
     export let data
-
     // let standards = [0, 0, 0, 0]
 
     // TODO: pull from frontmatter or children
