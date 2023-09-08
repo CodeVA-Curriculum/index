@@ -10,6 +10,7 @@ import YAML from 'yaml'
 import {error} from '@sveltejs/kit'
 import * as fs from 'fs'
 import { parseFrontmatter } from '$lib/utils/libParse.js'
+import { importLibraryGlob } from '$lib/utils/index.js'
 
 function validatePath(path) {
   if(fs.existsSync(`src/content/${path}.md`)) {
@@ -70,7 +71,7 @@ async function findChildFrontmatter(frontmatter) {
 }
 
 async function findParentFrontmatter(path) {
-  const possibleParents = await import.meta.glob('$content/**/meta.md')
+  const possibleParents = await importLibraryGlob('meta')
   let actualParents = []
   for(const parent in possibleParents) {
     const parentFrontmatter = await parseFrontmatter(parent)
@@ -113,7 +114,7 @@ export async function load({ params }){
 
 // entries  
 export async function entries() {
-  const paths = import.meta.glob('$content/**/*.md')
+  const paths = await importLibraryGlob('all')
   let cleanPaths = []
   for(const path in paths) {
     // exclude 'meta' files from prerendered paths

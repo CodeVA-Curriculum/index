@@ -39,8 +39,8 @@ const fetchMarkdownPosts = async () => {
 //     return allPosts
 // }
 
-function getLessonGroups() {
-  const posts = import.meta.glob('$content/**/meta.md'  )
+async function getLessonGroups() {
+  const posts = await importLibraryGlob('meta')
 
   // console.log(posts)
 
@@ -52,10 +52,11 @@ function getLessonGroups() {
       paths.push(path);
       // @ts-ignore
       body.push(posts[path]().then((obj) => {
+        console.log(obj.metadata)
         return { 
             // @ts-ignore
             ...obj.metadata,
-            path: path.slice("/src/content/".length, -7),
+            path: `${base}/library/${path.slice("/src/content/".length, -7)}`,
             // @ts-ignore
             content: obj.default
          }
@@ -63,6 +64,15 @@ function getLessonGroups() {
   }
   // console.log(body)
   return body;
+}
+
+async function importLibraryGlob(category) {
+  if(category=='all') {
+    return await import.meta.glob(['$content/**/*.md', '!$content/**/.*.md'])
+  } else if(category=='meta') {
+    return await import.meta.glob(['$content/**/meta.md', '!$content/**/.meta.md'])
+  }
+  
 }
 
 // @ts-ignore
@@ -91,4 +101,4 @@ function srcToUrl(path) {
   return '/'+base+'library'+path.replace('/src/content', '').replace('.md', '')
 }
 
-export {fetchMarkdownPosts, getLessonGroups, importDocument, srcToUrl}
+export {fetchMarkdownPosts, getLessonGroups, importDocument, srcToUrl, importLibraryGlob}

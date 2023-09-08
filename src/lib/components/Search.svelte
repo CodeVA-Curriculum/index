@@ -6,6 +6,8 @@
     import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
 
+    export let filter:boolean=true
+
     let url:string = '/'
     let loaded:boolean=false;
     let term:string="";
@@ -34,12 +36,14 @@
         <div class='control is-expanded'>
             <input bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">
         </div>
+        {#if filter}
         <div class='control'>
             <button on:click={toggle} data-tooltip="Filters" href='{url}' class='has-tooltip-arrow filter-button button is-large'>
                 <Fa icon={faFilter} />
                 <Fa class='ml-3' icon={faCaretDown} />
             </button>
         </div>
+        {/if}
         <div class='control'>
             <button on:click={updateUrl(term)} class='button is-large is-primary'>Search</button>
         </div>
