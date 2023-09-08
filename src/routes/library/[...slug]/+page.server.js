@@ -9,7 +9,7 @@ import rehypeStringify from 'rehype-stringify'
 import YAML from 'yaml'
 import {error} from '@sveltejs/kit'
 import * as fs from 'fs'
-import { parseFrontmatter } from '$lib/utils/libParse.js'
+import { parseFrontmatter, findMemberFrontmatter } from '$lib/utils/libParse.js'
 import { importLibraryGlob } from '$lib/utils/index.js'
 
 function validatePath(path) {
@@ -40,14 +40,15 @@ async function parseFile(path) {
     // Find parents of document or group
     frontmatter.parents = await findParentFrontmatter(path);
 
-    // TODO: If element frontmatter has a `contents`field, find child elements
+    // If element frontmatter has a `contents`field (i.e., is a group), find member elements
     if(frontmatter.contents) {
-      frontmatter.children = await findChildFrontmatter(frontmatter)
+      frontmatter.members = await findMemberFrontmatter(frontmatter)
     } else {
-      frontmatter.children = []
+      frontmatter.members = []
     }
 
-    // TODO: if frontmatter indicates inheritance, inherit all null fields from indicated meta file.
+    // TODO: If frontmatter indicates inheritance, inherit required fields from indicated file (default: './meta.md', if filename is 'meta.md' then '../meta.md')
+    
 
 
     return {
@@ -57,19 +58,7 @@ async function parseFile(path) {
     };
 }
 
-async function findChildFrontmatter(frontmatter) {
-  let children = []
-  const thisPath = frontmatter.path.replace('/meta', '/')
-  for(let i=0;i<frontmatter.contents.length;i++) {
-    //TODO: treat child directories and child files differently
-    const childPath= frontmatter.contents[i].replace('./', '')
-    const childFrontmatter = await parseFrontmatter('/src/content/'+thisPath+childPath)
-    children.push(childFrontmatter)
-  }
-  // console.log(children)
-  return children
-}
-
+// TODO: Currently finds immediate parent, but does not find all parents in heirarchy to include in breadcrumb and backlinks
 async function findParentFrontmatter(path) {
   const possibleParents = await importLibraryGlob('meta')
   let actualParents = []
@@ -79,7 +68,7 @@ async function findParentFrontmatter(path) {
       const parentPath = parentFrontmatter.path
       const docName = parentFrontmatter.contents[i].replace('./', parentPath.substring(0, parentPath.indexOf('/meta.md'))+'/')
       if(docName == '/src/content/'+path+'.md') {
-        console.log('Found parent at', parentPath)
+        // console.log('Found parent at', parentPath)
         // get parent object info
         possibleParents[parentPath]().then((obj) => {
           actualParents.push({
@@ -98,7 +87,7 @@ export async function load({ params }){
   const path = validatePath(params.slug)
   if(path) {
     const data = await parseFile(path)
-    console.log(data.frontmatter)
+    // console.log(data.frontmatter)
     return {
       content: data.file.toString(),
       metadata: data.frontmatter,

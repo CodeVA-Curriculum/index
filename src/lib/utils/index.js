@@ -52,7 +52,7 @@ async function getLessonGroups() {
       paths.push(path);
       // @ts-ignore
       body.push(posts[path]().then((obj) => {
-        console.log(obj.metadata)
+        // console.log(obj.metadata)
         return { 
             // @ts-ignore
             ...obj.metadata,

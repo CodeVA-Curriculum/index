@@ -60,9 +60,15 @@ You can also define optional frontmatter attributes for different kinds of resou
 | --------- | ----------- | ------------ |
 | `contents` | A list of relative paths pointing to files to be associated with the element on the site. Usually used to define groups. | No |
 
+TODO: support directories in `contents`
+
 ### Inheritance
 
 If an element does not define a required attribute in its frontmatter, it will inherit the required attribute from its containing group (if available). The only exception is the `title` field--if an element does not define a `title`, the compiler will throw an error and will not generate a page for the element.
+
+### Parents vs Members
+
+Elements can be *parents*, *childs*, *groups*, and *members. Parent-child relationships related to inheritance, while members appear on groups' pages (but do not pass attributes through chains of inheritance).
 
 ### Hiding an Element
 

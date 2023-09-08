@@ -54,11 +54,11 @@
             </div>
             <div class='buttons is-left my-5'>
                 <a class='button is-primary' href='/TODO:'>
-                    View {meta.children.length > 0? 'Group' : ''} on Google Drive
+                    View {meta.members.length > 0? 'Group' : ''} on Google Drive
                     <Fa class='ml-2' icon={faGoogleDrive} />
                 </a>
                 <a class='button' href='/TODO:'>
-                    Download {meta.children.length > 0? 'Group' : ''} PDF
+                    Download {meta.members.length > 0? 'Group' : ''} PDF
                     <Fa class='ml-2' icon={faCloudArrowDown} />
                 </a>
             </div>

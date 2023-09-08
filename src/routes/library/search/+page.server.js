@@ -7,8 +7,8 @@ export async function load({ params }){
     for(const path in library) {
         results.push(await parseFrontmatter(path))
     }
-    console.log('Printing frontmatter from search page...')
-    console.log(results)
+    // console.log('Printing frontmatter from search page...')
+    // console.log(results)
     return {
         results: results
     }

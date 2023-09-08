@@ -22,8 +22,8 @@
             {@html data.content}
             
             
-            {#each data.metadata.children as child}
-                <ElementCard data={child} />
+            {#each data.metadata.members as member}
+                <ElementCard data={member} />
             {/each}
         </div>
         <div class='column ml-3'>
