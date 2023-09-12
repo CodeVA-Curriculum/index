@@ -30,7 +30,7 @@ export async function parseFile(pathData:Path) {
     // Find parents of document or group
     frontmatter.parents = await findAndInheritFromParents(frontmatter);
 
-    console.log(frontmatter)
+    // console.log(frontmatter)
 
     // If element frontmatter has a `contents`field (i.e., is a group), find member elements
     if(frontmatter.contents) {
@@ -38,7 +38,7 @@ export async function parseFile(pathData:Path) {
     } else {
       frontmatter.members = []
     }
-    console.log("finished parsing members")
+    // console.log("finished parsing members")
 
     return {
       file: file,

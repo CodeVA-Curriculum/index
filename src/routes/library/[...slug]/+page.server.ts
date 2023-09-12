@@ -21,8 +21,8 @@ export async function load({ params }):Promise<Element> {
   const path:Path = validatePath(params.slug)
   if(path.exists) {
     const data = await parseFile(path)
-    console.log('loaded:')
-    console.log(data)
+    // console.log('loaded:')
+    // console.log(data)
     return {
       content: data.file.toString(),
       frontmatter: data.frontmatter,

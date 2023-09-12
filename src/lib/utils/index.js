@@ -71,6 +71,8 @@ async function importLibraryGlob(category) {
     return await import.meta.glob(['$content/**/*.md', '!$content/**/.*.md'])
   } else if(category=='meta') {
     return await import.meta.glob(['$content/**/meta.md', '!$content/**/.meta.md'])
+  } else if(category=='meta-hidden') {
+    return await import.meta.glob(['$content/**/meta.md', '$content/**/.meta.md'])
   }
   
 }
@@ -98,7 +100,7 @@ async function importDocument(doc) {
 }
 
 function srcToUrl(path) {
-  console.log(path)
+  // console.log(path)
   return '/'+base+'library/'+path.replace('/src/content', '').replace('.md', '')
 }
 

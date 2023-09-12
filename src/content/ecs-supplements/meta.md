@@ -1,6 +1,5 @@
 ---
 title: ECS Supplements
-authors: CodeVA Curriculum
 type: group
 contents:
     - ./unit-1
