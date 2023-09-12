@@ -5,7 +5,7 @@
     import Fa from 'svelte-fa'
     import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
-    import {srcToUrl} from '$lib/utils'
+    import {srcToUrl} from '$lib/utils/pathUtils'
     // onMount(()=>{
     //     console.log(srcToUrl(data.path))
     // })

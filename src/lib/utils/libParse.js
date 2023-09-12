@@ -165,13 +165,4 @@ function applyInheritance(frontmatter, parentFrontmatter) {
   return frontmatter
 }
 
-function checkFrontmatterRequirements(frontmatter) {
-  if(!frontmatter.title) {
-    throw new Error(`File at ${frontmatter.path} must define a title!`)
-  }
-  if(!frontmatter.authors) {
-    return false
-  }
-}
-
   export {parseFrontmatter, findMemberFrontmatter, parseFile, validatePath}

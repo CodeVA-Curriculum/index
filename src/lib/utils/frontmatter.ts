@@ -121,13 +121,16 @@ async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontm
 
 function auditFrontmatter(frontmatter:Frontmatter) {
     const rules:boolean[]  = [
-        // valid path
-        // has title
-        // has authors
+        frontmatter.pathData.exists,
+        frontmatter.pathData.path.length > 0,
+        frontmatter.title != null,
+        typeof(frontmatter.authors) == 'string'
     ]
     for(let i=0;i<rules.length;i++) {
         if(!rules[i]) {
-            throw new Error(`File at ${frontmatter.pathData.path} does not define or inherit required properties!`)
+            throw new Error(`File at ${frontmatter.pathData.path} does not define or inherit required properties! Failed rule ${i+1}`)
+        } else {
+            console.log(`File at ${frontmatter.pathData.path} passed rule ${i+1} check!`)
         }
     }
 }
@@ -151,5 +154,14 @@ async function findMemberFrontmatter(frontmatter:Frontmatter):Promise<Frontmatte
     return members
 }
 
+function checkFrontmatterRequirements(frontmatter:Frontmatter) {
+    if(!frontmatter.title) {
+      throw new Error(`File at ${frontmatter.pathData.path} must define a title!`)
+    }
+    if(!frontmatter.authors) {
+      return false
+    }
+  }
+
 export type {Frontmatter, Path}
-export {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFrontmatter}
+export {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFrontmatter, checkFrontmatterRequirements, auditFrontmatter}

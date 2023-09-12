@@ -1,5 +1,11 @@
 import * as fs from 'fs'
 import {validatePath, defaultPath, type Path} from './frontmatter'
+import {base} from '$app/paths'
+
+export function srcToUrl(path:string) {
+    // console.log(path)
+    return '/'+base+'library/'+path.replace('/src/content', '').replace('.md', '')
+  }
 
 export function getParentDirectory(pathData:Path):string {
     return pathData.path.substring(0, pathData.path.lastIndexOf('/'))

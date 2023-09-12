@@ -99,9 +99,6 @@ async function importDocument(doc) {
   return body[0]
 }
 
-function srcToUrl(path) {
-  // console.log(path)
-  return '/'+base+'library/'+path.replace('/src/content', '').replace('.md', '')
-}
 
-export {fetchMarkdownPosts, getLessonGroups, importDocument, srcToUrl, importLibraryGlob}
+
+export {fetchMarkdownPosts, getLessonGroups, importDocument, importLibraryGlob}
