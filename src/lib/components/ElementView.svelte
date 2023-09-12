@@ -1,7 +1,8 @@
-<script>
+<script lang='ts'>
+    import type {Element} from '$lib/utils/elementTypes'
     import DocumentHeader from "./DocumentHeader.svelte";
     import ElementCard from "./ElementCard.svelte";
-    export let data
+    export let data:Element
     // let standards = [0, 0, 0, 0]
 
     // TODO: pull from frontmatter or children
@@ -14,14 +15,14 @@
 </script>
 
 <div class='content'>
-    <DocumentHeader meta={data.metadata} />
+    <DocumentHeader meta={data.frontmatter} />
     <hr>
     <div class='columns'>
         <div class='column is-two-thirds'>
             {@html data.content}
             
             
-            {#each data.metadata.members as member}
+            {#each data.frontmatter.members as member}
                 <ElementCard data={member} />
             {/each}
         </div>

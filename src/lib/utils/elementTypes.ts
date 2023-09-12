@@ -1,18 +1,18 @@
-interface Frontmatter {
-    title:string|null,
-    authors:string,
-    path:string,
-    subject:string,
-    grade:string|number,
-    parents:Frontmatter[],
-    children:Frontmatter[]
-}
+// interface Frontmatter {
+//     title:string|null,
+//     authors:string,
+//     path:`${string}.md`,
+//     subject:string,
+//     grade:string|number,
+//     parents:Frontmatter[],
+//     children:Frontmatter[]
+// }
+import type {Frontmatter} from '$lib/utils/frontmatter'
 
 interface Element {
     content:string,
-    metadata:Frontmatter,
-    path:string,
+    frontmatter:Frontmatter,
     type:string
   }
 
-export type {Frontmatter, Element}
+export type {Element}

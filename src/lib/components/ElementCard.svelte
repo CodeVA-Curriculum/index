@@ -1,5 +1,6 @@
-<script>
-    export let data;
+<script lang='ts'>
+    import type {Frontmatter} from '$lib/utils/frontmatter'
+    export let data:Frontmatter;
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
     import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
@@ -17,10 +18,10 @@
                 <img src='https://placekitten.com/300/300' >
             </div>
             <div class='column'>
-                <h2><a href={srcToUrl(data.path)}>{data.title}</a></h2>
+                <h2><a href={srcToUrl(data.pathData.path)}>{data.title}</a></h2>
                 <p class='heading'>by {data.authors}</p>
                 <div class='buttons'>
-                    <a class='button is-small is-primary' href={srcToUrl(data.path)}>Read More</a>
+                    <a class='button is-small is-primary' href={srcToUrl(data.pathData.path)}>Read More</a>
                     <button class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
                         Google Drive
                         <Fa class='ml-2' icon={faGoogleDrive} />

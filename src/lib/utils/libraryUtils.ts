@@ -29,24 +29,6 @@ function getFrontmatter():Frontmatter {
     return frontmatter
 }
 
-export function validatePath(path:string):PathValidator {
-    let exists:boolean=false
-    let validPath:string = path
-    if(fs.existsSync(`src/content/${path}.md`)) {
-        validPath = path
-        exists=true
-      } else if(fs.existsSync(`src/content/${path}/meta.md`)) {
-        validPath = path+'/meta'
-        exists=true
-      } else {
-        exists = false
-      }
-    return {
-        exists: exists,
-        path: validPath
-    }
-}
-
 export async function parseFile(path:PathValidator):Promise<Element> {
     let frontmatter:Frontmatter = getFrontmatter()
     const file = await unified()

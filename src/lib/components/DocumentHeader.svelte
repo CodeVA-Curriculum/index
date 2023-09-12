@@ -5,31 +5,26 @@
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
 
-    interface Metadata {
-        title:string,
-        authors:string,
-        path:string,
-        parents?:string[]
-    }
+    import type {Frontmatter} from '$lib/utils/frontmatter'
 
-    export let meta:Metadata;
+    export let meta:Frontmatter;
 
     // TODO: render nodes
     
-    let nodes = [
-        {
-            title: '. .',
-            link: `${base}/library`
-        },
-        {
-            title: meta.title,
-            link: meta.path       
-        }
-    ]
+    // let nodes = [
+    //     {
+    //         title: '. .',
+    //         link: `${base}/library`
+    //     },
+    //     {
+    //         title: meta.title,
+    //         link: meta.path       
+    //     }
+    // ]
 </script>
 
 <div class='document-header content'>
-    <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} />
+    <!-- <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} /> -->
     <div class='columns'>
         <div class='column is-one-quarter'>
             <img alt="a placeholder" src="https://placekitten.com/400/400">
@@ -42,7 +37,7 @@
                 {#each meta.parents as parent, i}
                 {#if i!=0},{/if}
                 {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
-                <a data-sveltekit-reload href='{base}/library/{parent.path}'><i>{parent.title}</i></a>
+                <a data-sveltekit-reload href='{base}/library/{parent.pathData.path}'><i>{parent.title}</i></a>
                 {/each}
                 project{meta.parents.length>1 ? 's' : ''}.</p>
             {/if}

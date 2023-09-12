@@ -70,6 +70,8 @@ If an element does not define a required attribute in its frontmatter, it will i
 
 Elements can be *parents*, *childs*, *groups*, and *members. Parent-child relationships related to inheritance, while members appear on groups' pages (but do not pass attributes through chains of inheritance).
 
+Parents are ordered from most direct to least.
+
 ### Hiding an Element
 
 To exclude an element from the site, prepend the filename with a `.`. Files named `.meta.md` will still pass attributes to elements seeking inherited values.
