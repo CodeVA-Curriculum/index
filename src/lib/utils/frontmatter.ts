@@ -4,7 +4,7 @@ import { parseFrontmatter } from './parsers'
 import {getParentDirectory, getParentMeta} from './pathUtils'
 import { importLibraryGlob } from '.'
 
-const inheritableFields = ['authors', 'subject', 'grade']
+const inheritableFields = ['authors', 'subject', 'grade', 'license']
 
 interface Path {
     path:`${string}.md`,
@@ -12,9 +12,11 @@ interface Path {
 }
 
 export function validatePath(path:string):Path {
+    // console.log('validating', path)
     let exists:boolean=false
     let validPath:string = path
     // add extension if needed
+    // console.log('seeking file at',`src/content/${path}.md`)
     if(fs.existsSync(`src/content/${path}.md`)) {
         validPath = path
         exists=true
@@ -24,23 +26,31 @@ export function validatePath(path:string):Path {
       } else {
         exists = false
       }
+    // console.log(validPath, exists)
     return {
         exists: exists,
         path: `${validPath}.md`
     }
 }
 
+interface License {
+    name:string,
+    link:string
+}
+
 interface Frontmatter {
     title:string|null,
     authors:string,
     pathData:Path,
-    subject:string,
-    grade:string|number,
+    subjects:string[],
+    types:string[],
+    grades:(string|number)[],
     children:Frontmatter[]
     parents:Frontmatter[],
     members:Frontmatter[],
     groups:Frontmatter[],
-    contents:string[]
+    contents:string[],
+    license:License
 }
 
 export function defaultPath():Path {
@@ -55,19 +65,21 @@ function defaultFrontmatter() {
         title: null,
         authors: 'CodeVA Curriculum',
         pathData: defaultPath(),
-        subject: 'Computer Science',
-        grade: 0,
+        subjects: ['Computer Science'],
+        grades: [],
         children: [],
         parents: [],
         members: [],
         contents: [],
-        groups: []
+        groups: [],
+        types:[]
     }
 }
 
 
 function applyYAML(yaml:string, pathData:Path) {
     const fmatter:Frontmatter = YAML.parse(yaml) as Frontmatter
+
     // ensure that yaml defines title, at least
     if(!fmatter.hasOwnProperty('title')) {
         throw new Error(`Element file at ${pathData.path} does not define a title!`)
@@ -81,17 +93,18 @@ async function findParentFrontmatter(pathData:Path):Promise<Frontmatter[]> {
     let path:string = pathData.path
     const possibleParents = await importLibraryGlob('meta-hidden')
 
-    // console.log(possibleParents)
     let parentPath = getParentMeta(pathData)
+    // console.log('Loading parent at','/src/content'+parentPath.path)
     
+    // @ts-ignore
     while(possibleParents['/src/content'+parentPath.path]) {
         // get the frontmatter for the parent, push to array
         actualParents.push(await parseFrontmatter(parentPath))
-        parentPath = getParentMeta(parentPath)
         if(parentPath.path == '/.meta.md' || parentPath.path == '/meta.md') {
+            console.log('Found top level parent for ',pathData.path, 'at', parentPath)
             break;
         }
-        // console.log(parentPath.path)
+        parentPath = getParentMeta(parentPath)
     }
     // console.log(actualParents)
         
@@ -101,6 +114,7 @@ async function findParentFrontmatter(pathData:Path):Promise<Frontmatter[]> {
 
 async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontmatter[]> {
     const parents = await findParentFrontmatter(frontmatter.pathData)
+    console.log(frontmatter.title, parents)
     // iterate over parents and inherit from inheritable fields
     for(let i=0;i<inheritableFields.length;i++) {
         const field = inheritableFields[i]
@@ -146,11 +160,9 @@ async function findMemberFrontmatter(frontmatter:Frontmatter):Promise<Frontmatte
         members.push(await parseFrontmatter(memberPath))
     }
     
-    // TODO:
-    // for(let i=0;i<members.length;i++) {
-    //     members[i].parents = await findAndInheritFromParents(members[i]) 
-    //     // ...but members don't need parents until you load their page
-    // }
+    for(let i=0;i<members.length;i++) {
+        members[i].parents = await findAndInheritFromParents(members[i]) 
+    }
     return members
 }
 

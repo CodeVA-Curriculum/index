@@ -55,11 +55,26 @@ export async function parseFile(pathData:Path) {
   } else {
     frontmatter.members = []
   }
-  // console.log("finished parsing members")
+  
+  // Post-processing
+  // console.log(frontmatter)
+
+  // split subjects by comma
+  if(typeof(frontmatter.subjects) == typeof('string')) {
+    // @ts-ignore TODO: figure out how to make the types play nice
+    frontmatter.subjects = frontmatter.subjects.split(', ')
+  }
+  if(typeof(frontmatter.grades) == typeof('string')) {
+    // @ts-ignore TODO: figure out how to make the types play nice
+    frontmatter.grades = frontmatter.grades.split(', ')
+  }
+  if(typeof(frontmatter.types) == typeof('string')) {
+    // @ts-ignore TODO: figure out how to make the types play nice
+    frontmatter.types = frontmatter.types.split(', ')
+  }
 
   return {
     file: file,
-    frontmatter: frontmatter,
-    type: pathData.path.includes('meta') ? 'group' : 'document',
+    frontmatter: frontmatter
   };
 }

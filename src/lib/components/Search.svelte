@@ -13,9 +13,17 @@
     let term:string="";
     let expanded:boolean=false;
 
+    interface SearchParams {
+        term:string
+    }
+
+    let params:SearchParams = {
+        term: ''
+    }
+
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
-        if(loaded=true) {
+        if(loaded) {
             $page.url.searchParams.set('term',word); 
             goto(`?${$page.url.searchParams.toString()}`);
         }

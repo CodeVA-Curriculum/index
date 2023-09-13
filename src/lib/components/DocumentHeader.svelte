@@ -6,6 +6,7 @@
     import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
 
     import type {Frontmatter} from '$lib/utils/frontmatter'
+    import ArrayAsInlineList from "./ArrayAsInlineList.svelte";
 
     export let meta:Frontmatter;
 
@@ -42,10 +43,11 @@
                 project{meta.parents.length>1 ? 's' : ''}.</p>
             {/if}
             <div class='metadata'>
-                <p><strong>Subject: </strong>Computer Science</p>
-                <p><strong>Level: </strong>High School</p>
-                <p><strong>Material Type: </strong>Lesson Plan, Unit of Study</p>
-                <p><strong>License: </strong><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA</a></p>
+                <ArrayAsInlineList title="Subject" items={meta.subjects} />
+                <ArrayAsInlineList title="Grade" items={meta.grades} />
+                <ArrayAsInlineList title="Material Type" items={meta.types} />
+                <!-- <p><strong>Material Type: </strong>Lesson Plan, Unit of Study</p> -->
+                <p style='font-size: smaller; margin: 0 auto;'><strong>License: </strong><a href={meta.license.link}>{meta.license.name}</a></p>
             </div>
             <div class='buttons is-left my-5'>
                 <a class='button is-primary' href='/TODO:'>
@@ -63,10 +65,6 @@
 </div>
 
 <style>
-    .metadata > p {
-        font-size: smaller;
-        margin: 0 auto;
-    }
     .metadata {
         margin-top: 1rem;
     }

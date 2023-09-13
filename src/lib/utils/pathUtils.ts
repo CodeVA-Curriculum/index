@@ -8,15 +8,21 @@ export function srcToUrl(path:string) {
   }
 
 export function getParentDirectory(pathData:Path):string {
-    return pathData.path.substring(0, pathData.path.lastIndexOf('/'))
+    const parentPath = pathData.path.substring(0, pathData.path.lastIndexOf('/'))
+    if(parentPath[0] == '/') {
+        return parentPath
+    } else {
+        return '/'+parentPath
+    }
 }
 
 export function getParentMeta(pathData:Path):Path {
     if(!pathData.path.endsWith('meta.md')) {
         // file is not a metafile
         // check to see if meta next to file, otherwise continue
-        const adjacentMeta = validatePath(getParentDirectory(pathData)+'/meta.md')
-        const hiddenAdjacentMeta = validatePath(getParentDirectory(pathData)+'./meta.md')
+        // console.log('looking in',getParentDirectory(pathData)+'/meta.md', 'for parents')
+        const adjacentMeta = validatePath(getParentDirectory(pathData)+'/meta')
+        const hiddenAdjacentMeta = validatePath(getParentDirectory(pathData)+'/.meta')
         if(adjacentMeta.exists) {
             return adjacentMeta
         } else if(hiddenAdjacentMeta.exists) {
