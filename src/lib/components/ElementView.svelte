@@ -21,7 +21,6 @@
         <div class='column is-two-thirds'>
             {@html data.content}
             
-            
             {#each data.frontmatter.members as member}
                 <ElementCard data={member} />
             {/each}

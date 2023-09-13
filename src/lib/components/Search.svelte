@@ -1,17 +1,22 @@
 <script lang='ts'>
     import {page} from '$app/stores'
     import {goto} from '$app/navigation'
+    import {base} from '$app/paths'
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
     import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
 
+    // components
+    import Filters from '$lib/components/form-elements/Filters.svelte'
+
     export let filter:boolean=true
+    export let linkTo:boolean=false
 
     let url:string = '/'
     let loaded:boolean=false;
     let term:string="";
-    let expanded:boolean=false;
+    let expanded:boolean=true;
 
     interface SearchParams {
         term:string
@@ -24,8 +29,13 @@
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
         if(loaded) {
-            $page.url.searchParams.set('term',word); 
-            goto(`?${$page.url.searchParams.toString()}`);
+            $page.url.searchParams.set('term',word);
+            if(linkTo) {
+                goto(`${base}/library/search?${$page.url.searchParams.toString()}`);
+            } else {
+                goto(`?${$page.url.searchParams.toString()}`);
+            }
+            
         }
         return null
     }
@@ -58,9 +68,9 @@
         
     </div>
     {#if expanded}
-    <div transition:slide class='card'>
+    <div transition:slide class='filters card'>
         <div class='card-content'>
-            filters
+            <Filters />
         </div>
     </div>
     {/if}
@@ -75,4 +85,7 @@
         margin-left: auto;
         /* padding: 0 0; */
     }
+    /* .filters {
+        background-color: whitesmoke;
+    } */
 </style>

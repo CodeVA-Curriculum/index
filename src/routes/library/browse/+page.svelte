@@ -12,10 +12,9 @@
 
 <div class='lessons-browse section content'>
     <h1>Our Curriculum Projects</h1>
-
-<div class='groups-list'>
-    {#each lessonGroups as group}
-    <GroupCard meta={group} />
-    {/each}
-</div>
+    <div class='groups-list'>
+        {#each lessonGroups as group}
+        <GroupCard meta={group} />
+        {/each}
+    </div>
 </div>
