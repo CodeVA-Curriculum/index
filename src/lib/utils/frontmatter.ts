@@ -50,7 +50,8 @@ interface Frontmatter {
     members:Frontmatter[],
     groups:Frontmatter[],
     contents:string[],
-    license:License
+    license:License,
+    tags:string[]
 }
 
 export function defaultPath():Path {
@@ -72,7 +73,8 @@ function defaultFrontmatter() {
         members: [],
         contents: [],
         groups: [],
-        types:[]
+        types:[],
+        tags:[]
     }
 }
 
@@ -101,7 +103,7 @@ async function findParentFrontmatter(pathData:Path):Promise<Frontmatter[]> {
         // get the frontmatter for the parent, push to array
         actualParents.push(await parseFrontmatter(parentPath))
         if(parentPath.path == '/.meta.md' || parentPath.path == '/meta.md') {
-            console.log('Found top level parent for ',pathData.path, 'at', parentPath)
+            // console.log('Found top level parent for ',pathData.path, 'at', parentPath)
             break;
         }
         parentPath = getParentMeta(parentPath)
@@ -114,7 +116,7 @@ async function findParentFrontmatter(pathData:Path):Promise<Frontmatter[]> {
 
 async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontmatter[]> {
     const parents = await findParentFrontmatter(frontmatter.pathData)
-    console.log(frontmatter.title, parents)
+    // console.log(frontmatter.title, parents)
     // iterate over parents and inherit from inheritable fields
     for(let i=0;i<inheritableFields.length;i++) {
         const field = inheritableFields[i]
@@ -139,6 +141,7 @@ function auditFrontmatter(frontmatter:Frontmatter) {
         frontmatter.pathData.path.length > 0,
         frontmatter.title != null,
         typeof(frontmatter.authors) == 'string'
+        // TODO: add rules for Google Drive & PDF links
     ]
     for(let i=0;i<rules.length;i++) {
         if(!rules[i]) {

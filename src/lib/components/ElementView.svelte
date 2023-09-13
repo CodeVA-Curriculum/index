@@ -11,7 +11,7 @@
         'Data Science': [0, 0, 0, 0]
     }
 
-    let tags = ['tag', 'tag','tag', 'tag', 'tag']
+    // let tags = ['tag', 'tag','tag', 'tag', 'tag']
 </script>
 
 <div class='content'>
@@ -41,8 +41,8 @@
             </div>
             <div class='sidebar'>
                 <h3>Tags</h3>
-                <!-- TODO: fix link and pull data from content -->
-                {#each tags as tag}
+                <!-- TODO: fix link, use tag filter search URL -->
+                {#each data.frontmatter.tags as tag}
                 <a href='/' class='tag m-1'>{tag}</a>
                 {/each}
             </div>
