@@ -39,6 +39,7 @@ const fetchMarkdownPosts = async () => {
 //     return allPosts
 // }
 
+// TODO: update to pull from parents
 async function getLessonGroups() {
   const posts = await importLibraryGlob('meta')
 

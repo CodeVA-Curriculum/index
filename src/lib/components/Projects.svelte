@@ -13,7 +13,7 @@
     let audiences:string[] = ['Instructors', 'Students', 'General', 'Administrators']
     let subjects:string[] = ['Computer Science', 'Data Science']
     let grades:string[] = ['K-2', '3-5', '6-8', 'High School']
-    let list:boolean = true
+    let list:boolean = false
 
     function toggle() { 
         list = !list

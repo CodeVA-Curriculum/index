@@ -4,7 +4,7 @@ import { parseFrontmatter } from './parsers'
 import {getParentDirectory, getParentMeta} from './pathUtils'
 import { importLibraryGlob } from '.'
 
-const inheritableFields = ['authors', 'subject', 'grade', 'license']
+const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types']
 
 interface Path {
     path:`${string}.md`,

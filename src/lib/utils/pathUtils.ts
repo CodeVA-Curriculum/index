@@ -4,7 +4,7 @@ import {base} from '$app/paths'
 
 export function srcToUrl(path:string) {
     // console.log(path)
-    return '/'+base+'library/'+path.replace('/src/content', '').replace('.md', '')
+    return '/'+base+'library'+path.replace('/src/content', '').replace('.md', '')
   }
 
 export function getParentDirectory(pathData:Path):string {

@@ -53,11 +53,12 @@ export async function parseFile(pathData:Path) {
   if(frontmatter.contents) {
     frontmatter.members = await findMemberFrontmatter(frontmatter)
   } else {
+    console.log(frontmatter.pathData.path, 'has no members')
     frontmatter.members = []
   }
   
   // Post-processing
-  // console.log(frontmatter)
+  console.log(frontmatter)
 
   // split fields by comma
   frontmatter.subjects = splitString(frontmatter.subjects, ', ')
@@ -76,7 +77,7 @@ function splitString(string:any, separator:string):any[] {
   if(typeof(string) == typeof('string')) {
     list = string.split(separator)
   } else {
-    throw new Error('Tried to split frontmatter attribute of incorrect data type!')
+    throw new Error(`Tried to split frontmatter ${string} attribute of incorrect data type!`)
   }
   return list
 }

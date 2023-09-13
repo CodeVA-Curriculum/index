@@ -67,16 +67,19 @@
         </div>
         
     </div>
-    {#if expanded}
-    <div transition:slide class='filters card'>
+    
+    <div transition:slide class='filters {expanded? '':'hidden'} card'>
         <div class='card-content'>
             <Filters />
         </div>
     </div>
-    {/if}
+    
 </div>
 
 <style>
+    .filters.hidden {
+        display: none;
+    }
     .filter-button {
         border-color: none;
     }

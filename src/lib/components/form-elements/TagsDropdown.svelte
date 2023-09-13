@@ -11,7 +11,7 @@
     let expanded:boolean=false
 
     function removeTag(index:number) {
-        // console.log("Removing tag")
+        console.log("Removing tag")
         selectedTags = selectedTags.filter( (e,i) => i !== index );
     }
     function addTag(index:number) {
@@ -38,51 +38,54 @@
 	}
 </script>
 
-<div use:clickOutside on:click_outside={handleClickOutside} class="dropdown {expanded?'is-active':''}">
-    <label for='tag-select' class='label is-small my-1 mr-3'>{title}</label>
-    <div class="dropdown-trigger">
-        <div class="field">
-            <p class="control is-expanded has-icons-right" aria-haspopup="true" aria-controls="dropdown-menu">
-                <input on:click={()=>{expanded=true}} name='tag-select' class="input is-small" type="search" placeholder="Search tags..."/>
-                <span class="icon is-small is-right"><Fa icon={faCaretDown} /></span>
-            </p>
+<div class='tags-dropdown'>
+    <div use:clickOutside on:click_outside={handleClickOutside} class="dropdown {expanded?'is-active':''}">
+        <label for='tag-select' class='label is-small'>{title}: </label>
+        <div class="dropdown-trigger">
+            <div class="field">
+                <p class="control is-expanded has-icons-right" aria-haspopup="true" aria-controls="dropdown-menu">
+                    <input on:click={()=>{expanded=true}} name='tag-select' class="input is-small" type="search" placeholder="Search tags..."/>
+                    <span class="icon is-small is-right"><Fa icon={faCaretDown} /></span>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-        <div class="dropdown-content pl-2">
-            <p class='dropdown-item'>
-                {#each selectedTags as tag}
-                <span class='tag'>
-                    {tag}
-                    <button on:click={() => removeTag(i)} class='delete is-small'></button>
-                </span>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content pl-2">
+                <p class='dropdown-item'>
+                    {#each selectedTags as tag, i}
+                    <span class='tag'>
+                        {tag}
+                        <button on:click={() => removeTag(i)} class='delete is-small'></button>
+                    </span>
+                    {/each}
+                </p>
+                <span class='dropdown-divider'></span>
+                {#each items as item, i}
+                <a on:click={() => {addTag(i)}} class="tag m-1">{item}</a>
                 {/each}
-            </p>
-            <span class='dropdown-divider'></span>
-            {#each items as item, i}
-            <a on:click={() => {addTag(i)}} class="tag m-1">{item}</a>
-            {/each}
-        </div>
-    </div>    
-</div>
-<div class='selected-tags'>
-    {#each selectedTags as tag, i}
-        <span class='tag'>
-            {tag}
-            <button on:click={() => removeTag(i)} class='delete is-small'></button>
-        </span>
-    {/each}
+            </div>
+        </div>    
+    </div>
+    <div class='selected-tags'>
+        {#each selectedTags as tag, i}
+            <span class='tag'>
+                {tag}
+                <button on:click={() => removeTag(i)} class='delete is-small'></button>
+            </span>
+        {/each}
+    </div>
 </div>
 
 <style>
     label {
-        width: 2rem;
+        width: 2.5rem;
+        margin-top: 5px;
     }
     input {
         width: 12rem;
     }
     .selected-tags {
-        margin-left: 3rem;
+        margin-left: 2.5rem;
         width: 12rem;
         margin-top: 5px;
     }
