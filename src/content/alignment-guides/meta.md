@@ -2,9 +2,9 @@
 title: Computer Science Standard Alignment Guides
 authors: CodeVA Curriculum
 type: group
-# contents:
+contents:
 #     - ./kindergarten.md
-#     - ./grade-1.md
+    # - ./grade-1.md
 #     - ./grade-2.md
 #     - ./grade-3.md
 #     - ./grade-4.md
