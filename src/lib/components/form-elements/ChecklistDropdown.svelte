@@ -1,15 +1,16 @@
 <script lang='ts'>
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+    import {faCaretDown, faChevronDown} from '@fortawesome/free-solid-svg-icons'
+    import Collapse from '../Collapse.svelte';
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
     export let items:any = {}
 
-    let selected:any = {}
+    export let selected:any = {}
 
-    function manageToggle(e, subject) {
+    function manageToggle(e:any, subject:string) {
         if(e.target.checked) {
             selected[subject] = [...items[subject], subject]
         } else {
@@ -26,26 +27,32 @@
     </div>
     <div class='dropdown-menu' id={id} role='menu'>
         <div class='dropdown-content'>
-            {#each Object.entries(items) as [subject, arr]}
-                <label class="checkbox dropdown-item">
+            {#each Object.entries(items) as [index, arr]}
+            <Collapse>
+                <label slot="heading" class="checkbox dropdown-item">
                     <input
-                        on:change={(e)=>{manageToggle(e, subject)}}
+                        class='mr-1'
+                        on:change={(e)=>{manageToggle(e, index)}}
                         type="checkbox"
-                        value={subject}
-                        bind:group={selected[subject]}
+                        value={index}
+                        bind:group={selected[index]}
                     >
-                    {subject}
+                    <span>{index}</span>
                 </label>
-                {#each arr as strand, i}
-                <label class="ml-5 checkbox dropdown-item">
-                    <input 
-                        bind:group={selected[subject]}
-                        value={strand}
-                        type="checkbox"
-                    >
-                    {strand}
-                </label>
-                {/each}
+                <div class='collapsible'>
+                    {#each arr as item}
+                    <label class="ml-5 checkbox dropdown-item">
+                        <input 
+                            class='mr-1'
+                            bind:group={selected[index]}
+                            value={item}
+                            type="checkbox"
+                        >
+                        {item}
+                    </label>
+                    {/each}
+                </div>
+            </Collapse>
             {/each}
         </div>
     </div>
