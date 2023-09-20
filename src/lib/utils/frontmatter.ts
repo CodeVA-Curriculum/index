@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import { parseFrontmatter } from './parsers'
 import {getParentDirectory, getParentMeta} from './pathUtils'
 import { importLibraryGlob } from '.'
+import { srcToUrl } from './pathUtils'
 
 const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types']
 
@@ -76,6 +77,44 @@ function defaultFrontmatter() {
         types:[],
         tags:[]
     }
+}
+
+function splitString(string:any, separator:string):any[] {
+    let list = []
+    if(typeof(string) == typeof('string')) {
+      list = string.split(separator)
+    } else {
+      throw new Error(`Tried to split frontmatter ${string} attribute of incorrect data type!`)
+    }
+    return list
+  }
+
+function postprocess(frontmatter:Frontmatter):Frontmatter {
+    frontmatter.subjects = splitString(frontmatter.subjects, ', ')
+    frontmatter.grades = splitString(frontmatter.grades, ', ')
+    frontmatter.types = splitString(frontmatter.types, ', ')
+    frontmatter.tags = splitString(frontmatter.tags, ', ')
+
+    return frontmatter
+}
+
+async function getAllFrontmatter():Promise<Frontmatter[]> {
+    // Frontmatter for everything in the library
+    const library = await importLibraryGlob('all')
+    let frontmatters:Frontmatter[] = []
+    for(const path in library) {
+        const validPath:Path = {
+            path: `${srcToUrl(path)}.md`.replace('/library/', '') as `${string}.md`,
+            exists: true
+        }
+        let frontmatter = await parseFrontmatter(validPath)
+        frontmatter.parents = await findAndInheritFromParents(frontmatter)
+        frontmatter.members = await findMemberFrontmatter(frontmatter)
+        frontmatter = postprocess(frontmatter)
+
+        frontmatters.push(frontmatter)
+    }
+    return frontmatters
 }
 
 
@@ -156,7 +195,8 @@ async function findMemberFrontmatter(frontmatter:Frontmatter):Promise<Frontmatte
     const members:Frontmatter[] = []
     
     // first, clean relative paths in contents
-    for(let i=0;i<frontmatter.contents.length;i++) {
+    const contents = frontmatter.contents ? frontmatter.contents : []
+    for(let i=0;i<contents.length;i++) {
         const parentDirectory = getParentDirectory(frontmatter.pathData)+'/'
         const memberPath:Path = validatePath(frontmatter.contents[i].replace('./', parentDirectory).replace('.md', ''))
         // console.log('Parsing member frontmatter at', memberPath.path)
@@ -179,4 +219,4 @@ function checkFrontmatterRequirements(frontmatter:Frontmatter) {
   }
 
 export type {Frontmatter, Path}
-export {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFrontmatter, checkFrontmatterRequirements, auditFrontmatter}
+export {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFrontmatter, checkFrontmatterRequirements, auditFrontmatter, getAllFrontmatter, postprocess}

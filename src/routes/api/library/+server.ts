@@ -1,5 +1,5 @@
 import {json} from '@sveltejs/kit'
 
-export function GET() {
-    return json('library content')
+export async function GET() {
+    return json('Some data')
 }
