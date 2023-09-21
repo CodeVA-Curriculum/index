@@ -18,6 +18,8 @@
     let term:string="";
     let expanded:boolean=true;
 
+    let URLerror = false;
+
     interface SearchParams {
         term:string
     }
@@ -50,6 +52,17 @@
 </script>
 
 <div class='searchbox my-5'>
+    {#if URLerror}
+    <article transition:slide class="message is-danger">
+        <div class="message-header">
+          <p class='m-0 p-0'>Malformed URL!</p>
+          <button on:click={() => {URLerror = false}} class="delete" aria-label="delete"></button>
+        </div>
+        <div class="message-body">
+            The URL you used to visit this page was malformed, and we were not able to filter results from our library. Use the form and filters below to search our library, or <a href='{base}/library/browse'>browse our collections</a> to find what you need.
+        </div>
+    </article>
+    {/if}
     <div class='field has-addons'>
         <div class='control is-expanded'>
             <input bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">

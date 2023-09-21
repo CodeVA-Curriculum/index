@@ -51,7 +51,7 @@ interface Frontmatter {
     members:Frontmatter[],
     groups:Frontmatter[],
     contents:string[],
-    license:License,
+    license?:License,
     tags:string[]
 }
 
@@ -75,7 +75,7 @@ function defaultFrontmatter() {
         contents: [],
         groups: [],
         types:[],
-        tags:[]
+        tags:[],
     }
 }
 

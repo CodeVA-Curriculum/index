@@ -1,12 +1,15 @@
 <script lang='ts'>
-    export let data:any;
+    export let data:any = { results: [] };
     import Search from '$lib/components/Search.svelte';
     import {onMount} from 'svelte'
+    import {base} from '$app/paths'
     import ElementCard from '$lib/components/ElementCard.svelte';
     import {page} from '$app/stores'
 
-    onMount(()=>{
-        // console.log($page.url.searchParams.get('term'))
+    const testURL = '?query=hello&subject=Computer+Science&subject=English'
+
+    onMount(async ()=>{
+        const res = (await fetch(`${base}/api/library${testURL}`)).json()
     })
 </script>
 
