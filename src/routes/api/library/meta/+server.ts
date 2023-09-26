@@ -28,11 +28,17 @@ export async function GET() {
             results[strand].push(subjects[i])
         }
     }
+    const gradeResults = {
+        'K-2': grades.slice(0, 3),
+        '3-5': grades.slice(3, 6),
+        '6-8': grades.slice(6, 9),
+        '9-12': grades.slice(9-12)
+    }
 
 
     return json({
         subjects: results,
-        grades: grades
+        grades: gradeResults
     })
 }
 

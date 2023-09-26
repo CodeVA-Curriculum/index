@@ -15,4 +15,11 @@ interface Element {
     type:string
   }
 
-export type {Element}
+interface Standard {
+  name:string,
+  subStds:string[],
+  strand:string,
+  grade:string|number
+}
+
+export type {Element, Standard}

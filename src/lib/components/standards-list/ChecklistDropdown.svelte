@@ -7,6 +7,7 @@
     export let title:string = "No Title"
     export let id:string = 'no-id'
     export let items:any = {}
+    export let width:string = 'auto'
 
     export let selected:any = {}
 
@@ -26,7 +27,7 @@
         <button class='button is-small'>{title}<Fa class='ml-2' icon={faChevronDown} /></button>
     </div>
     <div class='dropdown-menu' id={id} role='menu'>
-        <div class='dropdown-content'>
+        <div style='width: {width};' class='dropdown-content'>
             {#each Object.entries(items) as [index, arr]}
             <Collapse>
                 <label slot="heading" class="checkbox dropdown-item">

@@ -1,37 +1,14 @@
 <script lang='ts'>
     import {onMount} from 'svelte'
+    import {slide} from 'svelte/transition'
     import { faCaretDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
-    import Dropdown from "./Dropdown.svelte";
-    import MultipleSelect from "./MultipleSelect.svelte";
-    import TagsDropdown from "./TagsDropdown.svelte"
-    import ChecklistDropdown from "./ChecklistDropdown.svelte";
-
-
-    let subjects:object|false = false
-    onMount(async () => {
-        const res = await (await fetch('/api/library/meta')).json()
-        subjects = res.subjects as string[]
-    })
+    import StandardsList from '../standards-list/StandardsList.svelte';
 </script>
 
 <div class='filters has-text-left columns'>
     <div class='column'>
-        <label for='standards' class='label'>Standards</label>
-        <div class='field has-addons'>
-
-            <!-- TODO: Add endpoint -->
-            {#if subjects}
-            <ChecklistDropdown title='Subjects' id='subjects-dropdown' items={subjects} />
-            {/if}
-            <ChecklistDropdown title='Grades' id='grades-dropdown' />
-            <div class='control'>
-                <input name='standards' class='input is-small' placeholder="Search...">
-            </div>
-            <div class='control'>
-                <button class='button is-small is-info'>Get List</button>
-            </div>
-        </div>
+        <StandardsList />
     </div>
     <div class='column is-narrow'>    
     <div class='field is-grouped'>
