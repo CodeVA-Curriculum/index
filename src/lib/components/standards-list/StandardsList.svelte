@@ -3,41 +3,101 @@
     
     import ChecklistDropdown from "./ChecklistDropdown.svelte";
     import ListView from './ListView.svelte';
+    import {renderGradesAsStrings, gradesByBandToList} from '$lib/utils/metaUtils'
+    import type {ListedStandards} from '$lib/utils/metaUtils'
+
     
-    let subjects:object|false = false
-    let grades:object|false = false
-    let selectedSubjects:object|false = false
-    let selectedGrades:object|false = false
 
-    interface StrandsObject {
-        'Algorithms & Programming'?:number[]
-    }
-
-    interface SubjectsObject {
-        'Computer Science'?:StrandsObject
-    }
-
-    interface ListedStandards {
-        K?:SubjectsObject
-    }
-
-    let standards:object[] = []
-    let filteredStandards:ListedStandards = {
+    let filteredStandards:object[] = []
+    let standards:ListedStandards = {
         'Kindergarten': {
             'Computer Science': {
-                'Algorithms & Programming': [1, 1, 1, 1]
+                'Algorithms & Programming': [
+                    {
+                        title:'K.1',
+                        text: 'The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        title: 'K.2',
+                        text: 'The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        title: 'K.3',
+                        text: 'The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        title: 'K.4',
+                        text: 'The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    }
+                ]
             }
         }
     }
 
+    function filterStandards(grades, subjects, standards) {
+        let filtered = {}
+
+        // Add indices for grade levels
+        let gradeList = gradesByBandToList(grades)
+        filtered = Object.fromEntries(Object.entries(standards).filter(([key]) => {
+            return gradeList.includes(key)
+        }));
+
+        for(const grade in filtered) {
+            // get subjects
+            filtered[grade] = Object.fromEntries(Object.entries(standards[grade]).filter(([key]) => {
+                return subjects[key] && subjects[key].includes(key)? true : false
+            }));
+
+            // // get strands
+            for(const subj in filtered[grade]) {
+                filtered[grade][subj] = Object.fromEntries(Object.entries(standards[grade][subj]).filter(([key]) => {
+                    return subjects[subj].includes(key)? true : false
+                }));
+            }
+        }
+
+        console.log(filtered)
+
+        
+
+        if(listView) {
+            showOrClose = listView.updateListStatus()
+        }
+        return filtered
+    }
+
+    $: filteredStandards = filterStandards(selectedGrades, selectedSubjects, standards)
+
     let listView:any;
 
     let showOrClose:boolean = false
+
+    let subjects:object|false = false
+    let grades:object|false = false
+    let selectedSubjects:any
+    let selectedGrades:any
+
     onMount(async () => {
         const res = await (await fetch('/api/library/meta')).json()
-        subjects = res.subjects as string[]
-        grades = res.grades as string[]
-
+        subjects = res.subjects
+        grades = res.grades
 
         // const standards = await (await fetch('/api/standards')).json()
     })
@@ -53,42 +113,56 @@
             return 'Show'
         }
     }
+
+    
 </script>
 
 <div class='standards-list'>
     <label for='standards' class='label'>Standards</label>
-        <div class='field has-addons'>
+        <div class='field'>
             {#if subjects}
             <ChecklistDropdown 
                 title='Subjects'
                 id='subjects-dropdown'
-                items={subjects}
-                bind:selected={selectedSubjects} 
+                items={subjects} 
+                bind:selected={selectedSubjects}
             />
             {/if}
             {#if grades}
             <ChecklistDropdown 
-                width='7rem' 
+                width='10rem' 
                 title='Grades' 
                 id='grades-dropdown' 
-                items={grades} 
-                bind:selected={selectedGrades} 
+                items={renderGradesAsStrings(grades)} 
+                bind:selected={selectedGrades}
             />
             {/if}
-            <div class='control'>
-                <button class='button is-small'>Add All Selected</button>
-            </div>
-            <div class='control'>
-                <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-info'>
-                    {showOrClose? 'Close':'Search'}
+            <!-- <div class='control'>
+                <input class='input is-small' placeholder="Filter list...">
+            </div> -->
+            <!-- <div class='control'> -->
+                <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary'>
+                    {showOrClose? 'Close List':'Show Standards'}
                 </button>
-            </div>
+            <!-- </div> -->
         </div>
-        <ListView bind:this={listView} contents={filteredStandards} />
+        <div class='list-view-wrapper'>
+            <ListView bind:this={listView} contents={filteredStandards}></ListView>
+        </div>
 </div>
 
 <style>
     label {
         font-size: 8pt;
+    }
+    button {
+        width: 10rem;
+    }
+    .list-view-wrapper {
+        /* border-left: 1px;
+        border-left-style: solid;
+        border-left-color: black; */
+        width: 100%;
+        overflow-x: visible;
     }
 </style>

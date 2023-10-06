@@ -19,6 +19,7 @@
     <div class='columns is-mobile p-0 m-0'>
         <div class='column p-0 m-0'><slot name='heading'></slot></div>
         <div class='column is-narrow p-0 pr-3 m-0'>
+            <slot name="label" />
             <button on:click={toggle}><Fa icon={open? faCaretDown:faCaretLeft} /></button>
         </div>
     </div>

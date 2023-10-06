@@ -19,12 +19,20 @@
         }
         
     }
+    function turnOffParent(e:any, parent:string, item:string) {
+        if(!e.target.checked && selected[parent].includes(parent)) {
+            selected[parent] = selected[parent].filter(obj => obj != parent && obj != item)
+        }
+        if(e.target.checked && selected[parent].length+1 == items[parent].length) {
+            selected[parent] = [parent, ...selected[parent], item]
+        }
+    }
     
 </script>
 
 <div class='checklist-dropdown control dropdown is-hoverable'>
     <div class='dropdown-trigger'>
-        <button class='button is-small'>{title}<Fa class='ml-2' icon={faChevronDown} /></button>
+        <button class='button is-small is-fullwidth'>{title}<Fa class='ml-2' icon={faChevronDown} /></button>
     </div>
     <div class='dropdown-menu' id={id} role='menu'>
         <div style='width: {width};' class='dropdown-content'>
@@ -40,10 +48,18 @@
                     >
                     <span>{index}</span>
                 </label>
+                <span slot='label'>
+                    {#if selected[index] && selected[index].length > 0}
+                    <span class='number-pill'>
+                        {selected[index].length > items[index].length? items[index].length : selected[index].length}
+                    </span>
+                    {/if}
+                </span>
                 <div class='collapsible'>
                     {#each arr as item}
                     <label class="ml-5 checkbox dropdown-item">
                         <input 
+                            on:change={(e)=>{turnOffParent(e, index, item)}}
                             class='mr-1'
                             bind:group={selected[index]}
                             value={item}
@@ -60,6 +76,15 @@
 </div>
 
 <style>
+    .number-pill {
+        background-color: whitesmoke;
+        font-size: small;
+        padding: 0 5px;
+        border-radius: 20px;;
+    }
+    .checklist-dropdown > .dropdown-trigger {
+        width: 7rem;
+    }
     label {
         font-size: 8pt;
     }

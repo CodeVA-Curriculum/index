@@ -81,10 +81,8 @@
         
     </div>
     
-    <div transition:slide class='filters {expanded? '':'hidden'} card'>
-        <div class='card-content'>
+    <div transition:slide class='filters {expanded? '':'hidden'}'>
             <Filters />
-        </div>
     </div>
     
 </div>
