@@ -73,8 +73,6 @@
             }
         }
 
-        console.log(filtered)
-
         
 
         if(listView) {
@@ -144,7 +142,6 @@
                 <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary'>
                     {showOrClose? 'Close List':'Show Standards'}
                 </button>
-            <!-- </div> -->
         </div>
         <div class='list-view-wrapper'>
             <ListView bind:this={listView} contents={filteredStandards}></ListView>

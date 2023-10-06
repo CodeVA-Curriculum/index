@@ -10,7 +10,7 @@
     const MAX_LENGTH:number = 20
 
     export let listStatus = 'none'
-    export let selectedStandards:string[]=['K.1', 'K.2']
+    export let selectedStandards:string[]=[]
     export let filter;
 
     onMount(() => {
@@ -54,6 +54,9 @@
     export function getStatus():string {
         return listStatus
     }
+    export function getSelected():number {
+        return selectedStandards.length
+    }
 
     function removeStandard(title:string) {
         selectedStandards = selectedStandards.filter(std => std != title)
@@ -83,6 +86,15 @@
             <button on:click={()=>removeStandard(std)} class='delete is-small'></button>
         </span>
         {/each}
+        {#if selectedStandards.length > 0}
+        <!-- TODO: fix A11y compliance -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <span on:click={()=>selectedStandards = []} class='clear tag is-light mr-1 ml-0 my-0'>
+            Clear
+            <button class='delete is-small'></button>
+        </span>
+        {/if}
     </div>
     {#if listStatus == 'empty'}
         <div class='has-text-centered'>
@@ -120,6 +132,9 @@
     </span>
 </div>
 <style>
+    .clear:hover {
+        cursor:pointer;
+    }
     .show {
         display: block;
     }
