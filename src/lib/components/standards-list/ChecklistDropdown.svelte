@@ -20,11 +20,21 @@
         
     }
     function turnOffParent(e:any, parent:string, item:string) {
-        if(!e.target.checked && selected[parent].includes(parent)) {
+        if(!e.target.checked && selected[parent].includes(parent) && selected[parent].length == 2) {
             selected[parent] = selected[parent].filter(obj => obj != parent && obj != item)
         }
         if(e.target.checked && selected[parent].length+1 == items[parent].length) {
             selected[parent] = [parent, ...selected[parent], item]
+        }
+    }
+
+    let length = 0
+    $: {
+        length = 0
+        for(const parent in selected) {
+            if(selected[parent].length > 0) {
+                length++
+            }
         }
     }
     
@@ -32,7 +42,11 @@
 
 <div class='checklist-dropdown control dropdown is-hoverable'>
     <div class='dropdown-trigger'>
-        <button class='button is-small is-fullwidth'>{title}<Fa class='ml-2' icon={faChevronDown} /></button>
+        <button class='button is-small is-fullwidth'>
+            {title}
+            <span class='number-pill mx-1'>{length}</span>
+            <Fa class='ml-2' icon={faChevronDown} />
+        </button>
     </div>
     <div class='dropdown-menu' id={id} role='menu'>
         <div style='width: {width};' class='dropdown-content'>
@@ -78,7 +92,7 @@
 <style>
     .number-pill {
         background-color: whitesmoke;
-        font-size: small;
+        font-size: 8pt;
         padding: 0 5px;
         border-radius: 20px;;
     }
