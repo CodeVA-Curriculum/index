@@ -6,15 +6,13 @@
     import {renderGradesAsStrings, gradesByBandToList} from '$lib/utils/metaUtils'
     import type {ListedStandards} from '$lib/utils/metaUtils'
 
-    
-
     let filteredStandards:object[] = []
     let standards:ListedStandards = {
         'Kindergarten': {
             'Computer Science': {
                 'Algorithms & Programming': [
                     {
-                        title:'K.1',
+                        title:'K.CS.1',
                         text: 'The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.',
                         subs:[],
                         grade: 'Kindergarten',
@@ -22,7 +20,7 @@
                         subject: 'Computer Science'
                     },
                     {
-                        title: 'K.2',
+                        title: 'K.CS.2',
                         text: 'The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.',
                         subs:[],
                         grade: 'Kindergarten',
@@ -30,7 +28,7 @@
                         subject: 'Computer Science'
                     },
                     {
-                        title: 'K.3',
+                        title: 'K.CS.3',
                         text: 'The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).',
                         subs:[],
                         grade: 'Kindergarten',
@@ -38,7 +36,7 @@
                         subject: 'Computer Science'
                     },
                     {
-                        title: 'K.4',
+                        title: 'K.CS.4',
                         text: 'The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.',
                         subs:[],
                         grade: 'Kindergarten',
@@ -89,18 +87,33 @@
 
     let subjects:object|false = false
     let grades:object|false = false
-    let selectedSubjects:any
-    let selectedGrades:any
+    export let selectedSubjects:any
+    export let selectedGrades:any
 
     export let standardsObjs:object[] = []
-
+    export let preselect;
 
     onMount(async () => {
         const res = await (await fetch('/api/library/meta')).json()
         subjects = res.subjects
         grades = res.grades
 
-        // const standards = await (await fetch('/api/standards')).json()
+        
+        const dropdown = {}
+        for(const s in subjects) {
+            dropdown[s] = [s]
+            for(const st in subjects[s]) {
+                dropdown[s].push(subjects[s][st])
+            }
+        }
+        if(preselect && preselect.get('subj')) {
+            const subjs = preselect.get('subj').split(',')
+            for(const s in dropdown) {
+                dropdown[s] = dropdown[s].filter((el) => subjs.includes(el))
+            }
+            selectedSubjects = dropdown
+        }
+        
     })
 
     async function getStandards() {

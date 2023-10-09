@@ -7,6 +7,7 @@
     import { listedStdsToStdList } from '$lib/utils/metaUtils';
     import { onMount } from 'svelte';
     import NumberPill from '../NumberPill.svelte';
+    import StandardTag from './StandardTag.svelte';
     export let contents:any = {}
     const MAX_LENGTH:number = 20
 
@@ -95,10 +96,7 @@
 <div class='list-view'>
     <div class='mb-3'>
         {#each selectedStandards as std}
-        <span class='tag is-dark mr-1 ml-0 my-0 mt-1'>
-            {std.title}
-            <button on:click={()=>removeStandard(std)} class='delete is-small'></button>
-        </span>
+        <StandardTag on:delete={(e)=>removeStandard(e.detail.data)} standard={std} />
         {/each}
         {#if selectedStandards.length > 0}
         <!-- TODO: fix A11y compliance -->
@@ -126,6 +124,7 @@
         </div>
     {/if}
     <span class='{listStatus != 'none'? 'show':'hide'}'>
+        <!-- TODO: replace object entries with API endpoints -->
         {#each Object.entries(contents) as [grade, subjs]}
             <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0}>
                 <span slot="pill">

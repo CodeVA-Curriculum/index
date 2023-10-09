@@ -1,16 +1,24 @@
 <script lang='ts'>
     import Fa from 'svelte-fa'
     import {faCaretDown, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
+    import { onMount } from 'svelte';
     
     export let title:string = 'No Title'
     export let selected:string[] = []
     export let placeholder:string = "No placeholder..."
     export let tagsList = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8']
+    export let preselect = ''
 
     let query:string = ''
     let filteredTags:string[] = []
 
     let input;
+
+    onMount(() => {
+        if(preselect) {
+            selected = preselect.split(',')
+        }
+    })
 
     $: filteredTags = tagsList.filter((el) => {
         return !selected.includes(el) && (el.includes(query) || query.length == 0)

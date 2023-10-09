@@ -53,10 +53,16 @@
             grade?:string[]
         }
 
+        let subjectsToSend:string[] = []
+        for(const subj in selectedSubjects) {
+            subjectsToSend = [...subjectsToSend, ...selectedSubjects[subj]]
+        }
+
         const tmp:Params = {}
         if(selectedAudiences.length > 0) { tmp['aud'] = selectedAudiences }
         if(selectedTypes.length > 0) { tmp['type'] = selectedTypes }
         if(selectedTags.length > 0) { tmp['tag'] = selectedTags }
+        if(subjectsToSend.length > 0) {tmp['subj'] = subjectsToSend}
         if(sols.length > 0) { tmp['sol'] = sols }
     
         return tmp
@@ -71,31 +77,26 @@
     }
 
     onMount(() => {
-        const tag = data.get('tag')
-        if(data.get('sol')) {
-
+        const audiences = data.get('aud')
+        if(audiences) {
+            selectedAudiences = audiences.split(',')
         }
-        if(data.get('aud')) {
 
-        }
-        if(data.get('type')) {
-
-        }
-        if(tag) {
-            selectedTags = tag.split(',')
-        }
-        if(data.get('subj')) {
-
-        }
-        if(data.get('grade')) {
-
+        const resources = data.get('type')
+        if(resources) {
+            selectedTypes = resources.split(',')
         }
     })
 </script>
 
 <div class='filters has-text-left columns'>
     <div class='column is-narrow'>
-        <StandardsList bind:standardsObjs={selectedStandards} />
+        <StandardsList 
+            preselect={data} 
+            bind:standardsObjs={selectedStandards}
+            bind:selectedGrades={selectedGrades}
+            bind:selectedSubjects={selectedSubjects}
+        />
     </div>
     <div class='column'>    
         <div class='field is-grouped'>
@@ -121,7 +122,7 @@
             </div>
             <div class='control'>
                 <label class='label small'>Tags</label>
-                <InputWithDropdown bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
+                <InputWithDropdown preselect={data.get('tag')} bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
             </div>
         </div>
     </div>
