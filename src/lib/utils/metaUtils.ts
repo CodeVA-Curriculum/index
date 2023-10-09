@@ -3,7 +3,8 @@ export interface Standard {
     text:string,
     subs:string[],
     grade:string,
-    strand:string
+    strand:string,
+    subject:string
 }
 export interface StrandsObject {
     'Algorithms & Programming'?:Standard[]

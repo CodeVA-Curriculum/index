@@ -94,7 +94,7 @@
         background-color: whitesmoke;
         font-size: 8pt;
         padding: 0 5px;
-        border-radius: 20px;;
+        border-radius: 20px;
     }
     .checklist-dropdown > .dropdown-trigger {
         width: 7rem;

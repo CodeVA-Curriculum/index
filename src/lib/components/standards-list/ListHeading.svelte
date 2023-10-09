@@ -23,6 +23,7 @@
         <!-- <div class='icon-left'><Fa rotate={90} icon={faArrowTurnUp} /></div> -->
         <div on:click={() => {expanded = !expanded}} class='heading-wrap column is-expanded mr-1 pl-1'>
             <span class='heading-name mr-3'>{title}</span>
+            <slot name='pill' />
         </div>
         <div class='column is-narrow'>
             <button on:click={addAll} class='button has-icon left is-italic m-0'>

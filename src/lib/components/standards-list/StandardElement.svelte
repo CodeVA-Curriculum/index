@@ -10,9 +10,13 @@
     export let standard;
     export let selected:any[] = []
 
+    const standardFinder = (element) => {
+        return standard.title == element.title
+    }
+
 
     $: {
-        if(selected.includes(standard.title)) {
+        if(selected.some(standardFinder)) {
             standardSelected = true
             icon = faCheck
         } else {
@@ -23,10 +27,10 @@
 
     function addStandard() {
         console.log("Adding standard")
-        selected = [...selected, standard.title]
+        selected = [...selected, standard]
     }
     function removeStandard() {
-        selected = selected.filter(std => std !== standard.title);
+        selected = selected.filter(std => std.title !== standard.title);
     }
     function handler() {
         if(standardSelected) {

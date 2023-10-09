@@ -6,6 +6,7 @@
     import Fa from 'svelte-fa'
     import { listedStdsToStdList } from '$lib/utils/metaUtils';
     import { onMount } from 'svelte';
+    import NumberPill from '../NumberPill.svelte';
     export let contents:any = {}
     const MAX_LENGTH:number = 20
 
@@ -48,7 +49,7 @@
         for(let i=0;i<list.length;i++) {
             titles.push(list[i].title)
         }
-        selectedStandards = selectedStandards.filter(str => list.includes(str))
+        selectedStandards = selectedStandards.filter(obj => list.includes(obj.title))
     }
 
     export function getStatus():string {
@@ -58,15 +59,15 @@
         return selectedStandards.length
     }
 
-    function removeStandard(title:string) {
-        selectedStandards = selectedStandards.filter(std => std != title)
+    function removeStandard(obj) {
+        selectedStandards = selectedStandards.filter(std => std.title != obj.title)
     }
 
     function addAllIn(obj) {
         if(obj.length) {
             for(let i=0;i<obj.length;i++) {
-                if(!selectedStandards.includes(obj[i].title)) {
-                    selectedStandards = [...selectedStandards, obj[i].title]
+                if(!selectedStandards.some((std)=> obj[i].title == std.title)) {
+                    selectedStandards = [...selectedStandards, obj[i]]
                 }
             }
         } else {
@@ -82,7 +83,7 @@
     <div class='mb-3'>
         {#each selectedStandards as std}
         <span class='tag is-dark mr-1 ml-0 my-0'>
-            {std}
+            {std.title}
             <button on:click={()=>removeStandard(std)} class='delete is-small'></button>
         </span>
         {/each}
@@ -114,10 +115,34 @@
     <span class='{listStatus != 'none'? 'show':'hide'}'>
         {#each Object.entries(contents) as [grade, subjs]}
             <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0} >
+                <span slot="pill">
+                    <NumberPill 
+                        list={selectedStandards} 
+                        cond={(obj)=> {
+                            return obj.grade == grade
+                        }}
+                    />
+                </span>
                 {#each Object.entries(subjs) as [subj, strands]}
-                <ListHeading title={subj} indent={1}>
+                <ListHeading on:addAll={()=> addAllIn(contents[grade][subj])} title={subj} indent={1}>
+                    <span slot="pill">
+                        <NumberPill 
+                            list={selectedStandards} 
+                            cond={(obj)=> {
+                                return obj.subject == subj
+                            }}
+                        />
+                    </span>
                     {#each Object.entries(strands) as [strand, stds]}
                         <ListHeading on:addAll={() => addAllIn(stds)} title={strand} indent={2}>
+                            <span slot="pill">
+                                <NumberPill 
+                                    list={selectedStandards} 
+                                    cond={(obj)=> {
+                                        return obj.strand == strand
+                                    }}
+                                />
+                            </span>
                             <div class='ml-2 mt-2'>
                                 {#each stds as std} 
                                 <StandardElement bind:selected={selectedStandards} standard={std} />
