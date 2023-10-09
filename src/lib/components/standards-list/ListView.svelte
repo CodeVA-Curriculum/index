@@ -77,12 +77,24 @@
             }
         }
     }
+
+    function findStandardsCount(obj) {
+        if(obj.length) {
+            return obj.length
+        } else {
+            let count = 0
+            for(const index in obj) {
+                count += findStandardsCount(obj)
+            }
+            return count
+        }
+    }
 </script>
 
 <div class='list-view'>
     <div class='mb-3'>
         {#each selectedStandards as std}
-        <span class='tag is-dark mr-1 ml-0 my-0'>
+        <span class='tag is-dark mr-1 ml-0 my-0 mt-1'>
             {std.title}
             <button on:click={()=>removeStandard(std)} class='delete is-small'></button>
         </span>
@@ -91,7 +103,7 @@
         <!-- TODO: fix A11y compliance -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <span on:click={()=>selectedStandards = []} class='clear tag is-light mr-1 ml-0 my-0'>
+        <span on:click={()=>selectedStandards = []} class='clear tag is-light mr-1 ml-0 my-0 mt-1'>
             Clear
             <button class='delete is-small'></button>
         </span>
@@ -114,7 +126,7 @@
     {/if}
     <span class='{listStatus != 'none'? 'show':'hide'}'>
         {#each Object.entries(contents) as [grade, subjs]}
-            <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0} >
+            <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0}>
                 <span slot="pill">
                     <NumberPill 
                         list={selectedStandards} 

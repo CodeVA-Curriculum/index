@@ -4,45 +4,75 @@
     import { faCaretDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
     import StandardsList from '../standards-list/StandardsList.svelte';
+    import ChecklistDropdown from '../standards-list/ChecklistDropdown.svelte';
+    import CheckBoxDropdown from './CheckBoxDropdown.svelte';
+    import InputWithDropdown from './InputWithDropdown.svelte';
+
+    let selectedTypes:string[] = []
+    let selectedAudiences:string[] = []
+
+    const types = [
+        "Unit of Study",
+        "Lesson Plan",
+        "Curricular Resource"
+    ]
+    const audiences = [
+        "Classroom Teachers",
+        "Students",
+        "Administrators",
+        "Curriculum Writers"
+    ]
+    
+    export let params:string = ""
 </script>
 
 <div class='filters has-text-left columns'>
-    <div class='column'>
+    <div class='column is-narrow'>
         <StandardsList />
     </div>
-    <div class='column is-narrow'>    
-    <div class='field is-grouped'>
-        <div class="control">
-            <label class='label small'>Audiences</label>
-            <div class="select is-small">
-              <select >
-                <option>All Audiences</option>
-                <option>With options</option>
-              </select>
+    <div class='column'>    
+        <div class='field is-grouped'>
+            <div class='control'>
+                <label class='label small'>Audiences</label>
+                <CheckBoxDropdown 
+                    width={'10rem'}
+                    title="Select..."
+                    id='resource-dropdown'
+                    items={audiences}
+                    bind:selected={selectedAudiences}
+                />
             </div>
-        </div>
-        <div class="control">
-            <label class='label small'>Resource Type</label>
-            <div class="dropdown is-hoverable is-small">
-              <div class='dropdown-trigger'>
-                <button class='button is-small'>Select types...<Fa class='ml-2' icon={faChevronDown} /></button>
-              </div>
-              <div class='dropdown-menu'>
-                <div class='dropdown-content'>
-                    <span class='dropdown-item'>Lesson Plan</span>
-                    <span class='dropdown-item'>Unit of Study</span>
-                    <span class='dropdown-item'>Curricular Planning</span>
+            <div class='control'>
+                <label class='label small'>Resource Types</label>
+                <CheckBoxDropdown 
+                    width={'10rem'}
+                    title="Select..."
+                    id='resource-dropdown'
+                    items={types}
+                    bind:selected={selectedTypes}
+                />
+            </div>
+            <!-- <div class="control">
+                <label class='label small'>Resource Type</label>
+                <div class="dropdown is-hoverable is-small">
+                <div class='dropdown-trigger'>
+                    <button class='button is-small'>Select types...<Fa class='ml-2' icon={faChevronDown} /></button>
                 </div>
-              </div>
+                <div class='dropdown-menu'>
+                    <div class='dropdown-content'>
+                        <span class='dropdown-item'>Lesson Plan</span>
+                        <span class='dropdown-item'>Unit of Study</span>
+                        <span class='dropdown-item'>Curricular Planning</span>
+                    </div>
+                </div>
+                </div>
+            </div> -->
+            <div class='control'>
+                <label class='label small'>Tags</label>
+                <InputWithDropdown title="Tags" placeholder="Type to search..." />
             </div>
-        </div>
-        <div class='control'>
-            <label class='label'>Tags</label>
-            <input class='input is-small' placeholder="Search for tags...">
         </div>
     </div>
-</div>
-    
 </div>
 
 <style>
