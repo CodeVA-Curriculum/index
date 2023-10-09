@@ -10,25 +10,67 @@
 
     let selectedTypes:string[] = []
     let selectedAudiences:string[] = []
+    let selectedTags:string[] = []
+    let selectedSubjects:string[] = []
+    let selectedGrades:string[] = []
+    let selectedStandards:object[] = []
 
-    const types = [
+    const types = [ // TODO:
         "Unit of Study",
         "Lesson Plan",
         "Curricular Resource"
     ]
-    const audiences = [
+    const audiences = [ // TODO:
         "Classroom Teachers",
         "Students",
         "Administrators",
         "Curriculum Writers"
     ]
+    const tags = ['python', 'ecs'] // TODO:
     
     export let params:string = ""
+
+    export function getParams() {
+        // let tmp = ''
+        // tmp += listToParams('aud', selectedAudiences)
+        // tmp += listToParams('&types', selectedTypes)
+        // tmp += listToParams('&tags', selectedTags)
+        // for(let i=0;i<selectedStandards.length;i++) {
+        //     tmp+=`&sols=${selectedStandards[i].title}`
+        // }
+        let sols:string[] = []
+        for(let i=0;i<selectedStandards.length;i++) {
+            sols = [...sols, selectedStandards[i].title]
+        }
+
+        interface Params {
+            aud?:string[],
+            type?:string[]
+            tag?:string[]
+            sol?:string[]
+        }
+
+        const tmp:Params = {}
+        if(selectedAudiences.length > 0) { tmp['aud'] = selectedAudiences }
+        if(selectedTypes.length > 0) { tmp['type'] = selectedTypes }
+        if(selectedTags.length > 0) { tmp['tag'] = selectedTags }
+        if(sols.length > 0) { tmp['sol'] = sols }
+    
+        return tmp
+    }
+
+    function listToParams(prefix:string,list:string[]):string {
+        let str = ''
+        for(let i=0;i<list.length;i++) {
+            str+=`${prefix}=${list[i]}`
+        }
+        return str
+    }
 </script>
 
 <div class='filters has-text-left columns'>
     <div class='column is-narrow'>
-        <StandardsList />
+        <StandardsList bind:standardsObjs={selectedStandards} />
     </div>
     <div class='column'>    
         <div class='field is-grouped'>
@@ -52,24 +94,9 @@
                     bind:selected={selectedTypes}
                 />
             </div>
-            <!-- <div class="control">
-                <label class='label small'>Resource Type</label>
-                <div class="dropdown is-hoverable is-small">
-                <div class='dropdown-trigger'>
-                    <button class='button is-small'>Select types...<Fa class='ml-2' icon={faChevronDown} /></button>
-                </div>
-                <div class='dropdown-menu'>
-                    <div class='dropdown-content'>
-                        <span class='dropdown-item'>Lesson Plan</span>
-                        <span class='dropdown-item'>Unit of Study</span>
-                        <span class='dropdown-item'>Curricular Planning</span>
-                    </div>
-                </div>
-                </div>
-            </div> -->
             <div class='control'>
                 <label class='label small'>Tags</label>
-                <InputWithDropdown title="Tags" placeholder="Type to search..." />
+                <InputWithDropdown bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
             </div>
         </div>
     </div>

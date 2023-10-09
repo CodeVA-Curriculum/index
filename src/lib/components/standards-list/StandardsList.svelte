@@ -92,6 +92,9 @@
     let selectedSubjects:any
     let selectedGrades:any
 
+    export let standardsObjs:object[] = []
+
+
     onMount(async () => {
         const res = await (await fetch('/api/library/meta')).json()
         subjects = res.subjects
@@ -144,7 +147,7 @@
                 </button>
         </div>
         <div class='list-view-wrapper'>
-            <ListView bind:this={listView} contents={filteredStandards}></ListView>
+            <ListView bind:this={listView} bind:selectedStandards={standardsObjs} contents={filteredStandards}></ListView>
         </div>
 </div>
 

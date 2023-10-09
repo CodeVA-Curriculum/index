@@ -11,8 +11,9 @@
     const MAX_LENGTH:number = 20
 
     export let listStatus = 'none'
-    export let selectedStandards:string[]=[]
-    export let filter;
+    export let selectedStandards:object[]=[]
+
+
 
     onMount(() => {
         listStatus = 'none'

@@ -10,6 +10,7 @@
     // components
     import Filters from '$lib/components/form-elements/Filters.svelte'
 
+    let filterElem;
     export let filter:boolean=true
     export let linkTo:boolean=false
 
@@ -20,24 +21,31 @@
 
     let URLerror = false;
 
-    interface SearchParams {
-        term:string
-    }
+    let params = ''
 
-    let params:SearchParams = {
-        term: ''
-    }
+    // interface SearchParams {
+    //     term:string
+    // }
+
+    // let params:SearchParams = {
+    //     term: ''
+    // }
 
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
         if(loaded) {
-            $page.url.searchParams.set('term',word);
+            $page.url.searchParams.set('query', term)
+            params = filterElem.getParams()
+            for(const key in params) {
+                $page.url.searchParams.set(key, params[key])
+            }
+            $page.url.searchParams.set('query', term)
+            // $page.url.searchParams.set('term',word);
             if(linkTo) {
                 goto(`${base}/library/search?${$page.url.searchParams.toString()}`);
             } else {
                 goto(`?${$page.url.searchParams.toString()}`);
             }
-            
         }
         return null
     }
@@ -81,8 +89,8 @@
         
     </div>
     
-    <div transition:slide class='filters {expanded? '':'hidden'}'>
-            <Filters />
+    <div class='filters {expanded? '':'hidden'}'>
+            <Filters bind:this={filterElem} bind:params={params} />
     </div>
     
 </div>
