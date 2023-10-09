@@ -29,6 +29,7 @@
     const tags = ['python', 'ecs'] // TODO:
     
     export let params:string = ""
+    export let data;
 
     export function getParams() {
         // let tmp = ''
@@ -47,7 +48,9 @@
             aud?:string[],
             type?:string[]
             tag?:string[]
-            sol?:string[]
+            sol?:string[],
+            subj?:string[],
+            grade?:string[]
         }
 
         const tmp:Params = {}
@@ -66,6 +69,28 @@
         }
         return str
     }
+
+    onMount(() => {
+        const tag = data.get('tag')
+        if(data.get('sol')) {
+
+        }
+        if(data.get('aud')) {
+
+        }
+        if(data.get('type')) {
+
+        }
+        if(tag) {
+            selectedTags = tag.split(',')
+        }
+        if(data.get('subj')) {
+
+        }
+        if(data.get('grade')) {
+
+        }
+    })
 </script>
 
 <div class='filters has-text-left columns'>

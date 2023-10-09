@@ -14,6 +14,8 @@
     export let filter:boolean=true
     export let linkTo:boolean=false
 
+    export let data:object;
+
     let url:string = '/'
     let loaded:boolean=false;
     let term:string="";
@@ -55,6 +57,8 @@
     }
 
     onMount(()=>{
+        term = data.get('query') ? data.get('query') : ''
+        
         loaded=true;
     })
 </script>
@@ -90,7 +94,7 @@
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters bind:this={filterElem} bind:params={params} />
+            <Filters data={data} bind:this={filterElem} bind:params={params} />
     </div>
     
 </div>

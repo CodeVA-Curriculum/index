@@ -121,15 +121,15 @@
 <div class='standards-list'>
     <label for='standards' class='label'>Standards</label>
         <div class='field'>
-            {#if subjects}
+            <!-- {#if subjects} -->
             <ChecklistDropdown 
                 title='Subjects'
                 id='subjects-dropdown'
                 items={subjects} 
                 bind:selected={selectedSubjects}
             />
-            {/if}
-            {#if grades}
+            <!-- {/if} -->
+            <!-- {#if grades} -->
             <ChecklistDropdown 
                 width='10rem' 
                 title='Grades' 
@@ -137,7 +137,7 @@
                 items={renderGradesAsStrings(grades)} 
                 bind:selected={selectedGrades}
             />
-            {/if}
+            <!-- {/if} -->
             <!-- <div class='control'>
                 <input class='input is-small' placeholder="Filter list...">
             </div> -->
