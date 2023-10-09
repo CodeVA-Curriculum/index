@@ -6,8 +6,9 @@
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
-    export let items:any = {}
+    export let items:any
     export let width:string = 'auto'
+    export let start:any
 
     export let selected:any = {}
 
@@ -27,6 +28,26 @@
             selected[parent] = [parent, ...selected[parent], item]
         }
     }
+
+    let loaded = false
+    $: {
+        if(!loaded && start && items) {
+            if(typeof(start) == typeof('str')) {
+                selected[start] = [...items[start], start]
+            } else {
+                for(let i=0;i<start.length;i++) {
+                    selected[start[i]] = [...items[start[i]], start[i]]
+                }
+            }
+            loaded = true
+        }
+    }
+
+    onMount(() => {
+        if(!start) {
+            loaded = true
+        }
+    })
 
     let length = 0
     $: {

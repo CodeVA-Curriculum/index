@@ -49,6 +49,7 @@
     }
 
     function filterStandards(grades, subjects, standards) {
+        console.log(standards)
         let filtered = {}
 
         // Add indices for grade levels
@@ -73,8 +74,8 @@
 
         
 
-        if(listView) {
-            showOrClose = listView.updateListStatus()
+        if(listView && loaded) {
+            showOrClose = listView.updateListStatus(listView.getStatus())
         }
         return filtered
     }
@@ -84,12 +85,12 @@
     let listView:any;
 
     let showOrClose:boolean = false
+    let loaded:boolean = false
 
     let subjects:object|false = false
     let grades:object|false = false
     export let selectedSubjects:any
     export let selectedGrades:any
-
     export let standardsObjs:object[] = []
     export let preselect;
 
@@ -97,6 +98,8 @@
         const res = await (await fetch('/api/library/meta')).json()
         subjects = res.subjects
         grades = res.grades
+
+        // standards = await (await fetch('/api/standards')).json()
 
         
         const dropdown = {}
@@ -113,7 +116,8 @@
             }
             selectedSubjects = dropdown
         }
-        
+
+        loaded = true
     })
 
     async function getStandards() {
@@ -140,6 +144,7 @@
                 id='subjects-dropdown'
                 items={subjects} 
                 bind:selected={selectedSubjects}
+                start={'Computer Science'}
             />
             <!-- {/if} -->
             <!-- {#if grades} -->
@@ -149,6 +154,7 @@
                 id='grades-dropdown' 
                 items={renderGradesAsStrings(grades)} 
                 bind:selected={selectedGrades}
+                start={['K-2', '3-5', '6-8', '9-12']}
             />
             <!-- {/if} -->
             <!-- <div class='control'>

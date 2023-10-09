@@ -77,14 +77,16 @@
     }
 
     onMount(() => {
-        const audiences = data.get('aud')
-        if(audiences) {
-            selectedAudiences = audiences.split(',')
-        }
+        if(data) {
+            const audiences = data.get('aud')
+            if(audiences) {
+                selectedAudiences = audiences.split(',')
+            }
 
-        const resources = data.get('type')
-        if(resources) {
-            selectedTypes = resources.split(',')
+            const resources = data.get('type')
+            if(resources) {
+                selectedTypes = resources.split(',')
+            }
         }
     })
 </script>
@@ -122,7 +124,7 @@
             </div>
             <div class='control'>
                 <label class='label small'>Tags</label>
-                <InputWithDropdown preselect={data.get('tag')} bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
+                <InputWithDropdown preselect={data ? data.get('tag') : null} bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
             </div>
         </div>
     </div>

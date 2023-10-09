@@ -57,7 +57,7 @@
     }
 
     onMount(()=>{
-        term = data.get('query') ? data.get('query') : ''
+        term = data ? data.get('query') : ''
         
         loaded=true;
     })

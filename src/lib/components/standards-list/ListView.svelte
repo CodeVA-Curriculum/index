@@ -17,10 +17,10 @@
 
 
     onMount(() => {
-        listStatus = 'none'
+        // listStatus = 'none'
     })
 
-    // $:console.log(listStatus)
+    $:console.log(listStatus)
 
     export function updateListStatus(status?:string):boolean {
         const length = Object.entries(contents).length
@@ -29,7 +29,7 @@
             return listStatus != 'none'
         }
         if(length == 0 && listStatus != 'empty') {
-            listStatus = 'empty'
+            listStatus = 'none'
             return true
         } else if(length > MAX_LENGTH && listStatus != 'error') {
             listStatus = 'error'
@@ -125,6 +125,9 @@
     {/if}
     <span class='{listStatus != 'none'? 'show':'hide'}'>
         <!-- TODO: replace object entries with API endpoints -->
+        <div class='has-text-centered {Object.entries(contents).length == 0? 'show':'hide'}'>
+            <p class='is-italic small'>--- None selected. Use dropdowns. ---</p>
+        </div>
         {#each Object.entries(contents) as [grade, subjs]}
             <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0}>
                 <span slot="pill">
