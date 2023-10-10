@@ -1,3 +1,9 @@
+<script lang='ts' context='module'>
+    export interface NestedDropdown {
+        [propName:string]: string[];
+    };
+</script>
+
 <script lang='ts'>
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
@@ -6,11 +12,59 @@
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
-    export let items:any
-    export let width:string = 'auto'
-    export let start:any
+    
+    export let items:NestedDropdown = {}
 
-    export let selected:any = {}
+    export let width:string = 'auto'
+    export let start:string[]
+
+    let selected:NestedDropdown = {}
+    export let output:string[] = []
+
+    let loaded = false
+    onMount(() => {
+        if(!start) {
+            loaded = true
+        }
+    })
+
+    // TODO: this sucks
+    $: {
+        if(!loaded && start && Object.entries(items).length > 0) {
+            for(let i=0;i<start.length;i++) {
+                if(items[start[i]] && !selected[start[i]]) { // the start value is a subject, and needs to be given an index
+                    selected[start[i]] = [start[i]]
+                } else {
+                    for(const subj in items) {
+                        if(items[subj].includes(start[i])) {
+                            selected[subj] = [...(selected[subj]? selected[subj]: []), start[i]]
+                            break
+                        }
+                    }
+                }
+            }
+            loaded = true
+        }
+    }
+
+    let length = 0
+    $: length = getLength(selected)
+
+    function getLength(selected:NestedDropdown):number {
+        let length = 0
+        output = []
+        for(const parent in selected) {
+            if(selected[parent].length > 0) {
+                length++
+                for(let i=0;i<selected[parent].length;i++) {
+                    if(!output.includes(selected[parent][i])) {
+                        output = [...output, selected[parent][i]]
+                    }
+                }
+            }
+        }
+        return length
+    }
 
     function manageToggle(e:any, subject:string) {
         if(e.target.checked) {
@@ -21,44 +75,16 @@
         
     }
     function turnOffParent(e:any, parent:string, item:string) {
-        if(!e.target.checked && selected[parent].includes(parent) && selected[parent].length == 2) {
-            selected[parent] = selected[parent].filter(obj => obj != parent && obj != item)
+        if(!e.target.checked && selected[parent].includes(parent)) {
+            selected[parent] = selected[parent].filter((obj:string) => obj != parent && obj != item)
+            if(selected[parent].length != 0) {
+                selected[parent] = [...selected[parent], parent]
+            }
         }
-        if(e.target.checked && selected[parent].length+1 == items[parent].length) {
+        if(e.target.checked) {
             selected[parent] = [parent, ...selected[parent], item]
         }
     }
-
-    let loaded = false
-    $: {
-        if(!loaded && start && items) {
-            if(typeof(start) == typeof('str')) {
-                selected[start] = [...items[start], start]
-            } else {
-                for(let i=0;i<start.length;i++) {
-                    selected[start[i]] = [...items[start[i]], start[i]]
-                }
-            }
-            loaded = true
-        }
-    }
-
-    onMount(() => {
-        if(!start) {
-            loaded = true
-        }
-    })
-
-    let length = 0
-    $: {
-        length = 0
-        for(const parent in selected) {
-            if(selected[parent].length > 0) {
-                length++
-            }
-        }
-    }
-    
 </script>
 
 <div class='checklist-dropdown control dropdown is-hoverable'>
@@ -86,7 +112,7 @@
                 <span slot='label'>
                     {#if selected[index] && selected[index].length > 0}
                     <span class='number-pill'>
-                        {selected[index].length > items[index].length? items[index].length : selected[index].length}
+                        {selected[index].length > items[index].length? items[index].length : selected[index].length-1}
                     </span>
                     {/if}
                 </span>

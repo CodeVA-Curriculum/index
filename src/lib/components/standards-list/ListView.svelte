@@ -2,25 +2,60 @@
     import {slide} from 'svelte/transition'
     import StandardElement from './StandardElement.svelte';
     import ListHeading from './ListHeading.svelte';
-    import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-    import Fa from 'svelte-fa'
-    import { listedStdsToStdList } from '$lib/utils/metaUtils';
-    import { onMount } from 'svelte';
+    import { listedStdsToStdList, type ListedStandards } from '$lib/utils/metaUtils';
+    import type {Standard} from '$lib/utils/metaUtils'
     import NumberPill from '../NumberPill.svelte';
     import StandardTag from './StandardTag.svelte';
-    export let contents:any = {}
+    
+    export let standards:any
+    export let filter:any
+    export let start:string[] = []
     const MAX_LENGTH:number = 20
+
+    let contents = {}
 
     export let listStatus = 'none'
     export let selectedStandards:object[]=[]
 
+    function findStandardbyId(id:string, contents:(ListedStandards|object[])):any {
+        if(contents && contents.length) {
+            const obj = (contents as object[]).filter((e) => {
+                return (e as Standard).id == id
+            })
+            return obj[0]
+        } else if(contents){
+            contents as ListedStandards
+            for(const [k, v] of Object.entries(contents)) {
+                const obj = findStandardbyId(id, v as ListedStandards)
+                if(obj) { return obj }
+            }
+        }
+        return null
+    }
 
+    function standardIsHere(id:string, contents:(ListedStandards|object[])):boolean {
+        const obj = findStandardbyId(id, contents)
+        if(obj) { return true }
+        return false
+    }
 
-    onMount(() => {
-        // listStatus = 'none'
-    })
-
-    $:console.log(listStatus)
+    let loaded = false
+    $: if(start && standards && !loaded) {
+        for(let i=0;i<start.length;i++) {
+            const obj = findStandardbyId(start[i], standards)
+            if(!selectedStandards.some((e) => {
+                return (e as Standard).id == obj.id
+                // return false
+            })) {
+                selectedStandards = [...selectedStandards, obj]
+            }
+        }
+        loaded = true
+        contents = standards
+    // } else if(loaded) {
+    //     console.log('update')
+    //     contents = standards // update from filter
+    }
 
     export function updateListStatus(status?:string):boolean {
         const length = Object.entries(contents).length
@@ -45,13 +80,13 @@
         return false
     }
 
-    function updateSelected(contents) {
-        const list:Standard = listedStdsToStdList(contents)
-        const titles:string[] = []
+    function updateSelected(contents:ListedStandards) {
+        const list:Standard[] = listedStdsToStdList(contents)
+        const ids:string[] = []
         for(let i=0;i<list.length;i++) {
-            titles.push(list[i].title)
+            ids.push(list[i].id)
         }
-        selectedStandards = selectedStandards.filter(obj => list.includes(obj.title))
+        selectedStandards = selectedStandards.filter(obj => list.includes(obj.id))
     }
 
     export function getStatus():string {
@@ -61,26 +96,35 @@
         return selectedStandards.length
     }
 
-    function removeStandard(obj) {
-        selectedStandards = selectedStandards.filter(std => std.title != obj.title)
+    function removeStandard(obj:Standard) {
+        selectedStandards = selectedStandards.filter((std) => {
+            const standard = std as Standard
+            return standard.id != obj.id
+        })
     }
 
-    function addAllIn(obj) {
+    // TODO: make overloaded version
+    function addAllIn(obj:(ListedStandards|object[])) {
         if(obj.length) {
-            for(let i=0;i<obj.length;i++) {
-                if(!selectedStandards.some((std)=> obj[i].title == std.title)) {
-                    selectedStandards = [...selectedStandards, obj[i]]
+            const list = obj as Standard[]
+            for(let i=0;i<list.length;i++) {
+                if(!selectedStandards.some((std)=> {
+                    const standard = std as Standard
+                    return list[i].id == standard.id
+                })) {
+                    selectedStandards = [...selectedStandards, list[i]]
                 }
             }
         } else {
-            console.log("Found object")
-            for(const index in obj) {
-                addAllIn(obj[index])
+            for(const [k,v] of Object.entries(obj)) {
+                const object = v as ListedStandards
+                addAllIn(object)
             }
         }
     }
 
-    function findStandardsCount(obj) {
+    // TODO: make overloaded version
+    function findStandardsCount(obj:any) {
         if(obj.length) {
             return obj.length
         } else {
@@ -91,12 +135,13 @@
             return count
         }
     }
+    $: console.log(standardIsHere('K.MT.PS.1', filter))
 </script>
 
 <div class='list-view'>
     <div class='mb-3'>
         {#each selectedStandards as std}
-        <StandardTag on:delete={(e)=>removeStandard(e.detail.data)} standard={std} />
+        <StandardTag on:delete={(e)=>removeStandard(e.detail.data)} standard={std} status={standardIsHere(std.id, filter)} />
         {/each}
         {#if selectedStandards.length > 0}
         <!-- TODO: fix A11y compliance -->
@@ -128,8 +173,8 @@
         <div class='has-text-centered {Object.entries(contents).length == 0? 'show':'hide'}'>
             <p class='is-italic small'>--- None selected. Use dropdowns. ---</p>
         </div>
-        {#each Object.entries(contents) as [grade, subjs]}
-            <ListHeading on:addAll={() => addAllIn(contents[grade])} title={grade} indent={0}>
+        {#each Object.entries(filter) as [grade, subjs]}
+            <ListHeading on:addAll={() => addAllIn(filter[grade])} title={grade} indent={0}>
                 <span slot="pill">
                     <NumberPill 
                         list={selectedStandards} 
@@ -139,7 +184,7 @@
                     />
                 </span>
                 {#each Object.entries(subjs) as [subj, strands]}
-                <ListHeading on:addAll={()=> addAllIn(contents[grade][subj])} title={subj} indent={1}>
+                <ListHeading on:addAll={()=> addAllIn(filter[grade][subj])} title={subj} indent={1}>
                     <span slot="pill">
                         <NumberPill 
                             list={selectedStandards} 
@@ -158,7 +203,7 @@
                                     }}
                                 />
                             </span>
-                            <div class='ml-2 mt-2'>
+                            <div class='ml-2 my-2'>
                                 {#each stds as std} 
                                 <StandardElement bind:selected={selectedStandards} standard={std} />
                                 {/each}
@@ -172,6 +217,9 @@
     </span>
 </div>
 <style>
+    .list-view {
+        width: 25rem;
+    }
     .clear:hover {
         cursor:pointer;
     }

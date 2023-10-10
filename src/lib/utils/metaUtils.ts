@@ -1,4 +1,5 @@
 export interface Standard {
+    id:string,
     title:string,
     text:string,
     subs:string[],
@@ -13,13 +14,17 @@ export interface SubjectsObject {
     'Computer Science'?:StrandsObject
 }
 export interface ListedStandards {
-    Kindergarten?:SubjectsObject
+    [propname:string]:SubjectsObject
 }
+type GradeBand = `K-2`|`3-5`|`6-8`|`9-12`
 export interface GradesByBand {
-    "K-2":(string|number)[],
-    "3-5":(string|number)[],
-    "6-8":(string|number)[],
-    "9-12":(string|number)[]
+    "K-2":number[],
+    "3-5":number[],
+    "6-8":number[],
+    "9-12":number[]
+}
+interface GradeByBandDisplay {
+    [propname:string]:string[]
 }
 
 export const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
@@ -51,13 +56,17 @@ export function listedStdsToStdList(obj:ListedStandards):Standard[] {
 }
 
 
-export function renderGradesAsStrings(grades:GradesByBand) {
+export function renderGradesAsStrings(grades:GradesByBand):GradeByBandDisplay {
+    let gradesWithFullNames:GradeByBandDisplay = {}
     for(const gradeBand in grades) {
-        for(let i=0;i<grades[gradeBand].length;i++) {
-            grades[gradeBand][i] = fullGradeNames[grades[gradeBand][i]]
+        const g = gradeBand as GradeBand
+        gradesWithFullNames[g] = []
+        for(let i=0;i<grades[g].length;i++) {
+            gradesWithFullNames[g].push('')
+            gradesWithFullNames[g][i] = fullGradeNames[grades[g][i]]
         }
     }
-    return grades
+    return gradesWithFullNames
 }
 
 export function renderGradesAsIndices(grades:object) {
@@ -76,3 +85,38 @@ export function gradesByBandToList(grades:GradesByBand) {
     }
     return gradeList
 } 
+
+export function expandDashNotation(grades:string[]):string[] {
+    // process dash notation
+    for(let i=0;i<grades.length;i++) {
+        if(grades[i].includes('-')) {
+            const first:number = gradeList.indexOf(grades[i].substring(0, grades[i].indexOf('-')))
+            const last:number  = gradeList.indexOf(grades[i].substring(grades[i].indexOf('-')+1, grades[i].length)) + 1
+            for(let i=first;i<last;i++) {
+                if(!grades.includes(gradeList[i])) {
+                    grades.push(gradeList[i])
+                }
+            }
+        }
+    }
+    return grades.filter(grade=>!grade.includes('-')) // remove dash item from array
+}
+
+export function condenseDashNotation(grades:number[]):string[] {
+    let str = ""
+    let list:string[] = []
+    for(let i=0;i<grades.length;i++) {
+        if(str=='') {
+            str=gradeList[grades[i]].toString()+'-'
+        }
+        // see if next index is consecutive
+        if(i < grades.length-1 && grades[i+1] == grades[i]+1) {
+            // console.log('iterating...')
+        } else {
+            str+=gradeList[grades[i]]
+            list.push(str)
+            str = ''
+        }
+    }
+    return list
+}

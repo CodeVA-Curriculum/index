@@ -35,24 +35,88 @@ const standards:object[] = [
     }
 ]
 
-export function GET({ params }) {
-    let output = {}
-    let stds = standards
-    console.log('starting...')
-    while(stds.length > 0) {
-        const length = stds.length - 1
-        if(!output[stds[length].grade]) {
-            output[stds[length].grade] = {}
-        } else if(!output[stds[length].grade][stds[length].subject]) {
-            output[stds[length].grade][stds[length].subject] = {}
-        } else if(!output[stds[length].grade][stds[length].subject][stds[length].strand]) {
-            output[stds[length].grade][stds[length].subject][stds[length].strand] = []
-        } else {
-            output[stds[length].grade][stds[length].subject][stds[length].strand].push(stds[length])
-            stds.pop()
+interface Params {
+    grades:string[]
+}
+
+// TODO: accept params
+export function GET({ url }) {
+
+    // TODO: get standards from "flat" version and arrange by grade > subject > strand
+    const stds = {
+        'Kindergarten': {
+            'Computer Science': {
+                'Algorithms & Programming': [
+                    {
+                        id: 'K.CS.AP.1',
+                        title:'K.1',
+                        text: 'The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: 'K.CS.AP.2',
+                        title: 'K.2',
+                        text: 'The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: 'K.CS.AP.3',
+                        title: 'K.3',
+                        text: 'The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: 'K.CS.AP.4',
+                        title: 'K.4',
+                        text: 'The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    }
+                ]
+            },
+            'Mathematics': {
+                'Probability & Statistics': [
+                    {
+                        id: 'K.MT.PS.1',
+                        title: 'K.1',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    },
+                    {
+                        id: 'K.MT.PS.2',
+                        title: 'K.2',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    },
+                    {
+                        id: 'K.MT.PS.3',
+                        title: 'K.3',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Kindergarten',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    }
+                ]
+            }
         }
-        // console.log(output)
     }
-    console.log(output)
-	return json(output)
+	return json(stds)
 }

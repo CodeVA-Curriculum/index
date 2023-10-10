@@ -1,9 +1,19 @@
 import { getAllFrontmatter } from "$lib/utils/frontmatter";
 import type {Frontmatter} from '$lib/utils/frontmatter'
 import {json} from '@sveltejs/kit'
-import { gradeList, standardsStrands } from "$lib/utils/metaUtils";
+import { gradeList, standardsStrands, expandDashNotation } from "$lib/utils/metaUtils";
 
-export async function GET() {
+interface Params {
+    grade:`band`|`list`,
+    subject:`band`|`list`
+}
+
+export async function GET({ url }) {
+    const routeParams:Params = {
+        grade: url.searchParams.get('grade') as `band`|`list`,
+        subject: url.searchParams.get('subject') as `band`|`list`
+    }
+
     const frontmatters:Frontmatter[] = await getAllFrontmatter()
 
     // Get subjects & grades
@@ -18,19 +28,7 @@ export async function GET() {
         grades = aggregate(frontmatters[i].grades, grades) as string[]
     }
 
-    // process dash notation
-    for(let i=0;i<grades.length;i++) {
-        if(grades[i].includes('-')) {
-            const first:number = gradeList.indexOf(grades[i].substring(0, grades[i].indexOf('-')))
-            const last:number  = gradeList.indexOf(grades[i].substring(grades[i].indexOf('-')+1, grades[i].length)) + 1
-            for(let i=first;i<last;i++) {
-                if(!grades.includes(gradeList[i])) {
-                    grades.push(gradeList[i])
-                }
-            }
-        }
-    }
-    grades = grades.filter(grade=>!grade.includes('-')) // remove dash item from array
+    grades = expandDashNotation(grades)
     
     // convert grades from strings to numbers
     let gradesAsNumbers = []
@@ -53,13 +51,18 @@ export async function GET() {
             results[strand].push(subjects[i])
         }
     }
-    const gradeResults = {
-        'K-2': gradesAsNumbers.slice(0, 3),
-        '3-5': gradesAsNumbers.slice(3, 6),
-        '6-8': gradesAsNumbers.slice(6, 9),
-        '9-12': gradesAsNumbers.slice(9-12)
-    }
 
+    let gradeResults:any;
+    if(routeParams.grade == "band") {
+        gradeResults = {
+            'K-2': gradesAsNumbers.slice(0, 3),
+            '3-5': gradesAsNumbers.slice(3, 6),
+            '6-8': gradesAsNumbers.slice(6, 9),
+            '9-12': gradesAsNumbers.slice(9-13)
+        }
+    } else {
+        gradeResults = gradesAsNumbers
+    }
 
     return json({
         subjects: results,

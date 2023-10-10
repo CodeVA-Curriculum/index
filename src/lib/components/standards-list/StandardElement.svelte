@@ -11,7 +11,7 @@
     export let selected:any[] = []
 
     const standardFinder = (element) => {
-        return standard.title == element.title
+        return standard.id == element.id
     }
 
 
@@ -30,7 +30,7 @@
         selected = [...selected, standard]
     }
     function removeStandard() {
-        selected = selected.filter(std => std.title !== standard.title);
+        selected = selected.filter(std => std.id !== standard.id);
     }
     function handler() {
         if(standardSelected) {

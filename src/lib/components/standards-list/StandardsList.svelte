@@ -2,54 +2,37 @@
     import {onMount} from 'svelte'
     
     import ChecklistDropdown from "./ChecklistDropdown.svelte";
+    import type {NestedDropdown} from './ChecklistDropdown.svelte'
+    
     import ListView from './ListView.svelte';
-    import {renderGradesAsStrings, gradesByBandToList} from '$lib/utils/metaUtils'
-    import type {ListedStandards} from '$lib/utils/metaUtils'
+    import {renderGradesAsStrings, gradesByBandToList, fullGradeNames, gradeList, condenseDashNotation} from '$lib/utils/metaUtils'
+    import type {ListedStandards, GradesByBand} from '$lib/utils/metaUtils'
 
+    export let standards:Promise<ListedStandards>
+    
     let filteredStandards:object[] = []
-    let standards:ListedStandards = {
-        'Kindergarten': {
-            'Computer Science': {
-                'Algorithms & Programming': [
-                    {
-                        title:'K.CS.1',
-                        text: 'The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        title: 'K.CS.2',
-                        text: 'The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        title: 'K.CS.3',
-                        text: 'The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        title: 'K.CS.4',
-                        text: 'The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    }
-                ]
-            }
-        }
-    }
+    // let standards:Promise<ListedStandards>
+
+    
+
+    
+    let listView:any;
+    let showOrClose:boolean = false
+    let loaded:boolean = false
+
+    
+    export let standardsObjs:object[] = []
+    export let preselect:URLSearchParams;
+
+    onMount(() => {
+        standards.then(() => {
+            loaded = true
+        })
+    })
+
+    // $: filteredStandards = filterStandards(selectedGrades, selectedSubjects, standards)
 
     function filterStandards(grades, subjects, standards) {
-        console.log(standards)
         let filtered = {}
 
         // Add indices for grade levels
@@ -80,93 +63,19 @@
         return filtered
     }
 
-    $: filteredStandards = filterStandards(selectedGrades, selectedSubjects, standards)
-
-    let listView:any;
-
-    let showOrClose:boolean = false
-    let loaded:boolean = false
-
-    let subjects:object|false = false
-    let grades:object|false = false
-    export let selectedSubjects:any
-    export let selectedGrades:any
-    export let standardsObjs:object[] = []
-    export let preselect;
-
-    onMount(async () => {
-        const res = await (await fetch('/api/library/meta')).json()
-        subjects = res.subjects
-        grades = res.grades
-
-        // standards = await (await fetch('/api/standards')).json()
-
-        
-        const dropdown = {}
-        for(const s in subjects) {
-            dropdown[s] = [s]
-            for(const st in subjects[s]) {
-                dropdown[s].push(subjects[s][st])
-            }
-        }
-        if(preselect && preselect.get('subj')) {
-            const subjs = preselect.get('subj').split(',')
-            for(const s in dropdown) {
-                dropdown[s] = dropdown[s].filter((el) => subjs.includes(el))
-            }
-            selectedSubjects = dropdown
-        }
-
-        loaded = true
-    })
-
-    async function getStandards() {
-        const standards = await (await fetch('/api/standards')).json()
-    }
-
-    function getExpanded():string {
-        if(listView) {
-            return listView.getStatus() == 'list'? 'Show' : 'Close'
-        } else {
-            return 'Show'
-        }
-    }
-
     
 </script>
 
 <div class='standards-list'>
     <label for='standards' class='label'>Standards</label>
         <div class='field'>
-            <!-- {#if subjects} -->
-            <ChecklistDropdown 
-                title='Subjects'
-                id='subjects-dropdown'
-                items={subjects} 
-                bind:selected={selectedSubjects}
-                start={'Computer Science'}
-            />
-            <!-- {/if} -->
-            <!-- {#if grades} -->
-            <ChecklistDropdown 
-                width='10rem' 
-                title='Grades' 
-                id='grades-dropdown' 
-                items={renderGradesAsStrings(grades)} 
-                bind:selected={selectedGrades}
-                start={['K-2', '3-5', '6-8', '9-12']}
-            />
-            <!-- {/if} -->
-            <!-- <div class='control'>
-                <input class='input is-small' placeholder="Filter list...">
-            </div> -->
-            <!-- <div class='control'> -->
-                <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary'>
-                    {showOrClose? 'Close List':'Show Standards'}
-                </button>
+            <slot />
+            <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary {loaded? 'is-loading':''}'>
+                {showOrClose? 'Close List':'Show Standards'}
+            </button>
         </div>
         <div class='list-view-wrapper'>
-            <ListView bind:this={listView} bind:selectedStandards={standardsObjs} contents={filteredStandards}></ListView>
+            <!-- <ListView bind:this={listView} bind:selectedStandards={standardsObjs} contents={filteredStandards}></ListView> -->
         </div>
 </div>
 
@@ -176,6 +85,9 @@
     }
     button {
         width: 10rem;
+    }
+    .hidden {
+        display: none;
     }
     .list-view-wrapper {
         /* border-left: 1px;

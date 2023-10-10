@@ -6,8 +6,7 @@
 
 </script>
 <span class='pill'>{list.filter((obj) => {
-    console.log(list)
-    return true
+    if(obj) { return cond(obj) } else { return false }
 }).length}</span>
 
 <style>

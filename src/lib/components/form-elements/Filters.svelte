@@ -1,47 +1,58 @@
 <script lang='ts'>
-    import {onMount} from 'svelte'
+    import {SvelteComponent, onMount} from 'svelte'
     import {slide} from 'svelte/transition'
     import { faCaretDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
-    import StandardsList from '../standards-list/StandardsList.svelte';
-    import ChecklistDropdown from '../standards-list/ChecklistDropdown.svelte';
+    import ListView from '../standards-list/ListView.svelte';
+    import ChecklistDropdown, { type NestedDropdown } from '../standards-list/ChecklistDropdown.svelte';
     import CheckBoxDropdown from './CheckBoxDropdown.svelte';
     import InputWithDropdown from './InputWithDropdown.svelte';
+    import {renderGradesAsStrings, condenseDashNotation, gradesByBandToList, type GradesByBand } from '$lib/utils/metaUtils';
+    import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
 
-    let selectedTypes:string[] = []
-    let selectedAudiences:string[] = []
-    let selectedTags:string[] = []
-    let selectedSubjects:string[] = []
-    let selectedGrades:string[] = []
-    let selectedStandards:object[] = []
+    export let data:URLSearchParams; // to preset filter UI based on params
 
-    const types = [ // TODO:
-        "Unit of Study",
-        "Lesson Plan",
-        "Curricular Resource"
-    ]
-    const audiences = [ // TODO:
-        "Classroom Teachers",
-        "Students",
-        "Administrators",
-        "Curriculum Writers"
-    ]
-    const tags = ['python', 'ecs'] // TODO:
+    let selectedStandards:Standard[] = []
+    let stdsRequest:Promise<any>
+    let standards:ListedStandards;
+
+    // Standards List Stuff
+    let showOrClose:boolean = false
+    let loaded=false
+    let listView:SvelteComponent
+
+    let stdsList:string[] = []
+
+    let subjects = {
+        items:{} as NestedDropdown,
+        start:[] as string[],
+        selected:[] as string[]
+    }
+    let grades = {
+        items:{} as GradesByBand,
+        start:[] as string[],
+        selected:[] as string[]
+    }
+    let types = {
+        items:["Unit of Study","Lesson Plan","Curricular Resource"] as string[], // TODO: pull from API route
+        selected:[] as string[]
+    }
+    let audiences = {
+        items:["Classroom Teachers","Students","Administrators","Curriculum Writers"], // TODO: pull from API route
+        selected:[] as string[]
+    }
+    let tags = {
+        items: ['python', 'ecs'], // TODO: pull from API route
+        selected:[] as string[]
+    }
     
-    export let params:string = ""
-    export let data;
+    
 
     export function getParams() {
-        // let tmp = ''
-        // tmp += listToParams('aud', selectedAudiences)
-        // tmp += listToParams('&types', selectedTypes)
-        // tmp += listToParams('&tags', selectedTags)
-        // for(let i=0;i<selectedStandards.length;i++) {
-        //     tmp+=`&sols=${selectedStandards[i].title}`
-        // }
+
         let sols:string[] = []
         for(let i=0;i<selectedStandards.length;i++) {
-            sols = [...sols, selectedStandards[i].title]
+            sols = [...sols, selectedStandards[i].id]
         }
 
         interface Params {
@@ -52,89 +63,176 @@
             subj?:string[],
             grade?:string[]
         }
-
-        let subjectsToSend:string[] = []
-        for(const subj in selectedSubjects) {
-            subjectsToSend = [...subjectsToSend, ...selectedSubjects[subj]]
-        }
-
+        // craft parameter URL
         const tmp:Params = {}
-        if(selectedAudiences.length > 0) { tmp['aud'] = selectedAudiences }
-        if(selectedTypes.length > 0) { tmp['type'] = selectedTypes }
-        if(selectedTags.length > 0) { tmp['tag'] = selectedTags }
-        if(subjectsToSend.length > 0) {tmp['subj'] = subjectsToSend}
+        if(audiences.selected.length > 0) { tmp['aud'] = audiences.selected }
+        if(types.selected.length > 0) { tmp['type'] = types.selected }
+        if(tags.selected.length > 0) { tmp['tag'] = tags.selected }
+        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
+        if(grades.selected.length > 0) {tmp['grade'] = grades.selected}
         if(sols.length > 0) { tmp['sol'] = sols }
     
         return tmp
     }
 
-    function listToParams(prefix:string,list:string[]):string {
-        let str = ''
-        for(let i=0;i<list.length;i++) {
-            str+=`${prefix}=${list[i]}`
+    let filteredStandards = {}
+
+    $: {
+        if(loaded) {
+            filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
         }
-        return str
+    }
+        
+
+    function filterStandards(grades, subjects, standards) {
+        let filtered:ListedStandards = {}
+
+        // Add indices for grade levels
+        // let gradeList = gradesByBandToList(grades)
+        // TODO: test with 1st grade
+        filtered = Object.fromEntries(Object.entries(standards).filter(([key]) => {
+            return grades.includes(key)
+        })) as ListedStandards;
+
+        for(const grade in filtered) {
+            // get subjects
+            filtered[grade] = Object.fromEntries(Object.entries(standards[grade]).filter(([key]) => {
+                // console.log(key, subjects)
+                return subjects.includes(key)
+            }));
+
+            // // get strands
+            for(const subj in filtered[grade]) {
+                filtered[grade][subj] = Object.fromEntries(Object.entries(standards[grade][subj]).filter(([key]) => {
+                    return subjects.includes(key)
+                }));
+            }
+        }
+
+        if(listView && loaded) {
+            showOrClose = listView.updateListStatus(listView.getStatus())
+        }
+        console.log(filtered)
+        return filtered
     }
 
-    onMount(() => {
-        if(data) {
-            const audiences = data.get('aud')
-            if(audiences) {
-                selectedAudiences = audiences.split(',')
-            }
+    onMount(async () => {
+        // Pull dropdown items from API route
+        const res = await (await fetch('/api/library/meta?grade=band')).json()
+        subjects.items = res.subjects as NestedDropdown
+        grades.items = res.grades as GradesByBand
 
-            const resources = data.get('type')
-            if(resources) {
-                selectedTypes = resources.split(',')
+        // console.log("Filters:", grades.items)
+
+        // load preselected data from URL params
+        if(data) {
+            if(data.get('aud'))   { audiences.selected = (data.get('aud') as string).split(',') }
+            if(data.get('type'))  { types.selected = (data.get('type') as string).split(',') }
+            if(data.get('subj'))  { subjects.start = (data.get('subj') as string).split(',') }
+            if(data.get('grade')) { grades.start = (data.get('grade') as string).split(',') }
+            if(data.get('tag'))   { tags.selected = (data.get('tag') as string).split(',') }
+            if(data.get('sol'))   { 
+                stdsList = (data.get('sol') as string).split(',')
             }
         }
+
+        let gl:number[] = []
+        for(const [key, value] of Object.entries(grades.items)) {
+            gl = [...gl, ...value]
+        }
+
+        // condense URL
+        const gradesWithDashes:string[] = condenseDashNotation(gl)
+        // console.log(gradesWithDashes)
+
+        const url = new URLSearchParams()
+        url.set('grades', gradesWithDashes)
+
+        stdsRequest = fetch(`/api/standards?${url.toString()}`)
+        stdsRequest.then(async (value) => {
+            
+            standards = await value.json()
+            loaded=true
+            // console.log(standards)
+        })
+        // console.log(url.toString())
     })
 </script>
 
 <div class='filters has-text-left columns'>
     <div class='column is-narrow'>
-        <StandardsList 
-            preselect={data} 
-            bind:standardsObjs={selectedStandards}
-            bind:selectedGrades={selectedGrades}
-            bind:selectedSubjects={selectedSubjects}
-        />
+        <label for='standards' class='label'>Standards</label>
+        <div class='field'>
+            <ChecklistDropdown 
+                title='Subjects'
+                id='subjects-dropdown'
+                items={subjects.items} 
+                bind:output={subjects.selected}
+                start={subjects.start}
+            />
+            <ChecklistDropdown 
+                width='10rem' 
+                title='Grades' 
+                id='grades-dropdown' 
+                items={renderGradesAsStrings(grades.items)} 
+                bind:output={grades.selected}
+                start={grades.start}
+            />
+            <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary {!loaded? 'is-loading':''}'>
+                {showOrClose? 'Close List':'Select Standards'}
+            </button>
+        </div>
+        {#await stdsRequest}
+        <button class='button is-fullwidth is-loading hidden'></button>
+        {:then}
+        <div class='list-view-wrapper'>
+            <ListView bind:this={listView} bind:selectedStandards={selectedStandards} standards={standards} filter={filteredStandards} start={stdsList}></ListView>
+        </div>
+        {/await}
     </div>
     <div class='column'>    
         <div class='field is-grouped'>
             <div class='control'>
-                <label class='label small'>Audiences</label>
+                <label for='audience-dropdown' class='label small'>Audiences</label>
+                <CheckBoxDropdown 
+                    width={'10rem'}
+                    title="Select..."
+                    id='audience-dropdown'
+                    items={audiences.items}
+                    bind:selected={audiences.selected}
+                />
+            </div>
+            <div class='control'>
+                <label for='resource-dropdown' class='label small'>Resource Types</label>
                 <CheckBoxDropdown 
                     width={'10rem'}
                     title="Select..."
                     id='resource-dropdown'
-                    items={audiences}
-                    bind:selected={selectedAudiences}
+                    items={types.items}
+                    bind:selected={types.selected}
                 />
             </div>
             <div class='control'>
-                <label class='label small'>Resource Types</label>
-                <CheckBoxDropdown 
-                    width={'10rem'}
-                    title="Select..."
-                    id='resource-dropdown'
-                    items={types}
-                    bind:selected={selectedTypes}
+                <label for='tag-select' class='label small'>Tags</label>
+                <InputWithDropdown 
+                    id='tag-select'
+                    bind:selected={tags.selected} 
+                    tagsList={tags.items} 
+                    placeholder="Type to search..." 
                 />
-            </div>
-            <div class='control'>
-                <label class='label small'>Tags</label>
-                <InputWithDropdown preselect={data ? data.get('tag') : null} bind:selected={selectedTags} tagsList={tags} title="Tags" placeholder="Type to search..." />
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    label {
-        font-size: 8pt;
+    .hidden {
+        display: none;
     }
-    .dropdown-content > span {
+    button {
+        width: 10rem;
+    }
+    label {
         font-size: 8pt;
     }
 </style>

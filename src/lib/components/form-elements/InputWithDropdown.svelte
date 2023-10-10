@@ -3,22 +3,15 @@
     import {faCaretDown, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
     import { onMount } from 'svelte';
     
-    export let title:string = 'No Title'
     export let selected:string[] = []
     export let placeholder:string = "No placeholder..."
     export let tagsList = ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6', 'tag7', 'tag8']
-    export let preselect = ''
+    export let id:string;
 
     let query:string = ''
     let filteredTags:string[] = []
 
     let input;
-
-    onMount(() => {
-        if(preselect) {
-            selected = preselect.split(',')
-        }
-    })
 
     $: filteredTags = tagsList.filter((el) => {
         return !selected.includes(el) && (el.includes(query) || query.length == 0)
@@ -62,7 +55,7 @@
         <!-- <label for='tag-select' class='label is-small'>{title}: </label> -->
         <div class="field long has-addons" >
             <p class="control is-expanded has-icons-right long is-pink" aria-haspopup="true" aria-controls="dropdown-menu">
-                <input bind:this={input} bind:value={query} on:click={()=>{expanded=true}} name='tag-select' class="input is-small long" type="search" placeholder={placeholder} />
+                <input bind:this={input} bind:value={query} on:click={()=>{expanded=true}} name='{id}' class="input is-small long" type="search" placeholder={placeholder} />
                 <span class="icon is-right">
                     <Fa size='1.5x' icon={faQuestionCircle} />
                     <Fa class='ml-1 mr-3' size='1x' icon={faCaretDown} />
