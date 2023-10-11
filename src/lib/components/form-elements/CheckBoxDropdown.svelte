@@ -6,7 +6,7 @@
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
-    export let items:any = {}
+    export let items:string[] = []
     export let width:string = 'auto'
 
     export let selected:string[] = []

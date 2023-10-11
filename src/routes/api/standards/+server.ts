@@ -116,6 +116,79 @@ export function GET({ url }) {
                     }
                 ]
             }
+        },
+        "Grade 1": {
+            'Computer Science': {
+                'Algorithms & Programming': [
+                    {
+                        id: '1.CS.AP.1',
+                        title:'1.1',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: '1.CS.AP.2',
+                        title: '1.2',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: '1.CS.AP.3',
+                        title: '1.3',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    },
+                    {
+                        id: '1.CS.AP.4',
+                        title: '1.4',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Algorithms & Programming',
+                        subject: 'Computer Science'
+                    }
+                ]
+            },
+            'Mathematics': {
+                'Probability & Statistics': [
+                    {
+                        id: '1.MT.PS.1',
+                        title: '1.1',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    },
+                    {
+                        id: '1.MT.PS.2',
+                        title: '1.2',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    },
+                    {
+                        id: '1.MT.PS.3',
+                        title: '1.3',
+                        text: 'Lorem ipsum',
+                        subs:[],
+                        grade: 'Grade 1',
+                        strand: 'Probability & Statistics',
+                        subject: 'Mathematics'
+                    }
+                ]
+            }
         }
     }
 	return json(stds)

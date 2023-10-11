@@ -96,12 +96,10 @@
     }
         
 
-    function filterStandards(grades, subjects, standards) {
+    function filterStandards(grades:string[], subjects:string[], standards:ListedStandards) {
         let filtered:ListedStandards = {}
 
         // Add indices for grade levels
-        // let gradeList = gradesByBandToList(grades)
-        // TODO: test with 1st grade
         filtered = Object.fromEntries(Object.entries(standards).filter(([key]) => {
             return grades.includes(key)
         })) as ListedStandards;
@@ -163,10 +161,10 @@
 
         // condense URL
         const gradesWithDashes:string[] = condenseDashNotation(gl)
-        // console.log(gradesWithDashes)
-
         const url = new URLSearchParams()
-        url.set('grades', gradesWithDashes)
+        for(let i=0;i<gradesWithDashes.length;i++) {
+            url.append('grades', gradesWithDashes[i])
+        }
 
         stdsRequest = fetch(`/api/standards?${url.toString()}`)
         stdsRequest.then(async (value) => {
