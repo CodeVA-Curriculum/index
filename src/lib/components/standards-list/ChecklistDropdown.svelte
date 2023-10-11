@@ -38,6 +38,9 @@
                     for(const subj in items) {
                         if(items[subj].includes(start[i])) {
                             selected[subj] = [...(selected[subj]? selected[subj]: []), start[i]]
+                            if(selected[subj].length == items[subj].length) {
+                                selected[subj] = [...selected[subj], subj]
+                            }
                             break
                         }
                     }

@@ -2,7 +2,7 @@
     import {page} from '$app/stores'
     import {goto} from '$app/navigation'
     import {base} from '$app/paths'
-    import {onMount} from 'svelte'
+    import {SvelteComponent, onMount} from 'svelte'
     import Fa from 'svelte-fa'
     import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
@@ -10,7 +10,7 @@
     // components
     import Filters from '$lib/components/form-elements/Filters.svelte'
 
-    let filterElem;
+    let filterElem:SvelteComponent;
     export let filter:boolean=true
     export let linkTo:boolean=false
 
@@ -38,8 +38,10 @@
         if(loaded) {
             $page.url.searchParams.set('query', term)
             params = filterElem.getParams()
-            for(const key in params) {
-                $page.url.searchParams.set(key, params[key])
+            for(const [k,v] of Object.entries(params)) {
+                for(let i=0;i<v.length;i++) {
+                    $page.url.searchParams.append(k, v[i])
+                }
             }
             $page.url.searchParams.set('query', term)
             // $page.url.searchParams.set('term',word);

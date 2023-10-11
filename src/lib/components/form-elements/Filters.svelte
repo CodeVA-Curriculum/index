@@ -7,7 +7,7 @@
     import ChecklistDropdown, { type NestedDropdown } from '../standards-list/ChecklistDropdown.svelte';
     import CheckBoxDropdown from './CheckBoxDropdown.svelte';
     import InputWithDropdown from './InputWithDropdown.svelte';
-    import {renderGradesAsStrings, condenseDashNotation, gradesByBandToList, type GradesByBand } from '$lib/utils/metaUtils';
+    import {renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation } from '$lib/utils/metaUtils';
     import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
 
     export let data:URLSearchParams; // to preset filter UI based on params
@@ -69,8 +69,20 @@
         if(types.selected.length > 0) { tmp['type'] = types.selected }
         if(tags.selected.length > 0) { tmp['tag'] = tags.selected }
         if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
-        if(grades.selected.length > 0) {tmp['grade'] = grades.selected}
         if(sols.length > 0) { tmp['sol'] = sols }
+
+        // TODO: condense grade notation
+        // Convert display names to numbers
+        let shortNames:number[] = []
+        for(let i=0;i<grades.selected.length;i++) {
+            const index = fullGradeNames.indexOf(grades.selected[i])
+            if(index >= 0) { // Filter out grade band (e.g., 'K-2')
+                shortNames.push(index)
+            }
+        }
+        console.log(shortNames)
+        // Convert contiguous sequences of grades to dash notation
+        if(shortNames.length > 0) {tmp['grade'] = condenseDashNotation(shortNames)}
     
         return tmp
     }
@@ -122,17 +134,25 @@
         subjects.items = res.subjects as NestedDropdown
         grades.items = res.grades as GradesByBand
 
-        // console.log("Filters:", grades.items)
-
-        // load preselected data from URL params
         if(data) {
-            if(data.get('aud'))   { audiences.selected = (data.get('aud') as string).split(',') }
-            if(data.get('type'))  { types.selected = (data.get('type') as string).split(',') }
-            if(data.get('subj'))  { subjects.start = (data.get('subj') as string).split(',') }
-            if(data.get('grade')) { grades.start = (data.get('grade') as string).split(',') }
-            if(data.get('tag'))   { tags.selected = (data.get('tag') as string).split(',') }
-            if(data.get('sol'))   { 
-                stdsList = (data.get('sol') as string).split(',')
+            if(data.has('aud'))   { audiences.selected = data.getAll('aud') }
+            if(data.has('type'))  { types.selected = data.getAll('type') }
+            if(data.has('subj'))  { subjects.start = data.getAll('subj') }
+            if(data.has('tag'))   { tags.selected = data.getAll('tag') }
+            if(data.has('sol'))   { 
+                stdsList = data.getAll('sol')
+            }
+
+            if(data.has('grade')) {
+                // expand dash notation 
+                const tmpGrades:string[] = data.getAll('grade')
+                const expanded = expandDashNotation(tmpGrades)
+                
+                // get long names
+                for(let i=0;i<expanded.length;i++) {
+                    expanded[i] = fullGradeNames[gradeList.indexOf(expanded[i])]
+                }
+                grades.start = expanded
             }
         }
 
