@@ -36,8 +36,6 @@ export async function GET({ url }) {
         gradesAsNumbers[i] = gradeList.indexOf(grades[i])
     }
 
-    console.log(gradesAsNumbers)
-
     let results = {}
     for(let i=0;i<subjects.length;i++) {
         // Add subject indices to results object

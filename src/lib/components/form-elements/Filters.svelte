@@ -9,6 +9,7 @@
     import InputWithDropdown from './InputWithDropdown.svelte';
     import {renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation } from '$lib/utils/metaUtils';
     import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
+    import type {Params} from '$lib/utils/searchUtils'
 
     export let data:URLSearchParams; // to preset filter UI based on params
 
@@ -54,15 +55,6 @@
         for(let i=0;i<selectedStandards.length;i++) {
             sols = [...sols, selectedStandards[i].id]
         }
-
-        interface Params {
-            aud?:string[],
-            type?:string[]
-            tag?:string[]
-            sol?:string[],
-            subj?:string[],
-            grade?:string[]
-        }
         // craft parameter URL
         const tmp:Params = {}
         if(audiences.selected.length > 0) { tmp['aud'] = audiences.selected }
@@ -71,7 +63,7 @@
         if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
         if(sols.length > 0) { tmp['sol'] = sols }
 
-        // TODO: condense grade notation
+        // Condense grade
         // Convert display names to numbers
         let shortNames:number[] = []
         for(let i=0;i<grades.selected.length;i++) {

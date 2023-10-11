@@ -1,6 +1,15 @@
 import { defaultFrontmatter } from "./frontmatter"
 import type { Frontmatter } from "./frontmatter"
 
+export interface Params {
+    aud?:string[],
+    type?:string[]
+    tag?:string[]
+    sol?:string[],
+    subj?:string[],
+    grade?:string[]
+}
+
 // an object with this class is input to the `Search` component, changing the UI to match the URL & results displayed on the page.
 export class FilterSet {
     query:string = ''

@@ -5,6 +5,6 @@ import {json} from '@sveltejs/kit'
 export async function GET({url}) {
     let filters:FilterSet = new FilterSet(url.searchParams)
     const results:Frontmatter[] = await searchLibrary(filters)
-    console.log('Got results from query:',results)
+    // console.log('Got results from query:',results)
     return json(results)
 }

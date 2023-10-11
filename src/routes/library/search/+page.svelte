@@ -1,19 +1,14 @@
 <script lang='ts'>
     export let data:any = { results: [] };
     import Search from '$lib/components/Search.svelte';
-    import {onMount} from 'svelte'
-    import {base} from '$app/paths'
     import ElementCard from '$lib/components/ElementCard.svelte';
     import {page} from '$app/stores'
+    import { onMount } from 'svelte';
 
     let params = true
 
-    let parameters = {
-        query: 'test'
-    }
-
-    onMount(async ()=>{
-        // const res = (await fetch(`${base}/api/library${testURL}`)).json()
+    onMount(() => {
+        console.log(data.results)
     })
 </script>
 
@@ -29,13 +24,13 @@
     </div>
     
     <div class='section'>
-        {#if data.results && data.results.length > 0}
+        <!-- {#if data.results && data.results.length > 0}
             {#each data.results as result}
             <ElementCard data={result} />
             {/each}
         {:else}
             <p><i>No Results</i></p>
-        {/if}
+        {/if} -->
     </div>
 </div>
 

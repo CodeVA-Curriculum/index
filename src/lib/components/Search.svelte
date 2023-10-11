@@ -25,13 +25,6 @@
 
     let params = ''
 
-    // interface SearchParams {
-    //     term:string
-    // }
-
-    // let params:SearchParams = {
-    //     term: ''
-    // }
 
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
@@ -39,12 +32,12 @@
             $page.url.searchParams.set('query', term)
             params = filterElem.getParams()
             for(const [k,v] of Object.entries(params)) {
-                for(let i=0;i<v.length;i++) {
+                $page.url.searchParams.set(k, v[0])
+                for(let i=1;i<v.length;i++) {
                     $page.url.searchParams.append(k, v[i])
                 }
             }
-            $page.url.searchParams.set('query', term)
-            // $page.url.searchParams.set('term',word);
+            // $page.url.searchParams.sort()
             if(linkTo) {
                 goto(`${base}/library/search?${$page.url.searchParams.toString()}`);
             } else {

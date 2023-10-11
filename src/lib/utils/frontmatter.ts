@@ -5,7 +5,7 @@ import {getParentDirectory, getParentMeta} from './pathUtils'
 import { importLibraryGlob } from '.'
 import { srcToUrl } from './pathUtils'
 
-const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types']
+const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types', 'audiences']
 
 interface Path {
     path:`${string}.md`,
@@ -45,14 +45,15 @@ interface Frontmatter {
     pathData:Path,
     subjects:string[],
     types:string[],
-    grades:(string|number)[],
+    grades:string[],
     children:Frontmatter[]
     parents:Frontmatter[],
     members:Frontmatter[],
     groups:Frontmatter[],
     contents:string[],
     license?:License,
-    tags:string[]
+    tags:string[],
+    audiences:string[]
 }
 
 export function defaultPath():Path {
@@ -76,15 +77,16 @@ function defaultFrontmatter() {
         groups: [],
         types:[],
         tags:[],
+        audiences:[]
     }
 }
 
 function splitString(string:any, separator:string):any[] {
     let list = []
     if(typeof(string) == typeof('string')) {
-      list = string.split(separator)
+      list.push(...string.split(separator))
     } else {
-      throw new Error(`Tried to split frontmatter ${string} attribute of incorrect data type!`)
+      throw new Error(`Tried to split frontmatter ${string} of type ${typeof(string)} attribute of incorrect data type! Make sure the field you are trying to split is inheritable.`)
     }
     return list
   }
@@ -94,6 +96,7 @@ function postprocess(frontmatter:Frontmatter):Frontmatter {
     frontmatter.grades = splitString(frontmatter.grades, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')
     frontmatter.tags = splitString(frontmatter.tags, ', ')
+    frontmatter.audiences = splitString(frontmatter.audiences, ',')
 
     return frontmatter
 }
