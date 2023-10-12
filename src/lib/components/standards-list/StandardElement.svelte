@@ -1,11 +1,14 @@
 <script lang='ts'>
     import { faCaretLeft, faPlusCircle, faPlus, faClose, faCheck } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
-    import { onMount } from "svelte";
+    import { SvelteComponent, onMount } from "svelte";
+    import StandardModal from "./StandardModal.svelte";
 
     let standardSelected = false
     let active:boolean = false
     let icon = faPlusCircle
+
+    let modal:SvelteComponent
 
     export let standard;
     export let selected:any[] = []
@@ -59,37 +62,17 @@
         <!-- TODO: a11y stuff -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <span>... <span class='link-like' on:click={()=> active = true}>See More</span></span>
+        <span>... <span class='link-like' on:click={modal.activate()}>See More</span></span>
     </div>
-    <div class="modal {active? 'is-active' : ''}">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-            <header class='modal-card-head'>
-                <h1 class='modal-card-title'>{standard.title}
-                    <span class='ml-5 tag is-dark'>Algorithms & Programming</span>
-                    <span class='tag is-dark'>Kindergarten</span>
-                </h1>
-                <button on:click={()=>active=false} class="button closer" aria-label="close"><Fa size='1.25x' icon={faClose} /></button>
-            </header>
-            <section class='modal-card-body'>
-                <p>{standard.text}</p>
-                {#if standard.subs.length > 0}
-                <ol>
-                    {#each standard.subs as sub}
-                    <li>sub</li>
-                    {/each}
-                </ol>
-                {/if}
-            </section>
-            <footer class="modal-card-foot">
-                <button on:click={handler} class="button {standardSelected? 'is-dark':'is-success'} is-hovered">
-                    <Fa class='mr-3' icon={icon} />
-                    {standardSelected? "Remove From":"Add To"} Search Filter
-                </button>
-                <button on:click={()=>active=false} class="button">Close</button>
-            </footer>
-        </div>
-    </div>
+    <StandardModal bind:this={modal} standard={standard} >
+        <span slot='footer'>
+            <button on:click={handler} class="button {standardSelected? 'is-dark':'is-success'} is-hovered">
+                <Fa class='mr-3' icon={icon} />
+                {standardSelected? "Remove From":"Add To"} Search Filter
+            </button>
+            <button on:click={modal.deactivate} class="button">Close</button>
+        </span>
+    </StandardModal>
 </article>
 
 <style>

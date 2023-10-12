@@ -2,7 +2,8 @@ import {json} from '@sveltejs/kit'
 
 const standards:object[] = [
     {
-        title:'K.CS.1',
+        id: 'K.CS.AP.1',
+        title:'K.1',
         text: 'The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.',
         subs:[],
         grade: 'Kindergarten',
@@ -10,7 +11,8 @@ const standards:object[] = [
         subject: 'Computer Science'
     },
     {
-        title: 'K.CS.2',
+        id: 'K.CS.AP.2',
+        title: 'K.2',
         text: 'The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.',
         subs:[],
         grade: 'Kindergarten',
@@ -18,7 +20,8 @@ const standards:object[] = [
         subject: 'Computer Science'
     },
     {
-        title: 'K.CS.3',
+        id: 'K.CS.AP.3',
+        title: 'K.3',
         text: 'The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).',
         subs:[],
         grade: 'Kindergarten',
@@ -26,7 +29,8 @@ const standards:object[] = [
         subject: 'Computer Science'
     },
     {
-        title: 'K.CS.4',
+        id: 'K.CS.AP.4',
+        title: 'K.4',
         text: 'The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.',
         subs:[],
         grade: 'Kindergarten',
@@ -41,6 +45,10 @@ interface Params {
 
 // TODO: accept params
 export function GET({ url }) {
+
+    if(url.searchParams.get('format') == 'flat') {
+        return json(standards)
+    }
 
     // TODO: get standards from "flat" version and arrange by grade > subject > strand
     const stds = {

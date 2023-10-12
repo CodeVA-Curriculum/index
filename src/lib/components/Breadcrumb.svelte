@@ -1,17 +1,21 @@
 <script lang='ts'>
     import {base} from '$app/paths'
+    import type { Frontmatter } from '$lib/utils/frontmatter';
+    import { faHome } from '@fortawesome/free-solid-svg-icons';
+    import {srcToUrl} from '$lib/utils/pathUtils'
+    import Fa from 'svelte-fa'
     interface Page {
         path:string,
         title:string
     }
-    export let nodes:Page[];
+    export let nodes:Frontmatter[];
     export let here:string;
 </script>
 <div class="breadcrumb" aria-label="breadcrumbs">
     <ul>
-        <li><a href="{base}/library">Home</a></li>
+        <li><a href="{base}/library"><Fa class='mt-1' icon={faHome} /></a></li>
         {#each nodes as node}
-        <li class={node.title == here ? 'is-active' : ''}><a href="{base}/library/{node.path}">{node.title}</a></li>
+        <li class={node.title == here ? 'is-active' : ''}><a href="{srcToUrl(node.pathData.path).replace('meta', '')}">{node.title}</a></li>
         {/each}
     </ul>
 </div>

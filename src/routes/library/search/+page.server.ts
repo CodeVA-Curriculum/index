@@ -69,7 +69,7 @@ export async function load({ url }){
     // Tags filter
     results = results.filter((obj) => {
         // If the object has tags and the filter defines them, match if intersecting
-        if(obj.tags && filter.tats) {
+        if(obj.tags && filter.tag) {
             return isIntersecting(filter.tag, obj.tags)
         // If the filter defines tags but the object does not, do not match
         } else if(filter.tag) {
@@ -118,7 +118,7 @@ export async function load({ url }){
         }
         // Filter by lcs
         objs = objs.filter((obj) => {
-            return (obj.score / obj.title.length) > threshold
+            return obj.title?.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(obj.title?.toLowerCase()) || obj.score > obj.title.length/2
         })
         objs.sort((a,b) => {
             if(b.score == a.score) {
@@ -143,7 +143,7 @@ export async function load({ url }){
         return objs
     }
 
-    if(filter.query[0]) {
+    if(filter.query) {
         // Query title (TODO: and body) filter for results
         results = results.filter((objs) => {
             return objs.title.toLowerCase().includes((filter.query[0]).toLowerCase())
@@ -153,6 +153,8 @@ export async function load({ url }){
         results = scoreFilterAndSort(filter.query[0], results, 0.5)
         related = scoreFilterAndSort(filter.query[0], related, 0.3)
     }
+
+    // TODO: make sure nothing intersects between `related` and `results`
 
     console.log("\nEnding with",related.length, "related")
     printTitles(related)

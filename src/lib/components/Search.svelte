@@ -28,28 +28,32 @@
 
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
-        if(loaded) {
-            // delete old params
-            for(const [k,v] of $page.url.searchParams.entries()) {
-                $page.url.searchParams.delete(k)
-            }
+        
+        // if(loaded) {
+        // delete old params
+        for(const [k,v] of $page.url.searchParams.entries()) {
+            $page.url.searchParams.delete(k)
+        }
 
-            // Set new params
-            $page.url.searchParams.set('query', term)
-            params = filterElem.getParams()
-            for(const [k,v] of Object.entries(params)) {
-                $page.url.searchParams.set(k, v[0])
-                for(let i=1;i<v.length;i++) {
-                    $page.url.searchParams.append(k, v[i])
-                }
-            }
-            // $page.url.searchParams.sort()
-            if(linkTo) {
-                goto(`${base}/library/search?${$page.url.searchParams.toString()}`);
-            } else {
-                goto(`?${$page.url.searchParams.toString()}`);
+        // Set new params
+        $page.url.searchParams.set('query', term)
+        params = filterElem.getParams()
+        for(const [k,v] of Object.entries(params)) {
+            $page.url.searchParams.set(k, v[0])
+            for(let i=1;i<v.length;i++) {
+                $page.url.searchParams.append(k, v[i])
             }
         }
+        // $page.url.searchParams.sort()
+        // if(linkTo) {
+        goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
+            replaceState: true,
+            invalidateAll: true
+        });
+        // } else {
+        //     goto(`?${$page.url.searchParams.toString()}`);
+        // }
+        // }
         return null
     }
     function toggle():null {

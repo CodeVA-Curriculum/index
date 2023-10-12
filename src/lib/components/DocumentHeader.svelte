@@ -7,25 +7,17 @@
 
     import type {Frontmatter} from '$lib/utils/frontmatter'
     import ArrayAsInlineList from "./ArrayAsInlineList.svelte";
+    import { onMount } from "svelte";
 
     export let meta:Frontmatter;
 
-    // TODO: render nodes
-    
-    // let nodes = [
-    //     {
-    //         title: '. .',
-    //         link: `${base}/library`
-    //     },
-    //     {
-    //         title: meta.title,
-    //         link: meta.path       
-    //     }
-    // ]
+    // onMount(() => {
+    //     console.log(meta)
+    // })
 </script>
 
 <div class='document-header content'>
-    <!-- <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} /> -->
+    <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} />
     <div class='columns'>
         <div class='column is-one-quarter'>
             <img alt="a placeholder" src="https://placekitten.com/400/400">

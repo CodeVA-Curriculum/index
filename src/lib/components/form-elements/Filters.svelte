@@ -164,7 +164,7 @@
             loaded=true
             // console.log(standards)
         })
-        // console.log(url.toString())
+        // console.log(subjects)
     })
 </script>
 

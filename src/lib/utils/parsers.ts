@@ -12,7 +12,7 @@ import {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFron
 import type {Frontmatter, Path} from './frontmatter'
 
 export async function parseFrontmatter(pathData:Path) {
-    let frontmatter:Frontmatter // = defaultFrontmatter()
+    let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
     const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -31,7 +31,7 @@ export async function parseFrontmatter(pathData:Path) {
 }
 
 export async function parseFile(pathData:Path) {
-  let frontmatter:Frontmatter // = defaultFrontmatter()
+  let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
   const file = await unified()
   .use(remarkParse)
   .use(remarkFrontmatter, ['yaml'])
@@ -53,6 +53,8 @@ export async function parseFile(pathData:Path) {
 
   // If element frontmatter doesn't have a `contents`field `members` will be an empty array
   frontmatter.members = await findMemberFrontmatter(frontmatter)
+
+  // TODO: Render standards from API
   
   // Post-processing
   frontmatter = postprocess(frontmatter)

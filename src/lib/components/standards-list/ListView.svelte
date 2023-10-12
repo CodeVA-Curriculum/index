@@ -141,7 +141,7 @@
 <div class='list-view'>
     <div class='mb-3'>
         {#each selectedStandards as std}
-        <StandardTag on:delete={(e)=>removeStandard(e.detail.data)} standard={std} status={standardIsHere(std.id, filter)} />
+        <StandardTag del={true} on:delete={(e)=>removeStandard(e.detail.data)} standard={std} status={standardIsHere(std.id, filter)} />
         {/each}
         {#if selectedStandards.length > 0}
         <!-- TODO: fix A11y compliance -->

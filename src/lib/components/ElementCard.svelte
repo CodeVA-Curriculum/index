@@ -24,7 +24,10 @@
                 <img src='https://placekitten.com/300/300' >
             </div>
             <div class='column has-text-left'>
-                <h2><a href={srcToUrl(data.pathData.path)}>{data.title}</a><Fa class= 'mx-2' icon={icon} /></h2>
+                <h2>
+                    <a href={srcToUrl(data.pathData.path)}>{data.title}</a>
+                    <!-- <Fa class= 'mx-2' icon={icon} /> -->
+                </h2>
                 <p class='heading'>a {data.types} {data.contents? "pack ":" "}by {data.authors}</p>
                 <div class='buttons'>
                     <a class='button is-small is-primary' href={srcToUrl(data.pathData.path)}>Read More</a>
