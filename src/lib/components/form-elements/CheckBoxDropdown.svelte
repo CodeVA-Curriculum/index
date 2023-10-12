@@ -17,7 +17,7 @@
     <div class='dropdown-trigger'>
         <button class='button is-small is-fullwidth'>
             {title}
-            <span class='number-pill mx-1'>{selected.length}</span>
+            <span class='number-pill mx-1'>{selected.length != 0? selected.length:''}</span>
             <Fa class='ml-2' icon={faChevronDown} />
         </button>
     </div>

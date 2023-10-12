@@ -15,10 +15,7 @@ export async function load({ url }){
 
     // Get params
     let filter:any = {
-        grade: [],
-        subj:[],
-        aud:[],
-        type:[]
+
     }
     for(const [k,v] of url.searchParams.entries()) {
         if(filter[k]) {
@@ -42,11 +39,12 @@ export async function load({ url }){
     console.log("Starting with",frontmatters.length)
     
     // Grade, Subject, Audience, Resource Filter
+    // if any of these are not defined in the query, the object matches that attribute
     let related:Frontmatter[] = frontmatters.filter((obj) => {
-        return  isIntersecting(filter.grade, expandDashNotation(obj.grades)) &&
-                isIntersecting(filter.subj, obj.subjects) &&
-                isIntersecting(filter.aud, obj.audiences) &&
-                isIntersecting(filter.type, obj.types)
+        return  filter.grade? isIntersecting(filter.grade, expandDashNotation(obj.grades)):true &&
+                filter.subj?  isIntersecting(filter.subj, obj.subjects):true &&
+                filter.aud?   isIntersecting(filter.aud, obj.audiences):true &&
+                filter.type?  isIntersecting(filter.type, obj.types):true
     })
 
     // Filter `related` by params to find `results`
@@ -64,7 +62,7 @@ export async function load({ url }){
 
     // Sort `related` by query text in body, title, or tags
 
-    console.log("Ending with",frontmatters.length)
+    console.log("Ending with",related.length)
     // console.log(frontmatters)
     
     return {
