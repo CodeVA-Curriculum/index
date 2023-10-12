@@ -1,6 +1,6 @@
 ---
 title: Data Science with Python
-type: document
+types: Lesson Plan
 ---
 
 ## Overview

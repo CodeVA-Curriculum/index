@@ -94,7 +94,6 @@ function splitString(string:any, separator:string):any[] {
   }
 
 function postprocess(frontmatter:Frontmatter):Frontmatter {
-    // console.log("Postprocessing",frontmatter.title)
     frontmatter.subjects = splitString(frontmatter.subjects, ', ')
     frontmatter.grades = splitString(frontmatter.grades, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')

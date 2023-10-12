@@ -3,12 +3,18 @@
     export let data:Frontmatter;
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
+    import {faCloudArrowDown, faFolder, faFile} from '@fortawesome/free-solid-svg-icons'
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {srcToUrl} from '$lib/utils/pathUtils'
-    // onMount(()=>{
-    //     console.log(srcToUrl(data.path))
-    // })
+    
+    let icon;
+    onMount(()=>{
+        if(data.contents && data.contents.length > 0) {
+            icon = faFolder
+        } else {
+            icon = faFile
+        }
+    })
 </script>
 
 <div class='element-card card my-5'>
@@ -17,9 +23,9 @@
             <div class='column is-narrow'>
                 <img src='https://placekitten.com/300/300' >
             </div>
-            <div class='column'>
-                <h2><a href={srcToUrl(data.pathData.path)}>{data.title}</a></h2>
-                <p class='heading'>by {data.authors}</p>
+            <div class='column has-text-left'>
+                <h2><a href={srcToUrl(data.pathData.path)}>{data.title}</a><Fa class= 'mx-2' icon={icon} /></h2>
+                <p class='heading'>a {data.types} {data.contents? "pack ":" "}by {data.authors}</p>
                 <div class='buttons'>
                     <a class='button is-small is-primary' href={srcToUrl(data.pathData.path)}>Read More</a>
                     <button class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
@@ -40,6 +46,7 @@
 <style lang='scss'>
     .element-card:hover {
         background-color: whitesmoke;
+        cursor: pointer;
     }
     img {
         width: 92px;

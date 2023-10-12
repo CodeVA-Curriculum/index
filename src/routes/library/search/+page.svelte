@@ -23,14 +23,26 @@
         <Search data={$page.url.searchParams} filter={true} />
     </div>
     
-    <div class='section'>
-        <!-- {#if data.results && data.results.length > 0}
+    <div class='section has-text-left'>
+        <h2>Results</h2>
+        {#if data.results && data.results.length > 0}
             {#each data.results as result}
             <ElementCard data={result} />
             {/each}
         {:else}
             <p><i>No Results</i></p>
-        {/if} -->
+        {/if}
+    </div>
+    <hr>
+    <div class='section has-text-left'>
+        <h2>Related Materials</h2>
+        {#if data.related && data.related.length > 0}
+            {#each data.related as result}
+            <ElementCard data={result} />
+            {/each}
+        {:else}
+            <p><i>No Results</i></p>
+        {/if}
     </div>
 </div>
 

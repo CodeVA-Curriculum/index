@@ -11,6 +11,10 @@ function isIntersecting(array1:string[], array2:string[]):boolean {
         return intersections > 0
 }
 
+function match(query:string, obj:Frontmatter) {
+
+}
+
 export async function load({ url }){
 
     // Get params
@@ -61,18 +65,94 @@ export async function load({ url }){
             return true
         }
     })
-    
-    // Tags
-    
-    // Standard
 
-    // Query
+    // Tags filter
+    results = results.filter((obj) => {
+        // If the object has tags and the filter defines them, match if intersecting
+        if(obj.tags && filter.tats) {
+            return isIntersecting(filter.tag, obj.tags)
+        // If the filter defines tags but the object does not, do not match
+        } else if(filter.tag) {
+            return false
+        // If the filter doesn't define tags, match the object regardless of its tags field
+        } else {
+            return true
+        }
+    })
+
+    
 
     // Sort `results` by type in resource, project, lesson order
+    // results.sort((a,b) => {
+    //     const order = ['Lesson Plan', 'Unit of Study', 'Curricular Resource']
+    //     let typeScoreA = 0
+    //     let typeScoreB = 0
+    //     for(let i=0;i<a.types.length;i++) {
+    //         const score = order.indexOf(a.types[i])
+    //         if(typeScoreA < score) { typeScoreA = score }
+    //     }
+    //     for(let i=0;i<b.types.length;i++) {
+    //         const score = order.indexOf(b.types[i])
+    //         if(typeScoreB < score) { typeScoreB = score }
+    //     }
+    //     return typeScoreA - typeScoreB
+    // })
+    function longestCommonSubsequence(a:string, b:string):number {
+        const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(0));
+        for(let i = 1; i < a.length + 1; i++) {
+            for(let j = 1; j < b.length + 1; j++) {
+                if(a[i-1] === b[j-1]) {
+                    matrix[i][j] = 1 + matrix[i-1][j-1];
+                } else {
+                    matrix[i][j] = Math.max(matrix[i-1][j], matrix[i][j-1]);
+                }
+            }
+        }
+        return matrix[a.length][b.length];
+    }
+    function scoreFilterAndSort(query:string, objs:Frontmatter[], threshold:number):Frontmatter[] {
+        for(let i=0;i<objs.length;i++) {
+            const score = longestCommonSubsequence(query.toLowerCase(), objs[i].title?.toLowerCase())
+            objs[i].score = score
+            // console.log("Score:",score)
+        }
+        // Filter by lcs
+        objs = objs.filter((obj) => {
+            return (obj.score / obj.title.length) > threshold
+        })
+        objs.sort((a,b) => {
+            if(b.score == a.score) {
+                // Sort by resource type
+                const order = ['Lesson Plan', 'Unit of Study', 'Curricular Resource']
+                let typeScoreA = 0
+                let typeScoreB = 0
+                for(let i=0;i<a.types.length;i++) {
+                    const score = order.indexOf(a.types[i])
+                    if(typeScoreA < score) { typeScoreA = score }
+                }
+                for(let i=0;i<b.types.length;i++) {
+                    const score = order.indexOf(b.types[i])
+                    if(typeScoreB < score) { typeScoreB = score }
+                }
+                return typeScoreA - typeScoreB
+            } else {
+                // Sort by longest common subsequence
+                return b.score - a.score
+            }
+        })
+        return objs
+    }
 
-    // Resort `results` by pulling titles including query to the top
+    if(filter.query[0]) {
+        // Query title (TODO: and body) filter for results
+        results = results.filter((objs) => {
+            return objs.title.toLowerCase().includes((filter.query[0]).toLowerCase())
+        })
 
-    // Sort `related` by query text in body, title, or tags
+        // Sort `results` by the length of the match in title (TODO: or body)
+        results = scoreFilterAndSort(filter.query[0], results, 0.5)
+        related = scoreFilterAndSort(filter.query[0], related, 0.3)
+    }
 
     console.log("\nEnding with",related.length, "related")
     printTitles(related)
@@ -81,8 +161,8 @@ export async function load({ url }){
     // console.log(frontmatters)
     
     return {
-        results: "Test",
-        related: "Another Test"
+        results: results,
+        related: related
     }
 }
 

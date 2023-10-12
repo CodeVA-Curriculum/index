@@ -1,7 +1,7 @@
 ---
 title: Computer Science Standard Alignment Guides
 authors: CodeVA Curriculum
-types: Unit of Study
+types: Curricular Resource
 contents:
     - ./grade-1.md
 ---
