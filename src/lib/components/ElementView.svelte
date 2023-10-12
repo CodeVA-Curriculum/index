@@ -16,7 +16,7 @@
         let url = new URLSearchParams()
 
         standards = await (await fetch(`${base}/api/standards?format=flat`)).json()
-        console.log(standards)
+        // console.log(standards)
 
         // Arrange by subject area
         for(let i=0;i<standards.length;i++) {
@@ -26,7 +26,7 @@
                 standardsBySubject[standards[i].subject] = [...standardsBySubject[standards[i].subject], standards[i]]
             }
         }
-        console.log("Standards By Subject:", standardsBySubject)
+        // console.log("Standards By Subject:", standardsBySubject)
     })
 
     // let tags = ['tag', 'tag','tag', 'tag', 'tag']

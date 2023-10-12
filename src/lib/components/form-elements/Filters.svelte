@@ -7,7 +7,7 @@
     import ChecklistDropdown, { type NestedDropdown } from '../standards-list/ChecklistDropdown.svelte';
     import CheckBoxDropdown from './CheckBoxDropdown.svelte';
     import InputWithDropdown from './InputWithDropdown.svelte';
-    import {renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation } from '$lib/utils/metaUtils';
+    import {renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation, getGradeNums } from '$lib/utils/metaUtils';
     import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
     import type {Params} from '$lib/utils/searchUtils'
 
@@ -113,7 +113,7 @@
         if(listView && loaded) {
             showOrClose = listView.updateListStatus(listView.getStatus())
         }
-        console.log(filtered)
+        // console.log(filtered)
         return filtered
     }
 
@@ -122,6 +122,8 @@
         const res = await (await fetch('/api/library/meta?grade=band')).json()
         subjects.items = res.subjects as NestedDropdown
         grades.items = res.grades as GradesByBand
+
+        // console.log(grades.items)
 
         if(data) {
             if(data.has('aud'))   { audiences.selected = data.getAll('aud') }
@@ -135,13 +137,15 @@
             if(data.has('grade')) {
                 // expand dash notation 
                 const tmpGrades:string[] = data.getAll('grade')
-                const expanded = expandDashNotation(tmpGrades)
-                
+                const expanded = getGradeNums(expandDashNotation(tmpGrades))
+                expanded.sort((a,b) => a-b)
+                // console.log(expanded)
                 // get long names
+                let longNames:string[] = []
                 for(let i=0;i<expanded.length;i++) {
-                    expanded[i] = fullGradeNames[gradeList.indexOf(expanded[i])]
+                    longNames.push(fullGradeNames[expanded[i]])
                 }
-                grades.start = expanded
+                grades.start = longNames
             }
         }
 

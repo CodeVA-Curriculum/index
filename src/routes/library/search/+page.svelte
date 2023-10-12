@@ -8,7 +8,7 @@
     let params = true
 
     onMount(() => {
-        console.log(data.results)
+        // console.log(data.results)
     })
 </script>
 

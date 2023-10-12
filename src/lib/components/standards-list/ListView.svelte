@@ -135,7 +135,7 @@
             return count
         }
     }
-    $: console.log(standardIsHere('K.MT.PS.1', filter))
+    // $: console.log(standardIsHere('K.MT.PS.1', filter))
 </script>
 
 <div class='list-view'>

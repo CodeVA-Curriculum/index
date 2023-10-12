@@ -35,6 +35,7 @@ export async function GET({ url }) {
     for(let i=0;i<grades.length;i++) {
         gradesAsNumbers[i] = gradeList.indexOf(grades[i])
     }
+    gradesAsNumbers.sort((a,b) => a-b)
 
     let results = {}
     for(let i=0;i<subjects.length;i++) {

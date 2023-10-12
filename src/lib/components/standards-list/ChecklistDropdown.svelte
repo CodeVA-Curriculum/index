@@ -23,41 +23,28 @@
 
     let loaded = false
     onMount(() => {
+        
         if(!start) {
             loaded = true
         }
     })
 
-    // TODO: this sucks
     $: {
         if(!loaded && start && Object.entries(items).length > 0) {
-            for(let i=0;i<start.length;i++) {
-                if(items[start[i]] && !selected[start[i]]) { // the start value is a subject, and needs to be given an index
-                    selected[start[i]] = [start[i]]
-                    // add all remaining under selected subject
-                    // console.log('adding all under',items[start[i]])
-                    for(let j=0;j<items[start[i]].length;j++) {
-                        // console.log('adding', items[start[i]][j])
-                        selected[start[i]] = [...selected[start[i]], items[start[i]][j]]
-                    }
-                } else {
-                    for(const subj in items) {
-                        if(items[subj].includes(start[i])) {
-                            if(selected[subj] && !selected[subj].includes(start[i])) {
-                                selected[subj] = [...selected[subj], start[i]]
-                            } else {
-                                selected[subj] = [...(selected[subj]? selected[subj]: []), start[i]]
-                            }
-                            if(selected[subj].length == items[subj].length) {
-                                selected[subj] = [...selected[subj], subj]
-                            }
-                            break
-                        }
+            for(const k in items) {
+                selected[k] = []
+                for(let i=0;i<start.length;i++) {
+                    if(items[k].includes(start[i])) {
+                        selected[k] = [...selected[k], start[i], k]
                     }
                 }
+                if(start.includes(k) && !selected[k].includes(k)) {
+                    selected[k] = [...selected[k], k]
+                    if(selected[k].length == 1) { selected[k] = [...items[k], k] }
+                }
+                // anything gets selected, add parent to selected
             }
             loaded = true
-            console.log("Selected", selected)
         }
     }
 

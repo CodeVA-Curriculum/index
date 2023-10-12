@@ -102,6 +102,14 @@ export function expandDashNotation(grades:string[]):string[] {
     return grades.filter(grade=>!grade.includes('-')) // remove dash item from array
 }
 
+export function getGradeNums(grades:string[]):number[] {
+    let nums:number[] =[]
+    for(let i=0;i<grades.length;i++) {
+        nums.push(gradeList.indexOf(grades[i]))
+    }
+    return nums
+}
+
 // Assumes num
 export function condenseDashNotation(grades:number[]):string[] {
     grades.sort((a,b) => a-b)
