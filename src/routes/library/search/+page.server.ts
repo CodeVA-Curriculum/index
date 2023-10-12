@@ -48,7 +48,19 @@ export async function load({ url }){
     })
 
     // Filter `related` by params to find `results`
-    let results:Frontmatter[]
+    // Standards filter 
+    let results:Frontmatter[] = related.filter((obj) => {
+        // If the object has standards and the filter defines them, match if intersecting
+        if(obj.standards && filter.sol) {
+            return isIntersecting(filter.sol, obj.standards)
+        // If the filter defines standards but the object does not, do not match
+        } else if(filter.sol) {
+            return false
+        // If the filter doesn't define standards, match the object regardless of its standards field
+        } else {
+            return true
+        }
+    })
     
     // Tags
     
@@ -62,13 +74,20 @@ export async function load({ url }){
 
     // Sort `related` by query text in body, title, or tags
 
-    console.log("Ending with",related.length)
+    console.log("\nEnding with",related.length, "related")
+    printTitles(related)
+    console.log("\nEnding with", results.length, "results")
+    printTitles(results)
     // console.log(frontmatters)
     
     return {
         results: "Test",
         related: "Another Test"
     }
+}
+
+function printTitles(l:Frontmatter[]) {
+    for(let i=0;i<l.length;i++) { console.log(`    ${i+1}: ${l[i].title}`) }
 }
 
 export const prerender=true;

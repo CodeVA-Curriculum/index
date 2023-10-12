@@ -53,7 +53,8 @@ interface Frontmatter {
     contents:string[],
     license?:License,
     tags:string[],
-    audiences:string[]
+    audiences:string[],
+    standards:string[]
 }
 
 export function defaultPath():Path {
@@ -77,7 +78,8 @@ function defaultFrontmatter() {
         groups: [],
         types:[],
         tags:[],
-        audiences:[]
+        audiences:[],
+        standards:[]
     }
 }
 
@@ -92,12 +94,15 @@ function splitString(string:any, separator:string):any[] {
   }
 
 function postprocess(frontmatter:Frontmatter):Frontmatter {
+    // console.log("Postprocessing",frontmatter.title)
     frontmatter.subjects = splitString(frontmatter.subjects, ', ')
     frontmatter.grades = splitString(frontmatter.grades, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')
     frontmatter.tags = splitString(frontmatter.tags, ', ')
     frontmatter.audiences = splitString(frontmatter.audiences, ',')
-
+    if(frontmatter.standards) {
+        frontmatter.standards = splitString(frontmatter.standards, ',')
+    }
     return frontmatter
 }
 

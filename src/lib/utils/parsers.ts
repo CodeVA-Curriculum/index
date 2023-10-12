@@ -12,13 +12,15 @@ import {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFron
 import type {Frontmatter, Path} from './frontmatter'
 
 export async function parseFrontmatter(pathData:Path) {
-    let frontmatter:Frontmatter = defaultFrontmatter()
+    let frontmatter:Frontmatter // = defaultFrontmatter()
     const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
     .use(() => (tree) => {
       frontmatter = applyYAML(tree.children[0].value, pathData)
       frontmatter.pathData = pathData
+      
+      // console.log(frontmatter)
     })
     .use(remarkRehype)
     .use(rehypeFormat)
@@ -29,7 +31,7 @@ export async function parseFrontmatter(pathData:Path) {
 }
 
 export async function parseFile(pathData:Path) {
-  let frontmatter:Frontmatter = defaultFrontmatter()
+  let frontmatter:Frontmatter // = defaultFrontmatter()
   const file = await unified()
   .use(remarkParse)
   .use(remarkFrontmatter, ['yaml'])

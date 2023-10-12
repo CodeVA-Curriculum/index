@@ -1,5 +1,4 @@
 <script lang='ts'>
-    export let n = 0;
     export let list:any[] = []
     let count = 0
     export let cond = (obj) => {}

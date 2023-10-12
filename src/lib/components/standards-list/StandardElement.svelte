@@ -56,8 +56,10 @@
         <span class='desc is-italic'>{standard.text}</span>
     </div>
     <div class='column is-narrow'>
-        <!-- <Fa icon={faCaretLeft} /> -->
-        <span>... <a on:click={()=> active = true}>See More</a></span>
+        <!-- TODO: a11y stuff -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <span>... <span class='link-like' on:click={()=> active = true}>See More</span></span>
     </div>
     <div class="modal {active? 'is-active' : ''}">
         <div class="modal-background"></div>
@@ -91,7 +93,14 @@
 </article>
 
 <style>
-    .ic > .hidden, .ic > .onhover {
+    .link-like:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .link-like {
+        color: lightskyblue;
+    }
+    .ic > .onhover {
         display: none;
     }
     .ic:hover > .onhover {
