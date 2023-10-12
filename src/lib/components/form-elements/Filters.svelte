@@ -72,7 +72,6 @@
                 shortNames.push(index)
             }
         }
-        console.log(shortNames)
         // Convert contiguous sequences of grades to dash notation
         if(shortNames.length > 0) {tmp['grade'] = condenseDashNotation(shortNames)}
     

@@ -29,6 +29,12 @@
     // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
         if(loaded) {
+            // delete old params
+            for(const [k,v] of $page.url.searchParams.entries()) {
+                $page.url.searchParams.delete(k)
+            }
+
+            // Set new params
             $page.url.searchParams.set('query', term)
             params = filterElem.getParams()
             for(const [k,v] of Object.entries(params)) {
