@@ -124,6 +124,8 @@
         grades.items = res.grades as GradesByBand
 
         // console.log(grades.items)
+        subjects.start = ['Computer Science']
+        let tmpGrades:string[] = ['K-12']
 
         if(data) {
             if(data.has('aud'))   { audiences.selected = data.getAll('aud') }
@@ -133,21 +135,20 @@
             if(data.has('sol'))   { 
                 stdsList = data.getAll('sol')
             }
-
-            if(data.has('grade')) {
-                // expand dash notation 
-                const tmpGrades:string[] = data.getAll('grade')
-                const expanded = getGradeNums(expandDashNotation(tmpGrades))
-                expanded.sort((a,b) => a-b)
-                // console.log(expanded)
-                // get long names
-                let longNames:string[] = []
-                for(let i=0;i<expanded.length;i++) {
-                    longNames.push(fullGradeNames[expanded[i]])
-                }
-                grades.start = longNames
-            }
+            
+            if(data.has('grade')) { tmpGrades = data.getAll('grade') }
         }
+
+        // expand dash notation 
+        const expanded = getGradeNums(expandDashNotation(tmpGrades))
+        expanded.sort((a,b) => a-b)
+        // console.log(expanded)
+        // get long names
+        let longNames:string[] = []
+        for(let i=0;i<expanded.length;i++) {
+            longNames.push(fullGradeNames[expanded[i]])
+        }
+        grades.start = longNames
 
         let gl:number[] = []
         for(const [key, value] of Object.entries(grades.items)) {

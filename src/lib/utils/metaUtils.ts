@@ -113,19 +113,20 @@ export function getGradeNums(grades:string[]):number[] {
 // Assumes num
 export function condenseDashNotation(grades:number[]):string[] {
     grades.sort((a,b) => a-b)
-    let str = ""
+    let str = gradeList[grades[0]]
     let list:string[] = []
+    let inRange = false
     for(let i=0;i<grades.length;i++) {
-        if(str=='') {
-            str=gradeList[grades[i]].toString()+'-'
-        }
-        // see if next index is consecutive
+        str.length == 0? str=gradeList[grades[i]] : str=str
+        // if we are in a range of grades, check if next is consecutive
         if(i < grades.length-1 && grades[i+1] == grades[i]+1) {
-            // console.log('iterating...')
+            // next grade is consecutive, continue
+            !(str.indexOf('-') == str.length-1)? str+='-' : str+=''
+            continue
         } else {
-            str+=gradeList[grades[i]]
-            list.push(str)
-            str = ''
+            // next grade is not consecutive or we are at the end of the list. Add grade to str if ending in dash, then push
+            (str.indexOf('-') == str.length -1)? list.push(str+=gradeList[grades[i]]) : list.push(gradeList[grades[i]])
+            str=''
         }
     }
     return list
