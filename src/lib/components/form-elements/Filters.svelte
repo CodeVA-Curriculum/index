@@ -35,15 +35,15 @@
         selected:[] as string[]
     }
     let types = {
-        items:[] as string[], // TODO: pull from API route
+        items:[] as string[],
         selected:[] as string[]
     }
     let audiences = {
-        items:["Classroom Teachers","Students","Administrators","Curriculum Writers"], // TODO: pull from API route
+        items:[] as string[],
         selected:[] as string[]
     }
     let tags = {
-        items: ['python', 'ecs'], // TODO: pull from API route
+        items: [],
         selected:[] as string[]
     }
     
@@ -146,6 +146,8 @@
         subjects.items = res.subjects as NestedDropdown
         grades.items = res.grades as GradesByBand
         types.items = res.types
+        audiences.items = res.audiences
+        tags.items = res.tags
 
         // console.log(types.items)
         // subjects.start = ['Computer Science']

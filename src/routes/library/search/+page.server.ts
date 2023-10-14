@@ -15,7 +15,7 @@ function isIntersecting(array1:string[], array2:string[]):boolean {
 export async function load({ url, fetch }){
 
     const meta = await(await fetch('/api/library/meta')).json()
-    // console.log(meta)
+    // console.log(meta.tags)
 
     if(url.searchParams.size == 0) {
         return {
@@ -55,9 +55,10 @@ export async function load({ url, fetch }){
     let related:Frontmatter[] = frontmatters.filter((obj) => {
         // console.log(filter.subj)
         const is =  (filter.grade? isIntersecting(filter.grade, expandDashNotation(obj.grades)):true) &&
-                // (filter.subj?  isIntersecting(filter.subj, obj.subjects):true) &&
-                // (filter.aud?   isIntersecting(filter.aud, obj.audiences):true) &&
-                (filter.type?  isIntersecting(filter.type, obj.types) : true)
+                (filter.subj?  isIntersecting(filter.subj, obj.subjects):true) &&
+                (filter.aud?   isIntersecting(filter.aud, obj.audiences):true) &&
+                (filter.type?  isIntersecting(filter.type, obj.types) : true) &&
+                (filter.tags? isIntersecting(filter.tag, obj.tags) : true)
         // console.log(is)
         return is
     })

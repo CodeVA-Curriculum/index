@@ -118,6 +118,7 @@ async function getAllFrontmatter():Promise<Frontmatter[]> {
         frontmatter.parents = await findAndInheritFromParents(frontmatter)
         frontmatter.members = await findMemberFrontmatter(frontmatter)
         frontmatter = postprocess(frontmatter)
+        // console.log(frontmatter)
 
         frontmatters.push(frontmatter)
     }
@@ -166,15 +167,26 @@ async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontm
     // iterate over parents and inherit from inheritable fields
     for(let i=0;i<inheritableFields.length;i++) {
         const field = inheritableFields[i]
-        for(let i=0;i<parents.length;i++) {
+        for(let j=0;j<parents.length;j++) {
             // Parents are ordered from most direct to least
-            const parent = parents[i]
+            const parent = parents[j]
+            let end = false
             if(!frontmatter.hasOwnProperty(field) && parent.hasOwnProperty(field)) {
                 // @ts-ignore
                 // This is kept safe by the condition above
                 frontmatter[field] = parent[field]
-                break; // end the iteration--the field has been satisfied
+                end = true
             }
+            if(frontmatter.hasOwnProperty('+'+field) && parent.hasOwnProperty(field)) {
+                // If the element has an add-on tag, add to it
+                const plusField = [...frontmatter['+'+field].split(',')]
+                for(let k=0;k<plusField.length;k++) {
+                    frontmatter[field] += ', '+plusField[k]
+                }
+                // console.log(frontmatter[field])
+                end = true
+            }
+            if(end) { break }
         }
     }
     parents.pop() // remove top-level /.meta.md parent from list

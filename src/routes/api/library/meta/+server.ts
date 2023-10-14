@@ -16,15 +16,22 @@ export async function GET({ url }) {
 
     const frontmatters:Frontmatter[] = await getAllFrontmatter()
 
-    // Get subjects & grades
+    // Get all metadata
     let subjects:string[] = []
     let grades:(string)[] = []
     let types:string[] = []
+    let audiences:string[] = []
+    let tags:string[] = []
 
     for(let i=0;i<frontmatters.length;i++) {
         subjects = aggregate(frontmatters[i].subjects, subjects) as string[]
         grades = aggregate(frontmatters[i].grades, grades) as string[]
         types = aggregate(frontmatters[i].types, types) as string[]
+        audiences = aggregate(frontmatters[i].audiences, audiences) as string[]
+        tags = aggregate(frontmatters[i].tags, tags) as string[]
+        // if(frontmatters[i]['+tags']) {
+        //     tags = [...tags, ...aggregate(frontmatters[i]['+tags'], tags) as string[]]
+        // }
     }
 
     grades = expandDashNotation(grades)
@@ -67,7 +74,9 @@ export async function GET({ url }) {
     return json({
         subjects: results,
         grades: gradeResults,
-        types: types
+        types: types,
+        audiences: audiences,
+        tags:tags
     })
 }
 

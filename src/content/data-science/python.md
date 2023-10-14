@@ -1,6 +1,7 @@
 ---
 title: Data Science with Python
 types: Lesson Plan
++tags: python
 ---
 
 ## Overview

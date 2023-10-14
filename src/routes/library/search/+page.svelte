@@ -3,11 +3,6 @@
     import Search from '$lib/components/Search.svelte';
     import ElementCard from '$lib/components/ElementCard.svelte';
     import {page} from '$app/stores'
-    import { onMount } from 'svelte';
-
-    onMount(() => {
-        // console.log(data.results)
-    })
 </script>
 
 <div class='search content has-text-centered'>
@@ -19,21 +14,9 @@
         </div>
         {/if}
         <Search data={$page.url.searchParams} filter={true} />
-        {#if false}
-        <div class='message is-warning'>
-            <div class='message-header'>
-                <p>Invalid Search!</p>
-                <!-- <button clas s="delete" aria-label="delete"></button> -->
-                <!-- <button on:click={()=>showError = false} class='delete' aria-label='delete'></button> -->
-            </div>
-            <div class='message-body'>
-                <p>No search terms or filters selected! Use the text box and menus above to search the library.</p>
-            </div>
-        </div>
-        {/if} 
     </div>
     
-    {#if !(data.results.length == 0 && data.related.length == 0)}
+    {#if !($page.url.searchParams.size == 0)}
     <div class='section results has-text-left'>
         <h2>Results</h2>
         {#if data.results && data.results.length > 0}
@@ -59,9 +42,6 @@
 </div>
 
 <style>
-    .bar {
-        margin-top: 1rem;
-    }
     .low {
         margin-top: 6rem;
     }
