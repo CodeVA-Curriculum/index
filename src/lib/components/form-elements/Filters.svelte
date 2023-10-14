@@ -60,8 +60,31 @@
         if(audiences.selected.length > 0) { tmp['aud'] = audiences.selected }
         if(types.selected.length > 0) { tmp['type'] = types.selected }
         if(tags.selected.length > 0) { tmp['tag'] = tags.selected }
-        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
+        // if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
         if(sols.length > 0) { tmp['sol'] = sols }
+
+        // Condense subjects
+        let newSelected:string[] = [...subjects.selected]
+        for(let i=0;i<subjects.selected.length;i++) {
+            const subjInItems = subjects.items[subjects.selected[i]]
+            if(subjInItems) {
+                let foundStrands:string[] = [...newSelected.splice(newSelected.indexOf(subjects.selected[i]), 1)]
+                // subject selected, check to see if all strands are included as well
+                let hasStrands = true
+                for(let j=0;j<subjInItems.length;j++) {
+                    if(subjects.selected.includes(subjInItems[j])) {
+                        // remove from newSelected, save in strands
+                        foundStrands = [...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
+                    } else {
+                        hasStrands = false
+                    }
+                }
+                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...foundStrands]
+            }
+        }
+        
+        subjects.selected = [...newSelected]
+        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
 
         // Condense grade
         // Convert display names to numbers
@@ -149,6 +172,25 @@
             longNames.push(fullGradeNames[expanded[i]])
         }
         grades.start = longNames
+
+        console.log("Preloading",subjects.start)
+        // Expand subject names
+        let startSubj:string[] = []
+        for(let i=0;i<subjects.start.length;i++) {
+            // console.log(subjects.start[i].includes('All'))
+            if(subjects.start[i].includes('All')) {
+                // console.log('adding strands...')
+                const subjName = subjects.start[i].substring(4, subjects.start[i].length)
+                // console.log("Items",subjects.items[subjName])
+                if(subjects.items[subjName]) {
+                    for(let j=0;j<subjects.items[subjName].length;j++) {
+                        startSubj.push(subjects.items[subjName][j])
+                    }
+                    subjects.start[i] = subjects.start[i].substring(4, subjects.start[i].length)
+                }
+            }
+        }
+        subjects.start = [...subjects.start, ...startSubj]
 
         let gl:number[] = []
         for(const [key, value] of Object.entries(grades.items)) {
