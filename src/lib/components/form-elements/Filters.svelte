@@ -7,7 +7,7 @@
     import ChecklistDropdown, { type NestedDropdown } from '../standards-list/ChecklistDropdown.svelte';
     import CheckBoxDropdown from './CheckBoxDropdown.svelte';
     import InputWithDropdown from './InputWithDropdown.svelte';
-    import {renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation, getGradeNums } from '$lib/utils/metaUtils';
+    import {expandSubjectsStrands, renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation, getGradeNums } from '$lib/utils/metaUtils';
     import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
     import type {Params} from '$lib/utils/searchUtils'
 
@@ -35,7 +35,7 @@
         selected:[] as string[]
     }
     let types = {
-        items:["Unit of Study","Lesson Plan","Curricular Resource"] as string[], // TODO: pull from API route
+        items:[] as string[], // TODO: pull from API route
         selected:[] as string[]
     }
     let audiences = {
@@ -145,10 +145,11 @@
         const res = await (await fetch('/api/library/meta?grade=band')).json()
         subjects.items = res.subjects as NestedDropdown
         grades.items = res.grades as GradesByBand
+        types.items = res.types
 
-        // console.log(grades.items)
-        subjects.start = ['Computer Science']
-        let tmpGrades:string[] = ['K-12']
+        // console.log(types.items)
+        // subjects.start = ['Computer Science']
+        let tmpGrades:string[] = []
 
         if(data) {
             if(data.has('aud'))   { audiences.selected = data.getAll('aud') }
@@ -173,24 +174,8 @@
         }
         grades.start = longNames
 
-        console.log("Preloading",subjects.start)
         // Expand subject names
-        let startSubj:string[] = []
-        for(let i=0;i<subjects.start.length;i++) {
-            // console.log(subjects.start[i].includes('All'))
-            if(subjects.start[i].includes('All')) {
-                // console.log('adding strands...')
-                const subjName = subjects.start[i].substring(4, subjects.start[i].length)
-                // console.log("Items",subjects.items[subjName])
-                if(subjects.items[subjName]) {
-                    for(let j=0;j<subjects.items[subjName].length;j++) {
-                        startSubj.push(subjects.items[subjName][j])
-                    }
-                    subjects.start[i] = subjects.start[i].substring(4, subjects.start[i].length)
-                }
-            }
-        }
-        subjects.start = [...subjects.start, ...startSubj]
+        subjects.start = expandSubjectsStrands(subjects.start, subjects.items)
 
         let gl:number[] = []
         for(const [key, value] of Object.entries(grades.items)) {

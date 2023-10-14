@@ -1,6 +1,7 @@
 import type {Params} from '$lib/utils/searchUtils'
 import { getAllFrontmatter, type Frontmatter } from '$lib/utils/frontmatter'
-import { expandDashNotation } from '$lib/utils/metaUtils'
+import { expandDashNotation, expandSubjectsStrands } from '$lib/utils/metaUtils'
+import {base} from '$app/paths'
 
 function isIntersecting(array1:string[], array2:string[]):boolean {
     let intersections = 0
@@ -11,44 +12,54 @@ function isIntersecting(array1:string[], array2:string[]):boolean {
         return intersections > 0
 }
 
-function match(query:string, obj:Frontmatter) {
+export async function load({ url, fetch }){
 
-}
+    const meta = await(await fetch('/api/library/meta')).json()
+    // console.log(meta)
 
-export async function load({ url }){
+    if(url.searchParams.size == 0) {
+        return {
+            results: [],
+            related: []
+        }
+    }
 
     // Get params
-    let filter:any = {
-
-    }
+    let filter:any = {}
     for(const [k,v] of url.searchParams.entries()) {
         if(filter[k]) {
             filter[k].push(v)
         } else {
             filter[k] = [v]
         }
-    }    
-
-    // expand params grades
-    if(filter.grade) {
-        filter.grade = expandDashNotation(filter.grade)
     }
-
 
     // Import all the frontmatter
     let frontmatters = await getAllFrontmatter()
-    // console.log(frontmatters)
-    console.log(filter)
+
+    // Preprocess the filter
+    if(filter.grade) {
+        filter.grade = expandDashNotation(filter.grade)
+    }
+    // expand subjects/strands
+    if(filter.subj) {
+        filter.subj = expandSubjectsStrands(filter.subj, meta.subjects)
+    }
+
+    console.log("Filter", filter)
 
     console.log("Starting with",frontmatters.length)
     
     // Grade, Subject, Audience, Resource Filter
     // if any of these are not defined in the query, the object matches that attribute
     let related:Frontmatter[] = frontmatters.filter((obj) => {
-        return  filter.grade? isIntersecting(filter.grade, expandDashNotation(obj.grades)):true &&
-                filter.subj?  isIntersecting(filter.subj, obj.subjects):true &&
-                filter.aud?   isIntersecting(filter.aud, obj.audiences):true &&
-                filter.type?  isIntersecting(filter.type, obj.types):true
+        // console.log(filter.subj)
+        const is =  (filter.grade? isIntersecting(filter.grade, expandDashNotation(obj.grades)):true) &&
+                // (filter.subj?  isIntersecting(filter.subj, obj.subjects):true) &&
+                // (filter.aud?   isIntersecting(filter.aud, obj.audiences):true) &&
+                (filter.type?  isIntersecting(filter.type, obj.types) : true)
+        // console.log(is)
+        return is
     })
 
     // Filter `related` by params to find `results`
@@ -83,20 +94,20 @@ export async function load({ url }){
     
 
     // Sort `results` by type in resource, project, lesson order
-    // results.sort((a,b) => {
-    //     const order = ['Lesson Plan', 'Unit of Study', 'Curricular Resource']
-    //     let typeScoreA = 0
-    //     let typeScoreB = 0
-    //     for(let i=0;i<a.types.length;i++) {
-    //         const score = order.indexOf(a.types[i])
-    //         if(typeScoreA < score) { typeScoreA = score }
-    //     }
-    //     for(let i=0;i<b.types.length;i++) {
-    //         const score = order.indexOf(b.types[i])
-    //         if(typeScoreB < score) { typeScoreB = score }
-    //     }
-    //     return typeScoreA - typeScoreB
-    // })
+    results.sort((a,b) => {
+        const order = ['Lesson Plan', 'Unit of Study', 'Curricular Resource']
+        let typeScoreA = 0
+        let typeScoreB = 0
+        for(let i=0;i<a.types.length;i++) {
+            const score = order.indexOf(a.types[i])
+            if(typeScoreA < score) { typeScoreA = score }
+        }
+        for(let i=0;i<b.types.length;i++) {
+            const score = order.indexOf(b.types[i])
+            if(typeScoreB < score) { typeScoreB = score }
+        }
+        return typeScoreA - typeScoreB
+    })
     function longestCommonSubsequence(a:string, b:string):number {
         const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(0));
         for(let i = 1; i < a.length + 1; i++) {

@@ -131,3 +131,22 @@ export function condenseDashNotation(grades:number[]):string[] {
     }
     return list
 }
+
+export function expandSubjectsStrands(start:string[], items:object):string[] {
+    let startSubj:string[] = []
+    for(let i=0;i<start.length;i++) {
+        // console.log(subjects.start[i].includes('All'))
+        if(start[i].includes('All')) {
+            // console.log('adding strands...')
+            const subjName = start[i].substring(4, start[i].length)
+            // console.log("Items",subjects.items[subjName])
+            if(items[subjName]) {
+                for(let j=0;j<items[subjName].length;j++) {
+                    startSubj.push(items[subjName][j])
+                }
+                start[i] = start[i].substring(4, start[i].length)
+            }
+        }
+    }
+    return [...start, ...startSubj]
+}

@@ -19,13 +19,12 @@ export async function GET({ url }) {
     // Get subjects & grades
     let subjects:string[] = []
     let grades:(string)[] = []
+    let types:string[] = []
 
     for(let i=0;i<frontmatters.length;i++) {
-        // TODO: anything else we want in this route
         subjects = aggregate(frontmatters[i].subjects, subjects) as string[]
-
-        // TODO: preprocess grades results to get it in the right format & to support different kinds of notation
         grades = aggregate(frontmatters[i].grades, grades) as string[]
+        types = aggregate(frontmatters[i].types, types) as string[]
     }
 
     grades = expandDashNotation(grades)
@@ -37,6 +36,7 @@ export async function GET({ url }) {
     }
     gradesAsNumbers.sort((a,b) => a-b)
 
+    // Arrange subjects & strands into object
     let results = {}
     for(let i=0;i<subjects.length;i++) {
         // Add subject indices to results object
@@ -51,6 +51,7 @@ export async function GET({ url }) {
         }
     }
 
+    // Arrange grades into bands
     let gradeResults:any;
     if(routeParams.grade == "band") {
         gradeResults = {
@@ -65,7 +66,8 @@ export async function GET({ url }) {
 
     return json({
         subjects: results,
-        grades: gradeResults
+        grades: gradeResults,
+        types: types
     })
 }
 

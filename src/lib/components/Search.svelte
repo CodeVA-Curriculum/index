@@ -20,13 +20,12 @@
     let loaded:boolean=false;
     let term:string="";
     let expanded:boolean=true;
-
+    
+    let showError = false
     let URLerror = false;
 
     let params = ''
 
-
-    // TODO: Change the URL based on search parameters
     function updateUrl(word:string):null {
         
         // if(loaded) {
@@ -36,7 +35,7 @@
         }
 
         // Set new params
-        $page.url.searchParams.set('query', term)
+        if(term && term.length > 0) { $page.url.searchParams.set('query', term) }
         params = filterElem.getParams()
         for(const [k,v] of Object.entries(params)) {
             $page.url.searchParams.set(k, v[0])
@@ -45,15 +44,14 @@
             }
         }
         // $page.url.searchParams.sort()
-        // if(linkTo) {
-        goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
-            replaceState: true,
-            invalidateAll: true
-        });
-        // } else {
-        //     goto(`?${$page.url.searchParams.toString()}`);
-        // }
-        // }
+        if($page.url.searchParams.size > 0) {
+            goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
+                replaceState: true,
+                invalidateAll: true
+            });
+        } else {
+            showError = true
+        }
         return null
     }
     function toggle():null {
@@ -101,6 +99,19 @@
     <div class='filters {expanded? '':'hidden'}'>
             <Filters data={data} bind:this={filterElem} bind:params={params} />
     </div>
+
+    {#if showError}
+        <div class='message is-warning'>
+            <div class='message-header'>
+                <p>Invalid Search!</p>
+                <!-- <button clas s="delete" aria-label="delete"></button> -->
+                <!-- <button on:click={()=>showError = false} class='delete' aria-label='delete'></button> -->
+            </div>
+            <div class='message-body'>
+                <p>No search terms or filters selected! Use the text box and menus above to search the library.</p>
+            </div>
+        </div>
+    {/if} 
     
 </div>
 
