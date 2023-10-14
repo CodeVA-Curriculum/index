@@ -124,13 +124,12 @@ export async function load({ url, fetch }){
     }
     function scoreFilterAndSort(query:string, objs:Frontmatter[], threshold:number):Frontmatter[] {
         for(let i=0;i<objs.length;i++) {
-            const score = longestCommonSubsequence(query.toLowerCase(), objs[i].title?.toLowerCase())
+            const score = longestCommonSubsequence(query.toLowerCase(), (objs[i].title as string)?.toLowerCase())
             objs[i].score = score
-            // console.log("Score:",score)
         }
         // Filter by lcs
         objs = objs.filter((obj) => {
-            return obj.title?.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes(obj.title?.toLowerCase()) || obj.score > obj.title.length/2
+            return obj.title?.toLowerCase().includes(query.toLowerCase()) || query.toLowerCase().includes((obj.title as string)?.toLowerCase()) || obj.score > obj.title.length/2
         })
         objs.sort((a,b) => {
             if(b.score == a.score) {
@@ -158,7 +157,7 @@ export async function load({ url, fetch }){
     if(filter.query) {
         // Query title (TODO: and body) filter for results
         results = results.filter((objs) => {
-            return objs.title.toLowerCase().includes((filter.query[0]).toLowerCase())
+            return (objs.title as string).toLowerCase().includes((filter.query[0]).toLowerCase())
         })
 
         // Sort `results` by the length of the match in title (TODO: or body)
@@ -166,7 +165,11 @@ export async function load({ url, fetch }){
         related = scoreFilterAndSort(filter.query[0], related, 0.3)
     }
 
-    // TODO: make sure nothing intersects between `related` and `results`
+    // Make sure nothing intersects between `related` and `results`
+    related = related.filter((obj) => {
+        const match = results.find((res) => obj.pathData.path == res.pathData.path)
+        if(match) { return false } else { return true }
+    })
 
     console.log("\nEnding with",related.length, "related")
     printTitles(related)

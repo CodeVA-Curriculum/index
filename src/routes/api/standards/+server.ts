@@ -1,4 +1,5 @@
 import {json} from '@sveltejs/kit'
+import { fullGradeNames } from '$lib/utils/metaUtils.js'
 
 const standards:object[] = [
     {
@@ -43,15 +44,40 @@ interface Params {
     grades:string[]
 }
 
-// TODO: accept params
+function applyField(field:string, obj:object, from:any, toApply:any):object {
+    if(!obj[from[field]]) {
+        obj[from[field]] = toApply
+    }
+    // console.log(obj)
+    return obj
+}
+
+// TODO: accept params so we only get a subset of the standards based on what's in the library
 export function GET({ url }) {
 
     if(url.searchParams.get('format') == 'flat') {
         return json(standards)
     }
 
-    // TODO: get standards from "flat" version and arrange by grade > subject > strand
-    const stds = {
+    
+    let stds = {}
+    for(let i=0;i<standards.length;i++) {
+        stds =  applyField('grade', stds, standards[i], {})
+        for(const grade in stds) {
+            // console.log(grade)
+            stds[grade] = applyField('subject', stds[grade], standards[i], {})
+            for(const subject in stds[grade]) {
+                stds[grade][subject] = applyField('strand', stds[grade][subject], standards[i], [])
+                for(const strand in stds[grade][subject]) {
+                    stds[grade][subject][strand] = standards.filter((obj) => {
+                        return obj.grade == grade && obj.subject == subject && obj.strand == strand
+                    })
+                }
+            }
+        }
+    }
+
+    const oldStds = {
         'Kindergarten': {
             'Computer Science': {
                 'Algorithms & Programming': [
@@ -93,111 +119,111 @@ export function GET({ url }) {
                     }
                 ]
             },
-            'Mathematics': {
-                'Probability & Statistics': [
-                    {
-                        id: 'K.MT.PS.1',
-                        title: 'K.1',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    },
-                    {
-                        id: 'K.MT.PS.2',
-                        title: 'K.2',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    },
-                    {
-                        id: 'K.MT.PS.3',
-                        title: 'K.3',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Kindergarten',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    }
-                ]
-            }
+            // 'Mathematics': {
+            //     'Probability & Statistics': [
+            //         {
+            //             id: 'K.MT.PS.1',
+            //             title: 'K.1',
+            //             text: 'Lorem ipsum',
+            //             subs:[],
+            //             grade: 'Kindergarten',
+            //             strand: 'Probability & Statistics',
+            //             subject: 'Mathematics'
+            //         },
+            //         {
+            //             id: 'K.MT.PS.2',
+            //             title: 'K.2',
+            //             text: 'Lorem ipsum',
+            //             subs:[],
+            //             grade: 'Kindergarten',
+            //             strand: 'Probability & Statistics',
+            //             subject: 'Mathematics'
+            //         },
+            //         {
+            //             id: 'K.MT.PS.3',
+            //             title: 'K.3',
+            //             text: 'Lorem ipsum',
+            //             subs:[],
+            //             grade: 'Kindergarten',
+            //             strand: 'Probability & Statistics',
+            //             subject: 'Mathematics'
+            //         }
+            //     ]
+            // }
         },
-        "Grade 1": {
-            'Computer Science': {
-                'Algorithms & Programming': [
-                    {
-                        id: '1.CS.AP.1',
-                        title:'1.1',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        id: '1.CS.AP.2',
-                        title: '1.2',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        id: '1.CS.AP.3',
-                        title: '1.3',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    },
-                    {
-                        id: '1.CS.AP.4',
-                        title: '1.4',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Algorithms & Programming',
-                        subject: 'Computer Science'
-                    }
-                ]
-            },
-            'Mathematics': {
-                'Probability & Statistics': [
-                    {
-                        id: '1.MT.PS.1',
-                        title: '1.1',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    },
-                    {
-                        id: '1.MT.PS.2',
-                        title: '1.2',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    },
-                    {
-                        id: '1.MT.PS.3',
-                        title: '1.3',
-                        text: 'Lorem ipsum',
-                        subs:[],
-                        grade: 'Grade 1',
-                        strand: 'Probability & Statistics',
-                        subject: 'Mathematics'
-                    }
-                ]
-            }
-        }
+        // "Grade 1": {
+        //     'Computer Science': {
+        //         'Algorithms & Programming': [
+        //             {
+        //                 id: '1.CS.AP.1',
+        //                 title:'1.1',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Algorithms & Programming',
+        //                 subject: 'Computer Science'
+        //             },
+        //             {
+        //                 id: '1.CS.AP.2',
+        //                 title: '1.2',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Algorithms & Programming',
+        //                 subject: 'Computer Science'
+        //             },
+        //             {
+        //                 id: '1.CS.AP.3',
+        //                 title: '1.3',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Algorithms & Programming',
+        //                 subject: 'Computer Science'
+        //             },
+        //             {
+        //                 id: '1.CS.AP.4',
+        //                 title: '1.4',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Algorithms & Programming',
+        //                 subject: 'Computer Science'
+        //             }
+        //         ]
+        //     },
+        //     'Mathematics': {
+        //         'Probability & Statistics': [
+        //             {
+        //                 id: '1.MT.PS.1',
+        //                 title: '1.1',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Probability & Statistics',
+        //                 subject: 'Mathematics'
+        //             },
+        //             {
+        //                 id: '1.MT.PS.2',
+        //                 title: '1.2',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Probability & Statistics',
+        //                 subject: 'Mathematics'
+        //             },
+        //             {
+        //                 id: '1.MT.PS.3',
+        //                 title: '1.3',
+        //                 text: 'Lorem ipsum',
+        //                 subs:[],
+        //                 grade: 'Grade 1',
+        //                 strand: 'Probability & Statistics',
+        //                 subject: 'Mathematics'
+        //             }
+        //         ]
+        //     }
+        // }
     }
 	return json(stds)
 }

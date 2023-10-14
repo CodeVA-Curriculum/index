@@ -13,6 +13,10 @@
     export let standard;
     export let selected:any[] = []
 
+    onMount(() => {
+        // console.log(standard)
+    })
+
     const standardFinder = (element) => {
         return standard.id == element.id
     }
