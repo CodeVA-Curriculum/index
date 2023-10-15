@@ -29,9 +29,6 @@ export async function GET({ url }) {
         types = aggregate(frontmatters[i].types, types) as string[]
         audiences = aggregate(frontmatters[i].audiences, audiences) as string[]
         tags = aggregate(frontmatters[i].tags, tags) as string[]
-        // if(frontmatters[i]['+tags']) {
-        //     tags = [...tags, ...aggregate(frontmatters[i]['+tags'], tags) as string[]]
-        // }
     }
 
     grades = expandDashNotation(grades)
