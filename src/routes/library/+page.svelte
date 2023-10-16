@@ -6,7 +6,7 @@
     let groups:any = [];
 
     onMount(()=> {
-        groups = data.content;
+        groups = data.projects;
     })
 </script>
 

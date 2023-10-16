@@ -6,35 +6,87 @@
     import Fa from 'svelte-fa'
     import {faFilter, faList} from '@fortawesome/free-solid-svg-icons'
     import {faCircle} from '@fortawesome/free-regular-svg-icons'
+    import { onMount } from 'svelte';
+    import type { Frontmatter } from '$lib/utils/frontmatter';
+    import { expandDashNotation } from '$lib/utils/metaUtils';
 
-    export let elems:any = []
+    export let elems:Frontmatter[] = [];
 //    let elems:number[] = [0, 0, 0, 0, 0, 0] 
 
-    let audiences:string[] = ['Instructors', 'Students', 'General', 'Administrators']
-    let subjects:string[] = ['Computer Science', 'Data Science']
-    let grades:string[] = ['K-2', '3-5', '6-8', 'High School']
-    let list:boolean = false
+    let audiences:string[] = []
+    let subjects:string[] = []
+    let grades:string[] = []
+    export let list:boolean = false
+    // let term:string = ''
+
+    let filter = {
+        term: '',
+        audiences: '',
+        subjects: '',
+        grades: ''
+    }
+    let filteredList = []
 
     function toggle() { 
         list = !list
+    }
+
+    onMount(async () => {
+        // console.log(elems)
+        filteredList = filterProjects(filter, elems)
+        const res = await (await fetch(`${base}/api/library/meta`)).json()
+        // console.log(res)
+        audiences = res.audiences
+        for(const subj in res.subjects) {
+            subjects = [...subjects, subj]
+        }
+        for(const band in res.grades) {
+            grades = [...grades, band]
+        }
+    })
+
+    function isIntersecting(array1:string[], array2:string[]):boolean {
+    let intersections = 0
+        for(let i=0;i<array1.length;i++) {
+            intersections += array2.includes(array1[i])? 1 : 0
+        }
+        // console.log(array1, array2, intersections > 0)
+        return intersections > 0
+    }
+
+    $: filtered = filterProjects(filter, elems)
+
+    function filterProjects(filter:object, elems:Frontmatter[]):Frontmatter[] {
+        // console.log('filtering...')
+        let filtered = elems.filter((el)=> {
+            const subjectsMatch = filter.subjects == 'All Subjects'? true : el.subjects.includes(filter.subjects)
+            const audiencesMatch = filter.audiences == 'All Audiences'? true : el.audiences.includes(filter.audiences)
+            // expand dash notation for both elements to find intersections
+            const expandedFilterGrades = expandDashNotation([filter.grades])
+            const expandedElementGrades = expandDashNotation(el.grades)
+            const gradeMatch = filter.grades == 'All Grade Levels'? true : isIntersecting(expandedFilterGrades, expandedElementGrades)
+            // console.log(filter.grades)
+            const termMatch = filter.term.length > 0? el.title?.toLowerCase().includes(filter.term.toLowerCase()) : true
+            return subjectsMatch && audiencesMatch && termMatch && gradeMatch
+        })
+        return filtered
     }
 </script>
 
 <div class='projects'>
     <div class='field is-grouped'>
         <!-- <p class='label'><Fa icon={faFilter} /></p> -->
-        <Dropdown label="Audience" options={audiences} defaultOption="All Audiences" />
-        <Dropdown label="Subject" options={subjects} defaultOption="All Subjects" />
-        <Dropdown label="Grade Level" options={grades} defaultOption="All Grade Levels" />
-        <input class='input mr-2' placeholder="Group Name">
+        <Dropdown bind:selected={filter.audiences} options={audiences} defaultOption="All Audiences" />
+        <Dropdown bind:selected={filter.subjects} options={subjects} defaultOption="All Subjects" />
+        <Dropdown bind:selected={filter.grades} options={grades} defaultOption="All Grade Levels" />
+        <input bind:value={filter.term} class='input mr-2' placeholder="Group Name">
         <button on:click={toggle} data-tooltip='View as {list? 'Orbs':'List'}' class='has-tooltip-arrow button'><Fa icon={list? faCircle:faList} /></button>
     </div>
     {#if list}
-        <Table groups={elems} />
+        <Table groups={filtered} />
     {:else}
-        {#each elems as el}
-        <GroupOrb data={el} />
-    <!-- {console.log(el.path)} -->
+        {#each filtered as el}
+        <GroupOrb meta={el} />
         {/each}
     {/if}
 </div>

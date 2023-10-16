@@ -13,6 +13,12 @@ import type {Frontmatter, Path} from './frontmatter'
 
 export async function parseFrontmatter(pathData:Path) {
     let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
+    
+    let cleanPath = pathData.path
+    if(cleanPath[0] == '/') {
+      cleanPath = cleanPath.substring(1, cleanPath.length) as `${string}.md`
+    }
+    // console.log('src/content/'+cleanPath)
     const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -25,7 +31,7 @@ export async function parseFrontmatter(pathData:Path) {
     .use(remarkRehype)
     .use(rehypeFormat)
     .use(rehypeStringify)
-    .process(await read('src/content/'+pathData.path))
+    .process(await read('src/content/'+cleanPath))
 
     return frontmatter;
 }

@@ -5,7 +5,7 @@ import {getParentDirectory, getParentMeta} from './pathUtils'
 import { importLibraryGlob } from '.'
 import { srcToUrl } from './pathUtils'
 
-const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types', 'audiences']
+const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types', 'audiences', 'image']
 
 interface Path {
     path:`${string}.md`,
@@ -54,7 +54,15 @@ interface Frontmatter {
     license?:License,
     tags:string[],
     audiences:string[],
-    standards:string[]
+    standards:string[],
+    links:Links,
+    image:string
+}
+
+interface Links {
+    goopen?:string,
+    drive:string,
+    pdf:string
 }
 
 export function defaultPath():Path {
@@ -79,7 +87,9 @@ function defaultFrontmatter() {
         types:[],
         tags:[],
         audiences:[],
-        standards:[]
+        standards:[],
+        links:{},
+        image: 'default.png'
     }
 }
 
@@ -98,14 +108,35 @@ function postprocess(frontmatter:Frontmatter):Frontmatter {
     frontmatter.grades = splitString(frontmatter.grades, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')
     frontmatter.tags = splitString(frontmatter.tags, ', ')
-    frontmatter.audiences = splitString(frontmatter.audiences, ',')
+    frontmatter.audiences = splitString(frontmatter.audiences, ', ')
     if(frontmatter.standards) {
-        frontmatter.standards = splitString(frontmatter.standards, ',')
+        frontmatter.standards = splitString(frontmatter.standards, ', ')
         // Render standards objects TODO: fetch subset for better performance
         
         
     }
     return frontmatter
+}
+
+export async function getProjectsFrontmatter():Promise<Frontmatter[]> {
+    const library = await importLibraryGlob('meta')
+    let frontmatters:Frontmatter[] = []
+    for(const path in library) {
+        // console.log(validPath.path)
+        const validPath:Path = {
+            path: path.replace('/src/content/', '') as `${string}.md`,
+            exists: true
+        }
+        // console.log(validPath.path)
+        let frontmatter = await parseFrontmatter(validPath)
+        frontmatter.parents = await findAndInheritFromParents(frontmatter)
+        frontmatter.members = await findMemberFrontmatter(frontmatter)
+        frontmatter = postprocess(frontmatter)
+        // console.log(frontmatter)
+
+        frontmatters.push(frontmatter)
+    }
+    return frontmatters
 }
 
 async function getAllFrontmatter():Promise<Frontmatter[]> {
@@ -201,8 +232,10 @@ function auditFrontmatter(frontmatter:Frontmatter) {
         frontmatter.pathData.exists,
         frontmatter.pathData.path.length > 0,
         frontmatter.title != null,
-        typeof(frontmatter.authors) == 'string'
-        // TODO: add rules for Google Drive & PDF links
+        typeof(frontmatter.authors) == 'string',
+        frontmatter.links != null,
+        frontmatter.links.drive != null,
+        // frontmatter.links.pdf != null
     ]
     for(let i=0;i<rules.length;i++) {
         if(!rules[i]) {

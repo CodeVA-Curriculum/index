@@ -8,12 +8,15 @@
     import {srcToUrl} from '$lib/utils/pathUtils'
     
     let icon;
+    let image;
     onMount(()=>{
         if(data.contents && data.contents.length > 0) {
             icon = faFolder
         } else {
             icon = faFile
         }
+
+        image = data.image? data.image: 'default.png'
     })
 </script>
 
@@ -21,7 +24,10 @@
     <div class='card-content'>
         <div class='columns is-mobile'>
             <div class='column is-narrow'>
-                <img src='https://placekitten.com/300/300' >
+                <img 
+                    alt="A logo for the {data.title} resource from CodeVA" 
+                    src='/images/{data.image}' 
+                >
             </div>
             <div class='column has-text-left'>
                 <h2>
@@ -31,14 +37,16 @@
                 <p class='heading'>a {data.types} {data.contents? "pack ":" "}by {data.authors}</p>
                 <div class='buttons'>
                     <a class='button is-small is-primary' href={srcToUrl(data.pathData.path)}>Read More</a>
-                    <button class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
+                    <a href={data.links.drive} class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
                         Google Drive
                         <Fa class='ml-2' icon={faGoogleDrive} />
-                    </button>
-                    <button data-tooltip="Download PDF" class='has-tooltip-arrow has-tooltip-bottom button is-small'>
+                    </a>
+                    {#if data.links.pdf}
+                    <a href={data.links.pdf} data-tooltip="Download PDF" class='has-tooltip-arrow has-tooltip-bottom button is-small'>
                         PDF
                         <Fa class='ml-2' icon={faCloudArrowDown} />
-                    </button>
+                    </a>
+                    {/if}
                     
                 </div>
             </div>
