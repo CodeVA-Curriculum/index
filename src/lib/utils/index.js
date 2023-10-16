@@ -20,30 +20,9 @@ const fetchMarkdownPosts = async () => {
     return allPosts
   }
 
-// const fetchPost = async (slug) => {
-//     const allPostFiles = import.meta.glob('/content/*.md')
-//     const iterablePostFiles = Object.entries(allPostFiles)
-    
-//     const allPosts = await Promise.all(
-//       iterablePostFiles.map(async ([path, resolver]) => {
-//         const { metadata } = await resolver()
-//         const postPath = path // TODO: slice this boi
-  
-//         return {
-//           meta: metadata,
-//           path: postPath,
-//         }
-//       })
-//     )
-//     console.log("Hello")
-//     return allPosts
-// }
 
-// TODO: update to pull from parents
 async function getLessonGroups() {
   const posts = await importLibraryGlob('meta')
-
-  // console.log(posts)
 
   let body = []
   // @ts-ignore

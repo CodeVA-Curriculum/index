@@ -1,4 +1,5 @@
 import {json} from '@sveltejs/kit'
+import { fullGradeNames } from '$lib/utils/metaUtils.js'
 
 let standards:object[] = []
 
@@ -14,9 +15,13 @@ async function getStandards() {
 }
 
 standards = await getStandards()
-// console.log(standards)
 
-// TODO: sort standards by grade
+// TODO: sort standards (check this periodically as you add standards)
+standards.sort((a,b) => {
+    return fullGradeNames.indexOf(a.grade) - fullGradeNames.indexOf(b.grade)
+})
+
+// console.log(standards)
 
 
 interface Params {
@@ -59,3 +64,5 @@ export function GET({ url }) {
     }
 	return json(stds)
 }
+
+export const prerender = true

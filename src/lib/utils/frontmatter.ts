@@ -179,7 +179,7 @@ async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontm
             }
             if(frontmatter.hasOwnProperty('+'+field) && parent.hasOwnProperty(field)) {
                 // If the element has an add-on tag, add to it
-                const plusField = [...frontmatter['+'+field].split(',')]
+                const plusField = [...frontmatter['_'+field].split(',')]
                 for(let k=0;k<plusField.length;k++) {
                     frontmatter[field] += ', '+plusField[k]
                 }

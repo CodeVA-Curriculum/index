@@ -18,6 +18,7 @@ import {validatePath} from '$lib/utils/frontmatter'
 import type {Element} from '$lib/utils/elementTypes'
 
 export async function load({ params }):Promise<Element> {
+  console.log(params.slug)
   const path:Path = validatePath(params.slug)
   if(path.exists) {
     const data = await parseFile(path)
