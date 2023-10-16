@@ -1,27 +1,18 @@
-import {read} from 'to-vfile'
-import {unified} from 'unified'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import remarkGfm from 'remark-gfm'
-import remarkFrontmatter from 'remark-frontmatter'
-import rehypeFormat from 'rehype-format'
-import rehypeStringify from 'rehype-stringify'
-import YAML from 'yaml'
 import {error} from '@sveltejs/kit'
-import { parseFrontmatter, findMemberFrontmatter } from '$lib/utils/libParse.js'
 import { parseFile } from '$lib/utils/parsers'
-// import {validatePath} from '$lib/utils/libraryUtils'
 import { importLibraryGlob } from '$lib/utils/index.js'
 import type {Path} from '$lib/utils/frontmatter'
 import {validatePath} from '$lib/utils/frontmatter'
+import {base} from '$app/paths'
 
 import type {Element} from '$lib/utils/elementTypes'
 
-export async function load({ params }):Promise<Element> {
-  console.log(params.slug)
+export async function load({ params, fetch }):Promise<Element> {
+  // console.log(params.slug)
   const path:Path = validatePath(params.slug)
   if(path.exists) {
-    const data = await parseFile(path)
+    const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
+    const data = await parseFile(path, standards)
     // console.log('loaded:')
     // console.log(data)
     return {
@@ -38,22 +29,25 @@ export async function load({ params }):Promise<Element> {
 
 // entries  
 export async function entries() {
-  // TODO: refactor to use fs instead of vite importing--it would be better to have the content outside of `src`
+  console.log("Prerendering dynamic routes")
   const paths = await importLibraryGlob('all')
   let cleanPaths = []
   for(const path in paths) {
     // exclude 'meta' files from prerendered paths
     if(path.includes('meta')) {
+      const clean = path.slice("/src/content/".length, -1*('meta.md'.length + 1))
       cleanPaths.push({
-        slug: path.slice("/src/content/".length, -1*'meta.md'.length)
+        slug: clean
       })  
     } else {
+      const clean = path.slice("/src/content/".length, -3)
       cleanPaths.push({
         // Add non-meta.md path to prerendered paths, excluding the '.md' file extension
-        slug: path.slice("/src/content/".length, -3)
+        slug: clean
       })
     }
   }
+  
   return cleanPaths;
 }
 

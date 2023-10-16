@@ -1,25 +1,7 @@
 import {json} from '@sveltejs/kit'
 import { fullGradeNames } from '$lib/utils/metaUtils.js'
+import {base} from '$app/paths'
 
-let standards:object[] = []
-
-async function getStandards() {
-    let stds:object[] = []
-    const files = await import.meta.glob('./**/*.json')
-    for (const path in files) {
-        await files[path]().then((mod:any) => {
-            stds = [...stds, ...mod.default]
-        })
-    }
-    return stds
-}
-
-standards = await getStandards()
-
-// TODO: sort standards (check this periodically as you add standards)
-standards.sort((a,b) => {
-    return fullGradeNames.indexOf(a.grade) - fullGradeNames.indexOf(b.grade)
-})
 
 // console.log(standards)
 
@@ -37,13 +19,13 @@ function applyField(field:string, obj:any, from:any, toApply:any):object {
 }
 
 // TODO: (eventually?) accept params so we only get a subset of the standards based on what's in the library
-export function GET({ url }) {
+export async function GET({fetch}) {
+    const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
 
-    if(url.searchParams.get('format') == 'flat') {
-        return json(standards)
-    }
-
-    
+    // TODO: sort standards (check this periodically as you add standards)
+    standards.sort((a,b) => {
+        return fullGradeNames.indexOf(a.grade) - fullGradeNames.indexOf(b.grade)
+    })
     let stds = {}
     for(let i=0;i<standards.length;i++) {
         stds =  applyField('grade', stds, standards[i], {})

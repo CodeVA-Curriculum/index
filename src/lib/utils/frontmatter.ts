@@ -101,6 +101,9 @@ function postprocess(frontmatter:Frontmatter):Frontmatter {
     frontmatter.audiences = splitString(frontmatter.audiences, ',')
     if(frontmatter.standards) {
         frontmatter.standards = splitString(frontmatter.standards, ',')
+        // Render standards objects TODO: fetch subset for better performance
+        
+        
     }
     return frontmatter
 }
@@ -111,7 +114,7 @@ async function getAllFrontmatter():Promise<Frontmatter[]> {
     let frontmatters:Frontmatter[] = []
     for(const path in library) {
         const validPath:Path = {
-            path: `${srcToUrl(path)}.md`.replace('/library/', '') as `${string}.md`,
+            path: `${srcToUrl(path)}.md`.replace('/library/browse/', '') as `${string}.md`,
             exists: true
         }
         let frontmatter = await parseFrontmatter(validPath)

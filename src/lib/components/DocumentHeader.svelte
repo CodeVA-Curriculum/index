@@ -4,6 +4,7 @@
     import Fa from 'svelte-fa'
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
+    import { srcToUrl } from "$lib/utils/pathUtils";
 
     import type {Frontmatter} from '$lib/utils/frontmatter'
     import ArrayAsInlineList from "./ArrayAsInlineList.svelte";
@@ -30,7 +31,7 @@
                 {#each meta.parents as parent, i}
                 {#if i!=0},{/if}
                 {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
-                <a data-sveltekit-reload href='{base}/library/{parent.pathData.path}'><i>{parent.title}</i></a>
+                <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('meta', '')}"><i>{parent.title}</i></a>
                 {/each}
                 project{meta.parents.length>1 ? 's' : ''}.</p>
             {/if}

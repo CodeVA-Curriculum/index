@@ -6,19 +6,14 @@
     import ElementCard from "./ElementCard.svelte";
     import StandardTag from './standards-list/StandardTag.svelte';
     export let data:Element
-    // let standards = [0, 0, 0, 0]
 
-    // TODO: pull from frontmatter or children
-    let standards = []
     let standardsBySubject:any = {}
 
     onMount(async () => {
         let url = new URLSearchParams()
 
-        standards = await (await fetch(`${base}/api/standards?format=flat`)).json()
-        // console.log(standards)
-
         // Arrange by subject area
+        const standards = data.frontmatter.standards ? data.frontmatter.standards : []
         for(let i=0;i<standards.length;i++) {
             if(!standardsBySubject[standards[i].subject]) {
                 standardsBySubject[standards[i].subject] = [standards[i]]
@@ -44,15 +39,9 @@
             {/each}
         </div>
         <div class='column ml-3'>
+            {#if data.frontmatter.standards}
             <div class='sidebar'>
                 <h3>Standards</h3>
-                <!-- {#each standards as obj}
-                <p>
-                    <i>{obj.id}:</i>
-                    {#each stds as std}
-                    <a href='/' class='tag std-tag mx-1 my-1'>N.XX.n</a>
-                    {/each}
-                </p> -->
                 {#each Object.entries(standardsBySubject) as [title, stds]}
                 <p>
                     <i>{title}:</i>    
@@ -62,13 +51,15 @@
                 </p>
                 {/each}
             </div>
+            {/if}
+            {#if data.frontmatter.tags}
             <div class='sidebar'>
                 <h3>Tags</h3>
                 {#each data.frontmatter.tags as tag}
                 <a href={`${base}/library/search?tag=${tag}`} class='tag m-1'>{tag}</a>
                 {/each}
             </div>
-            
+            {/if}
         </div>
     </div>
 </div>
