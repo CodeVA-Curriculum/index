@@ -26,41 +26,45 @@
 
     let params = ''
 
-    function updateUrl(word:string):null {
-        
+    function updateUrl(word:string):string {
+        console.log('updated URL')
         // if(loaded) {
         // delete old params
-        for(const [k,v] of $page.url.searchParams.entries()) {
-            $page.url.searchParams.delete(k)
-        }
+        // for(const [k,v] of $page.url.searchParams.entries()) {
+        //     $page.url.searchParams.delete(k)
+        // }
+
+        const searchParams = new URLSearchParams()
 
         // Set new params
-        if(term && term.length > 0) { $page.url.searchParams.set('query', term) }
+        if(term && term.length > 0) { searchParams.set('query', term) }
         params = filterElem.getParams()
         for(const [k,v] of Object.entries(params)) {
-            $page.url.searchParams.set(k, v[0])
+            searchParams.set(k, v[0])
             for(let i=1;i<v.length;i++) {
-                $page.url.searchParams.append(k, v[i])
+                searchParams.append(k, v[i])
             }
         }
         // $page.url.searchParams.sort()
-        if($page.url.searchParams.size > 0) {
-            goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
-                replaceState: true,
-                invalidateAll: true
-            });
-        } else {
-            showError = true
+        if(searchParams.size > 0) {
+            // goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
+            // });
+            return `${base}/library/search?${searchParams.toString()}`
         }
-        return null
+        return `${base}/library/search?error=invalid`
     }
     function toggle():null {
         expanded = !expanded
         return null
     }
 
+    // $: url = updateUrl(term)
+
     onMount(()=>{
         term = data ? data.get('query') : ''
+        if($page.url.searchParams.has('error')) {
+            showError = true
+        }
         
         loaded=true;
     })
@@ -90,14 +94,14 @@
             </button>
         </div>
         {/if}
-        <div class='control'>
-            <button on:click={updateUrl(term)} class='button is-large is-primary'>Search</button>
+        <div data-sveltekit-reload class='control'>
+            <a href='{url}' class='button is-large is-primary'>Search</a>
         </div>
         
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters data={data} bind:this={filterElem} bind:params={params} />
+            <Filters on:change={() => url = updateUrl(term)} data={data} bind:this={filterElem} bind:params={params} />
     </div>
 
     {#if showError}

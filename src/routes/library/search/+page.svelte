@@ -34,7 +34,7 @@
 
 <div class='search content has-text-centered'>
     <div class='section'>
-        {#if results.length == 0 && related.length == 0}
+        {#if $page.url.searchParams.size == 1 && $page.url.searchParams.has('error')}
         <h1 class='low'>Search Our Library</h1>
         <div class='has-text-left my-5'>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -43,7 +43,7 @@
         <Search data={urlData} filter={true} />
     </div>
     
-    {#if !(urlData.size == 0)}
+    {#if !(urlData.size == 0) && $page.url.searchParams.has('error') == false}
     <div class='section results has-text-left'>
         <h2>Results</h2>
         {#if results && results.length > 0}
