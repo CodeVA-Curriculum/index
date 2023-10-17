@@ -6,7 +6,7 @@ export function srcToUrl(path:string) {
     // console.log(path)
     let newPath = '/'+base+'library/browse/'+path.replace('/src/content/', '/').replace('.md', '')
     newPath = newPath.replace('//', '/')
-    console.log(newPath)
+    // console.log(newPath)
     return newPath
   }
 

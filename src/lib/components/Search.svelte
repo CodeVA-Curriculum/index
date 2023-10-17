@@ -27,7 +27,7 @@
     let params = ''
 
     function updateUrl(word:string):string {
-        console.log('updated URL')
+        // console.log('updated URL')
         // if(loaded) {
         // delete old params
         // for(const [k,v] of $page.url.searchParams.entries()) {

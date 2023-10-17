@@ -84,7 +84,7 @@ export function getFilter(params:URLSearchParams, meta:any):object {
     return filter
 }
 
-export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[]):object {
+export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[]):Promise<object> {
     console.log("Starting with",frontmatters.length)
 
     // Grade, Subject, Audience, Resource Filter
