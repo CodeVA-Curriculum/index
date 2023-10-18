@@ -36,6 +36,10 @@
     // $: console.log(results.length)
 </script>
 
+<svelte:head>
+    <title>Search the Library</title>
+</svelte:head>
+
 <div class='search content has-text-centered'>
     <div class='section'>
         {#if urlData.size == 1 && urlData.has('error')}

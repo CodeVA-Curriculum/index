@@ -11,6 +11,10 @@
 
 </script>
 
+<svelte:head>
+    <title>Browse the Library</title>
+</svelte:head>
+
 <div class='lessons-browse container content'>
     <div class='section'>
         <h1>CodeVA's Curriculum Projects</h1>
