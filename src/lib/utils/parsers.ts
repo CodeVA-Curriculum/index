@@ -13,6 +13,12 @@ import type {Frontmatter, Path} from './frontmatter'
 
 export async function parseFrontmatter(pathData:Path) {
     let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
+    
+    let cleanPath = pathData.path
+    if(cleanPath[0] == '/') {
+      cleanPath = cleanPath.substring(1, cleanPath.length) as `${string}.md`
+    }
+    // console.log('src/content/'+cleanPath)
     const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -25,12 +31,12 @@ export async function parseFrontmatter(pathData:Path) {
     .use(remarkRehype)
     .use(rehypeFormat)
     .use(rehypeStringify)
-    .process(await read('src/content/'+pathData.path))
+    .process(await read('src/content/'+cleanPath))
 
     return frontmatter;
 }
 
-export async function parseFile(pathData:Path) {
+export async function parseFile(pathData:Path, standards:object[]) {
   let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
   const file = await unified()
   .use(remarkParse)
@@ -45,7 +51,7 @@ export async function parseFile(pathData:Path) {
   .use(rehypeStringify)
   .process(await read('src/content/'+pathData.path))
 
-  // console.log(frontmatter)
+  
   // Find parents of document or group
   frontmatter.parents = await findAndInheritFromParents(frontmatter);
 
@@ -53,11 +59,19 @@ export async function parseFile(pathData:Path) {
 
   // If element frontmatter doesn't have a `contents`field `members` will be an empty array
   frontmatter.members = await findMemberFrontmatter(frontmatter)
-
-  // TODO: Render standards from API
+  
   
   // Post-processing
   frontmatter = postprocess(frontmatter)
+
+  // Render standards from API
+  if(frontmatter.standards) {
+    for(let i=0;i<frontmatter.standards.length;i++) {
+      frontmatter.standards[i] = standards.find((obj) => {
+        return obj.id == frontmatter.standards[i]
+      })
+    }
+  }
 
   return {
     file: file,

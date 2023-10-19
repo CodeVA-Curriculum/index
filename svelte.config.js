@@ -20,6 +20,9 @@ const config = {
       assets: 'build',
       fallback: null
     }),
+    // paths: {
+    //   base: '/index', // uncomment this before deployment
+    // },
     alias: {
       $content: 'src/content'
     }

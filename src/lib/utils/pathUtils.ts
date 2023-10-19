@@ -4,7 +4,10 @@ import {base} from '$app/paths'
 
 export function srcToUrl(path:string) {
     // console.log(path)
-    return '/'+base+'library'+path.replace('/src/content/', '/').replace('.md', '')
+    let newPath = '/'+base+'library/browse/'+path.replace('/src/content/', '/').replace('.md', '')
+    newPath = newPath.replace('//', '/')
+    // console.log(newPath)
+    return newPath
   }
 
 export function getParentDirectory(pathData:Path):string {

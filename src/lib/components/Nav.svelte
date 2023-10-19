@@ -29,7 +29,7 @@
             >
                 Home
             </a>
-            <a class="navbar-item"
+            <!-- <a class="navbar-item"
                 href='{base}/about'
             >
                 About
@@ -38,7 +38,7 @@
                 href='{base}/library'
             >
                 Our Library
-            </a>
+            </a> -->
             <!-- <a class="navbar-item"
                 href='{base}/'
             >

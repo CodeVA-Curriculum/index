@@ -36,7 +36,7 @@ async function getLessonGroups() {
         return { 
             // @ts-ignore
             ...obj.metadata,
-            path: `${base}/library/${path.slice("/src/content/".length, -7)}`,
+            path: `${base}/library/browse/${path.slice("/src/content/".length, -7)}`,
             // @ts-ignore
             content: obj.default
          }

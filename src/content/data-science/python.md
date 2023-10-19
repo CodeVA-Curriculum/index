@@ -2,6 +2,10 @@
 title: Data Science with Python
 types: Lesson Plan
 _tags: python
+links:
+    drive: https://drive.google.com/drive/folders/14fex6O2nwfpnTowDUR-sgBs1WcqNsW6d
+    goopen: https://goopenva.org/courseware/lesson/6185/overview
+    pdf: https://drive.google.com/file/d/18JQIjVfhPzSO-jM9ST1wCE9fHypYpk0x/view?usp=drive_link
 ---
 
 ## Overview

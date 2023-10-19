@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import {SvelteComponent, onMount} from 'svelte'
+    import {SvelteComponent, createEventDispatcher, onMount} from 'svelte'
     import {slide} from 'svelte/transition'
     import { faCaretDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
@@ -10,6 +10,14 @@
     import {expandSubjectsStrands, renderGradesAsStrings, condenseDashNotation, gradeList, fullGradeNames, type GradesByBand, expandDashNotation, getGradeNums } from '$lib/utils/metaUtils';
     import type {ListedStandards, Standard} from '$lib/utils/metaUtils'
     import type {Params} from '$lib/utils/searchUtils'
+    import {base} from '$app/paths'
+
+    const dispatch = createEventDispatcher()
+
+    function sendUpdate(selectedStandards, subjects, tags, grades, types, audiences) {
+        dispatch('change')
+        // console.log("Got change")
+    }
 
     export let data:URLSearchParams; // to preset filter UI based on params
 
@@ -103,6 +111,8 @@
 
     let filteredStandards = {}
 
+    $: sendUpdate(selectedStandards, subjects, tags, grades, types, audiences)
+    
     $: {
         if(loaded) {
             filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
@@ -111,6 +121,8 @@
         
 
     function filterStandards(grades:string[], subjects:string[], standards:ListedStandards) {
+        // console.log('Ran filter')
+        
         let filtered:ListedStandards = {}
 
         // Add indices for grade levels
@@ -142,7 +154,7 @@
 
     onMount(async () => {
         // Pull dropdown items from API route
-        const res = await (await fetch('/api/library/meta?grade=band')).json()
+        const res = await (await fetch(`${base}/api/library/meta`)).json()
         subjects.items = res.subjects as NestedDropdown
         grades.items = res.grades as GradesByBand
         types.items = res.types
@@ -191,7 +203,7 @@
             url.append('grades', gradesWithDashes[i])
         }
 
-        stdsRequest = fetch(`/api/standards?${url.toString()}`)
+        stdsRequest = fetch(`${base}/api/standards/object.json`)
         stdsRequest.then(async (value) => {
             
             standards = await value.json()
@@ -274,6 +286,7 @@
     }
     button {
         width: 10rem;
+        min-width: 10rem;
     }
     label {
         font-size: 8pt;

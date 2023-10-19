@@ -1,15 +1,17 @@
 import { getLessonGroups } from "$lib/utils"
+import { getProjectsFrontmatter } from "$lib/utils/frontmatter";
 // import {json} from '@sveltejs/kit'
 
 
 
 export async function load(){
+    let body = []
     // const post = await import(`../${params.slug}.md`)
-    const body = await getLessonGroups();
-    const content = await Promise.all(body)
-    // console.log(content)
+    body = await getProjectsFrontmatter();
+    // const content = await Promise.all(body)
+    // console.log(body)
     return {
-      content
+      projects: body
     }
   }
 
