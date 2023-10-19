@@ -2,10 +2,14 @@
     import Projects from "$lib/components/Projects.svelte";
     import Search from "$lib/components/Search.svelte";
     import {onMount} from 'svelte'
+    import { page } from "$app/stores";
     export let data;
+
+    let urlData:URLSearchParams
     let groups:any = [];
 
     onMount(()=> {
+        urlData = $page.url.searchParams
         groups = data.projects;
     })
 </script>
@@ -14,7 +18,7 @@
     <div class='section'>
         <h1>Search the Library</h1>
         <p>Use the search bar below to browse CodeVA's library of <strong>dozens of computer science lesson plans</strong> across all grades K-12. Use the filters to narrow down your search, or check out our curriculum projects listed below!</p>
-        <Search linkTo={true} filter={false} />
+        <Search data={urlData} filter={false} />
         <hr>
     </div>
     

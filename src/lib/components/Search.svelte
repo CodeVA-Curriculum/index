@@ -9,6 +9,7 @@
 
     // components
     import Filters from '$lib/components/form-elements/Filters.svelte'
+    import { todo } from 'node:test';
 
     let filterElem:SvelteComponent;
     export let filter:boolean=true
@@ -43,7 +44,7 @@
                 $page.url.searchParams.append(k, v[i])
             }
         }
-        // $page.url.searchParams.sort()
+        // TODO: fix this so we aren't using goto & we aren't using $page.url
         if($page.url.searchParams.size > 0) {
             goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
                 replaceState: true,
