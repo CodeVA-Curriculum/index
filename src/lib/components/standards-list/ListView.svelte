@@ -190,7 +190,7 @@
                         <NumberPill 
                             list={selectedStandards} 
                             cond={(obj)=> {
-                                return obj.subject == subj
+                                return obj.subject == subj && obj.grade == grade
                             }}
                         />
                     </span>
@@ -200,7 +200,7 @@
                                 <NumberPill 
                                     list={selectedStandards} 
                                     cond={(obj)=> {
-                                        return obj.strand == strand
+                                        return obj.strand == strand && obj.subject == subj && obj.grade == grade
                                     }}
                                 />
                             </span>
