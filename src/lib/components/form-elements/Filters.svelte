@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import {SvelteComponent, onMount} from 'svelte'
+    import {SvelteComponent, createEventDispatcher, onMount} from 'svelte'
     import {slide} from 'svelte/transition'
     import { faCaretDown, faChevronDown } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
@@ -13,6 +13,13 @@
     import {base} from '$app/paths'
 
     export let data:URLSearchParams; // to preset filter UI based on params
+
+    const dispatch = createEventDispatcher()
+
+    function sendUpdate(selectedStandards, subjects, tags, grades, types, audiences) {
+        dispatch('change')
+        // console.log("Got change", subjects.selected )
+    }
 
     let selectedStandards:Standard[] = []
     let stdsRequest:Promise<any>
@@ -49,7 +56,7 @@
     }
     
     
-
+    // TODO: fix this so it stops breaking the list display
     export function getParams() {
 
         let sols:string[] = []
@@ -71,21 +78,25 @@
             if(subjInItems) {
                 let foundStrands:string[] = [...newSelected.splice(newSelected.indexOf(subjects.selected[i]), 1)]
                 // subject selected, check to see if all strands are included as well
+                
                 let hasStrands = true
                 for(let j=0;j<subjInItems.length;j++) {
                     if(subjects.selected.includes(subjInItems[j])) {
                         // remove from newSelected, save in strands
-                        foundStrands = [...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
+                        foundStrands = [...foundStrands, ...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
                     } else {
+                        console.log("Broke")
                         hasStrands = false
                     }
                 }
-                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...foundStrands]
+                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...newSelected, ...foundStrands]
             }
         }
         
-        subjects.selected = [...newSelected]
-        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
+        // subjects.selected = [...newSelected]
+        // console.log('Selected Subjects:', subjects.selected)
+        // console.log('New Selected:', newSelected)
+        if(subjects.selected.length > 0) {tmp['subj'] = newSelected}
 
         // Condense grade
         // Convert display names to numbers
@@ -104,11 +115,18 @@
 
     let filteredStandards = {}
 
+    $: sendUpdate(selectedStandards, subjects, tags, grades, types, audiences)
+
     $: {
         if(loaded) {
             filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
         }
     }
+
+    // $: {
+    //     console.log("Selected Standards:", selectedStandards)
+    //     console.log("Filtered Standareds:", filteredStandards)
+    // }
         
 
     function filterStandards(grades:string[], subjects:string[], standards:ListedStandards) {

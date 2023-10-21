@@ -9,13 +9,12 @@
 
     // components
     import Filters from '$lib/components/form-elements/Filters.svelte'
-    import { todo } from 'node:test';
 
     let filterElem:SvelteComponent;
     export let filter:boolean=true
     export let linkTo:boolean=false
 
-    export let data:object;
+    export let data:URLSearchParams;
 
     let url:string = '/'
     let loaded:boolean=false;
@@ -25,35 +24,36 @@
     let showError = false
     let URLerror = false;
 
-    let params = ''
+    // let params = ''
 
-    function updateUrl(word:string):null {
+    function updateUrl(word:string):string {
         
+        const urlData = new URLSearchParams()
         // if(loaded) {
         // delete old params
-        for(const [k,v] of $page.url.searchParams.entries()) {
-            $page.url.searchParams.delete(k)
-        }
+        // for(const [k,v] of $page.url.searchParams.entries()) {
+        //     $page.url.searchParams.delete(k)
+        // }
 
         // Set new params
-        if(term && term.length > 0) { $page.url.searchParams.set('query', term) }
-        params = filterElem.getParams()
+        if(term && term.length > 0) { urlData.set('query', term) }
+        let params = filterElem.getParams()
         for(const [k,v] of Object.entries(params)) {
-            $page.url.searchParams.set(k, v[0])
+            urlData.set(k, v[0])
             for(let i=1;i<v.length;i++) {
-                $page.url.searchParams.append(k, v[i])
+                urlData.append(k, v[i])
             }
         }
         // TODO: fix this so we aren't using goto & we aren't using $page.url
-        if($page.url.searchParams.size > 0) {
-            goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
-                replaceState: true,
-                invalidateAll: true
-            });
-        } else {
-            showError = true
+        if(urlData.size > 0) {
+            // goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
+            //     replaceState: true,
+            //     invalidateAll: true
+            // });
+            // console.log("Going to", `${base}/library/search?${urlData.toString()}`)
+            return `${base}/library/search?${urlData.toString()}`
         }
-        return null
+        return `${base}/library/search?error=invalid}`
     }
     function toggle():null {
         expanded = !expanded
@@ -62,9 +62,14 @@
 
     onMount(()=>{
         term = data ? data.get('query') : ''
+        if(data && data.has('error')) {
+            showError = true
+        }
         
         loaded=true;
     })
+
+    // $: console.log(url)
 </script>
 
 <div class='searchbox my-5'>
@@ -81,24 +86,25 @@
     {/if}
     <div class='field has-addons'>
         <div class='control is-expanded'>
-            <input bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">
+            <input on:change={() => {url=updateUrl(term)}} bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">
         </div>
         {#if filter}
         <div class='control'>
-            <button on:click={toggle} data-tooltip="Filters" href='{url}' class='has-tooltip-arrow filter-button button is-large'>
+            <button on:click={toggle} data-tooltip="Filters" class='has-tooltip-arrow filter-button button is-large'>
                 <Fa icon={faFilter} />
                 <Fa class='ml-3' icon={faCaretDown} />
             </button>
         </div>
         {/if}
         <div class='control'>
-            <button on:click={updateUrl(term)} class='button is-large is-primary'>Search</button>
+            <a data-sveltekit-reload href='{url}' class='button is-large is-primary'>Search</a>
         </div>
         
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters data={data} bind:this={filterElem} bind:params={params} />
+        <!-- TODO: add on:change to update URL when filters updated -->
+            <Filters on:change={()=>{url = updateUrl(term)}} data={data} bind:this={filterElem} />
     </div>
 
     {#if showError}
