@@ -82,17 +82,17 @@
                 for(let j=0;j<subjInItems.length;j++) {
                     if(subjects.selected.includes(subjInItems[j])) {
                         // remove from newSelected, save in strands
-                        foundStrands = [...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
+                        foundStrands = [...foundStrands, ...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
                     } else {
                         hasStrands = false
                     }
                 }
-                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...foundStrands]
+                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...newSelected, ...foundStrands]
             }
         }
         
-        subjects.selected = [...newSelected]
-        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
+        // subjects.selected = [...newSelected]
+        if(subjects.selected.length > 0) {tmp['subj'] = newSelected}
 
         // Condense grade
         // Convert display names to numbers
