@@ -58,10 +58,12 @@
         return null
     }
 
-    // $: url = updateUrl(term)
+    $: if(loaded) { url = updateUrl(term) }
+    $: if(data && data.has('query')) { term = data.get('query') }
 
     onMount(()=>{
         term = data ? data.get('query') : ''
+        console.log(term)
         if($page.url.searchParams.has('error')) {
             showError = true
         }
@@ -100,12 +102,12 @@
         
     </div>
     
-    <div class='filters {expanded? '':'hidden'}'>
+    <div class='filters {expanded? '':'hidden'} mb-5'>
             <Filters on:change={() => url = updateUrl(term)} data={data} bind:this={filterElem} bind:params={params} />
     </div>
 
     {#if showError}
-        <div class='message is-warning'>
+    <div class='message is-warning my-5'>
             <div class='message-header'>
                 <p>Invalid Search!</p>
                 <!-- <button clas s="delete" aria-label="delete"></button> -->
