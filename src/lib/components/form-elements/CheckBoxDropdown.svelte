@@ -3,6 +3,7 @@
     import Fa from 'svelte-fa'
     import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
     import Collapse from '../Collapse.svelte';
+    import { clickOutside } from '$lib/utils/interactions';
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
@@ -10,15 +11,21 @@
     export let width:string = 'auto'
 
     export let selected:string[] = []
+
+    let expanded = false
+
+    function handleClickOutside(event: any) {
+		expanded = false;
+	}
     
 </script>
 
-<div class='checklist-dropdown control dropdown is-hoverable'>
-    <div class='dropdown-trigger'>
-        <button class='button is-small is-fullwidth'>
+<div use:clickOutside on:click_outside={handleClickOutside} class='checklist-dropdown control dropdown {expanded? 'is-active': ''} is-hoverable m-0 p-0'>
+    <div class='dropdown-trigger m-0 p-0'>
+        <button on:click={()=>expanded=!expanded} class='button is-small is-fullwidth m-0'>
             {title}
             <span class='number-pill mx-1'>{selected.length != 0? selected.length:''}</span>
-            <Fa class='ml-2' icon={faChevronDown} />
+            <Fa class='' icon={faChevronDown} />
         </button>
     </div>
     <div class='dropdown-menu' id={id} role='menu'>
@@ -39,16 +46,22 @@
 </div>
 
 <style>
+    .dropdown {
+        width: 100%;
+    }
     .number-pill {
         background-color: whitesmoke;
         font-size: 8pt;
         padding: 0 5px;
         border-radius: 20px;
     }
-    .checklist-dropdown > .dropdown-trigger {
-        width: 7rem;
-    }
     label {
         font-size: 8pt;
+    }
+    .checklist-dropdown {
+        padding: 0 0;
+    }
+    .dropdown-trigger {
+        width: 100%;
     }
 </style>

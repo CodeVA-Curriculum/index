@@ -82,17 +82,17 @@
                 for(let j=0;j<subjInItems.length;j++) {
                     if(subjects.selected.includes(subjInItems[j])) {
                         // remove from newSelected, save in strands
-                        foundStrands = [...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
+                        foundStrands = [...foundStrands, ...newSelected.splice(newSelected.indexOf(subjInItems[j]), 1)]
                     } else {
                         hasStrands = false
                     }
                 }
-                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...foundStrands]
+                hasStrands? newSelected.push('All '+subjects.selected[i]) : newSelected = [...newSelected, ...foundStrands]
             }
         }
         
-        subjects.selected = [...newSelected]
-        if(subjects.selected.length > 0) {tmp['subj'] = subjects.selected}
+        // subjects.selected = [...newSelected]
+        if(subjects.selected.length > 0) {tmp['subj'] = newSelected}
 
         // Condense grade
         // Convert display names to numbers
@@ -214,10 +214,10 @@
     })
 </script>
 
-<div class='filters has-text-left columns'>
-    <div class='column is-narrow'>
+<div class='filters has-text-left columns py-0'>
+    <div class='column is-narrow m-0 py-0'>
         <label for='standards' class='label'>Standards</label>
-        <div class='field'>
+        <div class='field columns m-0 p-0 is-mobile'>
             <ChecklistDropdown 
                 title='Subjects'
                 id='subjects-dropdown'
@@ -233,9 +233,11 @@
                 bind:output={grades.selected}
                 start={grades.start}
             />
-            <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-small is-secondary {!loaded? 'is-loading':''}'>
-                {showOrClose? 'Close List':'Select Standards'}
-            </button>
+            <div class='column my-0 p-0'>
+                <button on:click={() => {showOrClose = listView.updateListStatus()}} class='button is-fullwidth is-small is-secondary {!loaded? 'is-loading':''}'>
+                    {showOrClose? 'Close List':'Select Standards'}
+                </button>
+            </div>
         </div>
         {#await stdsRequest}
         <button class='button is-fullwidth is-loading hidden'></button>
@@ -245,9 +247,9 @@
         </div>
         {/await}
     </div>
-    <div class='column'>    
-        <div class='field is-grouped'>
-            <div class='control'>
+    <div class='column my-0 py-0'>    
+        <div class='field is-grouped columns m-0 p-0 is-mobile'>
+            <div class='column is-one-quarter m-0 mr-2 p-0'>
                 <label for='audience-dropdown' class='label small'>Audiences</label>
                 <CheckBoxDropdown 
                     width={'10rem'}
@@ -257,8 +259,8 @@
                     bind:selected={audiences.selected}
                 />
             </div>
-            <div class='control'>
-                <label for='resource-dropdown' class='label small'>Resource Types</label>
+            <div class='column is-one-quarter m-0 mr-2 p-0'>
+                <label for='resource-dropdown' class='label small'>Types</label>
                 <CheckBoxDropdown 
                     width={'10rem'}
                     title="Select..."
@@ -267,7 +269,7 @@
                     bind:selected={types.selected}
                 />
             </div>
-            <div class='control'>
+            <div class='control column m-0 p-0'>
                 <label for='tag-select' class='label small'>Tags</label>
                 <InputWithDropdown 
                     id='tag-select'
@@ -284,10 +286,10 @@
     .hidden {
         display: none;
     }
-    button {
+    /* button {
         width: 10rem;
         min-width: 10rem;
-    }
+    } */
     label {
         font-size: 8pt;
     }

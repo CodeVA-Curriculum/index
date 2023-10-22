@@ -82,7 +82,7 @@
         </div>
     </article>
     {/if}
-    <div class='field has-addons'>
+    <div class='field has-addons mb-5'>
         <div class='control is-expanded'>
             <input bind:value={term} class='input is-large' type='text' placeholder="Search for materials...">
         </div>

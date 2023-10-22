@@ -2,6 +2,7 @@
     import Fa from 'svelte-fa'
     import {faCaretDown, faQuestionCircle} from '@fortawesome/free-solid-svg-icons'
     import { onMount } from 'svelte';
+    import {clickOutside } from '$lib/utils/interactions'
     
     export let selected:string[] = []
     export let placeholder:string = "No placeholder..."
@@ -30,32 +31,17 @@
         input.focus()
     }
 
-    function clickOutside(node:any) {
-        const handleClick = (event: { target: any; defaultPrevented: any; }) => {
-            if (node && !node.contains(event.target) && !event.defaultPrevented) {
-            node.dispatchEvent(
-                new CustomEvent('click_outside', node)
-            )
-            }
-        }
-        document.addEventListener('click', handleClick, true);
-        return {
-            destroy() {
-                document.removeEventListener('click', handleClick, true);
-            }
-        }
-    }
     function handleClickOutside(event: any) {
 		expanded = false;
 	}
 </script>
 
 <div class='input-dropdown'>
-    <div use:clickOutside on:click_outside={handleClickOutside} class="dropdown {expanded?'is-active':''} long">
+    <div use:clickOutside on:click_outside={handleClickOutside} class="dropdown {expanded?'is-active':''} is-right m-0 p-0">
         <!-- <label for='tag-select' class='label is-small'>{title}: </label> -->
-        <div class="field long has-addons" >
-            <p class="control is-expanded has-icons-right long is-pink" aria-haspopup="true" aria-controls="dropdown-menu">
-                <input bind:this={input} bind:value={query} on:click={()=>{expanded=true}} name='{id}' class="input is-small long" type="search" placeholder={placeholder} />
+        <div class="field has-addons m-0 p-0" >
+            <p class="control is-expanded has-icons-right mb-1 m-0 p-0" aria-haspopup="true" aria-controls="dropdown-menu">
+                <input bind:this={input} bind:value={query} on:click={()=>{expanded=true}} name='{id}' class="input is-small m-0" type="search" placeholder={placeholder} />
                 <span class="icon is-right">
                     <Fa size='1.5x' icon={faQuestionCircle} />
                     <Fa class='ml-1 mr-3' size='1x' icon={faCaretDown} />
@@ -86,9 +72,9 @@
         </div>    
     </div>
     <!-- {#if !expanded} -->
-    <div class='selected-tags'>
+    <div class='selected-tags m-0 py-1'>
         {#each selected as tag, i}
-            <span class='tag is-dark is-small mr-1 ml-0 my-0 mt-1'>
+            <span class='tag is-dark is-small mr-1 ml-0 my-0 mb-0'>
                 {tag}
                 <!-- TODO: figure out how to delete tags from parent, who sets the list format -->
                 <button on:click={() => removeTag(i)} class='delete is-small'></button>
@@ -113,25 +99,13 @@
     }
     .dropdown-content {
         position: relative;
-        top: -0.5rem;
-    }
-    .input-dropdown {
-        width: 12.5rem;
+        /* top: -0.5rem; */
     }
     label {
         margin-top: 5px;
         margin-right: 8px;
     }
-    input {
-        width: 12rem;
-    }
     .items-in-list {
         font-size: 9pt;
-    }
-    .is-pink {
-        background-color: pink;
-    }
-    .long {
-        width: 100%;
     }
 </style>

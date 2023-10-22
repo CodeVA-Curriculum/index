@@ -12,9 +12,9 @@
 </script>
 
 <!-- Must have element with class `field` as direct parent -->
-<control class='control drop-down'>
+<div class='control drop-down column is-one-fifth m-0 mr-2 my-2 p-0'>
     <!-- <label class='label'>{label}</label> -->
-    <div class='select'>
+    <div class='select is-fullwidth m-0 p-0'>
         <select bind:value={selected} name='audience'>
             <option value={defaultOption}>{defaultOption}</option>
             {#each options as opt}
@@ -22,4 +22,11 @@
             {/each}
         </select>
     </div>
-</control>
+</div>
+
+<style>
+    .drop-down {
+        padding: 0 0;
+        margin: 0 0;
+    }
+</style>

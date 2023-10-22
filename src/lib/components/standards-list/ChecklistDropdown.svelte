@@ -9,9 +9,12 @@
     import Fa from 'svelte-fa'
     import {faCaretDown, faChevronDown} from '@fortawesome/free-solid-svg-icons'
     import Collapse from '../Collapse.svelte';
+    import { clickOutside } from '$lib/utils/interactions';
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
+
+    let expanded = false;
     
     export let items:NestedDropdown = {}
 
@@ -86,11 +89,14 @@
             selected[parent] = [parent, ...selected[parent], item]
         }
     }
+    function handleClickOutside() {
+        expanded = false;
+    }
 </script>
 
-<div class='checklist-dropdown control dropdown is-hoverable'>
+<div use:clickOutside on:click_outside={handleClickOutside} class='checklist-dropdown control dropdown is-hoverable column mr-2 my-0 p-0 {expanded? 'is-active' : ''}'>
     <div class='dropdown-trigger'>
-        <button class='button is-small is-fullwidth'>
+        <button on:click={()=>{expanded = !expanded}} class='button is-small is-fullwidth'>
             {title}
             <span class='number-pill mx-1'>{length !=0? length:''}</span>
             <Fa class='ml-2' icon={faChevronDown} />
@@ -143,9 +149,6 @@
         font-size: 8pt;
         padding: 0 5px;
         border-radius: 20px;
-    }
-    .checklist-dropdown > .dropdown-trigger {
-        width: 7rem;
     }
     label {
         font-size: 8pt;

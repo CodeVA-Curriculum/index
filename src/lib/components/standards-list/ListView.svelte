@@ -140,7 +140,7 @@
 </script>
 
 <div class='list-view'>
-    <div class='mb-3'>
+    <div class='mb-3 py-1'>
         {#each selectedStandards as std}
         <StandardTag del={true} on:delete={(e)=>removeStandard(e.detail.data)} standard={std} status={standardIsHere(std.id, filter)} />
         {/each}
@@ -190,7 +190,7 @@
                         <NumberPill 
                             list={selectedStandards} 
                             cond={(obj)=> {
-                                return obj.subject == subj
+                                return obj.subject == subj && obj.grade == grade
                             }}
                         />
                     </span>
@@ -200,7 +200,7 @@
                                 <NumberPill 
                                     list={selectedStandards} 
                                     cond={(obj)=> {
-                                        return obj.strand == strand
+                                        return obj.strand == strand && obj.subject == subj && obj.grade == grade
                                     }}
                                 />
                             </span>
