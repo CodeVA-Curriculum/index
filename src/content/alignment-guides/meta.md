@@ -4,6 +4,7 @@ authors: CodeVA Curriculum
 types: Curricular Resource
 audiences: Curriculum Writers, Administrators, Classroom Teachers
 grades: K-8
+standards: K-8.CS
 contents:
     - ./grade-1.md
 links:

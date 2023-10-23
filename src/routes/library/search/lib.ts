@@ -105,7 +105,26 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
     let results:Frontmatter[] = related.filter((obj) => {
         // If the object has standards and the filter defines them, match if intersecting
         if(obj.standards && filter.sol) {
-            return isIntersecting(filter.sol, obj.standards)
+            let matched = obj.standards.filter((str)=>{
+                const tokens = str.split('.')
+                console.log(tokens)
+                const grade = expandDashNotation([tokens[0]])
+                let bandedStrs = []
+                for(let i=0;i<grade.length;i++) {
+                    const id = `${grade[i]}.${tokens[1]}` + (tokens.length > 2? `.${tokens[2]}` : '')
+                    bandedStrs.push(id)
+                }
+                
+                bandedStrs = bandedStrs.filter((str) => {
+                    for(let i=0;i<filter.sol.length;i++) {
+                        return filter.sol[i].includes(str)
+                    }
+                    return false 
+                })
+                return bandedStrs.length > 0
+            })
+            console.log(matched)
+            return isIntersecting(filter.sol, obj.standards) || matched.length > 0
         // If the filter defines standards but the object does not, do not match
         } else if(filter.sol) {
             return false

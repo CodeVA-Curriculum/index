@@ -1,6 +1,7 @@
 ---
 title: Grade 1 Standard Alignment Guide
 grades: '1'
+standards: 1.CS.AP
 links:
     drive: https://drive.google.com/drive/folders/1386H5WyD3mLejNaEtl8KHyCjS32Qj-nb
     pdf: https://drive.google.com/file/d/1WCvjSkGYZraYUiPxREdDGM0F4k-bMTbs/view

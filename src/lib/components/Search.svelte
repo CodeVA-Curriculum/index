@@ -59,6 +59,7 @@
     }
 
     // $: url = updateUrl(term)
+    $: if(loaded) { url = updateUrl(term) }
 
     onMount(()=>{
         term = data ? data.get('query') : ''

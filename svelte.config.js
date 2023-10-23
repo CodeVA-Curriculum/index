@@ -24,7 +24,8 @@ const config = {
     //   base: '/index', // uncomment this before deployment
     // },
     alias: {
-      $content: 'src/content'
+      $content: 'src/content',
+      $api: 'src/routes/api'
     }
   },
 };

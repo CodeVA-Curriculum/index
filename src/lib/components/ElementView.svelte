@@ -44,7 +44,7 @@
                 <h3>Standards</h3>
                 {#each Object.entries(standardsBySubject) as [title, stds]}
                 <p>
-                    <i>{title}:</i>    
+                    {#if Object.entries(standardsBySubject).length > 1}<i>{title}:</i>{/if}    
                     {#each stds as obj}
                     <StandardTag standard={obj} status={true} theme='is-light' />
                     {/each}

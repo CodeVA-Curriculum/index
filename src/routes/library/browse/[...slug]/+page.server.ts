@@ -13,6 +13,7 @@ export async function load({ params, fetch }):Promise<Element> {
   if(path.exists) {
     const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
     const data = await parseFile(path, standards)
+    
     // console.log('loaded:')
     // console.log(data)
     return {

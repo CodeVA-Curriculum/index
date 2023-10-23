@@ -103,7 +103,7 @@ function splitString(string:any, separator:string):any[] {
     return list
   }
 
-function postprocess(frontmatter:Frontmatter):Frontmatter {
+async function postprocess(frontmatter:Frontmatter):Frontmatter {
     frontmatter.subjects = splitString(frontmatter.subjects, ', ')
     frontmatter.grades = splitString(frontmatter.grades, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')
@@ -111,9 +111,7 @@ function postprocess(frontmatter:Frontmatter):Frontmatter {
     frontmatter.audiences = splitString(frontmatter.audiences, ', ')
     if(frontmatter.standards) {
         frontmatter.standards = splitString(frontmatter.standards, ', ')
-        // Render standards objects TODO: fetch subset for better performance
-        
-        
+        // Expand standards names with API route
     }
     return frontmatter
 }
@@ -131,7 +129,7 @@ export async function getProjectsFrontmatter():Promise<Frontmatter[]> {
         let frontmatter = await parseFrontmatter(validPath)
         frontmatter.parents = await findAndInheritFromParents(frontmatter)
         frontmatter.members = await findMemberFrontmatter(frontmatter)
-        frontmatter = postprocess(frontmatter)
+        frontmatter = await postprocess(frontmatter)
         // console.log(frontmatter)
 
         frontmatters.push(frontmatter)
@@ -151,7 +149,7 @@ async function getAllFrontmatter():Promise<Frontmatter[]> {
         let frontmatter = await parseFrontmatter(validPath)
         frontmatter.parents = await findAndInheritFromParents(frontmatter)
         frontmatter.members = await findMemberFrontmatter(frontmatter)
-        frontmatter = postprocess(frontmatter)
+        frontmatter = await postprocess(frontmatter)
         // console.log(frontmatter)
 
         frontmatters.push(frontmatter)
