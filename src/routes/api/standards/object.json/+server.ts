@@ -3,9 +3,6 @@ import { fullGradeNames } from '$lib/utils/metaUtils.js'
 import {base} from '$app/paths'
 
 
-// console.log(standards)
-
-
 interface Params {
     grades:string[]
 }
@@ -44,6 +41,7 @@ export async function GET({fetch}) {
             }
         }
     }
+    console.log(stds)
 	return json(stds)
 }
 

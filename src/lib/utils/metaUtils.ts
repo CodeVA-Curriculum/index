@@ -1,3 +1,4 @@
+
 export interface Standard {
     id:string,
     title:string,
@@ -29,6 +30,9 @@ interface GradeByBandDisplay {
 
 export const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 export const fullGradeNames = ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
+
+// TODO: pull this from the API, dummy! 
+// These should all be API routes
 export const standardsStrands = {
     "Computer Science": [
         "Algorithms & Programming",
@@ -40,6 +44,14 @@ export const standardsStrands = {
     ],
     "Mathematics": [
         "Probability & Statistics"
+    ],
+    "Science": [
+        "Scientific & Engineering Practices",
+        "Force, Motion, & Energy",
+        "Matter",
+        "Living Systems & Processes",
+        "Earth & Space Systems",
+        "Earth Resources"
     ]
 }
 

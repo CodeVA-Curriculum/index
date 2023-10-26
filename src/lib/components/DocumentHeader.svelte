@@ -18,7 +18,7 @@
 </script>
 
 <div class='document-header content'>
-    <Breadcrumb nodes={[...meta.parents, meta]} here={meta.title} />
+    <Breadcrumb nodes={[meta, ...meta.parents]} here={meta.title} />
     <div class='columns'>
         <div class='column is-one-quarter'>
             <img 
@@ -32,7 +32,7 @@
             {#if meta.parents.length > 0}
             <p>Part of the 
                 {#each meta.parents as parent, i}
-                {#if i!=0},{/if}
+                {#if i>1},{/if}
                 {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
                 <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('meta', '')}"><i>{parent.title}</i></a>
                 {/each}

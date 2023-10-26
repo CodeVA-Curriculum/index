@@ -209,13 +209,15 @@ async function findAndInheritFromParents(frontmatter:Frontmatter):Promise<Frontm
                 frontmatter[field] = parent[field]
                 end = true
             }
-            if(frontmatter.hasOwnProperty('+'+field) && parent.hasOwnProperty(field)) {
+
+            // Handle "plusfields", which start with `_`
+            const plusId = '_'+field
+            if(frontmatter.hasOwnProperty(plusId) && parent.hasOwnProperty(field)) {
                 // If the element has an add-on tag, add to it
-                const plusField = [...frontmatter['_'+field].split(',')]
+                const plusField = [...frontmatter[plusId].split(',')]
                 for(let k=0;k<plusField.length;k++) {
                     frontmatter[field] += ', '+plusField[k]
                 }
-                // console.log(frontmatter[field])
                 end = true
             }
             if(end) { break }

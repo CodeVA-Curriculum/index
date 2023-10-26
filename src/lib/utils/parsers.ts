@@ -94,6 +94,8 @@ export async function parseFile(pathData:Path, standards:object[]) {
         }
     }
 
+    console.log(objs)
+
     // pull object from standards JSON
     // TODO: pull subsets from API to improve performance
     let stdStrings:string[] = []
@@ -104,9 +106,9 @@ export async function parseFile(pathData:Path, standards:object[]) {
             }
             const gradeMatch = obj.id.split('.')[0] == objs[i].grade
             const subjMatch = obj.id.split('.')[1] == objs[i].subject
-            const strandMatch = obj.id.split('.')[2] == objs[i].strand
-            // console.log(gradeMatch)
-            return gradeMatch && subjMatch
+            const strandToken = obj.id.split('.')[2]
+            const strandMatch = objs[i].strand ? strandToken == objs[i].strand : true 
+            return gradeMatch && subjMatch && strandMatch
         })
         for(let j=0;j<newObj.length;j++) {
             if(!stdStrings.includes(newObj[j].id)) {

@@ -31,13 +31,12 @@
             </div>
             <div class='column has-text-left'>
                 <h2>
-                    <a href={srcToUrl(data.pathData.path)}>{data.title}</a>
+                    <a data-sveltekit-reload href={srcToUrl(data.pathData.path)}>{data.title}</a>
                     <!-- <Fa class= 'mx-2' icon={icon} /> -->
                 </h2>
                 <p class='heading'>a {data.types} {data.contents? "pack ":" "}by {data.authors}</p>
                 <div class='buttons'>
-                    <a class='button is-small is-primary' href={srcToUrl(data.pathData.path)}>Read More</a>
-                    <a href={data.links.drive} class='button is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
+                    <a href={data.links.drive} class='button is-primary is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
                         Google Drive
                         <Fa class='ml-2' icon={faGoogleDrive} />
                     </a>
@@ -47,7 +46,7 @@
                         <Fa class='ml-2' icon={faCloudArrowDown} />
                     </a>
                     {/if}
-                    
+                    <a data-sveltekit-reload class='button is-small is-secondary' href={srcToUrl(data.pathData.path)}>Read More</a>
                 </div>
             </div>
         </div>

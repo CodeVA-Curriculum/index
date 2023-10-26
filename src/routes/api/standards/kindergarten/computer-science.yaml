@@ -1,0 +1,54 @@
+- id: K.CS.AP.1
+  title: K.1
+  text: The student will construct sets of step-by-step instructions (algorithms) either independently or collaboratively including sequencing that emphasize the beginning, middle, and end.
+  subs: []
+
+- id: K.CS.AP.2
+  title: K.2
+  text: The student will construct programs to accomplish tasks as a means of creative expression using a block based programming language or unplugged activities, either independently or collaboratively, including sequencing, emphasizing the beginning, middle, and end.
+  subs: []
+
+- id: K.CS.AP.3
+  title: K.3
+  text: The student will create a design document to illustrate thoughts, ideas, and stories in a sequential (step-by-step) manner (e.g., story map, storyboard, and sequential graphic organizer).
+  subs: []
+
+- id: K.CS.AP.4
+  title: K.4
+  text: The student will categorize a group of items based on one attribute or the action of each item, with or without a computing device.
+  subs: []
+
+- id: K.CS.CS.5
+  title: K.5
+  text: The student will identify components of computing systems (e.g., keyboard, mouse, desktop computer, laptop computer, tablet, and printer).
+  subs: []
+
+- id: K.CS.CS.6
+  title: K.6
+  text: The student will identify, using accurate terminology, simple hardware and software problems that may occur during use (e.g., app or program is not working as expected, no sound is coming from a device, device will not turn on).
+  subs: []
+
+- id: K.CS.CY.7
+  title: K.7
+  text: The student will identify what is allowed and what is not allowed at school when using technology.
+  subs: []
+
+- id: K.CS.CY.8
+  title: K.8
+  text: The student will identify personal information (e.g., address, telephone number, and name) and the importance of protecting personal information online.
+  subs: []
+
+- id: K.CS.DA.9
+  title: K.9
+  text: The student will gather and display data and organize it in a chart or graph in order to answer questions about the data, with or without a computing device.
+  subs: []
+
+- id: K.CS.IC.10
+  title: K.10
+  text: The student will identify responsible behaviors associated with using information and technology.
+  subs: []
+
+- id: K.CS.NI.11
+  title: K.11
+  text: The student will discuss, in a whole class setting, how information can be communicated electronically (e.g., email, social media).
+  subs: []

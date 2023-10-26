@@ -205,12 +205,11 @@
 
         stdsRequest = fetch(`${base}/api/standards/object.json`)
         stdsRequest.then(async (value) => {
-            
             standards = await value.json()
             loaded=true
             // console.log(standards)
         })
-        // console.log(subjects)
+        // console.log(subjects.items)
     })
 </script>
 

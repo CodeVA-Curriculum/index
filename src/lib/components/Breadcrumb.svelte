@@ -14,7 +14,7 @@
 <div class="breadcrumb" aria-label="breadcrumbs">
     <ul>
         <li><a href="{base}/library"><Fa class='mt-1' icon={faHome} /></a></li>
-        {#each nodes as node}
+        {#each [...nodes].reverse() as node}
         <li class={node.title == here ? 'is-active' : ''}><a href="{srcToUrl(node.pathData.path).replace('meta', '')}">{node.title}</a></li>
         {/each}
     </ul>

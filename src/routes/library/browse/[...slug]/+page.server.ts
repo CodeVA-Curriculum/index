@@ -12,6 +12,8 @@ export async function load({ params, fetch }):Promise<Element> {
   const path:Path = validatePath(params.slug)
   if(path.exists) {
     const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
+    
+    // TODO: avoid pulling in all the standards--we don't need all the info until the user clicks on the pill element in the Standards Box
     const data = await parseFile(path, standards)
     
     // console.log('loaded:')

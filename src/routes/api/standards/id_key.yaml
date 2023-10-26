@@ -1,0 +1,112 @@
+CS:
+    title: "Computer Science"
+    strands:
+        AP: "Algorithms & Programming"
+        CS: "Computing Systems"
+        CY: Cybersecurity
+        DA: Data & Analysis
+        IC: Impacts of Computing
+        NI: Networking & the Internet
+MT:
+    title: Mathematics
+    strands:
+        NS: Number & Number Sense
+        CE: Computation & Estimation
+        MG: Measurement & Geometry
+        PS: Probability & Statistics
+        PA: Patterns, Functions, & Algebra
+SC:
+    title: Science
+    strands:
+        SE: Scientific & Engineering Practices
+        FM: Force, Motion, & Energy
+        MA: Matter
+        LP: Living Systems & Processes
+        ES: Earth & Space Systems
+        ER: Earth Resources
+EN:
+    title: English
+    strands:
+        OL: Oral Language
+        RD: Reading
+        WR: Writing
+HS:
+    title: History & Social Science
+    strands:
+        SK: Skills
+        HS: History
+        GE: Geography
+        EC: Economics
+        CV: Civics
+MU:
+    title: Music
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
+VA:
+    title: Visual Art
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
+DA:
+    title: Dance Arts
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
+TA:
+    title: Theatre Arts
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
+DL:
+    title: Digital Learning Integration
+    strands:
+        EL: Empowered Learner
+        DC: Digital Citizen
+        KC: Knowledge Constructor
+        ID: Innovative Designer
+        CT: Computational Thinker
+        CC: Creative Communicator
+        GC: Global Collaborator
+DE:
+    title: Driver Education
+EPF:
+    title: Economics & Personal Finance
+FL:
+    title: Family Life
+HE:
+    title: Health
+    strands:
+        EC: Essential Health Concepts
+        HD: Healthy Decisions
+        AH: Advocacy & Health Promotion
+PE:
+    title: Physical Education
+    strands:
+        MS: Motor Skill Development
+        AM: Anatomical Basis of Movement
+        FP: Fitness Planning
+        SE: Social & Emotional Development
+        EB: Energy Balance
+WL:
+    title: World Language
+    strands:
+        IC: Interpersonal Communication
+        LR: Interpretive Communication
+        PC: Presentational Communication
+        CP: Cultural Perspectives, Practices, & Products
+        MC: Making Connections through Language
+        LC: Linguistic & Cultural Comparisons
+        SG: Interacting in School & Global Communities

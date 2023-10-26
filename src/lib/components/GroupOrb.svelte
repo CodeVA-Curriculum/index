@@ -25,7 +25,7 @@
         width: 200px;
         /* height: 200px; */
         padding: 1rem 1rem;
-        margin: 1rem 1rem;
+        margin: 0.5rem 0.25rem;
         text-align: center;
         vertical-align: top;
         border-radius: 20px;
