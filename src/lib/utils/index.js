@@ -48,11 +48,11 @@ async function getLessonGroups() {
 
 async function importLibraryGlob(category) {
   if(category=='all') {
-    return await import.meta.glob(['$content/**/*.md', '!$content/**/.*.md'])
+    return await import.meta.glob(['$content/**/*.md', '!$content/**/.*.md', '!$content/**/README.md'])
   } else if(category=='meta') {
-    return await import.meta.glob(['$content/**/meta.md', '!$content/**/.meta.md'])
+    return await import.meta.glob(['$content/**/meta.md', '!$content/**/.meta.md', '!$content/**/README.md'])
   } else if(category=='meta-hidden') {
-    return await import.meta.glob(['$content/**/meta.md', '$content/**/.meta.md'])
+    return await import.meta.glob(['$content/**/meta.md', '$content/**/.meta.md', '!$content/**/README.md'])
   }
   
 }
