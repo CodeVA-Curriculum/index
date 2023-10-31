@@ -49,6 +49,7 @@
                 <p>
                     {#if Object.entries(standardsBySubject).length > 1}<i>{title}:</i>{/if}    
                     {#each stds as obj}
+                    <!-- TODO: change standards so it's just ids -->
                     <StandardTag standard={obj} status={true} theme='is-light' />
                     {/each}
                 </p>

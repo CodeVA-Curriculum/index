@@ -85,6 +85,7 @@ export async function parseFile(pathData:Path, standards:object[]) {
         const grades = expandDashNotation([tokens[0]])
         for(let g=0;g<grades.length;g++) {
             const obj = {
+                name: split[i],
                 grade: grades[g],
                 subject: tokens[1],
                 strand: tokens.length == 3? tokens[2]:false,
@@ -94,7 +95,7 @@ export async function parseFile(pathData:Path, standards:object[]) {
         }
     }
 
-    console.log(objs)
+    // console.log(objs)
 
     // pull object from standards JSON
     // TODO: pull subsets from API to improve performance
@@ -125,6 +126,8 @@ export async function parseFile(pathData:Path, standards:object[]) {
         // assert(obj.length == 1)
         stdObjs.push(obj[0])
     }
+
+    // console.log(objs)
 
     frontmatter.standards = stdObjs
   }

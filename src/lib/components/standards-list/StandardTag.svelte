@@ -5,14 +5,22 @@
 	import Fa from 'svelte-fa'
     import { faLink } from '@fortawesome/free-solid-svg-icons';
 	import {gradeList, fullGradeNames} from '$lib/utils/metaUtils'
+    import type { Standard } from '$lib/utils/elementTypes';
 
-	export let standard:object
+	export let standard:string
 	export let status:boolean
 	export let del = false
 	export let theme='is-dark'
 
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
+
+	let obj:Standard
+	onMount(async ()=> {
+		// get standard info from API
+		// obj = await (await fetch(`${base}/api/standards/${id}.json`)).json() as Standard
+		// console.log("Got", obj.id)
+	})
 
 	function deleteSelf() {
 		dispatch('delete', {
@@ -34,7 +42,7 @@
 	}
 </script>
 
-<span class='tag mr-1 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
+<span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
 	<!-- TODO: add modal & modes/slot for filter page or for lesson plan view (linked to search page)  -->
 	<!-- TODO: add  -->
     <span on:click={() => {modal.activate()}} class='open'>{standard? standard.id : 'No ID!'}</span>
@@ -43,6 +51,7 @@
 	{/if}
 </span>
 
+{#if standard}
 <StandardModal bind:this={modal} standard={standard}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
@@ -52,6 +61,7 @@
 		<button on:click={modal.deactivate} class="button">Close</button>
 	</span>
 </StandardModal>
+{/if}
 
 <style>
 	.open:hover {
