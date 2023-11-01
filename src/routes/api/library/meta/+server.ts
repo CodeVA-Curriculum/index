@@ -26,7 +26,6 @@ export async function GET() {
         audiences = aggregate(frontmatters[i].audiences, audiences) as string[]
         tags = aggregate(frontmatters[i].tags, tags) as string[]
     }
-
     grades = expandDashNotation(grades)
     
     // convert grades from strings to numbers

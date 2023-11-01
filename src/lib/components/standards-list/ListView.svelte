@@ -8,7 +8,16 @@
     import StandardTag from './StandardTag.svelte';
     import { onMount } from 'svelte';
     
-    export let standards:any
+    export let standards:ListedStandards
+    // {
+    //     "Grade Category" {
+    //         "Subject Category": {
+    //             "Strand": [ standards ]
+    //         }
+    //     }
+    // }
+
+    
     export let filter:any
     export let start:string[] = []
     const MAX_LENGTH:number = 20
@@ -53,9 +62,6 @@
         }
         loaded = true
         contents = standards
-    // } else if(loaded) {
-    //     console.log('update')
-    //     contents = standards // update from filter
     }
 
     export function updateListStatus(status?:string):boolean {
@@ -137,6 +143,7 @@
         }
     }
     // $: console.log(standardIsHere('K.MT.PS.1', filter))
+    $: console.log(contents)
 </script>
 
 <div class='list-view'>
@@ -175,7 +182,7 @@
             <p class='is-italic small'>--- None selected. Use dropdowns. ---</p>
         </div>
         {#each Object.entries(filter) as [grade, subjs]}
-            <ListHeading on:addAll={() => addAllIn(filter[grade])} title={grade} indent={0}>
+            <ListHeading on:addAll={() => addAllIn(filter[grade])} title={grade} indent={0} next={subjs}>
                 <span slot="pill">
                     <NumberPill 
                         list={selectedStandards} 
@@ -185,7 +192,7 @@
                     />
                 </span>
                 {#each Object.entries(subjs) as [subj, strands]}
-                <ListHeading on:addAll={()=> addAllIn(filter[grade][subj])} title={subj} indent={1}>
+                <ListHeading on:addAll={()=> addAllIn(filter[grade][subj])} title={subj} indent={1} next={strands}>
                     <span slot="pill">
                         <NumberPill 
                             list={selectedStandards} 

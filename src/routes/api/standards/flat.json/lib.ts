@@ -32,15 +32,40 @@ export async function getStandards() {
         if(id.length < 4) {
             throw new Error(`Incorrectly formatted standard ${stds[i].id}`)
         }
+
+        // Check to see if the subject needs to inherit strands
+        let subjName
+        if(key[id[1]].inherit) {
+            subjName = key[id[1].inherit].title
+        } else {
+            subjName = key[id[1]].title
+        }
+    
+
+        // console.log(key)
+        let cat:string
+        if(key[id[0]] && key[id[0]].inherit && key[id[0]].grade) {
+            cat = key[id[0]].title
+            id[0] = key[id[0]].grade
+        } else {
+            cat = subjName
+        }
+
+        // let cat = hsCourseCodes.includes(id[0]) ? subjCategories[hsCourseCodes.indexOf(id[0])] : subjName
+        // if(hsCourseCodes.includes(id[0])) { id[0] = 'HS' }
+
+        // Account for high school course codes & subject mapping
         complete.push({
             id: stds[i].id,
             title: stds[i].title,
             text: stds[i].text,
             subs: stds[i].subs,
-            grade: fullGradeNames[gradeList.indexOf(id[0])],
-            subject: key[id[1]].title,
+            grade: fullGradeNames[gradeList.indexOf(id[0])], // TODO: this needs to not be separated from the rules of the YAML
+            subject: subjName,
+            course: cat,
             strand: key[id[1]].strands[id[2]]
         })
     }
+    // console.log(complete)
     return complete
 }

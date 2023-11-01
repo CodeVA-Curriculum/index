@@ -47,7 +47,7 @@
         }
     }
 
-    
+    const ol = 'abcdefghijklmnopqrstuvwxyz'
 
     // dispatch event when plus sign is clicked
 </script>
@@ -60,7 +60,12 @@
         <span><strong>{standard.title}</strong></span>
     </div>
     <div class='column short-description'>
-        <span class='desc is-italic'>{standard.text}</span>
+        <span class='desc is-italic'>
+            {standard.text}
+            {#each standard.subs as sub, i}
+                {`${ol.charAt(i)}. ${sub}, `}
+            {/each}
+        </span>
     </div>
     <div class='column is-narrow'>
         <!-- TODO: a11y stuff -->

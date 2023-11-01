@@ -118,6 +118,10 @@
             filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
         }
     }
+
+    const gradeBandNames = {
+        "High School Courses": ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12', '9-12']
+    }
         
 
     function filterStandards(grades:string[], subjects:string[], standards:ListedStandards) {
@@ -127,14 +131,23 @@
 
         // Add indices for grade levels
         filtered = Object.fromEntries(Object.entries(standards).filter(([key]) => {
-            return grades.includes(key)
+            let bandName = false
+             if(gradeBandNames[key]) { 
+                for(let i=0;i<gradeBandNames[key].length;i++) {
+                    if(grades.includes(gradeBandNames[key][i])) {
+                        bandName = true;
+                        break
+                    }
+                }
+             }
+            return grades.includes(key) || bandName
         })) as ListedStandards;
 
         for(const grade in filtered) {
             // get subjects
             filtered[grade] = Object.fromEntries(Object.entries(standards[grade]).filter(([key]) => {
                 // console.log(key, subjects)
-                return subjects.includes(key)
+                return subjects.includes(key) || subjects.includes(standards.courseToSubjectMap[key])
             }));
 
             // // get strands

@@ -25,9 +25,9 @@
         <section class='modal-card-body'>
             <p>{standard.text}</p>
             {#if standard.subs.length > 0}
-            <ol>
+            <ol type='a'>
                 {#each standard.subs as sub}
-                <li>sub</li>
+                <li>{sub}</li>
                 {/each}
             </ol>
             {/if}

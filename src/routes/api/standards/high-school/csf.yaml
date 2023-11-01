@@ -1,0 +1,7 @@
+- id: CSF.CS.AP.1
+  title: CSF.1
+  text: The student will
+  subs: [
+    "compare the structures, functions, and interactions between application software, system software, and hardware; and",
+    "explore the relationship between hardware and software using the Internet of Things."
+  ]

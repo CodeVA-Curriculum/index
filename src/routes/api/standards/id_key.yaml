@@ -7,6 +7,14 @@ CS:
         DA: Data & Analysis
         IC: Impacts of Computing
         NI: Networking & the Internet
+CSF:
+    title: "Computer Science Foundations"
+    inherit: "CS"
+    grade: HS
+ALG1:
+    title: "Algebra 1"
+    inherit: "MT"
+    grade: HS
 MT:
     title: Mathematics
     strands:
