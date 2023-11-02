@@ -7,19 +7,30 @@
 	import {gradeList, fullGradeNames} from '$lib/utils/metaUtils'
     import type { Standard } from '$lib/utils/elementTypes';
 
-	export let standard:string
+	export let standard:Standard
 	export let status:boolean
 	export let del = false
 	export let theme='is-dark'
+	export let id:string
+	export let get = false;
 
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
 
 	let obj:Standard
-	onMount(async ()=> {
-		// get standard info from API
-		// obj = await (await fetch(`${base}/api/standards/${id}.json`)).json() as Standard
-		// console.log("Got", obj.id)
+	onMount(()=> {
+		console.log("Mounted standard pill")
+		if(fetch && id) {
+			console.log("Fetching standard", id)
+			const p = fetch(`${base}/api/standards/${id}.json`)
+			p.then((o) => {
+				o.json().then((data) => {
+					obj = data
+				})
+			})
+		} else {
+			obj = standard
+		}
 	})
 
 	function deleteSelf() {
@@ -33,10 +44,10 @@
 
 	function generateUrl(standard) {
 		url = new URLSearchParams()
-		if(standard) {
-			url.set('sol', standard.id)
-			url.set('grade', gradeList[fullGradeNames.indexOf(standard.grade)])
-			url.set('subj', standard.subject)
+		if(obj) {
+			url.set('sol', obj.id)
+			url.set('grade', gradeList[fullGradeNames.indexOf(obj.grade)])
+			url.set('subj', obj.subject)
 		}
 		return url.toString()
 	}
@@ -45,14 +56,14 @@
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
 	<!-- TODO: add modal & modes/slot for filter page or for lesson plan view (linked to search page)  -->
 	<!-- TODO: add  -->
-    <span on:click={() => {modal.activate()}} class='open'>{standard? standard.id : 'No ID!'}</span>
+    <span on:click={() => {modal.activate()}} class='open'>{obj && obj.id? obj.id : '...'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}
 </span>
 
-{#if standard}
-<StandardModal bind:this={modal} standard={standard}>
+{#if obj}
+<StandardModal bind:this={modal} standard={obj}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />

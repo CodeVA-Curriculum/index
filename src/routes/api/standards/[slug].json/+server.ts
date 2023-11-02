@@ -4,7 +4,9 @@ import { json } from '@sveltejs/kit'
 export async function GET({params}) {
     // TODO: optimize so we don't have to get all the standards and filter them
     const stds = await getStandards();
+    console.log("Getting standard at", params.slug)
     const obj = stds.filter((obj) => obj.id == params.slug)
+    // console.log(obj)
     return json(obj[0])
 }
 

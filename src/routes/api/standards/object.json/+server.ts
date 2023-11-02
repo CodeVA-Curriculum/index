@@ -18,7 +18,7 @@ function applyField(field:string, obj:any, from:any, toApply:any):object {
 // TODO: (eventually?) accept params so we only get a subset of the standards based on what's in the library
 export async function GET({fetch}) {
     const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
-
+    console.log(standards)
     // TODO: sort standards (check this periodically as you add standards)
     standards.sort((a,b) => {
         return fullGradeNames.indexOf(a.grade) - fullGradeNames.indexOf(b.grade)
@@ -41,7 +41,6 @@ export async function GET({fetch}) {
             }
         }
     }
-    // console.log(stds)
 
     // Organize course information
     stds.courseToSubjectMap = {}

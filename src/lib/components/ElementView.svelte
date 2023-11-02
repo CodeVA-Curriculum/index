@@ -45,14 +45,8 @@
             <div id='standards-box' class='sidebar standards'>
                 <h3>Standards</h3>
                 <div class='pills {active? 'full':'full'}'>
-                {#each Object.entries(standardsBySubject) as [title, stds]}
-                <p>
-                    {#if Object.entries(standardsBySubject).length > 1}<i>{title}:</i>{/if}    
-                    {#each stds as obj}
-                    <!-- TODO: change standards so it's just ids -->
-                    <StandardTag standard={obj} status={true} theme='is-light' />
-                    {/each}
-                </p>
+                {#each data.frontmatter.standards as standard}
+                <StandardTag status={true} get={true} theme='is-light' id={standard} />
                 {/each}
                 </div>
                 <!-- <button tabindex="0" aria-expanded={active} aria-controls='standards-box' on:click={()=>{ active = !active }}>See {active? 'Less':'More'}</button> -->
