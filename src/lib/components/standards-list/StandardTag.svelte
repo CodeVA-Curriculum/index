@@ -63,7 +63,7 @@
 </span>
 
 {#if obj}
-<StandardModal bind:this={modal} standard={obj}>
+<StandardModal bind:this={modal} standards={[...obj]}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />
