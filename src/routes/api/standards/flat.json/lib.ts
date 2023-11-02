@@ -58,6 +58,6 @@ export async function getStandards() {
             subs: stds[i].subs
         })
     }
-    console.log(complete)
+    // console.log(complete)
     return complete
 }
