@@ -46,7 +46,7 @@
                 <h3>Standards</h3>
                 <div class='pills {active? 'full':'full'}'>
                 {#each data.frontmatter.standards as standard}
-                <StandardTag status={true} get={true} theme='is-light' id={standard} />
+                    <StandardTag status={true} get={true} theme='is-light' id={standard} />
                 {/each}
                 </div>
                 <!-- <button tabindex="0" aria-expanded={active} aria-controls='standards-box' on:click={()=>{ active = !active }}>See {active? 'Less':'More'}</button> -->

@@ -56,7 +56,7 @@
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
 	<!-- TODO: add modal & modes/slot for filter page or for lesson plan view (linked to search page)  -->
 	<!-- TODO: add  -->
-    <span on:click={() => {modal.activate()}} class='open'>{obj && obj.id? obj.id : id? id:'No ID!'}</span>
+    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{obj && obj.id? obj.id : id? id:'No ID!'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}

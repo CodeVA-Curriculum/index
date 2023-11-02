@@ -27,16 +27,17 @@ export async function GET({fetch}) {
     for(let i=0;i<standards.length;i++) {
         stds =  applyField('grade', stds, standards[i], {})
         for(const grade in stds) {
-            // console.log(grade)
-            stds[grade] = applyField('course', stds[grade], standards[i], {})
-            for(const subject in stds[grade]) {
-                if(standards[i].grade == grade && standards[i].course == subject) {
-                    stds[grade][subject] = applyField('strand', stds[grade][subject], standards[i], [])
-                }
-                for(const strand in stds[grade][subject]) {
-                    stds[grade][subject][strand] = standards.filter((obj) => {
-                        return obj.grade == grade && obj.course == subject && obj.strand == strand
-                    })
+            if(standards[i].grade === grade) {
+                stds[grade] = applyField('course', stds[grade], standards[i], {})
+                for(const subject in stds[grade]) {
+                    if(standards[i].grade == grade && standards[i].course == subject) {
+                        stds[grade][subject] = applyField('strand', stds[grade][subject], standards[i], [])
+                    }
+                    for(const strand in stds[grade][subject]) {
+                        stds[grade][subject][strand] = standards.filter((obj) => {
+                            return obj.grade == grade && obj.course == subject && obj.strand == strand
+                        })
+                    }
                 }
             }
         }
@@ -49,7 +50,7 @@ export async function GET({fetch}) {
             stds.courseToSubjectMap[standards[i].course] = standards[i].subject
         }
     }
-    // console.log(stds)
+    console.log(stds)
 	return json(stds)
 }
 
