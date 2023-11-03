@@ -47,8 +47,8 @@ export async function GET({ fetch }) {
         // Add subject indices to results object
         const subjOfStrand:string|false = isStrand(subjects[i], standardsStrands)
         if(isSubj(subjects[i], standardsStrands)) {
-            results[subjects[i]] = []
-            // subjToAdd.push(subjects[i])
+            // results[subjects[i]] = []
+            subjToAdd.push(subjects[i])
         } else if(subjOfStrand && !results[subjOfStrand]) {
             results[subjOfStrand] = []
             results[subjOfStrand].push(subjects[i]) 
