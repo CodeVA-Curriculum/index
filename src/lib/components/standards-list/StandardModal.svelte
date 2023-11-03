@@ -31,16 +31,16 @@
 <div class="modal {active? 'is-active' : ''}">
     <div on:click={deactivate} class="modal-background"></div>
     <div class="modal-card">
-        <section class='modal-card-body'>
+        <!-- <section class='modal-card-body'> -->
             {#if el}
-                <svelte:component this={el} standard={standards[0]} />
+                <svelte:component this={el} on:close={deactivate} standard={standards[0]} />
                 <!-- <SingleStandardModalBody standard={standards[0]} /> -->
             {:else}
                 {#each standards as standard}
                 <TableRow standard={standard} />
                 {/each}
             {/if}
-        </section>
+        <!-- </section> -->
         <!-- <header class='modal-card-head'>
             <h1 class='modal-card-title'>{standard.title}
                 <span class='ml-5 tag is-dark'>Algorithms & Programming</span>

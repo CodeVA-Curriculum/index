@@ -34,27 +34,27 @@ export const fullGradeNames = ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 
 
 // TODO: pull this from the API, dummy! 
 // These should all be API routes
-export const standardsStrands = {
-    "Computer Science": [
-        "Algorithms & Programming",
-        "Data & Analysis",
-        "Computing Systems",
-        "Impacts of Computing",
-        "Networks & the Internet",
-        "Cybersecurity"
-    ],
-    "Mathematics": [
-        "Probability & Statistics"
-    ],
-    "Science": [
-        "Scientific & Engineering Practices",
-        "Force, Motion, & Energy",
-        "Matter",
-        "Living Systems & Processes",
-        "Earth & Space Systems",
-        "Earth Resources"
-    ]
-}
+// export const standardsStrands = {
+//     "Computer Science": [
+//         "Algorithms & Programming",
+//         "Data & Analysis",
+//         "Computing Systems",
+//         "Impacts of Computing",
+//         "Networks & the Internet",
+//         "Cybersecurity"
+//     ],
+//     "Mathematics": [
+//         "Probability & Statistics"
+//     ],
+//     "Science": [
+//         "Scientific & Engineering Practices",
+//         "Force, Motion, & Energy",
+//         "Matter",
+//         "Living Systems & Processes",
+//         "Earth & Space Systems",
+//         "Earth Resources"
+//     ]
+// }
 
 export function listedStdsToStdList(obj:ListedStandards):Standard[] {
     let list:Standard[] = []

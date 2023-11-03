@@ -109,7 +109,7 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
             // match grade, subject, and strand standard group notation
             let matched = obj.standards.filter((str)=>{
                 const tokens = str.split('.')
-                console.log(tokens)
+                // console.log(tokens)
                 const grade = expandDashNotation([tokens[0]])
                 let bandedStrs = []
                 for(let i=0;i<grade.length;i++) {

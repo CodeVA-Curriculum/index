@@ -6,7 +6,7 @@ CS:
         CY: Cybersecurity
         DA: Data & Analysis
         IC: Impacts of Computing
-        NI: Networking & the Internet
+        NI: Networks & the Internet
 CSF:
     title: "Computer Science Foundations"
     inherit: CS

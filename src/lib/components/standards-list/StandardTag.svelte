@@ -17,7 +17,7 @@
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
 
-	let obj:Standard
+	let obj:Standard[] = []
 	onMount(()=> {
 		console.log("Mounted standard pill")
 		if(fetch && id) {
@@ -25,11 +25,11 @@
 			const p = fetch(`${base}/api/standards/${id}.json`)
 			p.then((o) => {
 				o.json().then((data) => {
-					obj = data
+					obj = [...data]
 				})
 			})
 		} else {
-			obj = standard
+			obj = [standard]
 		}
 	})
 
@@ -53,17 +53,21 @@
 	}
 </script>
 
+{#if standard}
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
-	<!-- TODO: add modal & modes/slot for filter page or for lesson plan view (linked to search page)  -->
-	<!-- TODO: add  -->
-    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{obj && obj.id? obj.id : id? id:'No ID!'}</span>
+    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{standard && standard.id? standard.id : id? id:'No ID!'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}
 </span>
+{:else}
+	{#each [...obj] as std}
+		<svelte:self get={true} status={true} theme='is-light' standard={std} />
+	{/each}
+{/if}
 
-{#if obj}
-<StandardModal bind:this={modal} standards={[...obj]}>
+{#if standard}
+<StandardModal bind:this={modal} standards={[standard]}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />

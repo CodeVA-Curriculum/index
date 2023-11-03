@@ -1,16 +1,18 @@
 import { getAllFrontmatter } from "$lib/utils/frontmatter";
 import type {Frontmatter} from '$lib/utils/frontmatter'
 import {json} from '@sveltejs/kit'
-import { gradeList, standardsStrands, expandDashNotation } from "$lib/utils/metaUtils";
+import { gradeList, expandDashNotation } from "$lib/utils/metaUtils";
+import { base } from '$app/paths'
 
 interface Params {
     grade:`band`|`list`,
     subject:`band`|`list`
 }
 
-export async function GET() {
+export async function GET({ fetch }) {
 
     const frontmatters:Frontmatter[] = await getAllFrontmatter()
+    const standardsStrands = await (await fetch(`${base}/api/standards/course-strand-map.json`)).json()
 
     // Get all metadata
     let subjects:string[] = []
@@ -39,8 +41,8 @@ export async function GET() {
     let results = {}
     for(let i=0;i<subjects.length;i++) {
         // Add subject indices to results object
-        const strand:string|false = isStrand(subjects[i])
-        if(isSubj(subjects[i])) {
+        const strand:string|false = isStrand(subjects[i], standardsStrands)
+        if(isSubj(subjects[i], standardsStrands)) {
             results[subjects[i]] = []
         } else if(strand && !results[strand]) {
             results[strand] = []
@@ -72,7 +74,7 @@ export async function GET() {
     })
 }
 
-function isStrand(name:string):string|false {
+function isStrand(name:string, standardsStrands:object):string|false {
     for(const subj in standardsStrands) {
         if(standardsStrands[subj].includes(name)) {
             return subj
@@ -81,7 +83,7 @@ function isStrand(name:string):string|false {
     return false
 }
 
-function isSubj(name:string) {
+function isSubj(name:string, standardsStrands:object) {
     if(standardsStrands[name]) {
         return true
     } else {
