@@ -99,7 +99,7 @@
     <div class='dropdown-menu' id={id} role='menu'>
         <div style='width: {width};' class='dropdown-content'>
             {#each Object.entries(items) as [index, arr]}
-            <Collapse>
+            <Collapse showDrop={arr.length > 0}>
                 <label slot="heading" class="checkbox dropdown-item">
                     <input
                         class='mr-1'

@@ -15,6 +15,14 @@ ALG1:
     title: "Algebra 1"
     inherit: MT
     grade: HS
+DS:
+    title: Data Science
+    strands:
+        CXT: Data in Context
+        BI: Data Bias
+        COM: Data & Communication
+        MOD: Data Modeling
+        DC: Data & Computing
 MT:
     title: Mathematics
     strands:

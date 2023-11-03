@@ -37,29 +37,27 @@ export async function GET({ fetch }) {
     }
     gradesAsNumbers.sort((a,b) => a-b)
 
+    // console.log("Subjects:", subjects)
+
     // Arrange subjects & strands into object
     // Don't add subject unless there are strands to go with it
     let results = {}
+    let subjToAdd:string[] = []
     for(let i=0;i<subjects.length;i++) {
         // Add subject indices to results object
         const subjOfStrand:string|false = isStrand(subjects[i], standardsStrands)
-        let subjToAdd:string[] = []
         if(isSubj(subjects[i], standardsStrands)) {
-            // results[subjects[i]] = []
-            subjToAdd.push(subjects[i])
+            results[subjects[i]] = []
+            // subjToAdd.push(subjects[i])
         } else if(subjOfStrand && !results[subjOfStrand]) {
             results[subjOfStrand] = []
             results[subjOfStrand].push(subjects[i]) 
         } else if(subjOfStrand && results[subjOfStrand]) {
-            if(!results[subjOfStrand] && subjToAdd.includes(subjOfStrand)) {
-                results[subjOfStrand] = []
-                subjToAdd.splice(subjToAdd.indexOf(subjOfStrand), 1)
-            }
             results[subjOfStrand].push(subjects[i])
         }
     }
 
-    console.log("Results:", results)
+    // console.log("Results:", results)
 
     // Arrange grades into bands
     let gradeResults:any;

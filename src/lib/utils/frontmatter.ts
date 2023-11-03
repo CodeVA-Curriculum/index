@@ -150,7 +150,7 @@ async function getAllFrontmatter():Promise<Frontmatter[]> {
         frontmatter.parents = await findAndInheritFromParents(frontmatter)
         frontmatter.members = await findMemberFrontmatter(frontmatter)
         frontmatter = await postprocess(frontmatter)
-        // console.log(frontmatter)
+        // console.log(frontmatter.title, frontmatter.subjects)
 
         frontmatters.push(frontmatter)
     }
