@@ -12,13 +12,12 @@
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
+    export let width:string = 'auto'
     
     export let items:NestedDropdown = {}
-
-    export let width:string = 'auto'
     export let start:string[]
-
     let selected:NestedDropdown = {}
+
     export let output:string[] = []
 
     let loaded = false

@@ -74,13 +74,15 @@
 </script>
 
 <div class='projects'>
-    <div class='field is-grouped'>
+    <div class='field m-0 p-0'>
         <!-- <p class='label'><Fa icon={faFilter} /></p> -->
         <Dropdown bind:selected={filter.audiences} options={audiences} defaultOption="All Audiences" />
         <Dropdown bind:selected={filter.subjects} options={subjects} defaultOption="All Subjects" />
         <Dropdown bind:selected={filter.grades} options={grades} defaultOption="All Grade Levels" />
-        <input bind:value={filter.term} class='input mr-2' placeholder="Group Name">
-        <button on:click={toggle} data-tooltip='View as {list? 'Orbs':'List'}' class='has-tooltip-arrow button'><Fa icon={list? faCircle:faList} /></button>
+        <div class='my-2 mx-2 p-0 is-flex is-inline-block-tablet'>
+            <input bind:value={filter.term} class='input mr-2 is-inline-block' placeholder="Group Name">
+            <button on:click={toggle} style='width: 2rem;' data-tooltip='View as {list? 'Orbs':'List'}' class='has-tooltip-arrow button'><Fa icon={list? faCircle:faList} /></button>
+        </div>
     </div>
     {#if list}
         <Table groups={filtered} />
@@ -100,7 +102,9 @@
     .button:hover {
         border-color: grey;
     }
-    .is-red {
-        color: red;
+    input {
+        max-width: 80%;
+        flex-grow: 1;
+
     }
 </style>

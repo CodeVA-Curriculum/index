@@ -12,9 +12,9 @@
 </script>
 
 <!-- Must have element with class `field` as direct parent -->
-<control class='control drop-down'>
+<div class='control drop-down my-2 mx-1 p-0 is-inline-block-tablet'>
     <!-- <label class='label'>{label}</label> -->
-    <div class='select'>
+    <div class='select is-fullwidth'>
         <select bind:value={selected} name='audience'>
             <option value={defaultOption}>{defaultOption}</option>
             {#each options as opt}
@@ -22,4 +22,8 @@
             {/each}
         </select>
     </div>
-</control>
+</div>
+
+<style>
+
+</style>

@@ -17,6 +17,7 @@ ALG1:
     grade: HS
 DS:
     title: Data Science
+    subject: Mathematics
     strands:
         CXT: Data in Context
         BI: Data Bias
@@ -62,32 +63,26 @@ MU:
         HC: History, Culture, & Citizenship
         IA: Innovation in the Arts
         TA: Technique & Application
+FA:
+    title: Fine Arts
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
 VA:
     title: Visual Art
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 DA:
     title: Dance Arts
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 TA:
     title: Theatre Arts
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 DL:
     title: Digital Learning Integration
+    inherit: null
     strands:
         EL: Empowered Learner
         DC: Digital Citizen
@@ -96,12 +91,15 @@ DL:
         CT: Computational Thinker
         CC: Creative Communicator
         GC: Global Collaborator
-DE:
-    title: Driver Education
-EPF:
-    title: Economics & Personal Finance
-FL:
-    title: Family Life
+# DE:
+#     title: Driver Education
+#     subject: CTE
+# EPF:
+#     title: Economics & Personal Finance
+#     subject: CTE
+# FL:
+#     title: Family Life
+#     subject: CTE
 HE:
     title: Health
     strands:

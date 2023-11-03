@@ -4,7 +4,7 @@
     import {base} from '$app/paths'
     import {SvelteComponent, onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
+    import {faCaretDown, faFilter, faSearch} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
 
     // components
@@ -14,7 +14,7 @@
     export let filter:boolean=true
     export let linkTo:boolean=false
 
-    export let data:object;
+    export let urlParams:object;
 
     let url:string = '/'
     let loaded:boolean=false;
@@ -27,13 +27,6 @@
     let params = ''
 
     function updateUrl(word:string):string {
-        // console.log('updated URL')
-        // if(loaded) {
-        // delete old params
-        // for(const [k,v] of $page.url.searchParams.entries()) {
-        //     $page.url.searchParams.delete(k)
-        // }
-
         const searchParams = new URLSearchParams()
 
         // Set new params
@@ -45,24 +38,21 @@
                 searchParams.append(k, v[i])
             }
         }
-        // $page.url.searchParams.sort()
         if(searchParams.size > 0) {
-            // goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
-            // });
             return `${base}/library/search?${searchParams.toString()}`
         }
         return `${base}/library/search?error=invalid`
     }
+
     function toggle():null {
         expanded = !expanded
         return null
     }
 
-    // $: url = updateUrl(term)
-    $: if(loaded) { url = updateUrl(term) }
+    // $: if(loaded) { url = updateUrl(term) }
 
     onMount(()=>{
-        term = data ? data.get('query') : ''
+        term = urlParams ? urlParams.get('query') : ''
         if($page.url.searchParams.has('error')) {
             showError = true
         }
@@ -96,13 +86,15 @@
         </div>
         {/if}
         <div data-sveltekit-reload class='control'>
-            <a href='{url}' class='button is-large is-primary'>Search</a>
+            <a href='{url}' class='button is-large is-primary'>
+                <span class='is-hidden-mobile'>Search</span>
+                <Fa class='ml-3' icon={faSearch} />
+            </a>
         </div>
-        
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters on:change={() => url = updateUrl(term)} data={data} bind:this={filterElem} bind:params={params} />
+            <Filters on:change={() => url = updateUrl(term)} startingUrl={urlParams} bind:this={filterElem} bind:params={params} />
     </div>
 
     {#if showError}

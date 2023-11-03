@@ -128,10 +128,10 @@
     .items-in-list {
         font-size: 9pt;
     }
-    .is-pink {
+    /* .is-pink {
         background-color: pink;
-    }
+    } */
     .long {
-        width: 100%;
+        width: 100%;    
     }
 </style>
