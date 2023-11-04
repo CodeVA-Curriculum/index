@@ -1,6 +1,6 @@
 <script lang='ts'>
     import Projects from "$lib/components/Projects.svelte";
-    import Search from "$lib/components/Search.svelte";
+    import Search from "$lib/components/search-ui/Search.svelte";
     import {onMount} from 'svelte'
     import { page } from "$app/stores";
     export let data;

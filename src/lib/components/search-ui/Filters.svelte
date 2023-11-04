@@ -1,12 +1,13 @@
 <script lang='ts'>
     import {SvelteComponent, createEventDispatcher, onMount} from 'svelte'
     import {base} from '$app/paths'
-    import CheckBoxDropdown from './CheckBoxDropdown.svelte';
-    import InputWithDropdown from './InputWithDropdown.svelte';
+    import CheckBoxDropdown from '../form-elements/CheckBoxDropdown.svelte';
+    import InputWithDropdown from '../form-elements/InputWithDropdown.svelte';
     import type { GradesByBand } from '$lib/utils/metaUtils'
     import FetchingDropdown from '../dropdowns/FetchingDropdown.svelte';
     import Fa from 'svelte-fa'
     import { faCaretDown, faSearch } from '@fortawesome/free-solid-svg-icons';
+    import type { Params } from './utils';
 
     export let startingUrl:URLSearchParams
     
@@ -16,12 +17,28 @@
         audiences: [],
         types: []
     }
+    let params:Params = {
+        subj:  [],
+        aud:   [],
+        type:  [],
+        grade: [],
+        tag:   []
+
+    }
+    let loaded = false
     onMount(async () => {
         res = await (await fetch(`${base}/api/library/meta`)).json()
+        loaded = true
     })
 
+    $: sendUpdate(params)
+
+    export function getParams():Params {
+        return params
+    }
+
     const dispatch = createEventDispatcher()
-    function sendUpdate(selectedStandards, subjects, tags, grades, types, audiences) {
+    function sendUpdate(params:Params) {
         dispatch('change')
     }
 
@@ -36,6 +53,7 @@
                     title="Select..."
                     id='subjects-dropdown'
                     items={res.subjects}
+                    bind:selected={params.subj}
                 />
             </div>
         </div>
@@ -48,6 +66,7 @@
                     items={res.grades}
                     flat={false}
                     width={'10rem'}
+                    bind:selected={params.grade}
                 />
             </div>
         </div>
@@ -58,6 +77,7 @@
                     title="Select..."
                     id='audiences-dropdown'
                     items={res.audiences}
+                    bind:selected={params.aud}
                 />
             </div>
         </div>
@@ -68,6 +88,7 @@
                     title="Select..."
                     id='audiences-dropdown'
                     items={res.types}
+                    bind:selected={params.type}
                 />
             </div>
         </div>
@@ -78,6 +99,7 @@
                     id='tag-select' 
                     tagsList={res.tags} 
                     placeholder="Type to search..." 
+                    bind:selected={params.tag}
                 />
             </div>
         </div>

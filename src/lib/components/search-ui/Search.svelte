@@ -8,7 +8,8 @@
     import {slide} from 'svelte/transition'
 
     // components
-    import Filters from '$lib/components/form-elements/Filters.svelte'
+    import Filters from '$lib/components/search-ui/Filters.svelte'
+    import { generateParams } from './utils';
 
     let filterElem:SvelteComponent;
     export let filter:boolean=true
@@ -27,22 +28,24 @@
     let params = ''
 
     function updateUrl(word:string):string {
-        const searchParams = new URLSearchParams()
+        // console.log("Updating url...")
 
         // Set new params
-        if(term && term.length > 0) { searchParams.set('query', term) }
-        params = filterElem.getParams()
-        for(const [k,v] of Object.entries(params)) {
-            searchParams.set(k, v[0])
-            for(let i=1;i<v.length;i++) {
-                searchParams.append(k, v[i])
-            }
+        const filterParams = filterElem.getParams()
+        console.log("Params from filter:", filterParams)
+
+        const params = generateParams(filterParams)
+        console.log("URL Params:", params.size)
+        
+        if(params.size > 0) {
+            url = `${base}/library/search?${params.toString()}`
+        } else {
+            url = `${base}/library/search?error=invalid`
         }
-        if(searchParams.size > 0) {
-            return `${base}/library/search?${searchParams.toString()}`
-        }
-        return `${base}/library/search?error=invalid`
+        return url
     }
+
+    $: console.log(url)
 
     function toggle():null {
         expanded = !expanded
@@ -52,10 +55,10 @@
     // $: if(loaded) { url = updateUrl(term) }
 
     onMount(()=>{
-        term = urlParams ? urlParams.get('query') : ''
-        if($page.url.searchParams.has('error')) {
-            showError = true
-        }
+        // term = urlParams ? urlParams.get('query') : ''
+        // if($page.url.searchParams.has('error')) {
+        //     showError = true
+        // }
         
         loaded=true;
     })
@@ -94,7 +97,7 @@
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters on:change={() => url = updateUrl(term)} startingUrl={urlParams} bind:this={filterElem} bind:params={params} />
+            <Filters on:change={() => updateUrl(term)} startingUrl={urlParams} bind:this={filterElem} />
     </div>
 
     {#if showError}
