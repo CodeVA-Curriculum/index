@@ -4,7 +4,7 @@
     import {base} from '$app/paths'
     import DocumentHeader from "./DocumentHeader.svelte";
     import ElementCard from "./ElementCard.svelte";
-    import StandardTag from './standards-list/StandardTag.svelte';
+    import StandardTag from '../standards-list/StandardTag.svelte';
     export let data:Element
 
     let standardsBySubject:any = {}

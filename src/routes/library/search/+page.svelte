@@ -1,7 +1,7 @@
 <script lang='ts'>
     export let data:any = { frontmatter: [], meta: [] };
     import Search from '$lib/components/search-ui/Search.svelte';
-    import ElementCard from '$lib/components/ElementCard.svelte';
+    import ElementCard from '$lib/components/element-views/ElementCard.svelte';
     import { expandDashNotation, expandSubjectsStrands } from '$lib/utils/metaUtils';
     import {page} from '$app/stores'
     import { onMount } from 'svelte';

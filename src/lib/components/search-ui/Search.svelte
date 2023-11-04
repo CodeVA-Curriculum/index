@@ -4,12 +4,13 @@
     import {base} from '$app/paths'
     import {SvelteComponent, onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faCaretDown, faFilter, faSearch} from '@fortawesome/free-solid-svg-icons'
+    import {faCaretDown, faCaretLeft, faFilter, faSearch} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
 
     // components
     import Filters from '$lib/components/search-ui/Filters.svelte'
     import { generateParams } from './utils';
+    import StandardsBar from './StandardsBar.svelte';
 
     let filterElem:SvelteComponent;
     export let filter:boolean=true
@@ -20,7 +21,9 @@
     let url:string = '/'
     let loaded:boolean=false;
     let term:string="";
+
     let expanded:boolean=true;
+    let standardsExpanded:boolean=true
     
     let showError = false
     let URLerror = false;
@@ -97,8 +100,15 @@
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters on:change={() => updateUrl(term)} startingUrl={urlParams} bind:this={filterElem} />
+        <Filters on:change={() => updateUrl(term)} startingUrl={urlParams} bind:this={filterElem}>
+            <button on:click={()=>{ standardsExpanded = !standardsExpanded}} class='standard-trigger button is-small is-fullwidth is-dark'>
+                Filter by Standard
+                <Fa class='ml-3' icon={standardsExpanded ? faCaretDown : faCaretLeft} />
+            </button>
+        </Filters>
+        <StandardsBar show={standardsExpanded} />
     </div>
+    
 
     {#if showError}
         <div class='message is-warning'>
@@ -116,6 +126,9 @@
 </div>
 
 <style>
+    .standard-trigger {
+        margin-top: 1.3rem;
+    }
     .filters.hidden {
         display: none;
     }

@@ -103,10 +103,9 @@
                 />
             </div>
         </div>
-        <button class='standard-trigger button is-small is-fullwidth-mobile is-dark'>
-            Standards
-            <Fa class='ml-3' icon={faCaretDown} />
-        </button>
+        <div class='end-of-bar'>
+            <slot />
+        </div>
 </div>
 
 
@@ -118,12 +117,6 @@
     .filters {
         flex-wrap: wrap;
     }
-    .level {
-        text-align: left;
-    }
-    .standard-trigger {
-        margin-top: 1.3rem;
-    }
     .hidden {
         display: none;
     }
@@ -133,7 +126,7 @@
         position: relative;
         top: 2px;
     }
-    button {
+    .end-of-bar {
         flex-grow: 1;
     }
 </style>
