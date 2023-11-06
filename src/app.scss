@@ -1,4 +1,15 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */ /* Import only what you need from Bulma */
+.number-pill {
+    background-color: whitesmoke;
+    text-align: center;
+    border-radius: 24px;
+    padding-left: 0.33rem;
+    padding-right: 0.33rem;
+    float: right;
+    margin-right: 1.5rem;
+    font-size: 10pt;
+}
+
 @import "bulma/sass/utilities/_all";
 @import "bulma/sass/base/_all";
 @import "bulma/sass/elements/_all";

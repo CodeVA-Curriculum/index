@@ -22,6 +22,19 @@
         }
     }
 
+    let countList = []
+    export let count = 0
+    $: count = getCount(countList)
+
+    function getCount(countList) {
+        let count = 0
+        for(let i=0;i<countList.length;i++) {
+            count = count + countList[i]
+        }
+        console.log("Counted", count)
+        return count
+    }
+
 </script>
 
 <div class='subject-row {expanded? '' : 'has-border'}'>
@@ -29,13 +42,14 @@
         <p style='flex-grow: 1' class='is-inline-block pb-1' on:click={() => { expanded = !expanded}}>
             <Fa icon={expanded? faCaretDown: faCaretRight} class='mr-3'/>
             {title}
+            <span class='number-pill'>{count}</span>
         </p>
         <button on:click={addAll} class='button add-all mt-2 mb-2'><Fa icon={faPlus} class='mr-2' />Add All</button>
     </div>
     <div class='{expanded? '':'is-hidden'}'>
         <table class='table ml-5 mb-3'>
-            {#each Object.entries(list) as [k,v]}
-                <StrandTable bind:inFilter={inFilter} bind:selected={selected} title={k} standards={v} />
+            {#each Object.entries(list) as [k,v], i}
+                <StrandTable bind:inFilter={inFilter} bind:count={countList[i]} bind:selected={selected} title={k} standards={v} />
             {/each}
         </table>
     </div>

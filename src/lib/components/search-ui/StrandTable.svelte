@@ -11,8 +11,19 @@
 
     let mask:boolean[] = []
     let expanded = false
+    export let count = 0
 
     $: updateMask(standards, inFilter)
+
+    $: count = getCount(mask)
+
+    function getCount(mask:boolean[]) {
+        let count = 0
+        for(let i=0;i<mask.length;i++) {
+            count = count + (mask[i] ? 1 : 0)
+        }
+        return count
+    }
 
     function updateMask(standards:Standard[], filter:Standard[]) {
         console.log("Updating mask...")
@@ -63,6 +74,7 @@
             <p style='flex-grow: 1; cursor: pointer' class='row-title is-inline-block m-0 p-0' on:click={()=>{expanded = !expanded}}>
                 <Fa class='mr-3' icon={expanded? faCaretDown : faCaretRight} />
                 {title}
+                <span class='number-pill'>{count}</span>
             </p>
             <button on:click={addAll} class='button add-all'><Fa icon={faPlus} class='mr-2' />Add All</button>
         </div>
@@ -93,6 +105,9 @@
 {/each}
 
 <style lang='scss'>
+    .number-pill {
+        margin-right: 2.35rem;
+    }
     .row-title {
         font-size: 11pt;
     }

@@ -40,6 +40,7 @@
                 standards[k] = res[k]
                 selectedTab = selectedTab == ''? k : selectedTab 
             }
+
         }
         loaded = true;
         console.log('Loaded', selectedTab)
@@ -85,11 +86,11 @@
         <!-- GRADE SELECT TABS -->
         <div class='tabs is-boxed'>
             <ul class='p-0 m-0'>
-                {#each Object.entries(standards) as [k,v]}
+                {#each Object.entries(standards) as [k,v], i}
                 <li class='{k==selectedTab? 'is-active':''}'>
                     <a on:click={() => {selectedTab=k}}>
                         {k}
-                        <span class='number-pill'>0</span>
+                        <!-- <span class='number-pill'>{countList[i]}</span> -->
                     </a>
                 </li>
                 {/each}
@@ -100,7 +101,7 @@
         {#if loaded}
         <div class='columns'>
             <div class='outline column is-6-tablet is-12-mobile m-0 p-0'>
-                {#each Object.entries(standards[selectedTab]) as [k,v]}
+                {#each Object.entries(standards[selectedTab]) as [k,v], i}
                 <StandardList bind:inFilter={selected} bind:selected={selectedStandard} title={k} list={v} />
                 {/each}
             </div>
