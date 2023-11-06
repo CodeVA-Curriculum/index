@@ -7,7 +7,7 @@
     import { srcToUrl } from "$lib/utils/pathUtils";
 
     import type {Frontmatter} from '$lib/utils/frontmatter'
-    import ArrayAsInlineList from "./ArrayAsInlineList.svelte";
+    import ArrayAsInlineList from "../ArrayAsInlineList.svelte";
     import { onMount } from "svelte";
 
     export let meta:Frontmatter;

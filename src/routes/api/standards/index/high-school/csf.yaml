@@ -1,0 +1,17 @@
+- id: HS.CSF.CS.1
+  title: CSF.1
+  text: The student will
+  subs: [
+    "compare the structures, functions, and interactions between application software, system software, and hardware; and",
+    "explore the relationship between hardware and software using the Internet of Things."
+  ]
+
+- id: HS.CSF.NI.2
+  title: CSF.2
+  text: The student will model how information is broken down into smaller pieces, transmitted as packets through multiple devices over networks and the Internet, and reassembled at the destination.
+  subs: []
+
+- id: HS.CSF.NI.3
+  title: CSF.3
+  text: The student will explain the role of protocols in transmitting data across networks and the Internet.
+  subs: []

@@ -4,6 +4,7 @@
 
     let open = false
     let collapse
+    export let showDrop = false
 
     function toggle() {
         open = !open
@@ -20,12 +21,14 @@
         <div class='column p-0 m-0'><slot name='heading'></slot></div>
         <div class='column is-narrow p-0 pr-3 m-0'>
             <slot name="label" />
-            <button on:click={toggle}><Fa icon={open? faCaretDown:faCaretLeft} /></button>
+            {#if showDrop}<button on:click={toggle}><Fa icon={open? faCaretDown:faCaretLeft} /></button>{/if}
         </div>
     </div>
+    {#if showDrop}
     <div bind:this={collapse} class='collapsible {open? 'active':''}'>
         <slot />
-    </div>    
+    </div>
+    {/if}
 </div>
 
 <style>

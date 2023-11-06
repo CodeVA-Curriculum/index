@@ -129,7 +129,7 @@ export async function parseFile(pathData:Path, standards:object[]) {
 
     // console.log(objs)
 
-    frontmatter.standards = stdObjs
+    // frontmatter.standards = stdObjs
   }
 
   return {

@@ -12,18 +12,17 @@
 
     export let title:string = "No Title"
     export let id:string = 'no-id'
+    export let width:string = 'auto'
     
     export let items:NestedDropdown = {}
-
-    export let width:string = 'auto'
     export let start:string[]
+    let selectedItems:NestedDropdown = {}
 
-    let selected:NestedDropdown = {}
-    export let output:string[] = []
+    export let selected:string[] = []
 
     let loaded = false
     onMount(() => {
-        
+        // console.log("Starting Nested Dropdown with", selected)
         if(!start) {
             loaded = true
         }
@@ -31,35 +30,38 @@
 
     $: {
         if(!loaded && start && Object.entries(items).length > 0) {
+            console.log("Processing Start", start)
             for(const k in items) {
-                selected[k] = []
+                selectedItems[k] = []
                 for(let i=0;i<start.length;i++) {
+                    console.log(items[k])
                     if(items[k].includes(start[i])) {
-                        selected[k] = [...selected[k], start[i], k]
+                        selectedItems[k] = [...selectedItems[k], start[i], k]
                     }
                 }
                 if(start.includes(k) && !selected[k].includes(k)) {
-                    selected[k] = [...selected[k], k]
-                    if(selected[k].length == 1) { selected[k] = [...items[k], k] }
+                    selectedItems[k] = [...selectedItems[k], k]
+                    if(selectedItems[k].length == 1) { selectedItems[k] = [...items[k], k] }
                 }
                 // anything gets selected, add parent to selected
             }
+            // console.log(selectedItems)
             loaded = true
         }
     }
 
     let length = 0
-    $: length = getLength(selected)
+    $: length = getLength(selectedItems)
 
-    function getLength(selected:NestedDropdown):number {
+    function getLength(selectedItems:NestedDropdown):number {
         let length = 0
-        output = []
-        for(const parent in selected) {
-            if(selected[parent].length > 0) {
+        selected = []
+        for(const parent in selectedItems) {
+            if(selectedItems[parent].length > 0) {
                 length++
-                for(let i=0;i<selected[parent].length;i++) {
-                    if(!output.includes(selected[parent][i])) {
-                        output = [...output, selected[parent][i]]
+                for(let i=0;i<selectedItems[parent].length;i++) {
+                    if(!selected.includes(selectedItems[parent][i])) {
+                        selected = [...selected, selectedItems[parent][i]]
                     }
                 }
             }
@@ -69,21 +71,21 @@
 
     function manageToggle(e:any, subject:string) {
         if(e.target.checked) {
-            selected[subject] = [...items[subject], subject]
+            selectedItems[subject] = [...items[subject], subject]
         } else {
-            selected[subject] = []
+            selectedItems[subject] = []
         }
         
     }
     function turnOffParent(e:any, parent:string, item:string) {
-        if(!e.target.checked && selected[parent].includes(parent)) {
-            selected[parent] = selected[parent].filter((obj:string) => obj != parent && obj != item)
-            if(selected[parent].length != 0) {
-                selected[parent] = [...selected[parent], parent]
+        if(!e.target.checked && selectedItems[parent].includes(parent)) {
+            selectedItems[parent] = selectedItems[parent].filter((obj:string) => obj != parent && obj != item)
+            if(selectedItems[parent].length != 0) {
+                selectedItems[parent] = [...selectedItems[parent], parent]
             }
         }
         if(e.target.checked) {
-            selected[parent] = [parent, ...selected[parent], item]
+            selectedItems[parent] = [parent, ...selectedItems[parent], item]
         }
     }
 </script>
@@ -106,14 +108,14 @@
                         on:change={(e)=>{manageToggle(e, index)}}
                         type="checkbox"
                         value={index}
-                        bind:group={selected[index]}
+                        bind:group={selectedItems[index]}
                     >
                     <span>{index}</span>
                 </label>
                 <span slot='label'>
-                    {#if selected[index] && selected[index].length > 0}
+                    {#if selectedItems[index] && selectedItems[index].length > 0}
                     <span class='number-pill'>
-                        {selected[index].length > items[index].length? items[index].length : selected[index].length-1}
+                        {selectedItems[index].length > items[index].length? items[index].length : selectedItems[index].length-1}
                     </span>
                     {/if}
                 </span>
@@ -123,7 +125,7 @@
                         <input 
                             on:change={(e)=>{turnOffParent(e, index, item)}}
                             class='mr-1'
-                            bind:group={selected[index]}
+                            bind:group={selectedItems[index]}
                             value={item}
                             type="checkbox"
                         >

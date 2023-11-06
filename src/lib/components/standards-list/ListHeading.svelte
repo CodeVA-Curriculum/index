@@ -11,8 +11,11 @@
 
     export let title:string
     export let indent:number
+    export let next:object
 
     let expanded = false
+
+    // $: if(next) { console.log(Object.entries(next)) }
 </script>
 
 <div class='list-heading p-0' style='margin-left: {indent}rem;'>
@@ -38,9 +41,17 @@
     {#if expanded}
     <slot />
     {/if}
+    {#if expanded && next && Object.entries(next).length == 0}
+    <div style='margin-left: {indent+1}rem;'>
+        <p class='is-italic is-small'>Nothing here!</p>
+    </div>
+    {/if}
 </div>
 
 <style>
+    .is-small {
+        font-size: 9pt;
+    }
     .heading-wrap:hover {
         background-color: whitesmoke;
     }

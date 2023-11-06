@@ -4,22 +4,27 @@
     import {base} from '$app/paths'
     import {SvelteComponent, onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faCaretDown, faFilter} from '@fortawesome/free-solid-svg-icons'
+    import {faCaretDown, faCaretLeft, faFilter, faSearch} from '@fortawesome/free-solid-svg-icons'
     import {slide} from 'svelte/transition'
 
     // components
-    import Filters from '$lib/components/form-elements/Filters.svelte'
+    import Filters from '$lib/components/search-ui/Filters.svelte'
+    import { generateParams } from './utils';
+    import StandardsBar from './StandardsBar.svelte';
 
     let filterElem:SvelteComponent;
+    let standardsBar:SvelteComponent;
     export let filter:boolean=true
     export let linkTo:boolean=false
 
-    export let data:object;
+    let urlParams:URLSearchParams;
 
     let url:string = '/'
     let loaded:boolean=false;
     let term:string="";
+
     let expanded:boolean=true;
+    let standardsExpanded:boolean=false
     
     let showError = false
     let URLerror = false;
@@ -27,42 +32,37 @@
     let params = ''
 
     function updateUrl(word:string):string {
-        // console.log('updated URL')
-        // if(loaded) {
-        // delete old params
-        // for(const [k,v] of $page.url.searchParams.entries()) {
-        //     $page.url.searchParams.delete(k)
-        // }
-
-        const searchParams = new URLSearchParams()
+        // console.log("Updating url...")
 
         // Set new params
-        if(term && term.length > 0) { searchParams.set('query', term) }
-        params = filterElem.getParams()
-        for(const [k,v] of Object.entries(params)) {
-            searchParams.set(k, v[0])
-            for(let i=1;i<v.length;i++) {
-                searchParams.append(k, v[i])
-            }
+        const filterParams = filterElem.getParams()
+        filterParams['sol'] = standardsBar.getStandards()
+        if(term) { filterParams['q'] = [term]}
+        // console.log("Params from filter:", filterParams)
+
+        const params = generateParams(filterParams)
+        // console.log("URL Params:", params.size)
+        
+        if(params.size > 0) {
+            url = `${base}/library/search?${params.toString()}`
+        } else {
+            url = `${base}/library/search?error=invalid`
         }
-        // $page.url.searchParams.sort()
-        if(searchParams.size > 0) {
-            // goto(`${base}/library/search?${$page.url.searchParams.toString()}`, {
-            // });
-            return `${base}/library/search?${searchParams.toString()}`
-        }
-        return `${base}/library/search?error=invalid`
+        return url
     }
+
+    $: console.log(url)
+
     function toggle():null {
         expanded = !expanded
         return null
     }
 
-    // $: url = updateUrl(term)
     $: if(loaded) { url = updateUrl(term) }
 
     onMount(()=>{
-        term = data ? data.get('query') : ''
+        urlParams= $page.url.searchParams
+        term = (urlParams && urlParams.has('q') ? urlParams.get('q') : '') as string
         if($page.url.searchParams.has('error')) {
             showError = true
         }
@@ -96,14 +96,23 @@
         </div>
         {/if}
         <div data-sveltekit-reload class='control'>
-            <a href='{url}' class='button is-large is-primary'>Search</a>
+            <a href='{url}' class='button is-large is-primary'>
+                <span class='is-hidden-mobile'>Search</span>
+                <Fa class='ml-3' icon={faSearch} />
+            </a>
         </div>
-        
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-            <Filters on:change={() => url = updateUrl(term)} data={data} bind:this={filterElem} bind:params={params} />
+        <Filters on:change={() => updateUrl(term)} bind:this={filterElem}>
+            <button on:click={()=>{ standardsExpanded = !standardsExpanded}} class='standard-trigger button is-small is-fullwidth is-dark'>
+                Filter by Standard
+                <Fa class='ml-3' icon={standardsExpanded ? faCaretDown : faCaretLeft} />
+            </button>
+        </Filters>
+        
     </div>
+    
 
     {#if showError}
         <div class='message is-warning'>
@@ -117,10 +126,15 @@
             </div>
         </div>
     {/if} 
+
+    <StandardsBar on:change={() => updateUrl(term)} bind:this={standardsBar} show={standardsExpanded} />
     
 </div>
 
 <style>
+    .standard-trigger {
+        margin-top: 1.3rem;
+    }
     .filters.hidden {
         display: none;
     }

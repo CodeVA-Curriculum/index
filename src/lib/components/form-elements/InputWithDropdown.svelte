@@ -86,7 +86,7 @@
         </div>    
     </div>
     <!-- {#if !expanded} -->
-    <div class='selected-tags'>
+    <div class='selected-tags mb-3 mt-0'>
         {#each selected as tag, i}
             <span class='tag is-dark is-small mr-1 ml-0 my-0 mt-1'>
                 {tag}
@@ -128,10 +128,10 @@
     .items-in-list {
         font-size: 9pt;
     }
-    .is-pink {
+    /* .is-pink {
         background-color: pink;
-    }
+    } */
     .long {
-        width: 100%;
+        width: 100%;    
     }
 </style>

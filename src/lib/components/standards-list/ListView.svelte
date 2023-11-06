@@ -6,9 +6,17 @@
     import type {Standard} from '$lib/utils/metaUtils'
     import NumberPill from '../NumberPill.svelte';
     import StandardTag from './StandardTag.svelte';
-    import { onMount } from 'svelte';
     
-    export let standards:any
+    export let standards:ListedStandards
+    // {
+    //     "Grade Category" {
+    //         "Subject Category": {
+    //             "Strand": [ standards ]
+    //         }
+    //     }
+    // }
+
+    
     export let filter:any
     export let start:string[] = []
     const MAX_LENGTH:number = 20
@@ -16,7 +24,7 @@
     let contents = {}
 
     export let listStatus = 'none'
-    export let selectedStandards:object[]=[]
+    export let selected:object[]=[]
 
     function findStandardbyId(id:string, contents:(ListedStandards|object[])):any {
         if(contents && contents.length) {
@@ -44,18 +52,15 @@
     $: if(start && standards && !loaded) {
         for(let i=0;i<start.length;i++) {
             const obj = findStandardbyId(start[i], standards)
-            if(!selectedStandards.some((e) => {
+            if(!selected.some((e) => {
                 return (e as Standard).id == obj.id
                 // return false
             })) {
-                selectedStandards = [...selectedStandards, obj]
+                selected = [...selected, obj]
             }
         }
         loaded = true
         contents = standards
-    // } else if(loaded) {
-    //     console.log('update')
-    //     contents = standards // update from filter
     }
 
     export function updateListStatus(status?:string):boolean {
@@ -87,18 +92,18 @@
         for(let i=0;i<list.length;i++) {
             ids.push(list[i].id)
         }
-        selectedStandards = selectedStandards.filter(obj => list.includes(obj.id))
+        selected = selected.filter(obj => list.includes(obj.id))
     }
 
     export function getStatus():string {
         return listStatus
     }
     export function getSelected():number {
-        return selectedStandards.length
+        return selected.length
     }
 
     function removeStandard(obj:Standard) {
-        selectedStandards = selectedStandards.filter((std) => {
+        selected = selected.filter((std) => {
             const standard = std as Standard
             return standard.id != obj.id
         })
@@ -109,11 +114,11 @@
         if(obj.length) {
             const list = obj as Standard[]
             for(let i=0;i<list.length;i++) {
-                if(!selectedStandards.some((std)=> {
+                if(!selected.some((std)=> {
                     const standard = std as Standard
                     return list[i].id == standard.id
                 })) {
-                    selectedStandards = [...selectedStandards, list[i]]
+                    selected = [...selected, list[i]]
                 }
             }
         } else {
@@ -137,18 +142,19 @@
         }
     }
     // $: console.log(standardIsHere('K.MT.PS.1', filter))
+    $: console.log(contents)
 </script>
 
 <div class='list-view'>
     <div class='mb-3'>
-        {#each selectedStandards as std}
-        <StandardTag del={true} on:delete={(e)=>removeStandard(e.detail.data)} standard={std} status={standardIsHere(std.id, filter)} />
+        {#each selected as std}
+        <StandardTag del={true} on:delete={(e)=>removeStandard(e.detail.data)} standards={[std]} status={standardIsHere(std.id, filter)} />
         {/each}
-        {#if selectedStandards.length > 0}
+        {#if selected.length > 0}
         <!-- TODO: fix A11y compliance -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <span on:click={()=>selectedStandards = []} class='clear tag is-light mr-1 ml-0 my-0 mt-1'>
+        <span on:click={()=>selected = []} class='clear tag is-light mr-1 ml-0 my-0 mt-1'>
             Clear
             <button class='delete is-small'></button>
         </span>
@@ -175,20 +181,20 @@
             <p class='is-italic small'>--- None selected. Use dropdowns. ---</p>
         </div>
         {#each Object.entries(filter) as [grade, subjs]}
-            <ListHeading on:addAll={() => addAllIn(filter[grade])} title={grade} indent={0}>
+            <ListHeading on:addAll={() => addAllIn(filter[grade])} title={grade} indent={0} next={subjs}>
                 <span slot="pill">
                     <NumberPill 
-                        list={selectedStandards} 
+                        list={selected} 
                         cond={(obj)=> {
                             return obj.grade == grade
                         }}
                     />
                 </span>
                 {#each Object.entries(subjs) as [subj, strands]}
-                <ListHeading on:addAll={()=> addAllIn(filter[grade][subj])} title={subj} indent={1}>
+                <ListHeading on:addAll={()=> addAllIn(filter[grade][subj])} title={subj} indent={1} next={strands}>
                     <span slot="pill">
                         <NumberPill 
-                            list={selectedStandards} 
+                            list={selected} 
                             cond={(obj)=> {
                                 return obj.subject == subj && obj.grade == grade
                             }}
@@ -198,7 +204,7 @@
                         <ListHeading on:addAll={() => addAllIn(stds)} title={strand} indent={2}>
                             <span slot="pill">
                                 <NumberPill 
-                                    list={selectedStandards} 
+                                    list={selected} 
                                     cond={(obj)=> {
                                         return obj.strand == strand && obj.subject == subj && obj.grade == grade
                                     }}
@@ -206,7 +212,7 @@
                             </span>
                             <div class='ml-2 my-2'>
                                 {#each stds as std} 
-                                <StandardElement bind:selected={selectedStandards} standard={std} />
+                                <StandardElement bind:selected={selected} standard={std} />
                                 {/each}
                             </div>
                         </ListHeading>

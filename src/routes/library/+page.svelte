@@ -1,6 +1,6 @@
 <script lang='ts'>
     import Projects from "$lib/components/Projects.svelte";
-    import Search from "$lib/components/Search.svelte";
+    import Search from "$lib/components/search-ui/Search.svelte";
     import {onMount} from 'svelte'
     import { page } from "$app/stores";
     export let data;
@@ -18,7 +18,7 @@
     <div class='section'>
         <h1>Search the Library</h1>
         <p>Use the search bar below to browse CodeVA's library of <strong>dozens of computer science lesson plans</strong> across all grades K-12. Use the filters to narrow down your search, or check out our curriculum projects listed below!</p>
-        <Search data={urlData} filter={false} />
+        <Search filter={false} />
         <hr>
     </div>
     
