@@ -5,7 +5,7 @@
 	import Fa from 'svelte-fa'
     import { faLink } from '@fortawesome/free-solid-svg-icons';
 	import {gradeList, fullGradeNames} from '$lib/utils/metaUtils'
-    import type { Standard } from '$lib/utils/elementTypes';
+    import type { Standard } from '$lib/utils/metaUtils';
 
 	export let standard:Standard
 	export let status:boolean
@@ -20,7 +20,7 @@
 	let obj:Standard[] = []
 	onMount(()=> {
 		console.log("Mounted standard pill")
-		if(fetch && id) {
+		if(get && id) {
 			console.log("Fetching standard", id)
 			const p = fetch(`${base}/api/standards/${id}.json`)
 			p.then((o) => {

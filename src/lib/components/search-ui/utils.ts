@@ -7,7 +7,8 @@ export interface Params {
     tag?:string[]
     sol?:string[],
     subj?:string[],
-    grade?:string[]
+    grade?:string[],
+    q?:string[]
 }
 
 function arrayToParams(url:URLSearchParams, key:string, items:string[]):URLSearchParams {

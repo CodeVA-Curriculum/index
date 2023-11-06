@@ -15,8 +15,8 @@
 <div class='card'>
     <header class='card-header'>
         <h1 class='card-header-title pb-3 m-0'>{standard.title}
-            <span class='ml-5 tag is-dark'>{standard.strand}</span>
-            <span class='ml-3 tag is-dark'>{standard.grade}</span>
+            <span class='ml-3 tag is-dark py-1'>{standard.strand}</span>
+            <span class='ml-1 tag is-dark py-1'>{standard.grade}</span>
         </h1>
         <button on:click={deactivate} class="card-header-icon" aria-label="close"><Fa size='1.25x' icon={faClose} /></button>
     </header>
@@ -37,8 +37,13 @@
 </div>
 
 <style>
-    .card {
-        /* width: 25%; */
+    .tag {
+        max-width: 12rem;
+        height: auto;
+        overflow-y: visible;
+        display: inline-block;
+        word-wrap: break-word;
+        white-space: normal;
     }
     button {
         position: absolute;

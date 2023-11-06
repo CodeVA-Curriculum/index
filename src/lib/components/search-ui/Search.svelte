@@ -13,10 +13,11 @@
     import StandardsBar from './StandardsBar.svelte';
 
     let filterElem:SvelteComponent;
+    let standardsBar:SvelteComponent;
     export let filter:boolean=true
     export let linkTo:boolean=false
 
-    export let urlParams:object;
+    let urlParams:URLSearchParams;
 
     let url:string = '/'
     let loaded:boolean=false;
@@ -35,10 +36,12 @@
 
         // Set new params
         const filterParams = filterElem.getParams()
-        console.log("Params from filter:", filterParams)
+        filterParams['sol'] = standardsBar.getStandards()
+        if(term) { filterParams['q'] = [term]}
+        // console.log("Params from filter:", filterParams)
 
         const params = generateParams(filterParams)
-        console.log("URL Params:", params.size)
+        // console.log("URL Params:", params.size)
         
         if(params.size > 0) {
             url = `${base}/library/search?${params.toString()}`
@@ -55,13 +58,14 @@
         return null
     }
 
-    // $: if(loaded) { url = updateUrl(term) }
+    $: if(loaded) { url = updateUrl(term) }
 
     onMount(()=>{
-        // term = urlParams ? urlParams.get('query') : ''
-        // if($page.url.searchParams.has('error')) {
-        //     showError = true
-        // }
+        urlParams= $page.url.searchParams
+        term = (urlParams && urlParams.has('q') ? urlParams.get('q') : '') as string
+        if($page.url.searchParams.has('error')) {
+            showError = true
+        }
         
         loaded=true;
     })
@@ -100,13 +104,13 @@
     </div>
     
     <div class='filters {expanded? '':'hidden'}'>
-        <Filters on:change={() => updateUrl(term)} startingUrl={urlParams} bind:this={filterElem}>
+        <Filters on:change={() => updateUrl(term)} bind:this={filterElem}>
             <button on:click={()=>{ standardsExpanded = !standardsExpanded}} class='standard-trigger button is-small is-fullwidth is-dark'>
                 Filter by Standard
                 <Fa class='ml-3' icon={standardsExpanded ? faCaretDown : faCaretLeft} />
             </button>
         </Filters>
-        <StandardsBar show={standardsExpanded} />
+        
     </div>
     
 
@@ -122,6 +126,8 @@
             </div>
         </div>
     {/if} 
+
+    <StandardsBar on:change={() => updateUrl(term)} bind:this={standardsBar} show={standardsExpanded} />
     
 </div>
 

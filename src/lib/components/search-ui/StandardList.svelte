@@ -5,9 +5,22 @@
     import Fa from 'svelte-fa'
 
     export let title:string
-    export let list:object = {}
+    export let list:any = {} // StrandList
+    // { 
+    //     strandTitle: [ Standards ]
+    // }
     export let selected:Standard
+    export let inFilter:Standard[] = []
     let expanded = false
+
+    function addAll() {
+        for(const [k,v] of Object.entries(list)) {
+            // inFilter = inFilter.filter((std) => v.id != std.id)
+            for(let i=0;i<v.length;i++) {
+                inFilter = [...inFilter, v[i]]
+            }
+        }
+    }
 
 </script>
 
@@ -17,12 +30,12 @@
             <Fa icon={expanded? faCaretDown: faCaretRight} class='mr-3'/>
             {title}
         </p>
-        <button class='button add-all mt-2 mb-2'><Fa icon={faPlus} class='mr-2' />Add All</button>
+        <button on:click={addAll} class='button add-all mt-2 mb-2'><Fa icon={faPlus} class='mr-2' />Add All</button>
     </div>
     <div class='{expanded? '':'is-hidden'}'>
         <table class='table ml-5 mb-3'>
             {#each Object.entries(list) as [k,v]}
-                <StrandTable bind:selected={selected} title={k} standards={v} />
+                <StrandTable bind:inFilter={inFilter} bind:selected={selected} title={k} standards={v} />
             {/each}
         </table>
     </div>

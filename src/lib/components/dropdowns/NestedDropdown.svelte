@@ -22,7 +22,7 @@
 
     let loaded = false
     onMount(() => {
-        
+        // console.log("Starting Nested Dropdown with", selected)
         if(!start) {
             loaded = true
         }
@@ -30,9 +30,11 @@
 
     $: {
         if(!loaded && start && Object.entries(items).length > 0) {
+            console.log("Processing Start", start)
             for(const k in items) {
                 selectedItems[k] = []
                 for(let i=0;i<start.length;i++) {
+                    console.log(items[k])
                     if(items[k].includes(start[i])) {
                         selectedItems[k] = [...selectedItems[k], start[i], k]
                     }
@@ -43,6 +45,7 @@
                 }
                 // anything gets selected, add parent to selected
             }
+            // console.log(selectedItems)
             loaded = true
         }
     }

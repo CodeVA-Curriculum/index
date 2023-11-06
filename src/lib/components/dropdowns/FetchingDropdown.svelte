@@ -9,6 +9,7 @@
     export let id:string = 'no-id'
     export let width:string = 'auto'
     export let flat = true
+    export let start:any
 
     export let selected:string[] = []
     export let items:(string[]|object)
@@ -27,5 +28,5 @@
 </script>
 
 <div class='fetcher'>
-    {#if el}<svelte:component bind:selected={selected} items={items} this={el} title={title} id={id} width={width} />{/if}
+    {#if el}<svelte:component bind:selected={selected} start={start} items={items} this={el} title={title} id={id} width={width} />{/if}
 </div>
