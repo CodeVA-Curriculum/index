@@ -24,7 +24,7 @@
     let term:string="";
 
     let expanded:boolean=true;
-    let standardsExpanded:boolean=true
+    let standardsExpanded:boolean=false
     
     let showError = false
     let URLerror = false;

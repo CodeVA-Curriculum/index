@@ -39,7 +39,7 @@
 
         // Get parameters from URL & add to preset filter
         for(const key in params) {
-            if(key != 'grade') {
+            if(key != 'grade' && key !='sol') {
                 params[key] = url.has(key) ? url.getAll(key) : []
                 // Make sure there aren't any illegal parameters in the url that end up getting injected into the UI
                 params[key] = params[key].filter((str) => {return res[paramToResMap[key]].includes(str)})

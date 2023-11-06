@@ -11,6 +11,7 @@
     import {faTrash} from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
     import { createEventDispatcher } from "svelte";
+    import { page} from '$app/stores'
 
     export let show=false
     let selected:Standard[] = []
@@ -21,7 +22,19 @@
 
     const dispatch = createEventDispatcher()
     onMount(async () => {
+        const url = $page.url.searchParams
         const res = await (await fetch(`${base}/api/standards/object.json`)).json()
+        const startingSOLs = url.has('sol') ? url.getAll('sol') : []
+
+        // Fetch standard objects
+        for(let i=0; i<startingSOLs.length;i++) {
+            fetch(`${base}/api/standards/${startingSOLs[i]}.json`).then((res) => {
+                res.json().then((obj) => {
+                    selected = [...selected, obj]
+                })    
+            })
+        }
+
         for(const k in res) {
             if(k != 'courseToSubjectMap') { 
                 standards[k] = res[k]
