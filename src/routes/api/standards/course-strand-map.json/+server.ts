@@ -3,7 +3,7 @@ import YAML from 'yaml'
 import {read} from 'to-vfile'
 
 export async function GET() {
-    const key = YAML.parse((await read('src/routes/api/standards/index/id_key.yaml')).toString())
+    const key = YAML.parse((await read('src/standards/id_key.yaml')).toString())
     let obj = {}
     for(const course in key) {
         let strandsList = []
