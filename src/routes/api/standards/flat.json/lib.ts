@@ -17,10 +17,10 @@ interface SubjectKey {
 
 export async function getStandards() {
     let stds:YamlStandard[] = []
-    const files = await import.meta.glob(['../**/*.yaml', '!../index/id_key.yaml'])
-    const key = YAML.parse((await read('src/routes/api/standards/index/id_key.yaml')).toString())
+    const files = await import.meta.glob(['$standards/**/*.yaml', '!$standards/id_key.yaml'])
+    const key = YAML.parse((await read('src/standards/id_key.yaml')).toString())
     for (const path in files) {
-        const data = YAML.parse((await read(`src/routes/api/standards/${path.replace('..', '')}`)).toString()) 
+        const data = YAML.parse((await read(`${path.replace('/src', 'src')}`)).toString()) 
         stds = [...stds, ...data]
     }
 

@@ -13,7 +13,7 @@ interface IDKEY {
 }
 
 export async function getKey() {
-    return YAML.parse((await read('src/routes/api/standards/index/id_key.yaml')).toString())
+    return YAML.parse((await read('src/standards/id_key.yaml')).toString())
 }
 
 export async function getSubjectsInKey() {

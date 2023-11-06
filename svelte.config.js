@@ -25,7 +25,8 @@ const config = {
     // },
     alias: {
       $content: 'src/content',
-      $api: 'src/routes/api'
+      $api: 'src/routes/api',
+      $standards: 'src/standards'
     }
   },
 };
