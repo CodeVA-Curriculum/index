@@ -3,6 +3,7 @@
     import Fa from 'svelte-fa'
     import { SvelteComponent, onMount } from "svelte";
     import StandardModal from "./StandardModal.svelte";
+    import type { Standard } from "$lib/utils/metaUtils";
 
     let standardSelected = false
     let active:boolean = false
@@ -10,7 +11,7 @@
 
     let modal:SvelteComponent
 
-    export let standard;
+    export let standard:Standard;
     export let selected:any[] = []
 
     onMount(() => {
@@ -47,7 +48,7 @@
         }
     }
 
-    
+    const ol = 'abcdefghijklmnopqrstuvwxyz'
 
     // dispatch event when plus sign is clicked
 </script>
@@ -60,7 +61,12 @@
         <span><strong>{standard.title}</strong></span>
     </div>
     <div class='column short-description'>
-        <span class='desc is-italic'>{standard.text}</span>
+        <span class='desc is-italic'>
+            {standard.text}
+            {#each standard.subs as sub, i}
+                {`${ol.charAt(i)}. ${sub}, `}
+            {/each}
+        </span>
     </div>
     <div class='column is-narrow'>
         <!-- TODO: a11y stuff -->
@@ -68,7 +74,7 @@
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <span>... <span class='link-like' on:click={modal.activate()}>See More</span></span>
     </div>
-    <StandardModal bind:this={modal} standard={standard} >
+    <StandardModal bind:this={modal} standards={[standard]} >
         <span slot='footer'>
             <button on:click={handler} class="button {standardSelected? 'is-dark':'is-success'} is-hovered">
                 <Fa class='mr-3' icon={icon} />

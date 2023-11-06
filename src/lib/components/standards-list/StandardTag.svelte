@@ -5,21 +5,32 @@
 	import Fa from 'svelte-fa'
     import { faLink } from '@fortawesome/free-solid-svg-icons';
 	import {gradeList, fullGradeNames} from '$lib/utils/metaUtils'
-    import type { Standard } from '$lib/utils/elementTypes';
+    import type { Standard } from '$lib/utils/metaUtils';
 
-	export let standard:string
+	export let standard:Standard
 	export let status:boolean
 	export let del = false
 	export let theme='is-dark'
+	export let id:string
+	export let get = false;
 
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
 
-	let obj:Standard
-	onMount(async ()=> {
-		// get standard info from API
-		// obj = await (await fetch(`${base}/api/standards/${id}.json`)).json() as Standard
-		// console.log("Got", obj.id)
+	let obj:Standard[] = []
+	onMount(()=> {
+		console.log("Mounted standard pill")
+		if(get && id) {
+			console.log("Fetching standard", id)
+			const p = fetch(`${base}/api/standards/${id}.json`)
+			p.then((o) => {
+				o.json().then((data) => {
+					obj = [...data]
+				})
+			})
+		} else {
+			obj = [standard]
+		}
 	})
 
 	function deleteSelf() {
@@ -33,26 +44,30 @@
 
 	function generateUrl(standard) {
 		url = new URLSearchParams()
-		if(standard) {
-			url.set('sol', standard.id)
-			url.set('grade', gradeList[fullGradeNames.indexOf(standard.grade)])
-			url.set('subj', standard.subject)
+		if(obj) {
+			url.set('sol', obj.id)
+			url.set('grade', gradeList[fullGradeNames.indexOf(obj.grade)])
+			url.set('subj', obj.subject)
 		}
 		return url.toString()
 	}
 </script>
 
+{#if standard}
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
-	<!-- TODO: add modal & modes/slot for filter page or for lesson plan view (linked to search page)  -->
-	<!-- TODO: add  -->
-    <span on:click={() => {modal.activate()}} class='open'>{standard? standard.id : 'No ID!'}</span>
+    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{standard && standard.id? standard.id : id? id:'No ID!'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}
 </span>
+{:else}
+	{#each [...obj] as std}
+		<svelte:self get={true} status={true} theme='is-light' standard={std} />
+	{/each}
+{/if}
 
 {#if standard}
-<StandardModal bind:this={modal} standard={standard}>
+<StandardModal bind:this={modal} standards={[standard]}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />

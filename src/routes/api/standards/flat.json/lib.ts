@@ -17,10 +17,10 @@ interface SubjectKey {
 
 export async function getStandards() {
     let stds:YamlStandard[] = []
-    const files = await import.meta.glob(['../**/*.yaml', '!../id_key.yaml'])
-    const key = YAML.parse((await read('src/routes/api/standards/id_key.yaml')).toString())
+    const files = await import.meta.glob(['../**/*.yaml', '!../index/id_key.yaml'])
+    const key = YAML.parse((await read('src/routes/api/standards/index/id_key.yaml')).toString())
     for (const path in files) {
-        const data = YAML.parse((await read(`src/routes/api/standards${path.replace('..', '')}`)).toString()) 
+        const data = YAML.parse((await read(`src/routes/api/standards/${path.replace('..', '')}`)).toString()) 
         stds = [...stds, ...data]
     }
 
@@ -32,15 +32,32 @@ export async function getStandards() {
         if(id.length < 4) {
             throw new Error(`Incorrectly formatted standard ${stds[i].id}`)
         }
+
+        // Check to see if the subject needs to inherit strands
+        // let subjName
+        // if(key[id[1]].inherit) {
+        //     subjName = key[id[1].inherit].title
+        // } else {
+        //     subjName = key[id[1]].title
+        // }
+
+        const grade = id[0]
+        const course = id[1]
+        const strand = id[2]
+        const number = id[3]
+
+
         complete.push({
             id: stds[i].id,
             title: stds[i].title,
             text: stds[i].text,
-            subs: stds[i].subs,
-            grade: fullGradeNames[gradeList.indexOf(id[0])],
-            subject: key[id[1]].title,
-            strand: key[id[1]].strands[id[2]]
+            grade: fullGradeNames[gradeList.indexOf(grade)],
+            strand: key[course].inherit? key[key[course].inherit].strands[strand] : key[course].strands[strand],
+            subject: key[course].inherit? key[key[course].inherit].title : key[course].title,
+            course: key[course].title,
+            subs: stds[i].subs
         })
     }
+    // console.log(complete)
     return complete
 }

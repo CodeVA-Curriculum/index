@@ -3,7 +3,7 @@
     import type {Element} from '$lib/utils/elementTypes'
     export let data:Element;
 
-    import ElementView from '$lib/components/ElementView.svelte';
+    import ElementView from '$lib/components/element-views/ElementView.svelte';
     // import FileTreeView from '$lib/components/FileTreeView.svelte';
 
     import {onMount} from 'svelte'

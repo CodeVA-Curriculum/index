@@ -6,7 +6,24 @@ CS:
         CY: Cybersecurity
         DA: Data & Analysis
         IC: Impacts of Computing
-        NI: Networking & the Internet
+        NI: Networks & the Internet
+CSF:
+    title: "Computer Science Foundations"
+    inherit: CS
+    grade: HS
+ALG1:
+    title: "Algebra 1"
+    inherit: MT
+    grade: HS
+DS:
+    title: Data Science
+    subject: Mathematics
+    strands:
+        CXT: Data in Context
+        BI: Data Bias
+        COM: Data & Communication
+        MOD: Data Modeling
+        DC: Data & Computing
 MT:
     title: Mathematics
     strands:
@@ -46,32 +63,26 @@ MU:
         HC: History, Culture, & Citizenship
         IA: Innovation in the Arts
         TA: Technique & Application
+FA:
+    title: Fine Arts
+    strands:
+        CP: Creative Process
+        CC: Critical Thinking & Communication
+        HC: History, Culture, & Citizenship
+        IA: Innovation in the Arts
+        TA: Technique & Application
 VA:
     title: Visual Art
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 DA:
     title: Dance Arts
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 TA:
     title: Theatre Arts
-    strands:
-        CP: Creative Process
-        CC: Critical Thinking & Communication
-        HC: History, Culture, & Citizenship
-        IA: Innovation in the Arts
-        TA: Technique & Application
+    inherit: FA
 DL:
     title: Digital Learning Integration
+    inherit: null
     strands:
         EL: Empowered Learner
         DC: Digital Citizen
@@ -80,12 +91,15 @@ DL:
         CT: Computational Thinker
         CC: Creative Communicator
         GC: Global Collaborator
-DE:
-    title: Driver Education
-EPF:
-    title: Economics & Personal Finance
-FL:
-    title: Family Life
+# DE:
+#     title: Driver Education
+#     subject: CTE
+# EPF:
+#     title: Economics & Personal Finance
+#     subject: CTE
+# FL:
+#     title: Family Life
+#     subject: CTE
 HE:
     title: Health
     strands:

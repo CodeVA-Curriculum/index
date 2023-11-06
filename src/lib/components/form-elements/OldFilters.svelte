@@ -12,6 +12,7 @@
     import type {Params} from '$lib/utils/searchUtils'
     import {base} from '$app/paths'
 
+
     const dispatch = createEventDispatcher()
 
     function sendUpdate(selectedStandards, subjects, tags, grades, types, audiences) {
@@ -33,7 +34,7 @@
     let stdsList:string[] = []
 
     let subjects = {
-        items:{} as NestedDropdown,
+        items:[],
         start:[] as string[],
         selected:[] as string[]
     }
@@ -113,10 +114,14 @@
 
     $: sendUpdate(selectedStandards, subjects, tags, grades, types, audiences)
     
-    $: {
-        if(loaded) {
-            filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
-        }
+    // $: {
+    //     if(loaded) {
+    //         filteredStandards = filterStandards(grades.selected, subjects.selected, standards)
+    //     }
+    // }
+
+    const gradeBandNames = {
+        "High School Courses": ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12', '9-12']
     }
         
 
@@ -127,14 +132,23 @@
 
         // Add indices for grade levels
         filtered = Object.fromEntries(Object.entries(standards).filter(([key]) => {
-            return grades.includes(key)
+            let bandName = false
+             if(gradeBandNames[key]) { 
+                for(let i=0;i<gradeBandNames[key].length;i++) {
+                    if(grades.includes(gradeBandNames[key][i])) {
+                        bandName = true;
+                        break
+                    }
+                }
+             }
+            return grades.includes(key) || bandName
         })) as ListedStandards;
 
         for(const grade in filtered) {
             // get subjects
             filtered[grade] = Object.fromEntries(Object.entries(standards[grade]).filter(([key]) => {
                 // console.log(key, subjects)
-                return subjects.includes(key)
+                return subjects.includes(key) || subjects.includes(standards.courseToSubjectMap[key])
             }));
 
             // // get strands
@@ -155,7 +169,7 @@
     onMount(async () => {
         // Pull dropdown items from API route
         const res = await (await fetch(`${base}/api/library/meta`)).json()
-        subjects.items = res.subjects as NestedDropdown
+        subjects.items = res.subjects
         grades.items = res.grades as GradesByBand
         types.items = res.types
         audiences.items = res.audiences
@@ -214,7 +228,7 @@
 </script>
 
 <div class='filters has-text-left columns'>
-    <div class='column is-narrow'>
+    <!-- <div class='column is-narrow'>
         <label for='standards' class='label'>Standards</label>
         <div class='field'>
             <ChecklistDropdown 
@@ -243,9 +257,30 @@
             <ListView bind:this={listView} bind:selectedStandards={selectedStandards} standards={standards} filter={filteredStandards} start={stdsList}></ListView>
         </div>
         {/await}
-    </div>
+    </div> -->
     <div class='column'>    
         <div class='field is-grouped'>
+            <div class='control'>
+                <label class='label small'>Subjects</label>
+                <CheckBoxDropdown 
+                    width={'13rem'}
+                    title="Select..."
+                    id='audience-dropdown'
+                    items={subjects.items}
+                />
+            </div>
+            <div class='control'>
+                <label class='label small'>Grades</label>
+                <ChecklistDropdown 
+                    width='10rem' 
+                    title='Grades' 
+                    id='grades-dropdown' 
+                    items={renderGradesAsStrings(grades.items)} 
+                    bind:output={grades.selected}
+                    start={grades.start}
+                />
+            </div>
+            
             <div class='control'>
                 <label for='audience-dropdown' class='label small'>Audiences</label>
                 <CheckBoxDropdown 

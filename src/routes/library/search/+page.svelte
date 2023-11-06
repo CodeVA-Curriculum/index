@@ -1,7 +1,7 @@
 <script lang='ts'>
     export let data:any = { frontmatter: [], meta: [] };
-    import Search from '$lib/components/Search.svelte';
-    import ElementCard from '$lib/components/ElementCard.svelte';
+    import Search from '$lib/components/search-ui/Search.svelte';
+    import ElementCard from '$lib/components/element-views/ElementCard.svelte';
     import { expandDashNotation, expandSubjectsStrands } from '$lib/utils/metaUtils';
     import {page} from '$app/stores'
     import { onMount } from 'svelte';
@@ -48,7 +48,7 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
         </div>
         {/if}
-        <Search data={urlData} filter={false} />
+        <Search filter={false} />
     </div>
     
     {#if !(urlData.size == 0) && urlData.has('error') == false}
