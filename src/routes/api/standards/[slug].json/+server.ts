@@ -32,4 +32,14 @@ export async function GET({params}) {
     return json(obj)
 }
 
+export async function entries() {
+    let routes = []
+    const res = await getStandards()
+    for(let i=0;i<res.length;i++) {
+        routes.push({ slug: res[i].id} )
+        console.log("Prerendering", res[i].id)
+    }
+    return routes
+}
+
 export const prerender = true;

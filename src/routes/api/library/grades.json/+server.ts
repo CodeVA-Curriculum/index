@@ -9,3 +9,5 @@ export async function GET() {
     const obj = await getGrades(frontmatters)
     return json(obj)
 }
+
+export const prerender = true

@@ -9,3 +9,5 @@ export async function GET() {
     
     return json(metaSubjects)
 }
+
+export const prerender = true

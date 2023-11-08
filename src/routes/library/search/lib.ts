@@ -165,15 +165,15 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
         return typeScoreA - typeScoreB
     })
 
-    if(filter.query) {
+    if(filter.q) {
         // Query title (TODO: and body) filter for results
         results = results.filter((objs) => {
-            return (objs.title as string).toLowerCase().includes((filter.query[0]).toLowerCase())
+            return (objs.title as string).toLowerCase().includes((filter.q[0]).toLowerCase())
         })
 
         // Sort `results` by the length of the match in title (TODO: or body)
-        results = scoreFilterAndSort(filter.query[0], results, 0.5)
-        related = scoreFilterAndSort(filter.query[0], related, 0.3)
+        results = scoreFilterAndSort(filter.q[0], results, 0.5)
+        related = scoreFilterAndSort(filter.q[0], related, 0.3)
     }
 
     // Make sure nothing intersects between `related` and `results`
