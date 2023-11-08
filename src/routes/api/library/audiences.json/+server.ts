@@ -6,3 +6,5 @@ export async function GET() {
     const frontmatters = await getAllFrontmatter()
     return json(getAudiences(frontmatters))
 }
+
+export const prerender = true

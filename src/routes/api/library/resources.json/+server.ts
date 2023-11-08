@@ -7,3 +7,4 @@ export async function GET() {
     return json(getResources(frontmatters))
 }
 
+export const prerender = true

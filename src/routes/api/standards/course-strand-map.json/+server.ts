@@ -18,3 +18,5 @@ export async function GET() {
     
     return json(obj)
 }
+
+export const prerender = true;

@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@creativebulma/bulma-tooltip": "^1.2.0",
+    "@rollup/plugin-yaml": "^4.1.2",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
     "@types/node": "^20.6.0",
