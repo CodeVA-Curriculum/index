@@ -28,7 +28,7 @@ export async function GET({params}) {
             throw new Error(`Should have found standard ${params.slug} but did not!`)
         }
     })
-    // console.log(obj)
+    console.log(obj)
     return json(obj)
 }
 
@@ -36,6 +36,10 @@ export async function entries() {
     let routes = []
     const res = await getStandards()
     for(let i=0;i<res.length;i++) {
+        const tokens = res[i].id.split('.')
+        routes.push({slug: tokens[0]})
+        routes.push({slug: `${tokens[0]}.${tokens[1]}`})
+        routes.push({slug: `${tokens[0]}.${tokens[1]}.${tokens[2]}`})
         routes.push({ slug: res[i].id} )
         console.log("Prerendering", res[i].id)
     }
