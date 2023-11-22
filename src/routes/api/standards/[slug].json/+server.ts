@@ -1,3 +1,4 @@
+import { expandDashNotation } from '$lib/utils/metaUtils';
 import {getStandards} from '../flat.json/lib'
 import { json } from '@sveltejs/kit'
 
@@ -5,9 +6,10 @@ export async function GET({params}) {
     // TODO: optimize so we don't have to get all the standards and filter them
     const stds = await getStandards();
     const id = params.slug.split('.')
-    if(id.length == 4 || id[0].includes('-')) {
+    if(id.length == 4 || !id[0].includes('-')) {
         console.log("Getting standard at", params.slug)
         const obj = stds.filter((obj) => obj.id == params.slug)
+        console.log(obj)
         return json(obj[0])
     }
 
@@ -17,18 +19,22 @@ export async function GET({params}) {
         const iid = obj.id.split('.')
 
         // TODO: support dash notation
+        let grades = [id[0]]
+        if(id[0].includes('-')) {
+            grades = expandDashNotation([id[0]])
+        }
         
         if(id.length == 1) {
-            return iid[0] == id[0]
+            return grades.includes(iid[0])
         } else if(id.length == 2) {
-            return iid[0] == id[0] && iid[1] == id[1]
+            return grades.includes(iid[0]) && iid[1] == id[1]
         } else if(id.length == 3) {
-            return iid[0] == id[0] && iid[1] == id[1] && iid[2] == id[2]
+            return grades.includes(iid[0]) && iid[1] == id[1] && iid[2] == id[2]
         } else {
             throw new Error(`Should have found standard ${params.slug} but did not!`)
         }
     })
-    console.log(obj)
+    // console.log(obj)
     return json(obj)
 }
 
