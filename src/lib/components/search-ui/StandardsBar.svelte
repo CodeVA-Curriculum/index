@@ -3,7 +3,7 @@
     import {base} from '$app/paths'
     import ListView from "../standards-list/ListView.svelte";
     import StandardList from "./StandardList.svelte";
-    import type { Standard } from "$lib/utils/metaUtils";
+    import { gradeList, type Standard } from "$lib/utils/metaUtils";
     import StandardModal from "../standards-list/StandardModal.svelte";
     import StandardDetail from "./StandardDetail.svelte";
     import { fade } from 'svelte/transition'
@@ -12,6 +12,7 @@
     import Fa from 'svelte-fa'
     import { createEventDispatcher } from "svelte";
     import { page} from '$app/stores'
+    import { fullGradeNames } from "$lib/utils/metaUtils";
 
     export let show=false
     let selected:Standard[] = []
@@ -34,16 +35,18 @@
                 })    
             })
         }
-
+        console.log(res)
         for(const k in res) {
-            if(k != 'courseToSubjectMap') { 
-                standards[k] = res[k]
+            if(k != 'courseToSubjectMap') {
                 selectedTab = selectedTab == ''? k : selectedTab 
             }
 
         }
         loaded = true;
+        standards = res
+        delete standards["courseToSubjectMap"]
         console.log('Loaded', selectedTab)
+        // console.log(standards["Middle School Courses"])
     })
 
     export function getStandards():string[] {
@@ -89,7 +92,7 @@
                 {#each Object.entries(standards) as [k,v], i}
                 <li class='{k==selectedTab? 'is-active':''}'>
                     <a on:click={() => {selectedTab=k}}>
-                        {k}
+                        {gradeList[fullGradeNames.indexOf(k)]}
                         <!-- <span class='number-pill'>{countList[i]}</span> -->
                     </a>
                 </li>

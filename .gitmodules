@@ -1,3 +1,6 @@
 [submodule "src/content"]
 	path = src/content
 	url = https://github.com/codeva-curriculum/library
+[submodule "src/standards"]
+	path = src/standards
+	url = https://github.com/CodeVA-Curriculum/standards
