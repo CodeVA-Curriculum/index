@@ -11,7 +11,7 @@ function applyField(field:string, obj:any, from:any, toApply:any):object {
     if(!obj[from[field]]) {
         obj[from[field]] = toApply
     }
-    // console.log(obj)
+    if(!from[field]) { console.log(from) }
     return obj
 }
 
@@ -50,7 +50,7 @@ export async function GET({fetch}) {
             stds.courseToSubjectMap[standards[i].course] = standards[i].subject
         }
     }
-    // console.log(stds)
+    // console.log(stds["Middle School Courses"]["Middle School CS Elective"])
 	return json(stds)
 }
 

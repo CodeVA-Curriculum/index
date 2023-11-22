@@ -46,6 +46,7 @@ export async function getStandards() {
         const strand = id[2]
         const number = id[3]
 
+        // console.log(stds[i].id)
 
         complete.push({
             id: stds[i].id,

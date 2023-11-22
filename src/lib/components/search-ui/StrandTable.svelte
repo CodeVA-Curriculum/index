@@ -71,11 +71,11 @@
 <tr>
     <td style='position: relative;' colspan='4'>
         <div class='is-flex'>
-            <p style='flex-grow: 1; cursor: pointer' class='row-title is-inline-block m-0 p-0' on:click={()=>{expanded = !expanded}}>
-                <Fa class='mr-3' icon={expanded? faCaretDown : faCaretRight} />
-                {title}
+            <div style='flex-grow: 1; cursor: pointer' class='is-inline-block m-0 p-0' on:click={()=>{expanded = !expanded}}>
+                <Fa class='mr-3 row-icon' icon={expanded? faCaretDown : faCaretRight} />
+                <p class='row-title'>{title}</p>
                 <span class='number-pill'>{count}</span>
-            </p>
+            </div>
             <button on:click={addAll} class='button add-all'><Fa icon={faPlus} class='mr-2' />Add All</button>
         </div>
     </td>
@@ -100,13 +100,21 @@
             {sub}
         {/each}
     </td>
-    <!-- <td class='ml-0 pl-0 is-italic'>Read More</td> -->
 </tr>
 {/each}
 
 <style lang='scss'>
+    .row-icon {
+        position: absolute;
+    }
+    .row-title {
+        width: 15rem;
+        display: inline-block;
+        margin: 0 0;
+    }
     .number-pill {
         margin-right: 2.35rem;
+        position: absolute;
     }
     .row-title {
         font-size: 11pt;
