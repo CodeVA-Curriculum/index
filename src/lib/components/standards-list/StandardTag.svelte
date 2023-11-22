@@ -24,7 +24,9 @@
 			console.log("Fetching standard", id)
 			const p = fetch(`${base}/api/standards/${id}.json`)
 			p.then((o) => {
+				// console.log(o)
 				o.json().then((data) => {
+					console.log(data)
 					obj = [...data]
 				})
 			})
@@ -61,9 +63,11 @@
 	{/if}
 </span>
 {:else}
-	{#each [...obj] as std}
+	<span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>{id}</span>
+	<!-- TODO: add modal with list of standards in it -->
+	<!-- {#each [...obj] as std}
 		<svelte:self get={true} status={true} theme='is-light' standard={std} />
-	{/each}
+	{/each} -->
 {/if}
 
 {#if standard}

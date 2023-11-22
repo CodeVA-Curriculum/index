@@ -5,6 +5,7 @@
     import DocumentHeader from "./DocumentHeader.svelte";
     import ElementCard from "./ElementCard.svelte";
     import StandardTag from '../standards-list/StandardTag.svelte';
+    import StandardsBox from './StandardsBox.svelte';
     export let data:Element
 
     let standardsBySubject:any = {}
@@ -41,16 +42,7 @@
         </div>
         <div class='column ml-3'>
             {#if data.frontmatter.standards}
-            <!-- TODO: Make this its own component -->
-            <div id='standards-box' class='sidebar standards'>
-                <h3>Standards</h3>
-                <div class='pills {active? 'full':'full'}'>
-                {#each data.frontmatter.standards as standard}
-                    <StandardTag status={true} get={true} theme='is-light' id={standard} />
-                {/each}
-                </div>
-                <!-- <button tabindex="0" aria-expanded={active} aria-controls='standards-box' on:click={()=>{ active = !active }}>See {active? 'Less':'More'}</button> -->
-            </div>
+                <StandardsBox standards={data.frontmatter.standards} />
             {/if}
             {#if data.frontmatter.tags}
             <div class='sidebar'>
@@ -70,29 +62,5 @@
         margin-bottom: 3rem;
         background-color: $light-green;
         padding: 1rem 1rem;
-    }
-    .standards > button {
-        border: none;
-        background-color: transparent;
-        float: right;
-        font-style: italic;
-        &:hover {
-            color: #0070E0;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-    }
-    .standards {
-        padding-bottom: 1.75rem;
-    }
-    .pills {
-        &.full {
-            max-height: auto;
-            overflow-y: auto;
-        }
-        &.collapsed {
-            max-height: 2.5rem;
-            overflow-y: hidden;
-        }
     }
 </style>

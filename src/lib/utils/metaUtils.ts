@@ -112,6 +112,7 @@ export function expandDashNotation(grades:string[]):string[] {
             }
         }
     }
+    // console.log(grades)
     return grades.filter(grade=>!grade.includes('-')) // remove dash item from array
 }
 

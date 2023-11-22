@@ -3,7 +3,7 @@
     import {base} from '$app/paths'
     import Fa from 'svelte-fa'
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
-    import {faCloudArrowDown} from '@fortawesome/free-solid-svg-icons'
+    import {faCloudArrowDown, faSpinner} from '@fortawesome/free-solid-svg-icons'
     import { srcToUrl } from "$lib/utils/pathUtils";
 
     import type {Frontmatter} from '$lib/utils/frontmatter'
@@ -54,6 +54,12 @@
                 <a class='button' href='{meta.links.pdf}'>
                     Download {meta.members.length > 0? 'Group' : ''} PDF
                     <Fa class='ml-2' icon={faCloudArrowDown} />
+                </a>
+                {/if}
+                {#if meta.links.goopen}
+                <a class='button' href='{meta.links.goopen}'>
+                    View {meta.members.length > 0? 'Group' : ''} on GoOpenVA
+                    <Fa class='ml-2' icon={faSpinner} />
                 </a>
                 {/if}
             </div>
