@@ -54,24 +54,18 @@
 		return url.toString()
 	}
 </script>
-
-{#if standard}
+<!-- if the object length is zero, it means we either called for one standard or defined the standard via the `standard` prop -->
+{#if obj.length > 0}
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
-    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{standard && standard.id? standard.id : id? id:'No ID!'}</span>
+    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{obj.length == 1? obj[0].id: id? id :'No ID!'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}
 </span>
-{:else}
-	<span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>{id}</span>
-	<!-- TODO: add modal with list of standards in it -->
-	<!-- {#each [...obj] as std}
-		<svelte:self get={true} status={true} theme='is-light' standard={std} />
-	{/each} -->
 {/if}
 
-{#if standard}
-<StandardModal bind:this={modal} standards={[standard]}>
+{#if obj.length > 0}
+<StandardModal bind:this={modal} standards={obj} id={obj.length == 1? obj[0].id: id? id :'No ID!'}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />

@@ -6,11 +6,11 @@ export async function GET({params}) {
     // TODO: optimize so we don't have to get all the standards and filter them
     const stds = await getStandards();
     const id = params.slug.split('.')
-    if(id.length == 4 || !id[0].includes('-')) {
+    if(id.length == 4 && !id[0].includes('-')) {
         console.log("Getting standard at", params.slug)
         const obj = stds.filter((obj) => obj.id == params.slug)
         console.log(obj)
-        return json(obj[0])
+        return json(obj)
     }
 
     // calling for a range of standards
