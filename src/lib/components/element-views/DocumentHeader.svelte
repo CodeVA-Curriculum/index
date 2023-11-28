@@ -11,14 +11,19 @@
     import { onMount } from "svelte";
 
     export let meta:Frontmatter;
+    let visibleParents:Frontmatter[] = []
 
-    // onMount(() => {
-    //     console.log(meta)
-    // })
+    onMount(() => {
+        for(let i=0;i<meta.parents.length;i++) {
+            if(!meta.parents[i].pathData.path.includes('.meta')) {
+                visibleParents = [...visibleParents, meta.parents[i]]
+            }
+        }
+    })
 </script>
 
 <div class='document-header content'>
-    <Breadcrumb nodes={[meta, ...meta.parents]} here={meta.title} />
+    <Breadcrumb nodes={[meta, ...visibleParents]} here={meta.title} />
     <div class='columns'>
         <div class='column is-one-quarter'>
             <img 
@@ -29,14 +34,14 @@
         <div class='column ml-5'>
             <h1>{meta.title}</h1>
             <p class='heading'>by {meta.authors}</p>
-            {#if meta.parents.length > 0}
+            {#if visibleParents.length > 0}
             <p>Part of the 
-                {#each meta.parents as parent, i}
-                {#if i>1},{/if}
-                {#if i==meta.parents.length-1 && meta.parents.length>1}and{/if}
-                <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('meta', '')}"><i>{parent.title}</i></a>
+                {#each visibleParents as parent, i}
+                    {#if i>1},{/if}
+                    {#if i==visibleParents.length-1 && visibleParents.length>1}and{/if}
+                    <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('meta', '')}"><i>{parent.title}</i></a>
                 {/each}
-                project{meta.parents.length>1 ? 's' : ''}.</p>
+                project{visibleParents.length>1 ? 's' : ''}.</p>
             {/if}
             <div class='metadata'>
                 <ArrayAsInlineList title="Subject" items={meta.subjects} />
