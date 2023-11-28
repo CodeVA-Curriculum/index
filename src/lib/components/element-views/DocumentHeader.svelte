@@ -9,6 +9,7 @@
     import type {Frontmatter} from '$lib/utils/frontmatter'
     import ArrayAsInlineList from "../ArrayAsInlineList.svelte";
     import { onMount } from "svelte";
+    import ElementButtons from "./ElementButtons.svelte";
 
     export let meta:Frontmatter;
     let visibleParents:Frontmatter[] = []
@@ -50,24 +51,7 @@
                 <!-- <p><strong>Material Type: </strong>Lesson Plan, Unit of Study</p> -->
                 <p style='font-size: smaller; margin: 0 auto;'><strong>License: </strong><a href={meta.license.link}>{meta.license.name}</a></p>
             </div>
-            <div class='buttons is-left my-5'>
-                <a class='button is-primary' href='{meta.links.drive}'>
-                    View {meta.members.length > 0? 'Group' : ''} on Google Drive
-                    <Fa class='ml-2' icon={faGoogleDrive} />
-                </a>
-                {#if meta.links.pdf}
-                <a class='button' href='{meta.links.pdf}'>
-                    Download {meta.members.length > 0? 'Group' : ''} PDF
-                    <Fa class='ml-2' icon={faCloudArrowDown} />
-                </a>
-                {/if}
-                {#if meta.links.goopen}
-                <a class='button' href='{meta.links.goopen}'>
-                    View {meta.members.length > 0? 'Group' : ''} on GoOpenVA
-                    <Fa class='ml-2' icon={faSpinner} />
-                </a>
-                {/if}
-            </div>
+            <ElementButtons meta={meta} />
         </div>
     </div>
 

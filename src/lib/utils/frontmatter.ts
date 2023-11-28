@@ -61,8 +61,9 @@ interface Frontmatter {
 
 interface Links {
     goopen?:string,
-    drive:string,
-    pdf:string
+    drive?:string,
+    pdf?:string,
+    ext?:string
 }
 
 export function defaultPath():Path {
@@ -233,8 +234,8 @@ function auditFrontmatter(frontmatter:Frontmatter) {
         frontmatter.pathData.path.length > 0,
         frontmatter.title != null,
         typeof(frontmatter.authors) == 'string',
-        frontmatter.links != null,
-        frontmatter.links.drive != null,
+        // frontmatter.links != null,
+        // frontmatter.links.drive != null,
         // frontmatter.links.pdf != null
     ]
     for(let i=0;i<rules.length;i++) {
@@ -253,7 +254,9 @@ async function findMemberFrontmatter(frontmatter:Frontmatter):Promise<Frontmatte
     const contents = frontmatter.contents ? frontmatter.contents : []
     for(let i=0;i<contents.length;i++) {
         const parentDirectory = getParentDirectory(frontmatter.pathData)+'/'
-        const memberPath:Path = validatePath(frontmatter.contents[i].replace('./', parentDirectory).replace('.md', ''))
+        let memberPath:Path
+        // TODO: better file finding
+        memberPath = validatePath(frontmatter.contents[i].replace('./', parentDirectory).replace('.md', ''))
         // console.log('Parsing member frontmatter at', memberPath.path)
         members.push(await parseFrontmatter(memberPath))
     }

@@ -3,9 +3,10 @@
     export let data:Frontmatter;
     import {onMount} from 'svelte'
     import Fa from 'svelte-fa'
-    import {faCloudArrowDown, faFolder, faFile} from '@fortawesome/free-solid-svg-icons'
+    import {faCloudArrowDown, faFolder, faFile, faSpinner} from '@fortawesome/free-solid-svg-icons'
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {srcToUrl} from '$lib/utils/pathUtils'
+    import ElementButtons from './ElementButtons.svelte';
     
     let icon;
     let image;
@@ -34,20 +35,31 @@
                     <a data-sveltekit-reload href={srcToUrl(data.pathData.path)}>{data.title}</a>
                     <!-- <Fa class= 'mx-2' icon={icon} /> -->
                 </h2>
-                <p class='heading'>a {data.types} {data.contents? "pack ":" "}by {data.authors}</p>
-                <div class='buttons'>
+                <p class='heading'>{data.types} {data.contents? "pack ":" "}by {data.authors}</p>
+                <ElementButtons meta={data} size={'is-small mx-1 px-2'}>
+                <a data-sveltekit-reload class='button is-small is-secondary mx-1 px-2' href={srcToUrl(data.pathData.path)}>Read More</a>
+                </ElementButtons>
+                <!-- <div class='buttons'>
+                    {#if data.links.drive}
                     <a href={data.links.drive} class='button is-primary is-small has-tooltip-arrow has-tooltip-down' data-tooltip='Open Google Drive'>
                         Google Drive
                         <Fa class='ml-2' icon={faGoogleDrive} />
                     </a>
+                    {/if}
                     {#if data.links.pdf}
                     <a href={data.links.pdf} data-tooltip="Download PDF" class='has-tooltip-arrow has-tooltip-bottom button is-small'>
                         PDF
                         <Fa class='ml-2' icon={faCloudArrowDown} />
                     </a>
                     {/if}
+                    {#if data.links.goopen}
+                    <a href={data.links.goopen} data-tooltip="View on GoOpenVA" class='has-tooltip-arrow has-tooltip-bottom button is-small'>
+                        GoOpenVA
+                        <Fa class='ml-2' icon={faSpinner} />
+                    </a>
+                    {/if}
                     <a data-sveltekit-reload class='button is-small is-secondary' href={srcToUrl(data.pathData.path)}>Read More</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
