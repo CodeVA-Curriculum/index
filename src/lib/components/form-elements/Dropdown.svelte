@@ -24,6 +24,12 @@
     </div>
 </div>
 
-<style>
-
+<style lang='scss'>
+    @import '../../../app.scss';
+    @include tablet {
+        .drop-down {
+            max-width: 10rem;
+        }
+    }
+    
 </style>

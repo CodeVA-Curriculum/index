@@ -11,6 +11,7 @@ interface Params {
 export async function GET({ fetch }) {
     const frontmatters:Frontmatter[] = await getAllFrontmatter()
     const subjects = await getSubjects(frontmatters)
+    // console.log("Subjects", subjects)
     const grades = await getGrades(frontmatters)
     const audiences = getAudiences(frontmatters)
     const types = getResources(frontmatters)

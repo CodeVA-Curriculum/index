@@ -41,6 +41,7 @@ export async function getSubjects(fm:Frontmatter[]) {
         }
         return false
     })
+    // console.log("metasubjects", metaSubjects)
     return metaSubjects
 }
 export function getGrades(fm:Frontmatter[]) {
