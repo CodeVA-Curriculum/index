@@ -35,14 +35,15 @@
         // console.log(elems)
         filteredList = filterProjects(filter, elems)
         const res = await (await fetch(`${base}/api/library/meta`)).json()
-        // console.log(res)
+        console.log(res)
         audiences = res.audiences
         for(const subj in res.subjects) {
-            subjects = [...subjects, subj]
+            subjects = [...subjects, res.subjects[subj]]
         }
         for(const band in res.grades) {
             grades = [...grades, band]
         }
+        console.log("Subjects", subjects)
     })
 
     function isIntersecting(array1:string[], array2:string[]):boolean {

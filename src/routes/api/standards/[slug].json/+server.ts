@@ -7,18 +7,18 @@ export async function GET({params}) {
     const stds = await getStandards();
     const id = params.slug.split('.')
     if(id.length == 4 && !id[0].includes('-')) {
-        console.log("Getting standard at", params.slug)
+        // console.log("Getting standard at", params.slug)
         const obj = stds.filter((obj) => obj.id == params.slug)
-        console.log(obj)
+        // console.log(obj)
         return json(obj)
     }
 
     // calling for a range of standards
-    console.log("Got range call")
+    // console.log("Got range call")
     const obj = stds.filter((obj) => {
         const iid = obj.id.split('.')
 
-        // TODO: support dash notation
+        // support dash notation
         let grades = [id[0]]
         if(id[0].includes('-')) {
             grades = expandDashNotation([id[0]])
@@ -47,7 +47,7 @@ export async function entries() {
         routes.push({slug: `${tokens[0]}.${tokens[1]}`})
         routes.push({slug: `${tokens[0]}.${tokens[1]}.${tokens[2]}`})
         routes.push({ slug: res[i].id} )
-        console.log("Prerendering", res[i].id)
+        // console.log("Prerendering", res[i].id)
     }
     return routes
 }
