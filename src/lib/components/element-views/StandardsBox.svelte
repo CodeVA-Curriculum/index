@@ -7,6 +7,7 @@
 <!-- TODO: Make this its own component -->
 <div id='standards-box' class='sidebar standards'>
     <h3>Standards</h3>
+    <p style='font-size: 10pt;' class='is-italic'>Click to Read SOLs</p>
     <div class='pills {active? 'full':'full'}'>
     {#each standards as standard}
         <StandardTag status={true} get={true} theme='is-light' id={standard} />

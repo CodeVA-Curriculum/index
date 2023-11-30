@@ -10,7 +10,7 @@ export async function load({ fetch }){
     // const post = await import(`../${params.slug}.md`)
     // body = await getProjectsFrontmatter();
     const res = await getAllFrontmatter()
-    const projects = res.filter((obj) => obj.pathData.path.includes('meta') && !obj.pathData.path.includes('.meta'))
+    const projects = res.filter((obj) => obj.pathData.path.includes('meta') && !obj.pathData.path.includes('.meta') && obj.pathData.path.split('/').length < 3)
     const lessons = res.filter((obj) => obj.types.includes("Lesson Plan"))
     
     return {

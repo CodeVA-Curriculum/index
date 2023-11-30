@@ -48,7 +48,8 @@
             <div class='sidebar'>
                 <h3>Tags</h3>
                 {#each data.frontmatter.tags as tag}
-                <a href={`${base}/library/search?tag=${tag}`} class='tag m-1'>{tag}</a>
+                <!-- <a href={`${base}/library/search?tag=${tag}`} class='tag m-1'>{tag}</a> -->
+                <span class='tag is-light m-1'>{tag}</span>
                 {/each}
             </div>
             {/if}
