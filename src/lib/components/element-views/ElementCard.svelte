@@ -7,6 +7,7 @@
     import {faGoogleDrive} from '@fortawesome/free-brands-svg-icons'
     import {srcToUrl} from '$lib/utils/pathUtils'
     import ElementButtons from './ElementButtons.svelte';
+    import GradePill from './GradePill.svelte';
     
     let icon;
     let image;
@@ -33,9 +34,10 @@
             <div class='column has-text-left'>
                 <h2>
                     <a data-sveltekit-reload href={srcToUrl(data.pathData.path)}>{data.title}</a>
-                    <!-- <Fa class= 'mx-2' icon={icon} /> -->
+                    <GradePill text={data.grades} />
+                    <!-- <span class='tag is-light'>{data.subjects}</span> -->
                 </h2>
-                <p class='heading'>{data.types} {data.contents? "pack ":" "}by {data.authors}</p>
+                <p class='subtitle'>by {data.authors}</p>
                 <ElementButtons meta={data} size={'is-small mx-1 px-2'}>
                 <a data-sveltekit-reload class='button is-small is-secondary mx-1 px-2' href={srcToUrl(data.pathData.path)}>Read More</a>
                 </ElementButtons>
@@ -76,5 +78,12 @@
     }
     h2 {
         font-size: larger;
+    }
+    .tag {
+        float: right;
+    }
+    .subtitle {
+        font-size: 10pt;
+        font-style: italic;
     }
 </style>

@@ -40,7 +40,7 @@
                 {#each visibleParents as parent, i}
                     {#if i>1},{/if}
                     {#if i==visibleParents.length-1 && visibleParents.length>1}and{/if}
-                    <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('meta', '')}"><i>{parent.title}</i></a>
+                    <a data-sveltekit-reload href="{srcToUrl(parent.pathData.path).replace('/meta', '')}"><i>{parent.title}</i></a>
                 {/each}
                 project{visibleParents.length>1 ? 's' : ''}.</p>
             {/if}

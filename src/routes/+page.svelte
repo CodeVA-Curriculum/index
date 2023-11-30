@@ -1,6 +1,7 @@
 <script lang='ts'>
     import logo from '$lib/assets/CodeVA_Logo_Primary.png';
     import OrbLink from '$lib/components/OrbLink.svelte';
+    import {base} from '$app/paths'
 
     interface Project {
         title:string,
@@ -46,9 +47,9 @@
                     <div class='is-sticky'>
                         <img alt="The CodeVA logo" src={logo} />
                         <h1 class="title my-5">CS Curriculum</h1>
-                        <p class='block is-italic'>This site is under construction. Check back later!</p>
+                        <p class='block is-italic'>Free computer science resources for K-12 teachers</p>
                         <div class='buttons is-centered pt-5'>
-                            <a href='https://codeva.arlo.co' class='button is-large is-primary'>Educator Programs </a>
+                            <a href='{base}/library' class='button is-large is-primary'>Search Our Library!</a>
                             <a href='https://codevirginia.org' class='button is-large'>About CodeVA</a>
                         </div>
                     </div>

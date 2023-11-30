@@ -29,21 +29,19 @@
             >
                 Home
             </a>
-            <!-- <a class="navbar-item"
-                href='{base}/about'
-            >
-                About
-            </a>
             <a class="navbar-item"
                 href='{base}/library'
             >
-                Our Library
-            </a> -->
-            <!-- <a class="navbar-item"
-                href='{base}/'
+                Search Our Library
+            </a>
+            <a target="_blank" class='navbar-item' href='https://goopenva.org/profile/18746'>
+                GoOpenVA
+            </a>
+            <a class="navbar-item"
+                href='{base}'
             >
-                Curriculum Resources
-            </a> -->
+                Contact Us!
+            </a>
         </div>
     </div>
 </nav>

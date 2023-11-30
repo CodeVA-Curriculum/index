@@ -45,7 +45,7 @@ function nsfDirective() {
         data.hProperties = hast.properties
         data.hChildren = hast.children
 
-        console.log(node)
+        // console.log(node)
       }
     })
   }
