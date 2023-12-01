@@ -19,14 +19,14 @@
 
 	let obj:Standard[] = []
 	onMount(()=> {
-		console.log("Mounted standard pill")
+		// console.log("Mounted standard pill")
 		if(get && id) {
 			console.log("Fetching standard", id)
 			const p = fetch(`${base}/api/standards/${id}.json`)
 			p.then((o) => {
 				// console.log(o)
 				o.json().then((data) => {
-					console.log(data)
+					// console.log(data)
 					obj = [...data]
 				})
 			})

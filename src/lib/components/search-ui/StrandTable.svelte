@@ -13,6 +13,8 @@
     let expanded = false
     export let count = 0
 
+    $: console.log(title, standards)
+
     $: updateMask(standards, inFilter)
 
     $: count = getCount(mask)
