@@ -43,7 +43,7 @@
                 <td><a href={srcToUrl(lesson.pathData.path)}>{lesson.title}</a></td>
                 <td>{#each lesson.grades as grade}{grade}{/each}</td>
                 <td>{#each lesson.subjects as subj, i}{subj}{#if lesson.subjects.length > 1 && i < lesson.subjects.length-1}, {/if}{/each}</td>
-                <td>{#each lesson.types as type}{type}{/each}</td>
+                <td>{#each lesson.types as type, i}{#if i!=0}, {/if}{type}{/each}</td>
             </tr>
             {/each}
             </tbody>
