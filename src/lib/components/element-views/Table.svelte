@@ -1,6 +1,7 @@
 <script lang='ts'>
     import {base} from '$app/paths'
-    import type {Frontmatter} from '$lib/utils/elementTypes'
+    import type {Frontmatter} from '$lib/utils/frontmatter'
+    import { srcToUrl } from '$lib/utils/pathUtils';
 
     export let groups:Frontmatter[]=[]
 </script>
@@ -15,7 +16,7 @@
     <tbody>
         {#each groups as group}
         <tr>
-            <td><a href='{group.path}'>{group.title}</a></td>
+            <td><a href='{srcToUrl(group.pathData.path).replace('/meta', '')}'>{group.title}</a></td>
             <td>{group.authors}</td>
         </tr>
         {/each}
