@@ -13,6 +13,11 @@
     </div>
 </section> -->
 
+<svelte:head>
+    <title>Contact Us | CodeVA Curriculum Library</title>
+    <meta name="description" content="Get in touch with the CodeVA Curriculum Team to request resources, ask questions about materials in the Curriculum library, or organize professional learning opportunities for your school or district!">
+</svelte:head>
+
 <div>
     <iframe class="clickup-embed clickup-dynamic-height" src="https://forms.clickup.com/8529737/p/f/849u9-26240/GQ89V9R2M3SE59CWKO/connection-requests" onwheel="" width="100%" height="100%" style="background: transparent; border: 1px solid #ccc;"></iframe><script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
 </div>
