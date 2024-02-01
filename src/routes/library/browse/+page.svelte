@@ -13,7 +13,8 @@
 </script>
 
 <svelte:head>
-    <title>Browse the Library</title>
+    <title>Browse the CodeVA Curriculum Library</title>
+    <meta name="Browse the CodeVA Curriculum Library" content="Find free, sharable, and remixable computer science lessons, curricular resources, tutorials, and more aligned to the Virginia Computer Science Standards of Learning.">
 </svelte:head>
 
 <div class='lessons-browse container content'>
