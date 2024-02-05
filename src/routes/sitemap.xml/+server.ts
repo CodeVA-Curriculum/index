@@ -1,5 +1,6 @@
 import { getAllFrontmatter } from "$lib/utils/frontmatter";
-import {base} from '$app/paths'
+
+const base = 'https://curriculum.codevirginia.org'
 
 export async function GET() {
     const fm = await getAllFrontmatter();
@@ -7,11 +8,12 @@ export async function GET() {
 	// TODO: the <lastmod> thing is sketch
 	for(let i=0;i<fm.length;i++) {
         const url = `\n<url>
-			<loc>${base}/library/browse/${fm[i].pathData.path.replace('/meta.md', '')}</loc>
+			<loc>${base}/library/browse/${fm[i].pathData.path.replace('.md', '').replace('/meta', '')}</loc>
 			<lastmod>2024-02-01</lastmod>
 		</url>`
 		urlString+=url
     }
+	console.log(urlString);
 	return new Response(
 		`
 		<?xml version="1.0" encoding="UTF-8" ?>
