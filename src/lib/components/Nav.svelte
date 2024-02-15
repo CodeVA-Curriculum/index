@@ -38,7 +38,7 @@
                 GoOpenVA
             </a>
             <a class="navbar-item"
-                href='{base}'
+                href='{base}/contact'
             >
                 Contact Us!
             </a>

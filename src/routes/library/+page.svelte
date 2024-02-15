@@ -14,6 +14,11 @@
     })
 </script>
 
+<svelte:head>
+    <title>Search the CodeVA Curriculum Library</title>
+    <meta name="CodeVA Curriculum Library" content="Find free, sharable, and remixable computer science lessons, curricular resources, tutorials, and more aligned to the Virginia Computer Science Standards of Learning.">
+</svelte:head>
+
 <div class='content has-text-centered'>
     <div class='section'>
         <h1>Search the Library</h1>
