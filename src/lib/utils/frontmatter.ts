@@ -97,9 +97,11 @@ function defaultFrontmatter() {
 function splitString(string:any, separator:string):any[] {
     let list = []
     if(typeof(string) == typeof('string')) {
-      list.push(...string.split(separator))
+        list.push(...string.split(separator))
+    } else if(string.constructor == Array) {
+        list = string
     } else {
-      throw new Error(`Tried to split frontmatter ${string} of type ${typeof(string)} attribute of incorrect data type! Make sure the field you are trying to split is inheritable.`)
+        throw new Error(`Tried to split frontmatter ${string} of type ${typeof(string)} attribute of incorrect data type! Make sure the field you are trying to split is inheritable.`)
     }
     return list
   }

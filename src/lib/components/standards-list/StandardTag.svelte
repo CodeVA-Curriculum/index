@@ -16,7 +16,7 @@
 
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
-
+	let cleanID = ''
 	let obj:Standard[] = []
 	onMount(()=> {
 		// console.log("Mounted standard pill")
@@ -33,6 +33,7 @@
 		} else {
 			obj = [standard]
 		}
+		cleanID = id.replace('[','').replace(']','').replaceAll(',', ', ')
 	})
 
 	function deleteSelf() {
@@ -57,7 +58,7 @@
 <!-- if the object length is zero, it means we either called for one standard or defined the standard via the `standard` prop -->
 {#if obj.length > 0}
 <span class='tag mr-0 ml-0 my-0 mt-1 {status ? theme : 'disabled'}'>
-    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{obj.length == 1? obj[0].id: id? id :'No ID!'}</span>
+    <span on:click={() => {modal.activate(); console.log('activating modal...')}} class='open'>{obj.length == 1? obj[0].id: id? cleanID :'No ID!'}</span>
 	{#if del}
     <button on:click={()=>deleteSelf()} class='delete is-small'></button>
 	{/if}
@@ -65,7 +66,7 @@
 {/if}
 
 {#if obj.length > 0}
-<StandardModal bind:this={modal} standards={obj} id={obj.length == 1? obj[0].id: id? id :'No ID!'}>
+<StandardModal bind:this={modal} standards={obj} id={obj.length == 1? obj[0].id: id? cleanID :'No ID!'}>
 	<span slot='footer'>
 		<a href={`${base}/library/search?${url}`} class="button is-success is-hovered">
 			<Fa class='mr-3' icon={faLink} />
