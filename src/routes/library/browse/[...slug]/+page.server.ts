@@ -9,7 +9,7 @@ import type {Element} from '$lib/utils/elementTypes'
 
 export async function load({ params, fetch }):Promise<Element> {
   // console.log(params.slug)
-  const res = (await (await fetch(`${base}/api/library/${params.slug}`)).json() as unknown) as Element
+  const res = (await (await fetch(`${base}/api/library/${params.slug}.json`)).json() as unknown) as Element
   console.log(res)
   return {
       content: res.content,

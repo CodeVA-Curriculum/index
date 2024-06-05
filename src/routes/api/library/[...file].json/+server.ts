@@ -8,6 +8,7 @@ import {base} from '$app/paths'
 import type {Element} from '$lib/utils/elementTypes'
 
 export async function GET({ params, fetch }) {
+    // console.log(params.file)
     const path:Path = validatePath(params.file)
     if(path.exists) {
         const standards = await (await fetch(`${base}/api/standards/flat.json`)).json()
@@ -22,7 +23,7 @@ export async function GET({ params, fetch }) {
         })
     } else {
         throw error(404, {
-        message: 'Not found'
+        message: `${params.file} not found.`
         });
     }
 }
@@ -39,13 +40,13 @@ export async function entries() {
     if(path.includes('meta')) {
       const clean = path.slice("/src/content/".length, -1*('meta.md'.length + 1))
       cleanPaths.push({
-        slug: clean
+        file: clean
       })  
     } else {
       const clean = path.slice("/src/content/".length, -3)
       cleanPaths.push({
         // Add non-meta.md path to prerendered paths, excluding the '.md' file extension
-        slug: clean
+        file: clean
       })
     }
   }
