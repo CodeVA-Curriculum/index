@@ -8,7 +8,7 @@ import {base} from '$app/paths'
 export async function load({ fetch }){
 
     // Import library metadata
-    const meta = await(await fetch('/api/library/meta')).json()
+    const meta = await(await fetch('/api/library/meta.json')).json()
 
     // Import all the frontmatter
     let frontmatters = await getAllFrontmatter()

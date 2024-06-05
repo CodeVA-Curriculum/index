@@ -168,7 +168,7 @@
 
     onMount(async () => {
         // Pull dropdown items from API route
-        const res = await (await fetch(`${base}/api/library/meta`)).json()
+        const res = await (await fetch(`${base}/api/library/meta.json`)).json()
         subjects.items = res.subjects
         grades.items = res.grades as GradesByBand
         types.items = res.types

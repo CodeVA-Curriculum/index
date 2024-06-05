@@ -35,7 +35,7 @@
     let loaded = false
     onMount(async () => {
         const url = $page.url.searchParams
-        res = await (await fetch(`${base}/api/library/meta`)).json()
+        res = await (await fetch(`${base}/api/library/meta.json`)).json()
 
         // Get parameters from URL & add to preset filter
         for(const key in params) {
