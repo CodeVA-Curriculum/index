@@ -34,7 +34,7 @@
     onMount(async () => {
         // console.log(elems)
         filteredList = filterProjects(filter, elems)
-        const res = await (await fetch(`${base}/api/library/meta`)).json()
+        const res = await (await fetch(`${base}/api/library/meta.json`)).json()
         console.log(res)
         audiences = res.audiences
         for(const subj in res.subjects) {
