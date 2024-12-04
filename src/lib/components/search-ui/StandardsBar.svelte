@@ -26,16 +26,15 @@
         const url = $page.url.searchParams
         const res = await (await fetch(`${base}/api/standards/object.json`)).json()
         const startingSOLs = url.has('sol') ? url.getAll('sol') : []
+        let selectedSOLData:Standard[] = []
 
         // Fetch standard objects
         for(let i=0; i<startingSOLs.length;i++) {
-            fetch(`${base}/api/standards/${startingSOLs[i]}.json`).then((res) => {
-                res.json().then((obj) => {
-                    selected = [...selected, obj]
-                })    
-            })
+            const res = await fetch(`${base}/api/standards/${startingSOLs[i]}.json`)
+            const obj = await res.json()
+            selected = [...selected, ...obj]    
         }
-        console.log(res)
+        // console.log("Selected standards", selectedSOLData)
         for(const k in res) {
             if(k != 'courseToSubjectMap') {
                 selectedTab = selectedTab == ''? k : selectedTab 

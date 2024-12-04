@@ -30,10 +30,10 @@
 					obj = [...data]
 				})
 			})
+			cleanID = id.replace('[','').replace(']','').replaceAll(',', ', ')
 		} else {
 			obj = [standard]
 		}
-		cleanID = id.replace('[','').replace(']','').replaceAll(',', ', ')
 	})
 
 	function deleteSelf() {
