@@ -11,45 +11,13 @@ import YAML from 'yaml'
 import { expandDashNotation } from './metaUtils'
 import {h} from 'hastscript'
 import {visit} from 'unist-util-visit'
+import {nsfDirective} from './directives/nsf'
+import { supporterDirective } from './directives/supporter'
 
 import {applyYAML, defaultFrontmatter, findAndInheritFromParents, findMemberFrontmatter, auditFrontmatter, postprocess} from './frontmatter'
 import type {Frontmatter, Path} from './frontmatter'
 
-function nsfDirective() {
-  /**
-   * @param {import('mdast').Root} tree
-   *   Tree.
-   * @returns {undefined}
-   *   Nothing.
-   */
-  return function (tree) {
-    visit(tree, function (node) {
-      if (
-        (node.type === 'containerDirective' ||
-        node.type === 'leafDirective' ||
-        node.type === 'textDirective') && node.name == 'nsf'
-      ) {
-        // console.log("found node", node)
-        const data = node.data || (node.data = {})
-        const hast = h('div.nsf-disclaimer', [
-          h('div.img-wrap', [
-            h('img', {
-              src: "/images/nsf.png",
-              alt: "The NSF logo."
-            })
-          ]),
-          h('p.text', `This material is based upon work supported by the National Science Foundation under Grant No. ${node.children[0].value}. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.`)
-        ])
 
-        data.hName = hast.tagName
-        data.hProperties = hast.properties
-        data.hChildren = hast.children
-
-        // console.log(node)
-      }
-    })
-  }
-}
 
 export async function parseFrontmatter(pathData:Path) {
     let frontmatter:Frontmatter = {} as Frontmatter// = defaultFrontmatter()
@@ -88,6 +56,7 @@ export async function parseFile(pathData:Path, standards:object[]) {
   .use(remarkGfm)
   .use(remarkDirective)
   .use(nsfDirective)
+  .use(supporterDirective)
   .use(remarkRehype)
   .use(rehypeFormat)
   .use(rehypeStringify)
