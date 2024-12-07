@@ -7,7 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "thumbnails": "node ./scripts/thumbnails.cjs"
   },
   "devDependencies": {
     "@creativebulma/bulma-tooltip": "^1.2.0",
@@ -39,6 +40,7 @@
     "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.2",
     "remark-rehype": "^10.1.0",
+    "request": "^2.88.2",
     "svelte-fa": "^3.0.4",
     "to-vfile": "^8.0.0",
     "unified": "^11.0.2",
