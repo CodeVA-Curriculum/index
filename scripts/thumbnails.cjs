@@ -10,12 +10,14 @@ var download = function(uri, filename, callback){
   });
 };
 async function getIds() {
-    const res = await (await fetch('http://localhost:5173/api/library/all.json')).json()
+    const res = await (await fetch('https://curriculum.codevirginia.org/api/library/all.json')).json()
     let ids = []
     for(const el of res) {
         // only get the thumbnail if the file isn't a "group"
-        if(!el.contents && el.links.drive) {
-            let id = el.links.drive//.substring(el.links.drive.indexOf('/d/') + 3)
+        // if(el.links.drive == "https://docs.google.com/document/d/1CPYR86AiX5Oy6Ie53mzhAqwXwBhXHRLxWMY2pea1zBk/edit?usp=drive_link")
+        if(!el.contents && el.links.drive && el.links.drive.includes('/d/')) {
+            let id = el.links.drive.substring(el.links.drive.indexOf('/d/') + 3)
+            id = id.substring(0, id.indexOf('/'))
             if(id.length > 0) {
                 ids.push(id)
             }
@@ -41,15 +43,16 @@ async function getFile(id) {
 
 async function main() {
     const files = await getIds()
-    for(const file of files) {
-        if(file == "1xM9merQyJEKALJaIKpczHdo33Nj48nPR") {
-            console.log("PDF test passed!")
-        }
-        if(file.includes("1xM9merQyJEKALJaIKpczHdo33Nj48nPR")) {
-            console.log("Uhhhhh " + file)
-        }
-    }
-    // getThumbnails(files)
+    // for(const file of files) {
+    //     if(file == "1pJcVTPSp0IOIFhm4MMoWscCbPqP8arnM") {
+    //         console.log("PDF test passed!")
+    //     }
+    //     if( file == "1CPYR86AiX5Oy6Ie53mzhAqwXwBhXHRLxWMY2pea1zBk") {
+    //         console.log("Doc test passed!")
+    //     }
+    // }
+    // console.log(files)
+    getThumbnails(files)
 }
 
 main()
