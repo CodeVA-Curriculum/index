@@ -22,9 +22,9 @@ export async function GET({ params, fetch }) {
             type: data.type
         })
     } else {
-        throw error(404, {
-        message: `${params.file} not found.`
-        });
+        error(404, {
+                message: `${params.file} not found.`
+                });
     }
 }
 
