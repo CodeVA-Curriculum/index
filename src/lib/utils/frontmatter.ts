@@ -2,7 +2,7 @@ import YAML from 'yaml'
 import * as fs from 'fs'
 import { parseFrontmatter } from './parsers'
 import {getParentDirectory, getParentMeta} from './pathUtils'
-import { importLibraryGlob } from '.'
+import { importLibraryGlob } from './index'
 import { srcToUrl } from './pathUtils'
 
 const inheritableFields = ['authors', 'subjects', 'grades', 'license', 'tags', 'types', 'audiences', 'image']
@@ -106,9 +106,14 @@ function splitString(string:any, separator:string):any[] {
     return list
   }
 
-async function postprocess(frontmatter:Frontmatter):Frontmatter {
+async function postprocess(frontmatter:Frontmatter):Promise<Frontmatter> {
+    // console.log(`Processing ${frontmatter.title}`)
     frontmatter.subjects = splitString(frontmatter.subjects, ', ')
-    frontmatter.grades = splitString(frontmatter.grades, ', ')
+    let grade:string|number|string[] = frontmatter.grades
+    if(typeof(grade) == typeof(1)) {
+        grade = String(frontmatter.grades)
+    }
+    frontmatter.grades = splitString(grade, ', ')
     frontmatter.types = splitString(frontmatter.types, ', ')
     frontmatter.tags = splitString(frontmatter.tags, ', ')
     frontmatter.audiences = splitString(frontmatter.audiences, ', ')
