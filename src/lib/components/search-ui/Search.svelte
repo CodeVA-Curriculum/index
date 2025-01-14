@@ -73,7 +73,7 @@
 
 <div class='searchbox my-5'>
     {#if URLerror}
-    <article transition:slide class="message is-danger">
+    <article transition:slide|global class="message is-danger">
         <div class="message-header">
           <p class='m-0 p-0'>Malformed URL!</p>
           <button on:click={() => {URLerror = false}} class="delete" aria-label="delete"></button>
