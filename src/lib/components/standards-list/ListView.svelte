@@ -165,7 +165,7 @@
             <p class='is-italic small'>--- None selected. Use dropdowns. ---</p>
         </div>
     {:else if listStatus == 'error'}
-        <div transition:slide class='message is-danger is-small'>
+        <div transition:slide|global class='message is-danger is-small'>
             <div class='message-header'>
                 Too Many Standards!
                 <button on:click={() => {updateListStatus('list')}} class='delete'></button>
