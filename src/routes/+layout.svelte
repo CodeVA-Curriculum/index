@@ -9,8 +9,8 @@
     <title>CodeVA Curriculum Library</title>
 </svelte:head>
 
-<Analytics />
+<!-- <Analytics /> -->
 
 <Nav />
 <slot />
-<Footer />
+<!-- <Footer /> -->
