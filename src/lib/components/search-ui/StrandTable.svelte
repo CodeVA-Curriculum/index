@@ -3,6 +3,7 @@
     import { faCaretDown, faCaretRight, faCheck, faChevronDown, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
     import { createEventDispatcher, onMount } from "svelte";
+    import StandardTag from "../standards-list/StandardTag.svelte";
 
     export let title:string
     export let standards:Standard[] = []
@@ -95,7 +96,8 @@
         if(mask[i]) { remove(i) } else { add(i, true) }
     }}><Fa icon={mask[i] ? faCheck : faPlus} /></button></td>
     <td>{standard.title}</td>
-    <td><span class='tag is-dark is-small'>{standard.id}</span></td>
+    <!-- <td><span class='tag is-dark is-small'>{standard.id}</span></td> -->
+    <td><StandardTag standard={standard} status={true} /></td>
     <td class='text'>
         {standard.text}
         {#each standard.subs as sub}

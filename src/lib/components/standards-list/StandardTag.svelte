@@ -11,8 +11,9 @@
 	export let status:boolean
 	export let del = false
 	export let theme='is-dark'
-	export let id:string
+	export let id:string|false
 	export let get = false;
+	export let mods:string = ''
 
 	const dispatch = createEventDispatcher();
 	let modal:SvelteComponent
@@ -86,5 +87,8 @@
 		background-color: whitesmoke;
 		text-decoration: line-through;
 		color: lightgrey;
+	}
+	.outline {
+		border-color: red;
 	}
 </style>
