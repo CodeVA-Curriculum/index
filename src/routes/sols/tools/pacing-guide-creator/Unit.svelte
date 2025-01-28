@@ -7,7 +7,9 @@
     let formUp = false
 </script>
 
-
+<div class='unit add'>
+    Add a unit
+</div>
 
 <style lang='scss'>
     .unit.add {

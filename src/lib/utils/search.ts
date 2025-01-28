@@ -1,5 +1,5 @@
-import type { Frontmatter } from "$lib/utils/frontmatter";
-import { expandDashNotation, expandSubjectsStrands } from "$lib/utils/metaUtils";
+import type { Frontmatter } from "./frontmatter";
+import { expandDashNotation, expandSubjectsStrands } from "./metaUtils";
 
 function isIntersecting(array1:string[], array2:string[]):boolean {
     let intersections = 0

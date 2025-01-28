@@ -6,7 +6,7 @@
 
     let rows:Row[] = testData//[]
 </script>
-<table class='table is-bordered is-hoverable is-fullwidth is-narrow'>
+<table class='table is-bordered is-fullwidth is-narrow'>
     <thead>
         <tr>
           <th>Week #</th>
@@ -18,8 +18,8 @@
         </tr>
     </thead>
     <tbody>
-        {#each rows as row}
-        <TableRow {...row} />
+        {#each rows as row, i}
+        <TableRow position={i} />
         {/each}
     </tbody>
 </table>

@@ -12,11 +12,11 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
             <Fa icon={faChevronLeft} size='2x' />
         </span>
     </div>
-    <div class='lesson column is-flex'>
+    <div class='lesson column is-narrow is-flex'>
         <img class='image' src='https://placecats.com/300/400' alt="Lesson thumbnail">
-        <div class='lesson-info'>
+        <!-- <div class='lesson-info'>
             <p><a href="{base}/TODO:">Lesson Title</a></p>
-        </div>
+        </div> -->
         
     </div>
     <div class='column is-narrow arrow is-flex'>
@@ -32,6 +32,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 <style lang='scss'>
     .carousel {
         height: 250px;
+        width: 0px;
         margin: 0 0 ;
     }
     .lesson {
