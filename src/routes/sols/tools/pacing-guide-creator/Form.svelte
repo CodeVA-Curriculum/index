@@ -12,6 +12,7 @@
     import { faTrash } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
     import { createEventDispatcher } from "svelte";
+    import type { Row } from "./_data";
 
     const dispatch = createEventDispatcher()
 
@@ -20,11 +21,14 @@
         placeholder: ''
     }
 
-    let entries = {
+    export let entries:Row = {
         title: '',
         description: '',
         sols: [],
-        duration: 1
+        csols: [],
+        suggestedSOLs: [],
+        duration: 1,
+        lessons: []
     }
 
     let data = ''

@@ -10,16 +10,22 @@
     import type { Standard } from "$lib/utils/metaUtils";
     import StandardTag from "$lib/components/standards-list/StandardTag.svelte";
     import type { Frontmatter } from "$lib/utils/frontmatter";
+    import { createEventDispatcher } from "svelte";
+
+    
 
     export let position:number; // tracks the vertical position of the row in the table (0 indexed)
 
-    export let title:string
-    export let description:string
-    export let duration:number = 1
-    export let sols:Standard[] = []
-    export let suggestedSOLs:Standard[] = []
-    export let csols:Standard[] = []
-    export let lessons:Frontmatter[] = []
+    export let entries:Row = {
+        title: '',
+        description: '',
+        duration: 1,
+        sols: [],
+        suggestedSOLs: [],
+        csols: [],
+        lessons: []
+    }
+    
 
     let edit = false
     let empty = true
@@ -30,15 +36,15 @@
         const obj = event.detail
         if(obj) {
             empty = false
-            title = obj.title ? obj.title : title
-            description = obj.description ? obj.description : description
-            duration = obj.duration ? obj.duration : duration
+            entries.title = obj.title ? obj.title : entries.title
+            entries.description = obj.description ? obj.description : entries.description
+            entries.duration = obj.duration ? obj.duration : entries.duration
             
             // Sort CS SOLs away from non-CS
-            sols = obj.sols.filter((obj:Standard) => {
+            entries.sols = obj.sols.filter((obj:Standard) => {
                 return !obj.subject.includes("Computer Science")
             })
-            csols = obj.sols.filter((obj:Standard) => {
+            entries.csols = obj.sols.filter((obj:Standard) => {
                 return obj.subject.includes("Computer Science")
             })
 
@@ -50,25 +56,27 @@
             for(const sol of obj.sols) {
                 url += 'sol=' + sol.id + "&"
             }
-            const res = await (await fetch(url)).json()
             
             // update lessons
-            lessons = (res.results as Frontmatter[]).filter((obj:Frontmatter) => obj.types.includes("Lesson Plan"))
+            if(obj.sols.length > 0) {
+                const res = await (await fetch(url)).json()
+                entries.lessons = (res.results as Frontmatter[]).filter((obj:Frontmatter) => obj.types.includes("Lesson Plan"))
+            } 
 
             // Find suggested CS SOLs from lessons
-            suggestedSOLs = []
-            let selectedIDs:Standard[] = []
+            entries.suggestedSOLs = []
+            let selectedIDs:string[] = []
             for(const o of obj.sols) {
                 selectedIDs = [...selectedIDs, o.id]
             }
-            for(const lesson of lessons) {
+            for(const lesson of entries.lessons) {
                 const sols = lesson.standards && lesson.standards.length > 0 ? lesson.standards : []
                 for(const s of sols) {
                     let obj = await (await fetch(`${base}/api/standards/${s}.json`)).json()
                     let cs = obj.filter((obj:Standard) => {
                         return obj.subject.includes('Computer Science') && !selectedIDs.includes(obj.id)
                     })
-                    suggestedSOLs = [...suggestedSOLs, ...cs]
+                    entries.suggestedSOLs = [...entries.suggestedSOLs, ...cs]
                 }
             }
         }
@@ -77,12 +85,29 @@
     function hoverHighlight(lesson:Frontmatter) {
         hoveredIDs = lesson.standards
     }
+
+    function clear() {
+        entries = {
+            title: '',
+            description: '',
+            duration: 1,
+            sols: [],
+            csols: [],
+            suggestedSOLs: [],
+            lessons: []
+        }
+        empty = true;
+    }
+    const dispatch = createEventDispatcher()
+    function move(direction:'up'|'down'|'add') {
+        dispatch(direction, position)
+    }
 </script>
 
 <tr>
     {#if edit}
     <td class='form-row' colspan=5>
-        <Form on:submit={processSubmit} />
+        <Form on:submit={processSubmit} entries={entries} />
     </td>
     {:else if empty}
     <td class='empty-row' colspan=5>
@@ -92,29 +117,34 @@
         </div>
     </td>
     {:else}
-    <td>{duration}</td>
-    <td>{title}<br>{@html description}</td>
+    <td>{entries.duration + position}</td>
+    <td>{entries.title}<br>{@html entries.description}</td>
     <td>
-        {#each sols as sol}
+        {#each entries.sols as sol}
         <StandardTag theme={hoveredIDs.includes(sol.id) ? 'is-warning' : 'is-dark'} status={true} standard={sol} id={false} del={false} />
         {/each}
     </td>
     <td>
-        <div class='{csols.length > 0 ? 'mb-3' : ''}'>
-            {#each csols as sol}
+        <div class='{entries.csols.length > 0 ? 'mb-3' : ''}'>
+            {#each entries.csols as sol}
             <StandardTag theme={hoveredIDs.includes(sol.id) ? 'is-warning' : 'is-dark'} status={true} standard={sol} id={false} del={false} />
             {/each}
         </div>
         <div>
+            {#if entries.suggestedSOLs.length == 0}
+            <i>No suggested CS SOLs</i>
+            {:else}
             <i>Suggested:</i>
-            {#each suggestedSOLs as sol}
+            {/if}
+
+            {#each entries.suggestedSOLs as sol}
             <StandardTag theme={hoveredIDs.includes(sol.id) ? 'is-warning' : 'is-dark'} status={true} standard={sol} id={false} del={false} />
             {/each}
         </div>
     </td>
     <td class='content'>
         <ul>
-            {#each lessons as lesson}
+            {#each entries.lessons as lesson}
             <li>
                 <a 
                     on:mouseenter={() => hoverHighlight(lesson)}
@@ -131,11 +161,11 @@
     {/if}
     <td class='ui'>
         {#if !edit && !empty}
-        <button class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Edit"><Fa icon={faEdit} /></button>
-        <button class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Up"><Fa icon={faArrowUp} /></button>
-        <button class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Down"><Fa icon={faArrowDown} /></button>
-        <button class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Add Row Below"><Fa icon={faPlus} /></button>
-        <button class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Delete"><Fa icon={faTrash} /></button>
+        <button on:click={() => edit = true} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Edit"><Fa icon={faEdit} /></button>
+        <button on:click={()=>move('up')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Up"><Fa icon={faArrowUp} /></button>
+        <button on:click={()=>move('down')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Down"><Fa icon={faArrowDown} /></button>
+        <button on:click={()=>move('add')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Add Row Below"><Fa icon={faPlus} /></button>
+        <button on:click={clear} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Delete"><Fa icon={faTrash} /></button>
         {/if}
     </td>
 </tr>
