@@ -1,10 +1,14 @@
 <script lang='ts'>
-    import { faPencilSquare, faPenToSquare, faPlus } from "@fortawesome/free-solid-svg-icons";
     import Table from "./Table.svelte";
-    import Fa from "svelte-fa";
     import Unit from "./Unit.svelte";
+    
 
+    let editTitle = false;
+    let title="Pacing Guide Title"
 
+    let filename = title
+    $: filename = title.toLowerCase().replaceAll(' ', '-') + '.json'
+    let active = false;
 </script>
 
 <div class='container is-fullheight'>
@@ -19,10 +23,6 @@
         </ol>
     </section>
     <section class='section'>
-        <h1 class='title pacing-title'>
-            Pacing Guide Title
-            <button class='ml-3'><Fa icon={faPenToSquare} /></button>
-        </h1>
         <div class='units'>
             <Table />
         </div>
@@ -33,5 +33,18 @@
     .pacing-title {
         font-style: italic;
         color: grey
+    }
+    input.pacing-title {
+        height: 3rem;
+    }
+    .right-panel {
+        display: block;
+        margin-left: auto;
+        margin-right: 7rem;
+        // background-color: pink;
+        button {
+            float: right;
+            margin-left: 0.5rem;
+        }
     }
 </style>

@@ -28,7 +28,7 @@
     
 
     let edit = false
-    let empty = true
+    export let empty = true
     let hoveredIDs:string[] = []
 
     async function processSubmit(event:any) {
@@ -80,6 +80,7 @@
                 }
             }
         }
+        dispatch('change', entries)
     }
 
     function hoverHighlight(lesson:Frontmatter) {
@@ -102,6 +103,11 @@
     function move(direction:'up'|'down'|'add') {
         dispatch(direction, position)
     }
+
+    function editRow() {
+        edit = true
+        move('add')
+    }
 </script>
 
 <tr>
@@ -111,7 +117,7 @@
     </td>
     {:else if empty}
     <td class='empty-row' colspan=5>
-        <div on:click={() => edit = true}>
+        <div on:click={editRow}>
             <Fa icon={faPlus} />
             <span>Add a unit...</span>
         </div>
@@ -161,21 +167,31 @@
     {/if}
     <td class='ui'>
         {#if !edit && !empty}
-        <button on:click={() => edit = true} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Edit"><Fa icon={faEdit} /></button>
-        <button on:click={()=>move('up')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Up"><Fa icon={faArrowUp} /></button>
-        <button on:click={()=>move('down')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Down"><Fa icon={faArrowDown} /></button>
-        <button on:click={()=>move('add')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Add Row Below"><Fa icon={faPlus} /></button>
-        <button on:click={clear} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Delete"><Fa icon={faTrash} /></button>
+            <button on:click={() => edit = true} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Edit"><Fa icon={faEdit} /></button>
+            <button on:click={()=>move('up')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Up"><Fa icon={faArrowUp} /></button>
+            <button on:click={()=>move('down')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Move Down"><Fa icon={faArrowDown} /></button>
+            <button on:click={()=>move('add')} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Add Row Below"><Fa icon={faPlus} /></button>
+            <button on:click={clear} class='button is-fullwidth has-tooltip-right has-tooltip-arrow' data-tooltip="Delete"><Fa icon={faTrash} /></button>
+        {:else}
+            <div class='filler'></div>
         {/if}
     </td>
 </tr>
 
 
 <style lang='scss'>
+    .filler {
+        width: 3rem;
+        background-color: pink;
+        position: relative;
+    }
     .ui > button {
         display: block;
         width: 3rem;
         margin: 3px 0;
+    }
+    .ui {
+        position: relative;
     }
     .ui {
         border: none;
@@ -196,19 +212,17 @@
         color: grey;
         &:hover {
             background-color: whitesmoke;
+            cursor: pointer;
         }
         div {
             display: flex;
             flex-grow: 1;
             align-items: center;
             justify-content: center;
-            height: 4rem;
+            height: 11rem;
             font-size: 1.5rem;
             span {
                 margin-left: 1rem;
-            }
-            &:hover {
-                cursor: pointer;
             }
         }
     }
