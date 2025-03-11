@@ -34,11 +34,9 @@
     <hr>
     <div class='columns'>
         <div class='column is-two-thirds'>
-            {@html data.content}
-            
-            {#each data.frontmatter.members as member}
-                <ElementCard data={member} />
-            {/each}
+            <div class='padding'>
+                {@html data.content}
+            </div>
         </div>
         <div class='column ml-3'>
             {#if data.frontmatter.standards}
@@ -55,6 +53,12 @@
             {/if}
         </div>
     </div>
+    <div class='padding'>
+        <!-- <h2>Contents</h2> -->
+        {#each data.frontmatter.members as member}
+            <ElementCard data={member} />
+        {/each}
+    </div>
 </div>
 
 <style lang='scss'>
@@ -63,5 +67,8 @@
         margin-bottom: 3rem;
         background-color: $light-green;
         padding: 1rem 1rem;
+    }
+    .padding {
+        margin-bottom: 5rem;
     }
 </style>

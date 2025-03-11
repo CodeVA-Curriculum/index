@@ -28,7 +28,6 @@
 
         const res = filterFrontmatter(filter, data.frontmatter)
         res.then((res)=> {
-            // console.log(res.results)
             results = res.results
             related = res.related
         })
