@@ -14,7 +14,7 @@
     let expanded = false
     export let count = 0
 
-    $: console.log(title, standards)
+    // $: console.log(title, standards)
 
     $: updateMask(standards, inFilter)
 
@@ -29,7 +29,7 @@
     }
 
     function updateMask(standards:Standard[], filter:Standard[]) {
-        console.log("Updating mask...")
+        // console.log("Updating mask...")
         if(inFilter.length == 0) { mask = [] } else {
             mask = []
             for(let i=0;i<standards.length;i++) {

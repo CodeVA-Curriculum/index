@@ -90,13 +90,11 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
     // Grade, Subject, Audience, Resource Filter
     // if any of these are not defined in the query, the object matches that attribute
     let related:Frontmatter[] = frontmatters.filter((obj) => {
-        // console.log(filter.subj)
         const is =  (filter.grade? isIntersecting(filter.grade, expandDashNotation(obj.grades)):true) &&
                 (filter.subj?  isIntersecting(filter.subj, obj.subjects):true) &&
                 (filter.aud?   isIntersecting(filter.aud, obj.audiences):true) &&
                 (filter.type?  isIntersecting(filter.type, obj.types) : true) &&
                 (filter.tags? isIntersecting(filter.tag, obj.tags) : true)
-        // console.log(is)
         return is
     })
 
@@ -151,7 +149,7 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
 
     // Sort `results` by type in resource, project, lesson order
     results.sort((a,b) => {
-        const order = ['Lesson Plan', 'Unit of Study', 'Curricular Resource']
+        const order = ['Unit of Study', 'Lesson Plan', 'Curricular Resource']
         let typeScoreA = 0
         let typeScoreB = 0
         for(let i=0;i<a.types.length;i++) {
@@ -181,6 +179,23 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
         const match = results.find((res) => obj.pathData.path == res.pathData.path)
         if(match) { return false } else { return true }
     })
+
+    // If a "Lesson Plan" type element appears in `results` alongside its parent, remove the element
+    let parentPaths:string[] = []
+    for(const result of results) {
+        if(result.types.includes("Unit of Study")) {
+            parentPaths.push("/" + result.pathData.path)
+        }
+    }
+    console.log(parentPaths)
+    results = results.filter((obj) => {
+        const foundParent = obj.parents.find((parent) => parentPaths.includes(parent.pathData.path))
+        const isLesson = obj.types.includes("Lesson Plan") && !obj.types.includes("Unit of Study")
+        return foundParent ? !isLesson : true
+    })
+
+    // Truncate `related` to 10 maximum items
+    related = related.splice(0, 10)
 
     console.log("\nEnding with",related.length, "related")
     printTitles(related)
