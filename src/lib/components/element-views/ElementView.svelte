@@ -29,12 +29,12 @@
     // let tags = ['tag', 'tag','tag', 'tag', 'tag']
 </script>
 
-<div class='content'>
+<div class=''>
     <DocumentHeader meta={data.frontmatter} />
     <hr>
     <div class='columns'>
         <div class='column is-two-thirds'>
-            <div class='padding'>
+            <div class='content padding'>
                 {@html data.content}
             </div>
         </div>
@@ -44,7 +44,7 @@
             {/if}
             {#if data.frontmatter.tags}
             <div class='sidebar'>
-                <h3>Tags</h3>
+                <h3 class='title is-4'>Tags</h3>
                 {#each data.frontmatter.tags as tag}
                 <!-- <a href={`${base}/library/search?tag=${tag}`} class='tag m-1'>{tag}</a> -->
                 <span class='tag is-light m-1'>{tag}</span>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class='padding'>
-        <!-- <h2>Contents</h2> -->
+        <h2 class='title is-3'>Materials, Resources, & Lessons</h2>
         {#each data.frontmatter.members as member}
             <ElementCard data={member} />
         {/each}

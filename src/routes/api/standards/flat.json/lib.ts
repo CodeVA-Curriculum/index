@@ -48,17 +48,24 @@ export async function getStandards() {
 
         // console.log(stds[i].id)
 
-        complete.push({
-            id: stds[i].id,
-            title: stds[i].title,
-            text: stds[i].text,
-            grade: fullGradeNames[gradeList.indexOf(grade)],
-            strand: key[course].inherit? key[key[course].inherit].strands[strand] : key[course].strands[strand],
-            subject: key[course].inherit? key[key[course].inherit].title : key[course].title,
-            course: key[course].title,
-            subs: stds[i].subs
-        })
+        if(checkStandard(stds[i], key, course)) {
+            complete.push({
+                id: stds[i].id,
+                title: stds[i].title,
+                text: stds[i].text,
+                grade: fullGradeNames[gradeList.indexOf(grade)],
+                strand: key[course].inherit? key[key[course].inherit].strands[strand] : key[course].strands[strand],
+                subject: key[course].inherit? key[key[course].inherit].title : key[course].title,
+                course: key[course].title,
+                subs: stds[i].subs
+            })
+        }
     }
     // console.log(complete)
     return complete
+}
+
+function checkStandard(obj:YamlStandard, key:any, course:string) {
+    let courseHasIdInKey = key[course] ? true : false
+    return courseHasIdInKey
 }

@@ -11,16 +11,17 @@ body { height: 100vh; }
     margin-right: 1.5rem;
     font-size: 10pt;
 }
-.nsf-disclaimer {
+.nsf-disclaimer, .supporter-disclaimer {
+    display: flex;
     .img-wrap {
-        display: inline-block;
-        width: 20%;
+        width: 200px;
+        justify-content: center;
         padding-right: 1rem;
     }
     .text {
-        display: inline-block;
-        width: 75%;
+        flex-grow: 2;
         font-size: 10pt;
+        justify-content: center;
     }
     background-color: whitesmoke;
     border-radius: 20px;

@@ -181,18 +181,18 @@ export async function filterFrontmatter(filter:object, frontmatters:Frontmatter[
     })
 
     // If a "Lesson Plan" type element appears in `results` alongside its parent, remove the element
-    let parentPaths:string[] = []
-    for(const result of results) {
-        if(result.types.includes("Unit of Study")) {
-            parentPaths.push("/" + result.pathData.path)
-        }
-    }
-    console.log(parentPaths)
-    results = results.filter((obj) => {
-        const foundParent = obj.parents.find((parent) => parentPaths.includes(parent.pathData.path))
-        const isLesson = obj.types.includes("Lesson Plan") && !obj.types.includes("Unit of Study")
-        return foundParent ? !isLesson : true
-    })
+    // let parentPaths:string[] = []
+    // for(const result of results) {
+    //     if(result.contents && result.contents.length > 0) {
+    //         parentPaths.push("/" + result.pathData.path)
+    //     }
+    // }
+    // console.log(parentPaths)
+    // results = results.filter((obj) => {
+    //     // const foundParent = obj.parents.find((parent) => parentPaths.includes(parent.pathData.path))
+    //     const isLesson = obj.types.includes("Lesson Plan") && !obj.contents
+    //     return !isLesson
+    // })
 
     // Truncate `related` to 10 maximum items
     related = related.splice(0, 10)

@@ -9,27 +9,27 @@
 </script>
 
 {#if meta.links}
-<div class='element-buttons buttons is-left mt-5 px-0'>
+<div class='vertical-buttons px-0'>
     {#if meta.links.drive}
-    <a target="_blank" class='button is-primary {size}' href='{meta.links.drive}'>
+    <a target="_blank" class='is-fullwidth button is-primary {size}' href='{meta.links.drive}'>
         Google Drive
         <Fa class='ml-2' icon={faGoogleDrive} />
     </a>
     {/if}
     {#if meta.links.pdf}
-    <a target="_blank" class='button {size}' href='{meta.links.pdf}'>
+    <a target="_blank" class='is-fullwidth button {size}' href='{meta.links.pdf}'>
         PDF
         <Fa class='ml-2' icon={faCloudArrowDown} />
     </a>
     {/if}
     <!-- {#if meta.links.goopen}
-    <a target="_blank" class='button {size}' href='{meta.links.goopen}'>
+    <a target="_blank" class='is-fullwidth button {size}' href='{meta.links.goopen}'>
         GoOpenVA
         <Fa class='ml-2' icon={faSpinner} />
     </a>
     {/if} -->
     {#if meta.links.ext}
-    <a target="_blank" class='button {size}' href='{meta.links.ext}'>
+    <a target="_blank" class='is-fullwidth button {size}' href='{meta.links.ext}'>
         View {meta.members && meta.members.length > 0? 'Group' : 'Resource'}
         <Fa class='ml-2' icon={faArrowUpRightFromSquare} />
     </a>
