@@ -6,7 +6,6 @@ export async function GET({ url, fetch }) {
     const meta = await(await fetch('/api/library/meta.json')).json()
     const fm = await (await fetch (`${base}/api/library/all.json`)).json()
     
-    console.log(url)
     let filter = getFilter(url.searchParams, meta)
     const res = await filterFrontmatter(filter, fm)
     

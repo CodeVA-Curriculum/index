@@ -1,7 +1,8 @@
 import type { Frontmatter } from "./frontmatter";
 
 const disallowed = [
-    "identity"
+    "identity",
+    "indigenous"
 ]
 
 export function censorTitles(els:Frontmatter[]):Frontmatter[] {
