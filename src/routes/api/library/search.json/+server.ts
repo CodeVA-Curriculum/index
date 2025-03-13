@@ -15,3 +15,5 @@ export async function GET({ url, fetch }) {
     })
     // return json('Hello')
 }
+
+export const prerender = true;
