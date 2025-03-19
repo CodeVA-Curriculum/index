@@ -42,7 +42,7 @@
 <section class='hero is-fullheight-with-navbar'>
     <div class='hero-body'>
         <div class='container has-text-centered'>
-            <div class='columns is-desktop'>
+            <!-- <div class='columns is-desktop'>
                 <div class='column mr-5 pr-3'>
                     <div class='is-sticky'>
                         <img alt="The CodeVA logo" src={logo} />
@@ -59,7 +59,9 @@
                     <OrbLink data={project} />
                     {/each}
                 </div>
-            </div>
+            </div> -->
+            <h1 class='title is-1'>Oops! Something went wrong.</h1>
+            <a class='button is-primary' href="https://codevirginia.org">Return to CodeVA's Website</a>
         </div>
         
     </div>

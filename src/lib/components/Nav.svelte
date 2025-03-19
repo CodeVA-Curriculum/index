@@ -29,19 +29,19 @@
             >
                 Home
             </a>
-            <a class="navbar-item"
+            <!-- <a class="navbar-item"
                 href='{base}/library'
             >
                 Search Our Library
-            </a>
-            <a target="_blank" class='navbar-item' href='https://goopenva.org/profile/18746'>
+            </a> -->
+            <!-- <a target="_blank" class='navbar-item' href='https://goopenva.org/profile/18746'>
                 GoOpenVA
-            </a>
-            <a class="navbar-item"
-                href='{base}/contact'
-            >
-                Contact Us!
-            </a>
+            </a> -->
+            <!-- <a class="navbar-item"
+            href='{base}/contact'
+        > -->
+            <!-- Contact Us! -->
+        <!-- </a> -->
         </div>
     </div>
 </nav>
