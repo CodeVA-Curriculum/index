@@ -18,7 +18,7 @@ export function supporterDirective() {
           // console.log("found node", node)
           const data = node.data || (node.data = {})
           const image = node.children.length > 0 && node.children[0].value == "the Virginia Department of Education" ? "vdoe.png" : "donate.png"
-          const text = node.children.length > 0 && node.children[0].value == "the Virginia Department of Education" ? `CodeVA created this material with support from the Virginia Department of Education, and is aligned with the Virginia Standards of Learning and other state education policies.` : `CodeVA created this material with support from a private donor. It has not been reviewed or endorsed by the VDOE or other authorities for alignment to the Virginia Standards of Learning.`
+          const text = node.children.length > 0 && node.children[0].value == "the Virginia Department of Education" ? `CodeVA created this material in partnership with the Virginia Department of Education and was paid for with state appropriation dollars.` : `CodeVA created this material with support from a private donor. It has not been reviewed or endorsed by the VDOE or other authorities for alignment to the Virginia Standards of Learning.`
           
           const hast = h('div.supporter-disclaimer', [
             h('div.img-wrap', [
