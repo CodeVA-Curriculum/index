@@ -56,7 +56,8 @@ interface Frontmatter {
     audiences:string[],
     standards:string[],
     links:Links,
-    image:string
+    image:string,
+    vdoe:boolean
 }
 
 interface Links {

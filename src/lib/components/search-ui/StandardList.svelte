@@ -31,7 +31,7 @@
         for(let i=0;i<countList.length;i++) {
             count = count + countList[i]
         }
-        console.log("Counted", count)
+        // console.log("Counted", count)
         return count
     }
 

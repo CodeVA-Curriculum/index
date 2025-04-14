@@ -5,6 +5,7 @@
     import ElementView from '$lib/components/element-views/ElementView.svelte';
 
     import {onMount} from 'svelte'
+    import SupporterPop from '$lib/components/element-views/SupporterPop.svelte';
 
     let metaDescription = ""
     let metaKeywords = ""
@@ -47,4 +48,16 @@
     <div class='section'>
         <ElementView data={data} />
     </div>
+    
 </div>
+<div class='support-wrap'>
+    <SupporterPop vdoe={data.frontmatter.vdoe} />
+</div>
+
+<style lang='scss'>
+    .support-wrap {
+        position: fixed;
+        bottom: 5rem;
+        right: 5rem;
+    }
+</style>

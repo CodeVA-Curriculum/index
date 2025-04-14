@@ -32,10 +32,9 @@
     }
 
     onMount(async () => {
-        // console.log(elems)
         filteredList = filterProjects(filter, elems)
         const res = await (await fetch(`${base}/api/library/meta.json`)).json()
-        console.log(res)
+        
         audiences = res.audiences
         for(const subj in res.subjects) {
             subjects = [...subjects, res.subjects[subj]]
@@ -43,7 +42,6 @@
         for(const band in res.grades) {
             grades = [...grades, band]
         }
-        console.log("Subjects", subjects)
     })
 
     function isIntersecting(array1:string[], array2:string[]):boolean {
@@ -51,7 +49,6 @@
         for(let i=0;i<array1.length;i++) {
             intersections += array2.includes(array1[i])? 1 : 0
         }
-        // console.log(array1, array2, intersections > 0)
         return intersections > 0
     }
 
@@ -66,9 +63,11 @@
             const expandedFilterGrades = expandDashNotation([filter.grades])
             const expandedElementGrades = expandDashNotation(el.grades)
             const gradeMatch = filter.grades == 'All Grade Levels'? true : isIntersecting(expandedFilterGrades, expandedElementGrades)
-            // console.log(filter.grades)
-            const termMatch = filter.term.length > 0? el.title?.toLowerCase().includes(filter.term.toLowerCase()) : true
-            return subjectsMatch && audiencesMatch && termMatch && gradeMatch
+            
+            // This was here when we thought we'd have a search box, removed for now
+            // const termMatch = filter.term.length > 0? el.title?.toLowerCase().includes(filter.term.toLowerCase()) : true
+            
+            return subjectsMatch && audiencesMatch && gradeMatch // && termMatch
         })
         return filtered
     }

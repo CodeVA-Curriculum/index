@@ -33,6 +33,7 @@ export async function parseFrontmatter(pathData:Path) {
     .use(() => (tree) => {
       frontmatter = applyYAML(tree.children[0].value, pathData)
       frontmatter.pathData = pathData
+      frontmatter.vdoe = frontmatter.vdoe ? true : false
       
       // console.log(frontmatter)
     })
