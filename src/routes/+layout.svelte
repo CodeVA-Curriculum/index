@@ -15,5 +15,5 @@
 <Nav />
 <slot />
 
-<Acknowledge />
+<!-- <Acknowledge /> -->
 <!-- <Footer /> -->

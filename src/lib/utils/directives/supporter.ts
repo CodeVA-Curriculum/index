@@ -28,10 +28,12 @@ export function supporterDirective() {
             ]),
             h('p.text', text)
           ])
-  
-          data.hName = hast.tagName
-          data.hProperties = hast.properties
-          data.hChildren = hast.children
+          
+          if(node.children.length > 0 && node.children[0].value == 'the Virginia Department of Education') {
+            data.hName = hast.tagName
+            data.hProperties = hast.properties
+            data.hChildren = hast.children
+          }
   
           // console.log(node)
         }

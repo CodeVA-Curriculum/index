@@ -16,14 +16,13 @@
         <p class="modal-card-title">Acknowledgement</p>
       </header>
       <section class="modal-card-body">
-        <!-- <p>Many of the materials on this site were not created in partnership with the VDOE, and were not paid for by state appropriation dollars. These materials do not represent the views of the Virginia Department of Education, and may not align to state or federal curriculum guidelines. All materials are clearly marked to indicate whether or not they were paid for by the state of Virginia.</p> -->
-
-        <p>To access the site, please check the box below and click "Continue":</p>
+        <p>Many of the materials on this site were created in partnership with private donors, and <span class='emphasis'>were not paid for by Virginia state-appropriated funds</span>. Materials created in partnership with the VDOE are indicated clearly on their page.</p>
+        <p class='mt-5'>To access the site, please check the box below and click "Continue":</p>
         <div class='field mt-5'>
             <div class='control is-expanded'>
                 <label class="checkbox">
                     <input bind:value={acknowledged} type="checkbox">
-                    I acknowledge that the materials on this site do not reflect the views, policies, values, or constitute official guidance from the VDOE unless otherwise indicated.
+                    I acknowledge that many of the materials on this site were not created in partnership with the VDOE, and may not reflect the views or policies of the Virginia Department of Education.
                 </label>
             </div>
         </div>
@@ -41,6 +40,12 @@
   
 
   <style lang='scss'>
+    .emphasis {
+      font-weight:900;
+        font-style: italic;
+        text-decoration: underline;
+        background-color: yellow;
+    }
     .disclaimer > p {
         font-size: 9pt;
     }

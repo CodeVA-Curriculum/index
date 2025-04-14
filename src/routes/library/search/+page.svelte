@@ -7,6 +7,7 @@
     import { onMount } from 'svelte';
     import { getFilter, filterFrontmatter } from '$lib/utils/search';
     import type { Frontmatter } from '$lib/utils/frontmatter';
+    import Acknowledge from '$lib/components/Acknowledge.svelte';
 
     let results:Frontmatter[] = []
     let related:Frontmatter[] = []
