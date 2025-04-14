@@ -54,11 +54,6 @@
                         </div>
                     </div>
                 </div>
-                <div class='column' style='margin-top: 1rem;'>
-                    {#each projects as project}
-                    <OrbLink data={project} />
-                    {/each}
-                </div>
             </div>
         </div>
         

@@ -4,9 +4,8 @@
     let active = true;
 </script>
 
-<!-- TODO: Make this its own component -->
 <div id='standards-box' class='sidebar standards'>
-    <h3>Standards</h3>
+    <h3 class='title is-4'>Standards</h3>
     <p style='font-size: 10pt;' class='is-italic'>Click to Read SOLs</p>
     <div class='pills {active? 'full':'full'}'>
     {#each standards as standard}

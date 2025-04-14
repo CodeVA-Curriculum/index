@@ -164,3 +164,20 @@ export function expandSubjectsStrands(start:string[], items:object):string[] {
     }
     return [...start, ...startSubj]
 }
+
+export async function getThumbnail(driveLink:string):Promise<string|false> {
+    let id = driveLink.substring(driveLink.indexOf('/d/') + 3)
+    id = id.substring(0, id.indexOf('/'))
+    
+    let exists = false
+
+    if(id != 'tps:') {
+        const res = await fetch("/thumbnails/" + id + '.png', { method: 'HEAD' })
+        exists = res.ok
+    }
+
+    if(exists) {
+        return "/thumbnails/" + id + '.png'
+    }
+    return false
+}

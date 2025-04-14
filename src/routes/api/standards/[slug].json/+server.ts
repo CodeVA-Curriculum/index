@@ -7,14 +7,14 @@ export async function GET({params}) {
     const stds = await getStandards();
     const id = params.slug.split('.')
     if(id.length == 4 && !id[0].includes('-')) {
-        console.log("Getting standard at", params.slug)
+        // console.log("Getting standard at", params.slug)
         const obj = stds.filter((obj) => obj.id == params.slug)
         // console.log(obj)
         return json(obj)
     }
 
     // calling for a range of standards
-    console.log("Got range call", params.slug)
+    // console.log("Got range call", params.slug)
     const obj = stds.filter((obj) => {
         const iid = obj.id.split('.')
 
