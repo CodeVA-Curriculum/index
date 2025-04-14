@@ -6,6 +6,7 @@
     import ElementCard from "./ElementCard.svelte";
     import StandardTag from '../standards-list/StandardTag.svelte';
     import StandardsBox from './StandardsBox.svelte';
+    import SupporterPop from './SupporterPop.svelte';
     export let data:Element
 
     let standardsBySubject:any = {}
@@ -71,7 +72,9 @@
     </div>
 </div>
 
-{#if !data.frontmatter.vdoe}
+<!-- <SupporterPop /> -->
+
+<!-- {#if !data.frontmatter.vdoe}
 <div class="modal {open ? 'is-active' : ''}">
     <div class="modal-background blur"></div>
     <div class="modal-card">
@@ -103,7 +106,7 @@
       </footer>
     </div>
 </div>
-{/if}
+{/if} -->
 
 <style lang='scss'>
     @import '$lib/styles/colors.scss';
