@@ -2,7 +2,14 @@
 $body-overflow-y: auto;
 
 @import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
-$family-sans-serif: "Raleway";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800;0,900;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Calibri&display=swap");
+$family-sans-serif: "Calibri";
+$body-font-size: 1.125em;
+
+$title-family: "Poppins";
+$title-weight: 800;
+
 $weight-bold: 900;
 
 $primary: #0f3760;
@@ -18,3 +25,10 @@ $middle-school-light: #c1edf2;
 
 $elementary: #75bf4a;
 $elementary-light: #e3edc4;
+
+// New Colors
+$light-green: #e0eac1;
+
+$light-yellow: #f7e9b2;
+
+$navy: #0f3760;
