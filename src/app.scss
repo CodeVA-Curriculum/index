@@ -1,6 +1,11 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */ /* Import only what you need from Bulma */
 body { height: 100vh; }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: $title-family;
+    font-weight: 900;
+}
+
 .number-pill {
     background-color: whitesmoke;
     text-align: center;
