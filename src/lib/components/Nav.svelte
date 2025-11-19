@@ -45,8 +45,13 @@
             <a class="navbar-item"
                 href='{base}/contact'
             >
-                Contact Us!
+                Contact
             </a>
+            <div class='navbar-item'>
+                <a class='button is-primary' href='https://app.hubspot.com/payments/purchase/hscs_d16qUamtR7hEt0Q5avDzgfGx4fKcRmYMTwP5jTC0T6hbnt1Bc8SpNR0dMBlPayR6?referrer=CMS_MODULE_NEWTAB'>
+                    Donate!
+                </a>
+            </div>
         </div>
     </div>
 </nav>

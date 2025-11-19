@@ -1,5 +1,6 @@
 <script lang='ts'>
     import { fullGradeNames } from "$lib/utils/metaUtils";
+    import { base } from "$app/paths";
     let grades = fullGradeNames.splice(0,9)
     grades.push('High School')
 
@@ -21,7 +22,7 @@
                     <li>
                         <div class='is-flex'>
                             <img alt='' src='/images/empty-hex.png'>
-                            <a class='title is-4'>Algorithms & Programming</a>
+                            <a href='{base}/sols/algorithms-and-programming' class='title is-4'>Algorithms & Programming</a>
                         </div>
                         <!-- <div class='hexagon'></div> -->
                          <p>In this strand, students learn how to code and how to apply computational thinking practices to the process of creating software.</p>
