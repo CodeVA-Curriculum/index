@@ -4,7 +4,7 @@ import {base} from '$app/paths'
 
 export function srcToUrl(path:string) {
     // console.log(path)
-    let newPath = '/'+base+'library/browse/'+path.replace('/src/content/', '/').replace('.md', '')
+    let newPath = '/library/browse/'+path.replace('/src/content/', '/').replace('.md', '')
     newPath = newPath.replace('//', '/')
     // console.log(newPath)
     return newPath

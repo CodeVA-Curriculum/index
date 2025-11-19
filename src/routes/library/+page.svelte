@@ -2,7 +2,9 @@
     import Projects from "$lib/components/Projects.svelte";
     import Search from "$lib/components/search-ui/Search.svelte";
     import {onMount} from 'svelte'
+    import Acknowledge from "$lib/components/Acknowledge.svelte";
     import { page } from "$app/stores";
+    import { censorTitles } from "$lib/utils/censor.js";
     export let data;
     let groups:any = [];
 
@@ -10,7 +12,7 @@
 
     onMount(()=> {
         urlData = $page.url.searchParams
-        groups = data.projects;
+        groups = censorTitles(data.projects);
     })
 </script>
 
@@ -32,3 +34,4 @@
         <Projects elems={groups} />
     </div>
 </div>
+

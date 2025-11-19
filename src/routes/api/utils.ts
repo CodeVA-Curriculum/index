@@ -2,11 +2,12 @@ import YAML from 'yaml'
 import { read } from 'to-vfile'
 
 // Types
-interface KeyEntry {
+export interface KeyEntry {
     title:string,
     subject?:string,
     inherit?:string,
-    strands?:object
+    strands?:object,
+    grade?:number|string
 }
 interface IDKEY {
     [name: string]: KeyEntry
@@ -34,4 +35,25 @@ function isSubject(keyEntry:KeyEntry):boolean {
     // 2. inherit strands from a subject and take on that subject at its own (e.g., Computer Science Foundations), or
     // 3. define their own strands and subject (which must exist as another key in id_key) (e.g., Data Science, Virginia Studies)
     return Object.hasOwn(keyEntry, 'title') && Object.hasOwn(keyEntry, 'strands') && !Object.hasOwn(keyEntry, 'inherit') && !Object.hasOwn(keyEntry, 'subject')
+}
+
+export async function getSubjectParent(keyEntry:KeyEntry):Promise<false | KeyEntry> {
+    const keys = await getKey()
+    if(isSubject(keyEntry)) {
+        return keyEntry
+    }
+    if(Object.hasOwn(keyEntry, 'subject')) {
+        return keys[keyEntry.subject]
+    }
+    return false
+}
+
+export async function getAllSubjects(obj:any):Promise<KeyEntry[]> {
+    let subjects:KeyEntry[] = []
+    for(const [k,v] of Object.entries(obj)) {
+        if(isSubject(v as KeyEntry) || true) {
+            subjects = [...subjects, v as KeyEntry]
+        }
+    }
+    return subjects
 }

@@ -46,7 +46,7 @@
 
 <div class="modal {active? 'is-active' : ''}">
     <div on:click={deactivate} class="modal-background"></div>
-    <div class="modal-card">
+    <div class="wrap modal-card content">
         {#if el}
             <SingleStandardModalBody back={back} on:close={deactivate} standard={selected} />
         {:else}
@@ -57,3 +57,10 @@
         </footer>
     </div>
 </div>
+
+<style>
+    .wrap {
+        font-style: normal;
+        font-size: medium;
+    }
+</style>

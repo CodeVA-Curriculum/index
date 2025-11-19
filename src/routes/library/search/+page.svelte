@@ -5,15 +5,16 @@
     import { expandDashNotation, expandSubjectsStrands } from '$lib/utils/metaUtils';
     import {page} from '$app/stores'
     import { onMount } from 'svelte';
-    import { getFilter, filterFrontmatter } from './lib';
+    import { getFilter, filterFrontmatter } from '$lib/utils/search';
     import type { Frontmatter } from '$lib/utils/frontmatter';
+    import Acknowledge from '$lib/components/Acknowledge.svelte';
 
     let results:Frontmatter[] = []
     let related:Frontmatter[] = []
 
     let urlData:URLSearchParams = new URLSearchParams()
     
-    onMount(() => {
+    onMount(async () => {
         urlData = $page.url.searchParams
         // load results based on Search filters
         if($page.url.searchParams.size == 0) {
@@ -23,11 +24,11 @@
         }
 
         // Get params
+        
         let filter = getFilter($page.url.searchParams, data.meta)
 
         const res = filterFrontmatter(filter, data.frontmatter)
         res.then((res)=> {
-            // console.log(res.results)
             results = res.results
             related = res.related
         })
