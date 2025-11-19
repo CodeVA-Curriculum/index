@@ -42,7 +42,7 @@ async function getFile(id) {
 }
 
 async function main() {
-    // const files = await getIds()
+    const files = await getIds()
     // for(const file of files) {
     //     if(file == "1pJcVTPSp0IOIFhm4MMoWscCbPqP8arnM") {
     //         console.log("PDF test passed!")
@@ -51,9 +51,9 @@ async function main() {
     //         console.log("Doc test passed!")
     //     }
     // }
-    // console.log(files)
-    // getThumbnails(files)
-    getFile("11kOGV1Oh2A9tRXDm4lwY5cU41lamSAsHYFP3cIP73Sc")
+    console.log(files)
+    getThumbnails(files)
+    // getFile("11kOGV1Oh2A9tRXDm4lwY5cU41lamSAsHYFP3cIP73Sc")
 }
 
 main()
