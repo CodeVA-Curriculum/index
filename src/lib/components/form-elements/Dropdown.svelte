@@ -5,6 +5,8 @@
     export let defaultOption:string
     // export let label:string
     export let selected = ''
+    export let optionClasses = ''
+    export let width:string|undefined = '10rem'
 
     onMount(() => {
         selected = defaultOption
@@ -12,10 +14,10 @@
 </script>
 
 <!-- Must have element with class `field` as direct parent -->
-<div class='control drop-down my-2 mx-1 p-0 is-inline-block-tablet'>
+<div style={width ? `max-width: ${width};` : ''} class='control drop-down my-2 mx-1 p-0 is-inline-block-tablet'>
     <!-- <label class='label'>{label}</label> -->
     <div class='select is-fullwidth'>
-        <select bind:value={selected} name='audience'>
+        <select class={optionClasses} bind:value={selected} name='audience'>
             <option value={defaultOption}>{defaultOption}</option>
             {#each options as opt}
             <option value={opt}>{opt}</option>
@@ -25,11 +27,11 @@
 </div>
 
 <style lang='scss'>
-    @import '../../../app.scss';
-    @include tablet {
-        .drop-down {
-            max-width: 10rem;
-        }
-    }
+    // @import '../../../app.scss';
+    // @include tablet {
+    //     .drop-down {
+    //         max-width: 10rem;
+    //     }
+    // }
     
 </style>
