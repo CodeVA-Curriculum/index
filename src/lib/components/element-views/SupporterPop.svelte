@@ -32,7 +32,7 @@
     {#if vdoe}
     <p class='text block'>CodeVA created this resource in partnership with the VDOE. It was paid for, in part, using state-appropriated funds. If you have questions about this resource, please email <a href="mailto:curriculum@codevirginia.org">curriculum@codevirginia.org</a>.</p>
     {:else}
-    <p class='text block'>CodeVA created this material with support from a private donor.<br class='mb-2'>This resource <span class='emphasis'>was not created</span> in partnership with the VDOE and <span class='emphasis'>was not</span> paid for using state appropriations.</p>
+    <p class='text block'>CodeVA created this material with generous support from a private donor.<br class='mb-2'>Do you want to support our work or create something with us? <a href="https://codevirginia.org/contact-us">Get in touch!</a></p>
     {/if}
 </div>
 {/if}
