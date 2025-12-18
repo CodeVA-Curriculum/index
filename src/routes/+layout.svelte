@@ -1,19 +1,13 @@
-<script>
-  import "../app.scss";
-  import Nav from '$lib/components/Nav.svelte'
-  import Analytics from "$lib/components/analytics/Analytics.svelte";
-    import Footer from "$lib/components/Footer.svelte";
-    import Acknowledge from "$lib/components/Acknowledge.svelte";
+<script lang="ts">
+	import Nav from '$lib/components/Nav.svelte'
+	import favicon from '$lib/assets/favicon.svg';
+	import '$lib/styles/index.scss';
+	let { children } = $props();
 </script>
 
 <svelte:head>
-    <title>CodeVA Curriculum Library</title>
+	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<!-- <Analytics /> -->
-
 <Nav />
-<slot />
-
-<!-- <Acknowledge /> -->
-<!-- <Footer /> -->
+{@render children()}
