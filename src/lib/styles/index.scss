@@ -1,0 +1,14 @@
+@use '@picocss/pico/scss/pico'; //with (
+  /* $modules: ( */
+    /* "themes/default": false */
+  /* ) */
+// );
+@use './theme.scss';
+
+$section-gap: 4rem;
+
+:root {
+  section {
+    margin-top: $section-gap;
+  }
+}
