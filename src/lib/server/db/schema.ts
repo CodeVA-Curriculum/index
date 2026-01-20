@@ -16,3 +16,14 @@ export const session = sqliteTable('session', {
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
+
+// Trail Guide stuff
+export const guide = sqliteTable('guide', {
+	id: integer('id').primaryKey(),
+	title: text('title').notNull(),
+	path: text('path'),
+	short: text('short'),
+	description: text('description'),
+	image: text('image')
+})
+export type Guide = typeof guide.$inferSelect;
