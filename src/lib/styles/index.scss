@@ -4,13 +4,22 @@
   /* ) */
 // );
 @use './theme.scss';
+@use './fonts/face.css'; // load font face rules: Poppins, Calibri
 
 $section-gap: 4rem;
 $section-margin: 2rem;
 
+
 :root {
+  font-family: Calibri;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Poppins;
+  }
   section {
     margin-top: $section-gap;
     margin-left: $section-margin;
+  }
+  button, a[role="button"] {
+    border-radius: 0;
   }
 }

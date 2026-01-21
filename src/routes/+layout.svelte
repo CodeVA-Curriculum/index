@@ -2,8 +2,8 @@
 	import Nav from '$lib/components/Nav.svelte'
 	import favicon from '$lib/assets/favicon.svg';
 	import '$lib/styles/index.scss';
+	// import '$lib/styles/fonts/face.css';
 	let { children } = $props();
-	import { 
 </script>
 
 <svelte:head>

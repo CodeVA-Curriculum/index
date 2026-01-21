@@ -4,6 +4,11 @@ import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
 import * as table from '$lib/server/db/schema';
+import { env } from '$env/dynamic/private';
+
+// if (!env.SECRET_KEY) throw new Error('SECRET_KEY is not set');
+
+// export const auth_secret = env.SECRET_KEY
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -15,10 +20,10 @@ export function generateSessionToken() {
 	return token;
 }
 
-export async function createSession(token: string, userId: string) {
+export async function createSession(token: string, userId:number) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: table.Session = {
-		id: sessionId,
+		// id: sessionId,
 		userId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
@@ -79,3 +84,5 @@ export function deleteSessionTokenCookie(event: RequestEvent) {
 		path: '/'
 	});
 }
+
+
