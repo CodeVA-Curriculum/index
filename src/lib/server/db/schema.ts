@@ -25,7 +25,6 @@ export const session = sqliteTable('session', {
 export type Session = typeof session.$inferSelect;
 export type User = typeof user.$inferSelect;
 
-
 // Library Elements
 export const element = sqliteTable('element', {
 	// table schema contain exclusively read-only properties. Relational fields are expressed in other areas of this file.
@@ -212,3 +211,13 @@ export const pivotUserProject = sqliteTable('pivot_user_project', {
 	projectId: integer('project_id').notNull().references(() => user.id)
 })
 
+// Trail Guide stuff
+export const guide = sqliteTable('guide', {
+	id: integer('id').primaryKey(),
+	title: text('title').notNull(),
+	path: text('path'),
+	short: text('short'),
+	description: text('description'),
+	image: text('image')
+})
+export type Guide = typeof guide.$inferSelect;
