@@ -5,6 +5,7 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 // userland
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoincrement: true }),
+	email: text('email'),
 	username: text('username').notNull(),
 	passwordHash: text('password_hash').notNull()
 });

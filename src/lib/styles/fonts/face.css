@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('$lib/styles/fonts/Poppins/Poppins-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('$lib/styles/fonts/Calibri/calibri-regular.ttf');
+}
