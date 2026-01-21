@@ -1,0 +1,6 @@
+[submodule "static/standards"]
+	path = static/standards
+	url = https://github.com/codeva-curriculum/standards
+[submodule "static/library"]
+	path = static/library
+	url = https://github.com/codeva-curriculum/library
