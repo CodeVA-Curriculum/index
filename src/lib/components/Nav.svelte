@@ -11,6 +11,7 @@
 
 <style lang='scss'>
   nav {
+    flex-grow: 0;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     padding: 0 1rem;
   }
