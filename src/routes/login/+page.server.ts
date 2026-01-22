@@ -37,8 +37,16 @@ export const actions = {
       console.log("Got user")
       // Log the user in to our side of things, which means adding a session to the database and making a cookie for it.
       const token = auth.generateSessionToken()
-      const [user] = await db.select().from(tables.user).where(eq(tables.user.email, res.email))
-      console.log(user)
+      let [user] = await db.select().from(tables.user).where(eq(tables.user.email, res.email))
+      if(!user) {
+        // user is not in our database yet, so add them
+        user = await db.insert(tables.user).values({
+          name: res.first_name + " " + res.last_name,
+          username: res.email,
+          email: res.email,
+          password_hash: '0000'
+        }).returning()
+      }
       const session = await auth.createSession(token, user.id)
       auth.setSessionTokenCookie(event, token, session.expiresAt)
       event.locals.user = user
