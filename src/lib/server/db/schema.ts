@@ -4,7 +4,7 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 // userland
 export const user = sqliteTable('user', {
-	id: integer('id').primaryKey({ autoincrement: true }),
+	id: integer('id').primaryKey({ autoIncrement: true }),
 	email: text('email'),
 	username: text('username').notNull(),
 	passwordHash: text('password_hash')
@@ -17,7 +17,7 @@ export const user = sqliteTable('user', {
 // }
 
 export const session = sqliteTable('session', {
-	id: integer('id').primaryKey({ autoincrement: true }),
+	id: integer('id').primaryKey({ autoIncrement: true }),
 	userId: integer('user_id').notNull().references(() => user.id),
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
 });
@@ -29,7 +29,7 @@ export type User = typeof user.$inferSelect;
 // Library Elements
 export const element = sqliteTable('element', {
 	// table schema contain exclusively read-only properties. Relational fields are expressed in other areas of this file.
-	id: integer('id').primaryKey({ autoincrement: true }),
+	id: integer('id').primaryKey({ autoIncrement: true }),
 	title: text('title').notNull(),
 	short: text('short').default("Short description"),
 	long: text('long').default("Long description"),
@@ -72,7 +72,7 @@ export const grade = sqliteTable('grade', {
 export type Grade = typeof grade.$inferSelect
 
 export const standard = sqliteTable('standard', {
-	id: integer('id').primaryKey({autoincrement: true}),
+	id: integer('id').primaryKey({autoIncrement: true}),
 	abbr: text(),
 	gradeId: integer('grade_id').notNull().references(() => grade.id),
 	subjectId: integer('subject_id').notNull().references(() => subject.id),
@@ -158,7 +158,7 @@ export const standardsToElements = sqliteTable('standards_to_elements', {
 
 // Trail Guide Stuff
 export const node = sqliteTable('node', {
-	id: integer().primaryKey({ autoincrement: true }),
+	id: integer().primaryKey({ autoIncrement: true }),
 	path: text(),
 	content: text(), // HTML
 	short: text(),
@@ -169,7 +169,7 @@ export const node = sqliteTable('node', {
 export type Node = typeof node.$inferSelect;
 
 export const project = sqliteTable('project', {
-	id: integer().primaryKey({autoincrement: true}),
+	id: integer().primaryKey({autoIncrement: true}),
 	title: text(),
 	content: text(), // HTML
 	short: text(),
