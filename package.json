@@ -4,6 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"db:seed": "npx tsx --env-file=./.env ./src/lib/server/db/seed.ts",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
