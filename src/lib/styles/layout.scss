@@ -9,7 +9,7 @@ section { margin: $section-gap 0; }
   display: flex;
   flex-flow: wrap-reverse;
   & > * {
-    margin: $section-gap/4 $section-gap/4;
+    margin: $section-gap/4 0;
     flex: 1;
     @include xs {
     flex-basis: 100%; }
