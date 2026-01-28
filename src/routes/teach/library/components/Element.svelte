@@ -20,6 +20,7 @@
   .card, .stats {
     display: flex;
     flex-direction: row;
+    width: 100%;
   }
   .buttons {
     display: flex;
