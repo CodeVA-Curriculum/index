@@ -3,7 +3,7 @@
 </script>
 <nav>
   <ul>
-    <li>Brand Logo</li>
+    <li><img src="/images/wordmark.png"></li>
   </ul>
   <ul>
     <li><a href="/teach">Teach</a></li>
@@ -19,9 +19,15 @@
 </nav>
 
 <style lang='scss'>
+  @import "$lib/styles/media-queries.scss";
   nav {
     flex-grow: 0;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     padding: 0 1rem;
+  }
+  img {
+    width: auto;
+    height: 36px;
+    @include xs { height: 22px; }
   }
 </style>
