@@ -7,7 +7,7 @@ export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoincrement: true }),
 	email: text('email'),
 	username: text('username').notNull(),
-	passwordHash: text('password_hash').notNull()
+	passwordHash: text('password_hash')
 });
 
 // TODO: refactor: apply these columns to any element that can be saved to the user's profile
