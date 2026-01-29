@@ -9,10 +9,13 @@ section { margin: $section-gap 0; }
   display: flex;
   flex-flow: wrap-reverse;
   & > * {
-    margin: $section-gap/4 0;
+    margin: $section-gap/4 $section-gap/4;
+    margin-left: 0;
     flex: 1;
     @include xs {
-    flex-basis: 100%; }
+      flex-basis: 100%; 
+      margin-right: 0;
+    }
   }
 }
 
