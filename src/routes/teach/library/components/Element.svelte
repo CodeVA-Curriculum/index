@@ -14,7 +14,7 @@
     <span>items: 8</span>
   </div>
   <div class='stats'>
-      <span>Type: Lesson Plan (1h) <Help /></span>
+      <span>Type: Lesson Plan (1h) <Help>A Lesson Plan is a continuous learning experience, usually about 1 instructional hour. Some are longer; check the lesson details for estimated duration of a lesson.</Help></span>
       <span>subj: 4</span>
       <span>sols: 3</span>
   </div>
