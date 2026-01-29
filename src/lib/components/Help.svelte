@@ -1,11 +1,13 @@
 <script lang='ts'>
   import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
+
+  let { children } = $props();
 </script>
 
 <span><Fa size=.9x icon={faCircleQuestion} />
 <div class='tooltip'>
-  <span>A Lesson Plan is one continuous learning experience, usually about 1 hour of instruction. Some are longer, spreading instruction out over several hours or class periods. Check the lesson details for an estimate of lesson duration.</span>
+  <span>{@render children()}</span>
 </div>
 </span>
 
