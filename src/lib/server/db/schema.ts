@@ -6,20 +6,20 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	email: text('email'),
-	username: text('username').notNull(),
+	username: text('username'),
 	passwordHash: text('password_hash')
 });
 
 // TODO: refactor: apply these columns to any element that can be saved to the user's profile
 // export const userSaveable = {
 // 	savedAt: integer({ mode: 'timestamp' }).defaultNow(),
-// 	userId: integer('user_id').notNull().references(() => user.id)
+// 	userId: integer('user_id').references(() => user.id)
 // }
 
 export const session = sqliteTable('session', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	userId: integer('user_id').notNull().references(() => user.id),
-	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
+	userId: integer('user_id').references(() => user.id),
+	expiresAt: integer('expires_at', { mode: 'timestamp' })
 });
 
 
@@ -30,7 +30,7 @@ export type User = typeof user.$inferSelect;
 export const element = sqliteTable('element', {
 	// table schema contain exclusively read-only properties. Relational fields are expressed in other areas of this file.
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	title: text('title').notNull(),
+	title: text('title'),
 	short: text('short').default("Short description"),
 	long: text('long').default("Long description"),
 	authors: text().default("CodeVA Curriculum")
@@ -41,14 +41,16 @@ export type Element = typeof element.$inferSelect;
 export const subject = sqliteTable('subject', {
 	id: integer('id').primaryKey(),
 	title: text(),
-	abbr: text()
+	abbr: text(),
+	strands: text({ mode: 'json' })
 })
 export type Subject = typeof subject.$inferSelect;
 export const course = sqliteTable('course', {
 	id: integer('id').primaryKey(),
 	title: text(),
-	subjectId: integer('subject_id').notNull().references(() => subject.id),
-	abbr: text()
+	subjectId: integer('subject_id').references(() => subject.id),
+	abbr: text(),
+	strands: text({ mode: 'json' })
 })
 export type Course = typeof course.$inferSelect;
 // export const relationsSubjectCourse = defineRelations({ subject, course }, {
@@ -74,8 +76,8 @@ export type Grade = typeof grade.$inferSelect
 export const standard = sqliteTable('standard', {
 	id: integer('id').primaryKey({autoIncrement: true}),
 	abbr: text(),
-	gradeId: integer('grade_id').notNull().references(() => grade.id),
-	subjectId: integer('subject_id').notNull().references(() => subject.id),
+	gradeId: integer('grade_id').references(() => grade.id),
+	subjectId: integer('subject_id').references(() => subject.id),
 	text: text() // HTML
 })
 export type Standard = typeof standard.$inferSelect
@@ -97,18 +99,18 @@ export type Standard = typeof standard.$inferSelect
 // }))
 
 export const elementsToGrades = sqliteTable('elements_to_grades', {
-	elementId: integer('element_id').notNull().references(() => element.id),
-	gradeId: integer('grade_id').notNull().references(() => grade.id)
+	elementId: integer('element_id').references(() => element.id),
+	gradeId: integer('grade_id').references(() => grade.id)
 })
 
 export const subjectsToElements = sqliteTable('subjects_to_elements', {
-	elementId: integer('element_id').notNull().references(() => element.id),
-	subjectId: integer('subject_id').notNull().references(() => subject.id)
+	elementId: integer('element_id').references(() => element.id),
+	subjectId: integer('subject_id').references(() => subject.id)
 })
 
 export const standardsToElements = sqliteTable('standards_to_elements', {
-	elementId: integer('element_id').notNull().references(() => element.id),
-	standardId: integer('standard_id').notNull().references(() => standard.id)
+	elementId: integer('element_id').references(() => element.id),
+	standardId: integer('standard_id').references(() => standard.id)
 })
 
 // export const elementRelations = relations({ element, grade, subject, elementsToGrades, subjectsToElements, standardsToElements }, (r) => ({
@@ -151,8 +153,8 @@ export const standardsToElements = sqliteTable('standards_to_elements', {
 
 
 // export const subjectsToGrades = sqliteTable('subjects_to_grades', {
-// 	subjectId: integer('subject_id').notNull().references(() => subject.id),
-// 	gradeId: integer('grade_id').notNull().references(() => grade.id)
+// 	subjectId: integer('subject_id').references(() => subject.id),
+// 	gradeId: integer('grade_id').references(() => grade.id)
 // })
 
 
@@ -180,8 +182,8 @@ export const project = sqliteTable('project', {
 export type Project = typeof project.$inferSelect;
 
 export const pivotNodeProject = sqliteTable('pivot_node_project', {
-	nodeId: integer('node_id').notNull().references(() => node.id),
-	projectId: integer('project_id').notNull().references(() => project.id)
+	nodeId: integer('node_id').references(() => node.id),
+	projectId: integer('project_id').references(() => project.id)
 })
 
 // export const projectRelations = relations({ project, user, node }, (r) => ({
@@ -203,19 +205,19 @@ export const pivotNodeProject = sqliteTable('pivot_node_project', {
 // }))
 
 export const pivotUserElement = sqliteTable('pivot_user_element', {
-	userId: integer('user_id').notNull().references(() => user.id),
-	elementId: integer('element_id').notNull().references(() => element.id)
+	userId: integer('user_id').references(() => user.id),
+	elementId: integer('element_id').references(() => element.id)
 })
 
 export const pivotUserProject = sqliteTable('pivot_user_project', {
-	userId: integer('user_id').notNull().references(() => user.id),
-	projectId: integer('project_id').notNull().references(() => user.id)
+	userId: integer('user_id').references(() => user.id),
+	projectId: integer('project_id').references(() => user.id)
 })
 
 // Trail Guide stuff
 export const guide = sqliteTable('guide', {
 	id: integer('id').primaryKey(),
-	title: text('title').notNull(),
+	title: text('title'),
 	path: text('path'),
 	short: text('short'),
 	description: text('description'),
