@@ -1,33 +1,44 @@
 <script lang='ts'>
-  import ElementPanel from './components/ElementPanel.svelte'
-  import Element from './components/Element.svelte'
-  import SearchBar from './components/SearchBar.svelte'
+  import ElementPanel from '../components/ElementPanel.svelte'
+  import Element from '../components/Element.svelte'
+  import SearchBar from '../components/SearchBar.svelte'
 
   const items = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   let selected = 4
 </script>
 <div class='page'>
-  <div class='container results'>
-    <section>
+  <div class='results container'>
+    <section class='long'>
       <h1>Search CS Lessons & Resources</h1>
       <p>Use the search bar and filters to browse our library of computer science resources!</p>
-    </section>
-    <section class='long'>
       <div class='sticky'>
         <SearchBar />
       </div>
       <table>
+        <colgroup>
+          <col class='narrow'>
+          <col>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
       <thead>
         <tr>
-          <th scope="col">Grade</th>
+          <th scope="col">Grades</th>
           <th scope="col">Title</th>
+          <th scope="col">Type</th>
+          <th scope="col">Items</th>
+          <th scope="col">Subjects</th>
+          <th scope="col">Tags</th>
+          
         </tr>
       </thead>
       <tbody>
         {#each items as item, i}
           {#if i == selected}
-            <tr style="background-color: powderblue;">
-              <td colspan="2">
+            <tr class='selected' style="background-color: powderblue;">
+              <td colspan="6">
               <Element />
               </td>
             </tr>
@@ -35,6 +46,10 @@
           <tr>
             <td>Gr</td>
             <td>Title</td>
+            <td>Type</td>
+            <td>Items</td>
+            <td>Subj</td>
+            <td>Tags</td>
           </tr>
         {/each}
       </tbody>
@@ -46,6 +61,7 @@
 </div>
 
 <style lang='scss'>
+  tr:hover { background-color: powderblue; cursor: pointer; }
   .page {
     display: flex;
     flex-direction: row;
@@ -56,11 +72,24 @@
     height: 400vh;// TODO: get rid of this eventually 
   }
   .sticky {
+    background-color: white;
+    box-shadow: 0 1rem 1rem white;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
     position: sticky;
     top: 0;
+    z-index: 99;
   }
   .data-view {
-    width: 40rem;
+    // position: relative;
+    // right: 0;
+    padding: 0;
     background-color: pink;
+  }
+  .selected { & > td { padding: 1rem 0; } }
+
+  // Table styles
+  .narrow {
+    width: 50px;
   }
 </style>
