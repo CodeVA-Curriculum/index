@@ -5,8 +5,10 @@ export async function seedSubjects(db:any, schema:any) {
   const yaml = ((await read('static/standards/id_key.yaml')).value).toString()
   const idKey = await YAML.parse(yaml)
   // construct the subjects that aren't children of another subject
-  // 
+  await db.delete(schema.course)
   await db.delete(schema.subject) // drop everything, we're replacing it from source
+
+  console.log("Adding parent subjects...")
   const childSubjects = []
   const dbObjs = {}
   for(const [k,v] of Object.entries(idKey)) {
@@ -24,18 +26,17 @@ export async function seedSubjects(db:any, schema:any) {
       childSubjects.push(c)
     }
   }
-  // now do the same thing for all the remaining subjects, which should be stored as "courses"
-  await db.delete(schema.course)
-  console.log("Adding " + childSubjects.length + " courses...")
+  // now do the same thing for all the remaining subjects
+  console.log("Adding " + childSubjects.length + " subjects...")
   for(const course of childSubjects) {
-    console.log(`Adding ${course.title} with subject_id ${dbObjs[course.subject].id}`)
+    // console.log(`Adding ${course.title} with subject_id ${dbObjs[course.subject].id}`)
     let strands = ''
     if(course.inherit) {
       strands = JSON.stringify(dbObjs[course.inherit].strands)
     } else {
       strands = JSON.stringify(course.strands)
     }
-    await db.insert(schema.course).values({
+    await db.insert(schema.subject).values({
       title: course.title,
       abbr: course.abbr,
       subjectId: dbObjs[course.subject].id,

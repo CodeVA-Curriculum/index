@@ -42,6 +42,7 @@ export const subject = sqliteTable('subject', {
 	id: integer('id').primaryKey(),
 	title: text(),
 	abbr: text(),
+	subjectId: integer('subject_id').references(() => subject.id),
 	strands: text({ mode: 'json' })
 })
 export type Subject = typeof subject.$inferSelect;
@@ -74,8 +75,9 @@ export const grade = sqliteTable('grade', {
 export type Grade = typeof grade.$inferSelect
 
 export const standard = sqliteTable('standard', {
-	id: integer('id').primaryKey({autoIncrement: true}),
+	id: integer('id').primaryKey(),
 	abbr: text(),
+	title: text(),
 	gradeId: integer('grade_id').references(() => grade.id),
 	subjectId: integer('subject_id').references(() => subject.id),
 	text: text() // HTML
