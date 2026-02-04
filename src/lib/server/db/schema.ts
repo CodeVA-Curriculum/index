@@ -1,5 +1,5 @@
-// import { relations} from 'drizzle-orm'
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { defineRelations } from 'drizzle-orm'
+import { primaryKey, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 
 // userland
@@ -66,13 +66,62 @@ export type Course = typeof course.$inferSelect;
 // 	}
 // })
 
-// // Grade levels
+// Static content: grade levels, audiences, element types
 export const grade = sqliteTable('grade', {
 	id: integer('id').primaryKey(),
 	title: text(),
 	abbr: text()
 })
 export type Grade = typeof grade.$inferSelect
+
+export const audience = sqliteTable('audience', {
+	id: integer('id').primaryKey(),
+	title: text()
+})
+export type Audience = typeof audience.$inferSelect
+
+export const elementType = sqliteTable('element_type', {
+	id: integer('id').primaryKey(),
+	title: text()
+})
+export type ElementType = typeof elementType.$inferSelect
+
+// static content pivot tables
+export const elementToGrade = sqliteTable('element_to_grade', {
+		elementId: integer('element_id').references(() => element.id),
+		gradeId: integer('grade_id').references(() => grade.id)
+	},
+	(t) => [primaryKey({ columns: [t.elementId, t.gradeId] })]
+)
+export const elementToAudience= sqliteTable('element_to_audience', {
+		elementId: integer('element_id').references(() => element.id),
+		audienceId: integer('audience_id').references(() => audience.id)
+	},
+	(t) => [primaryKey({ columns: [t.elementId, t.audienceId] })]
+)
+export const elementToType = sqliteTable('element_to_type', {
+		elementId: integer('element_id').references(() => element.id),
+		typeId: integer('type_id').references(() => elementType.id)
+	},
+	(t) => [primaryKey({ columns: [t.elementId, t.typeId] })]
+)
+
+export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience }, (r) => ({
+	element: {
+		grades: r.many.grade({
+			from: r.element.id.through(r.elementToGrade.elementId),
+			to: r.grade.id.through(r.elementToGrade.gradeId)
+		}),
+		types: r.many.elementType({
+			from: r.element.id.through(r.elementToType.elementId),
+			to: r.elementType.id.through(r.elementToType.typeId)
+		}),
+		audiences: r.many.audience({
+			from: r.element.id.through(r.elementToAudience.elementId),
+			to: r.audience.id.through(r.elementToAudience.audienceId)
+		})
+	}
+}))
 
 export const standard = sqliteTable('standard', {
 	id: integer('id').primaryKey(),
@@ -100,20 +149,20 @@ export type Standard = typeof standard.$inferSelect
 // 	},
 // }))
 
-export const elementsToGrades = sqliteTable('elements_to_grades', {
-	elementId: integer('element_id').references(() => element.id),
-	gradeId: integer('grade_id').references(() => grade.id)
-})
+// export const elementsToGrades = sqliteTable('elements_to_grades', {
+// 	elementId: integer('element_id').references(() => element.id),
+// 	gradeId: integer('grade_id').references(() => grade.id)
+// })
 
-export const subjectsToElements = sqliteTable('subjects_to_elements', {
-	elementId: integer('element_id').references(() => element.id),
-	subjectId: integer('subject_id').references(() => subject.id)
-})
+// export const subjectsToElements = sqliteTable('subjects_to_elements', {
+// 	elementId: integer('element_id').references(() => element.id),
+// 	subjectId: integer('subject_id').references(() => subject.id)
+// })
 
-export const standardsToElements = sqliteTable('standards_to_elements', {
-	elementId: integer('element_id').references(() => element.id),
-	standardId: integer('standard_id').references(() => standard.id)
-})
+// export const standardsToElements = sqliteTable('standards_to_elements', {
+// 	elementId: integer('element_id').references(() => element.id),
+// 	standardId: integer('standard_id').references(() => standard.id)
+// })
 
 // export const elementRelations = relations({ element, grade, subject, elementsToGrades, subjectsToElements, standardsToElements }, (r) => ({
 // 	element: {
