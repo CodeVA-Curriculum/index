@@ -9,14 +9,14 @@ import { seedStandards } from './seedStandards'
 async function main() {
   const client = new Database(process.env.DATABASE_URL);
 
-  const db = drizzle(client, { schema: { ...schema } });
+  const db = drizzle({ schema: schema, client: client });
   const users = await db.select().from(schema.user)
 
   // seed subjects and courses
-  const { subjects, courses } = await seedSubjects(db, schema)
+  // const { subjects, courses } = await seedSubjects(db, schema)
 
   // seed standards
-  const { standards } = await seedStandards(db, schema, subjects, courses)
+  // const { standards } = await seedStandards(db, schema, subjects, courses)
 
   // TODO: seed library elements
 }
