@@ -36,6 +36,7 @@ async function main() {
 
   await db.delete(schema.elementType)
   await db.delete(schema.audience)
+  await db.delete(schema.elementToGrade)
   await db.delete(schema.grade)
 
   for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
@@ -58,32 +59,77 @@ async function main() {
   const els:any[] = []
   const elsByPath:any = {}
   for(const path of paths){
-    console.log("Processing "+path)
-    let { literal, relational } = await fileToElementObj(path)
-    const dbObj:any = await db.insert(schema.element).values(literal).returning({ id: schema.element.id }) as any
-    literal.id = dbObj[0].id
+    // console.log("Processing "+path)
+    let el = await fileToElementObj(path)
+    const dbObj:any = await db.insert(schema.element).values({
+      title: el.title,
+      short: el.short,
+      path: el.path,
+      content: el.content
+    }).returning({ id: schema.element.id }) as any
+    el.id = dbObj[0].id
     // console.log(literal, dbObj)
-    els.push({ literal: literal, relational: relational })
-    elsByPath[path] = { literal: literal, relational: relational }
+    // els.push({ literal: literal, relational: relational })
+    elsByPath[path] = el
+  }
+  for(const path of paths) {
+    const el =elsByPath[path]
+    // inherit all inheritable fields before assembling db relations and updating element
+
+    // TODO: why is this undefined?? not tracking top level .meta.md
+    console.log(elsByPath['static/library/.meta.md'])
+    
+    el.authors = inherit(el, 'authors', elsByPath)
+    el.grades = expandDashNotation(inherit(el, 'grades', elsByPath))
+    // console.log(path, el.grades)
 
     // assemble relational fields: grades, audiences, types
     // Grade IDs are in order (K.id = 0, 1.id = 1, etc.)
-    console.log(relational)
-    if(relational.grades != 'inherit') {
-      for(const grade of relational.grades) {
-        console.log("Associating " + path + " with " + grade)
-        console.log(literal.id, gradeAbbr.indexOf(grade))
-        await db.insert(schema.elementToGrade).values({
-          elementId: literal.id,
-          gradeId: gradeAbbr.indexOf(grade)
-        })
-      }
+    // console.log(relational)
+    // if(el.grades != 'inherit') {
+    //   console.log(el.grades)
+    for(const grade of el.grades) {
+      console.log("Associating " + path + " with " + grade)
+      console.log(path + " " + el.id, gradeAbbr.indexOf(grade))
+      await db.insert(schema.elementToGrade).values({
+        elementId: el.id,
+        gradeId: gradeAbbr.indexOf(grade)
+      })
     }
+    // }
+    
     // console.log(relational)
   }
-
 }
 main()
+
+function inherit(obj:any, field:string, lib:any):string {
+  if(!obj[field]) {
+    console.log("Inheriting " + field + ' for ' + obj.path)
+    const f = decedentField(obj.path, field, lib)
+    console.log("found decedent at " + f)
+    return f
+  } else {
+    return obj[field]
+  }
+}
+function decedentField(path:string, field:string, lib:any):string {
+  console.log("Finding candidates for " + field + " at " + path + " for ")
+  path = path.substring(0, path.lastIndexOf('/'))
+  // console.log("New stem path:", path)
+  const candidates = ['/.meta.md', '/meta.md']
+  for(const candidate of candidates) {
+    if(lib[path + candidate] && lib[path + candidate][field]) {      
+      return (lib[path+candidate][field] as string)
+    }
+  }
+  if(!path.substring(0, path.lastIndexOf('/')).includes('static/library')) {
+    throw new Error("climbed too high! " + path + ' | ' + path.substring(0, path.lastIndexOf('/')))
+  }
+  // console.log(path.substring(0, path.lastIndexOf('/')))
+  // return 'oops'
+  return decedentField(path.substring(0, path.lastIndexOf('/')), field, lib)
+}
 
 async function fileToElementObj(path:string):Promise<any> {
   let frontmatter:any
@@ -104,30 +150,28 @@ async function fileToElementObj(path:string):Promise<any> {
 
     // TODO: make sure the file has frontmatter;
     // console.log(frontmatter)
-    function tern(obj:any, field:string):string {
-      if(!obj[field]) { return inheritField(path, field) } else return obj[field]
-    }
-    function inheritField(path:string, field:string) {
-      return 'inherit'
-    }
     
     return {
-      literal: {
-        content: file.toString(),
-        author: tern(frontmatter, 'authors'),
-        short: tern(frontmatter, 'short'),
-        title: tern(frontmatter, 'title'),
-        path: path
-      },
-      relational: {
-        grades: frontmatter.grades? expandDashNotation(String(frontmatter.grades)): 'inherit',
-        audiences: frontmatter.audiences? frontmatter.audiences.split(', ') : 'inherit',
-        types: frontmatter.types? frontmatter.types.split(', ') : 'inherit'
-      }
+      ...frontmatter,
+      content: file.toString(),
+      path: path
+      // literal: {
+      //   content: file.toString(),
+      //   author: tern(frontmatter, 'authors'),
+      //   short: tern(frontmatter, 'short'),
+      //   title: tern(frontmatter, 'title'),
+      //   path: path
+      // },
+      // relational: {
+      //   grades: frontmatter.grades? expandDashNotation(String(frontmatter.grades)): 'inherit',
+      //   audiences: frontmatter.audiences? frontmatter.audiences.split(', ') : 'inherit',
+      //   types: frontmatter.types? frontmatter.types.split(', ') : 'inherit'
+      // }
     }
   
 }
-function expandDashNotation(fmGrade:string):string[] {
+function expandDashNotation(fmGrade:string|number):string[] {
+    fmGrade = String(fmGrade)
     // console.log("Expanding ", fmGrade)
     const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'MS', 'HS']
     // split grades along commas
