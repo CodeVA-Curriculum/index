@@ -2,6 +2,7 @@ import { defineRelations } from 'drizzle-orm'
 import { primaryKey, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 
+
 // userland
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
@@ -33,7 +34,8 @@ export const element = sqliteTable('element', {
 	title: text('title'),
 	short: text('short').default("Short description"),
 	long: text('long').default("Long description"),
-	authors: text().default("CodeVA Curriculum")
+	authors: text().default("CodeVA Curriculum"),
+	content: text()
 })
 export type Element = typeof element.$inferSelect;
 
