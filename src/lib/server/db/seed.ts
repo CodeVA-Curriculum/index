@@ -14,6 +14,7 @@ import { read } from 'to-vfile'
 import YAML from 'yaml'
 import { seedSubjects } from './seedSubjects'
 import { seedStandards } from './seedStandards'
+import type { AnyAaaaRecord } from 'dns'
 // import { expandDashNotation } from '$lib/components/pacing-guide/util'
 
 async function main() {
@@ -36,6 +37,7 @@ async function main() {
   const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
   await db.delete(schema.elementType)
+  await db.delete(schema.elementToAudience)
   await db.delete(schema.audience)
   await db.delete(schema.elementToGrade)
   await db.delete(schema.grade)
@@ -75,9 +77,12 @@ async function main() {
   }
   for(const path of paths) {
     const el =elsByPath[path]
+
+    // inherit and update authors
     el.authors= inherit(el, 'authors', elsByPath)
     await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
 
+    // inherit and update grades
     el.grades = expandDashNotation(inherit(el, 'grades', elsByPath))
     for(const grade of el.grades) {
       await db.insert(schema.elementToGrade).values({
@@ -85,9 +90,41 @@ async function main() {
         gradeId: gradeAbbr.indexOf(grade)
       })
     }
+
+    // inherit and update audiences
+    const audienceRows = await db.select().from(schema.audience).orderBy(schema.audience.id)
+    let audienceByTitle:any = {}
+    for(const a of audienceRows) {
+      audienceByTitle[a.title] = a
+    }
+    el.audiences = inherit(el, 'audiences', elsByPath)
+    console.log(typeof(el.audiences))
+    // I truly have no idea why this is necessary. Sometimes we end up with the audiences as
+    // an array instead of as a string to split and I have no idea why.
+    if(typeof(el.audiences) == 'object') { el.audiences = el.audiences[0] }
+    el.audiences = el.audiences.split(', ')
+    for(const audience of el.audiences) {
+      if(!audienceByTitle[audience]) {
+        const o = await db.insert(schema.audience).values({title: audience}).returning()
+        console.log("Inserted new audience " + audience)
+        audienceByTitle[o[0].title] = o[0]
+      }
+      console.log("Associating " + audience + " with " + el.path)
+      await db.insert(schema.elementToAudience).values({
+        elementId: el.id,
+        audienceId: audienceByTitle[audience].id
+      })
+    }
   }
 }
 main()
+
+function reFrontmatter(values:any, field:string):string {
+  if(field == 'audience' && typeof(values) == typeof([ 'string' ])) {
+    let s = values[values.length-1]
+    for(let i=values.length-2; i>=0; i--) { s = values[i] + ', ' }
+  }
+}
 
 function inherit(obj:any, field:string, lib:any):string {
   if(!obj[field]) {
@@ -108,7 +145,7 @@ function decedentField(path:string, field:string, lib:any):string {
     for(const candidate of candidates) {
       if(lib[p+ candidate] && lib[p+ candidate][field]) {      
         console.log("Found candidate at " + lib[p+candidate].path)
-        return (lib[p+candidate][field] as string)
+        return lib[p+candidate][field] as string
       }
     }
   } 
