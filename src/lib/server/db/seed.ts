@@ -70,7 +70,8 @@ async function main() {
       title: el.title,
       short: el.short,
       path: el.path,
-      content: el.content
+      content: el.content,
+      link: el.links ? el.links.drive : null
     }).returning({ id: schema.element.id }) as any
     el.id = dbObj[0].id
     // console.log(literal, dbObj)
