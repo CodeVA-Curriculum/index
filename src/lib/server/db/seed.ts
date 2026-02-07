@@ -15,6 +15,7 @@ import YAML from 'yaml'
 import { seedSubjects } from './seedSubjects'
 import { seedStandards } from './seedStandards'
 import type { AnyAaaaRecord } from 'dns'
+import type { Z_UNKNOWN, Z_VERSION_ERROR } from 'zlib'
 // import { expandDashNotation } from '$lib/components/pacing-guide/util'
 
 async function main() {
@@ -31,16 +32,18 @@ async function main() {
 
   // TODO: seed library elements
     // Add static elements: grades, types, audiences
-  const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource']
+  const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
   const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
   const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
   const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
+  await db.delete(schema.elementToType)
   await db.delete(schema.elementType)
   await db.delete(schema.elementToAudience)
   await db.delete(schema.audience)
   await db.delete(schema.elementToGrade)
   await db.delete(schema.grade)
+  await db.delete(schema.element)
 
   for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
     id: i,
@@ -54,7 +57,6 @@ async function main() {
     await db.insert(schema.elementType).values({ title: t })
   }
 
-  await db.delete(schema.element)
   // Pull all files
   const paths = await globby(['static/library', '!static/library/README.md'], {
     expandDirectories: { files: ['*.md', '.*.md'] }
@@ -62,7 +64,7 @@ async function main() {
   const els:any[] = []
   const elsByPath:any = {}
   for(const path of paths){
-    // console.log("Processing "+path)
+    console.log("Processing "+path)
     let el = await fileToElementObj(path)
     const dbObj:any = await db.insert(schema.element).values({
       title: el.title,
@@ -98,7 +100,6 @@ async function main() {
       audienceByTitle[a.title] = a
     }
     el.audiences = inherit(el, 'audiences', elsByPath)
-    console.log(typeof(el.audiences))
     // I truly have no idea why this is necessary. Sometimes we end up with the audiences as
     // an array instead of as a string to split and I have no idea why.
     if(typeof(el.audiences) == 'object') { el.audiences = el.audiences[0] }
@@ -106,13 +107,28 @@ async function main() {
     for(const audience of el.audiences) {
       if(!audienceByTitle[audience]) {
         const o = await db.insert(schema.audience).values({title: audience}).returning()
-        console.log("Inserted new audience " + audience)
+        // console.log("Inserted new audience " + audience)
         audienceByTitle[o[0].title] = o[0]
       }
-      console.log("Associating " + audience + " with " + el.path)
+      // console.log("Associating " + audience + " with " + el.path)
       await db.insert(schema.elementToAudience).values({
         elementId: el.id,
         audienceId: audienceByTitle[audience].id
+      })
+    }
+
+    // inherit and update types
+    el.types = inherit(el, 'types', elsByPath)
+    const typeRows = await db.select().from(schema.elementType).orderBy(schema.elementType.id)
+    // console.log(el.types)
+    el.types = typeof(el.types) == typeof([ 'string' ]) ? el.types : el.types.split(', ')
+    for(const type of el.types) {
+      // console.log("Associating " + type + " with " + el.path)
+      const result = typeRows.filter((obj) => obj.title == type)
+      console.log(result)
+      await db.insert(schema.elementToType).values({
+        elementId: el.id,
+        typeId: result[0].id
       })
     }
   }
@@ -128,9 +144,9 @@ function reFrontmatter(values:any, field:string):string {
 
 function inherit(obj:any, field:string, lib:any):string {
   if(!obj[field]) {
-    console.log("Inheriting " + field + ' for ' + obj.path)
+    // console.log("Inheriting " + field + ' for ' + obj.path)
     const f = decedentField(obj.path, field, lib)
-    console.log("found decedent " + f)
+    // console.log("found decedent " + f)
     return f
   } else {
     return obj[field]
@@ -138,7 +154,7 @@ function inherit(obj:any, field:string, lib:any):string {
 }
 function decedentField(path:string, field:string, lib:any):string {
   // console.log("New stem path:", path)
-  console.log("Finding candidates for " + field + " at " + path)
+  // console.log("Finding candidates for " + field + " at " + path)
   if(!path.includes('meta.md')) {
     const p = path.substring(0, path.lastIndexOf('/'))
     const candidates = ['/.meta.md', '/meta.md']
