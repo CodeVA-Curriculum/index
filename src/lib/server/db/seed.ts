@@ -1,3 +1,4 @@
+import { eq } from 'drizzle-orm'
 import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
@@ -54,7 +55,7 @@ async function main() {
   await db.delete(schema.element)
   // Pull all files
   const paths = await globby(['static/library', '!static/library/README.md'], {
-    expandDirectories: { files: ['*.md'] }
+    expandDirectories: { files: ['*.md', '.*.md'] }
   })
   const els:any[] = []
   const elsByPath:any = {}
@@ -74,31 +75,16 @@ async function main() {
   }
   for(const path of paths) {
     const el =elsByPath[path]
-    // inherit all inheritable fields before assembling db relations and updating element
+    el.authors= inherit(el, 'authors', elsByPath)
+    await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
 
-    // TODO: why is this undefined?? not tracking top level .meta.md
-    console.log(elsByPath['static/library/.meta.md'])
-    
-    el.authors = inherit(el, 'authors', elsByPath)
     el.grades = expandDashNotation(inherit(el, 'grades', elsByPath))
-    // console.log(path, el.grades)
-
-    // assemble relational fields: grades, audiences, types
-    // Grade IDs are in order (K.id = 0, 1.id = 1, etc.)
-    // console.log(relational)
-    // if(el.grades != 'inherit') {
-    //   console.log(el.grades)
     for(const grade of el.grades) {
-      console.log("Associating " + path + " with " + grade)
-      console.log(path + " " + el.id, gradeAbbr.indexOf(grade))
       await db.insert(schema.elementToGrade).values({
         elementId: el.id,
         gradeId: gradeAbbr.indexOf(grade)
       })
     }
-    // }
-    
-    // console.log(relational)
   }
 }
 main()
@@ -107,27 +93,30 @@ function inherit(obj:any, field:string, lib:any):string {
   if(!obj[field]) {
     console.log("Inheriting " + field + ' for ' + obj.path)
     const f = decedentField(obj.path, field, lib)
-    console.log("found decedent at " + f)
+    console.log("found decedent " + f)
     return f
   } else {
     return obj[field]
   }
 }
 function decedentField(path:string, field:string, lib:any):string {
-  console.log("Finding candidates for " + field + " at " + path + " for ")
-  path = path.substring(0, path.lastIndexOf('/'))
   // console.log("New stem path:", path)
-  const candidates = ['/.meta.md', '/meta.md']
-  for(const candidate of candidates) {
-    if(lib[path + candidate] && lib[path + candidate][field]) {      
-      return (lib[path+candidate][field] as string)
+  console.log("Finding candidates for " + field + " at " + path)
+  if(!path.includes('meta.md')) {
+    const p = path.substring(0, path.lastIndexOf('/'))
+    const candidates = ['/.meta.md', '/meta.md']
+    for(const candidate of candidates) {
+      if(lib[p+ candidate] && lib[p+ candidate][field]) {      
+        console.log("Found candidate at " + lib[p+candidate].path)
+        return (lib[p+candidate][field] as string)
+      }
     }
-  }
+  } 
+  
   if(!path.substring(0, path.lastIndexOf('/')).includes('static/library')) {
     throw new Error("climbed too high! " + path + ' | ' + path.substring(0, path.lastIndexOf('/')))
   }
-  // console.log(path.substring(0, path.lastIndexOf('/')))
-  // return 'oops'
+  console.log("Did not find decedent, searching for metafiles in", path)
   return decedentField(path.substring(0, path.lastIndexOf('/')), field, lib)
 }
 
