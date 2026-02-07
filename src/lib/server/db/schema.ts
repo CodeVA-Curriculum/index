@@ -35,7 +35,8 @@ export const element = sqliteTable('element', {
 	short: text('short').default("Short description"),
 	long: text('long').default("Long description"),
 	authors: text().default("CodeVA Curriculum"),
-	content: text()
+	content: text(),
+	link: text()
 })
 export type Element = typeof element.$inferSelect;
 
