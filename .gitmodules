@@ -1,6 +1,6 @@
-[submodule "src/content"]
-	path = src/content
+[submodule "static/library"]
+	path = static/library
 	url = https://github.com/codeva-curriculum/library
-[submodule "src/standards"]
-	path = src/standards
+[submodule "static/standards"]
+	path = static/standards
 	url = https://github.com/CodeVA-Curriculum/standards
