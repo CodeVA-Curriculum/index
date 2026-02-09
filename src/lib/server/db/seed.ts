@@ -66,27 +66,31 @@ async function main() {
   for(const path of paths){
     console.log("Processing "+path)
     let el = await fileToElementObj(path)
-    const dbObj:any = await db.insert(schema.element).values({
+    let { id } = await db.insert(schema.element).values({
       title: el.title,
       short: el.short,
       path: el.path,
       content: el.content,
       link: el.links ? el.links.drive : null
     }).returning({ id: schema.element.id }) as any
-    el.id = dbObj[0].id
+    el.id = id
+    // el.id = dbObj[0].id
     // console.log(literal, dbObj)
     // els.push({ literal: literal, relational: relational })
     elsByPath[path] = el
+    // console.log("Successfully added " + path + " to DB")
   }
   for(const path of paths) {
     const el =elsByPath[path]
 
     // inherit and update authors
-    el.authors= inherit(el, 'authors', elsByPath)
+    console.log(el.authors)
+    el.authors= inherit(el, 'authors', path, elsByPath)
+    console.log("inherited authors values for " + path + ", updating database", el.authors)
     await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
 
     // inherit and update grades
-    el.grades = expandDashNotation(inherit(el, 'grades', elsByPath))
+    el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
     for(const grade of el.grades) {
       await db.insert(schema.elementToGrade).values({
         elementId: el.id,
@@ -100,7 +104,8 @@ async function main() {
     for(const a of audienceRows) {
       audienceByTitle[a.title] = a
     }
-    el.audiences = inherit(el, 'audiences', elsByPath)
+    console.log("Inheriting audiences for " + path)
+    el.audiences = inherit(el, 'audiences', path, elsByPath)
     // I truly have no idea why this is necessary. Sometimes we end up with the audiences as
     // an array instead of as a string to split and I have no idea why.
     if(typeof(el.audiences) == 'object') { el.audiences = el.audiences[0] }
@@ -119,7 +124,7 @@ async function main() {
     }
 
     // inherit and update types
-    el.types = inherit(el, 'types', elsByPath)
+    el.types = inherit(el,'types',  path, elsByPath)
     const typeRows = await db.select().from(schema.elementType).orderBy(schema.elementType.id)
     // console.log(el.types)
     el.types = typeof(el.types) == typeof([ 'string' ]) ? el.types : el.types.split(', ')
@@ -141,7 +146,7 @@ async function main() {
     // Y: split
     el.tags = el.tags ? el.tags.split(', ') : []
     // Y: Add unique values to database
-    const tagRows = await db.select().from(schema.tag).returning({ title: schema.tag.title })
+    const tagRows = await db.select().from(schema.tag)
     const uniqueTags = el.tags.filter((o) => {
       const res = tagRows.filter((r) => r.title == o.title )
       return res.length == 0 
@@ -174,15 +179,15 @@ function reFrontmatter(values:any, field:string):string {
   }
 }
 
-function inherit(field:string, path:string, lib:any):string {
+function inherit(obj:any, fieldName:string, path:string, lib:any):string {
   // Inherit the plain text value from valid decedents
-  if(!obj[field]) {
-    // console.log("Inheriting " + field + ' for ' + obj.path)
-    const f = decedentField(obj.path, field, lib)
+  if(!obj[fieldName]) {
+    console.log("Inheriting " + fieldName+ ' for ' + path)
+    const f = decedentField(path, fieldName, lib)
     // console.log("found decedent " + f)
     return f
   } else {
-    return obj[field]
+    return obj[fieldName]
   }
 }
 function decedentField(path:string, field:string, lib:any):string {

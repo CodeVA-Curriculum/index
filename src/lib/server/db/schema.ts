@@ -136,7 +136,7 @@ export const relations = defineRelations({grade, element, elementToGrade, elemen
 		}),
 		tags: r.many.tag({
 			from: r.element.id.through(r.elementToTag.elementId),
-			to: rm.tag.id.through(r.elementToTag.tagId)
+			to: r.tag.id.through(r.elementToTag.tagId)
 		})
 	}
 }))
