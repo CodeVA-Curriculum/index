@@ -119,9 +119,17 @@ export const elementToTag = sqliteTable('element_to_tag', {
 	},
 	(t) => [primaryKey({ columns: [t.elementId, t.tagId] })]
 )
+export const elementToSubj = sqliteTable('element_to_subj', {
+	elementId: integer('element_id').references(() => element.id),
+	subjectId: integer('subject_id').references(() => subject.id)
+})
 
-export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag }, (r) => ({
+export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject }, (r) => ({
 	element: {
+		subjects: r.many.subject({
+			from: r.element.id.through(r.elementToSubj.elementId),
+			to: r.subject.id.through(r.elementToSubj.subjectId)
+		}),
 		grades: r.many.grade({
 			from: r.element.id.through(r.elementToGrade.elementId),
 			to: r.grade.id.through(r.elementToGrade.gradeId)
