@@ -37,6 +37,8 @@ async function main() {
   const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
   const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
+  await db.delete(schema.elementToTag)
+  await db.delete(schema.tag)
   await db.delete(schema.elementToType)
   await db.delete(schema.elementType)
   await db.delete(schema.elementToAudience)
@@ -56,6 +58,7 @@ async function main() {
   for(const t of types) {
     await db.insert(schema.elementType).values({ title: t })
   }
+  
 
   // Pull all files
   const paths = await globby(['static/library', '!static/library/README.md'], {
@@ -66,13 +69,13 @@ async function main() {
   for(const path of paths){
     console.log("Processing "+path)
     let el = await fileToElementObj(path)
-    let { id } = await db.insert(schema.element).values({
+    let { id }  = (await db.insert(schema.element).values({
       title: el.title,
       short: el.short,
       path: el.path,
       content: el.content,
       link: el.links ? el.links.drive : null
-    }).returning({ id: schema.element.id }) as any
+    }).returning({ id: schema.element.id }))[0] as any
     el.id = id
     // el.id = dbObj[0].id
     // console.log(literal, dbObj)
@@ -84,11 +87,9 @@ async function main() {
     const el =elsByPath[path]
 
     // inherit and update authors
-    console.log(el.authors)
     el.authors= inherit(el, 'authors', path, elsByPath)
     console.log("inherited authors values for " + path + ", updating database", el.authors)
     await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
-
     // inherit and update grades
     el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
     for(const grade of el.grades) {
@@ -153,9 +154,9 @@ async function main() {
     })
     const tagObjs = []
     for(const tag of uniqueTags) {
-      tagObjs.push(await db.insert(schema.tag).values({
+      tagObjs.push((await db.insert(schema.tag).values({
         title: tag
-      }))
+      }).returning({ id: schema.tag.id }))[0])
     }
     // Y: Associate all values with element
     for(const tag of tagObjs) {
