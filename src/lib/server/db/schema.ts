@@ -57,17 +57,6 @@ export const course = sqliteTable('course', {
 	strands: text({ mode: 'json' })
 })
 export type Course = typeof course.$inferSelect;
-// export const relationsSubjectCourse = defineRelations({ subject, course }, {
-// 	course: {
-// 		subject: r.one.subject({
-// 			from: r.course.subjectId,
-// 			to:   r.subject.id
-// 		})
-// 	},
-// 	subject: {
-// 		relatedCourses: r.many.course()
-// 	}
-// })
 
 // Static content: grade levels, audiences, element types
 export const grade = sqliteTable('grade', {
@@ -139,7 +128,7 @@ export const elementToStandard = sqliteTable('element_to_standard', {
 	elementId: integer('element_id').references(() => element.id),
 	standardId: integer('standard_id').references(() => standard.id)
 },
-	(t) => [primaryKey({ columns: [t.elementId, t.standardId] })]
+	(t) => [primaryKey({ columns: [t.elementId, t.standardId]standard })]
 )
 
 export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject, standard, elementToStandard }, (r) => ({
@@ -170,83 +159,6 @@ export const relations = defineRelations({grade, element, elementToGrade, elemen
 		})
 	}
 }))
-
-// export const relationStandardsGrades = defineRelations({ standard, grade, subject }, (r) => ({
-// 	standard: {
-// 		grade: r.one.grade({
-// 			from: r.standard.gradeId,
-// 			to:   r.grade.id
-// 		}),
-// 		subject: r.one.subject({
-// 			from: r.standard.subjectId,
-// 			to: r.subject.id
-// 		})
-// 	},
-// 	grade: {
-// 		standards: r.many.standard(),
-// 		subjects: r.many.subjects()
-// 	},
-// }))
-
-// export const elementsToGrades = sqliteTable('elements_to_grades', {
-// 	elementId: integer('element_id').references(() => element.id),
-// 	gradeId: integer('grade_id').references(() => grade.id)
-// })
-
-// export const subjectsToElements = sqliteTable('subjects_to_elements', {
-// 	elementId: integer('element_id').references(() => element.id),
-// 	subjectId: integer('subject_id').references(() => subject.id)
-// })
-
-// export const standardsToElements = sqliteTable('standards_to_elements', {
-// 	elementId: integer('element_id').references(() => element.id),
-// 	standardId: integer('standard_id').references(() => standard.id)
-// })
-
-// export const elementRelations = relations({ element, grade, subject, elementsToGrades, subjectsToElements, standardsToElements }, (r) => ({
-// 	element: {
-// 		grades: r.many.grade({
-// 			from: r.element.id.through(r.elementsToGrades.elementId),
-// 			to:   r.grade.id.through(r.elementsToGrades.gradeId)
-// 		}),
-// 		standards: r.many.standard({
-// 			from: r.element.id.through(r.standardsToElements.elementId),
-// 			to:   r.standard.id.through(r.standardsToElements.standardId)
-// 		}),
-// 		subjects: r.many.subjects({
-// 			from: r.element.id.through(r.subjectsToElements.elementId),
-// 			to:   r.subject.id.through(r.subjectsToElements.subjectId)
-// 		}),
-// 	},
-// 	grade: {
-// 		relatedElements: r.many.elements()
-// 	},
-// 	standard: {
-// 		relatedElements: r.many.elements()
-// 	},
-// 	subject: {
-// 		relatedElements: r.many.elements()
-// 	},
-// 	user: {
-// 		savedElements: r.many.elements({
-// 			from: r.user.id.through(r.pivotUserElement.userId),
-// 			to: r.element.id.through(r.pivotUserElement.elementId)
-// 		}),
-// 		savedProjects: r.many.project({
-// 			from: r.user.id.through(r.pivotUserProject.userId),
-// 			to: r.element.id.through(r.pivotUserProject.projectId)
-// 		})
-// 	}
-// }))
-
-// // pivot tables
-
-
-// export const subjectsToGrades = sqliteTable('subjects_to_grades', {
-// 	subjectId: integer('subject_id').references(() => subject.id),
-// 	gradeId: integer('grade_id').references(() => grade.id)
-// })
-
 
 // Trail Guide Stuff
 export const node = sqliteTable('node', {
