@@ -126,15 +126,46 @@ async function main() {
     for(const type of el.types) {
       // console.log("Associating " + type + " with " + el.path)
       const result = typeRows.filter((obj) => obj.title == type)
-      console.log(result)
+      // console.log(result)
       await db.insert(schema.elementToType).values({
         elementId: el.id,
         typeId: result[0].id
       })
     }
+    
+    // update tags (do not inherit)
+    // this is different bc it's not associating only--it's:
+    // first, split into valid [ "string" ] type, then:
+    // N: inherit
+    // el.types = inherit(el, 'types', )
+    // Y: split
+    el.tags = el.tags ? el.tags.split(', ') : []
+    // Y: Add unique values to database
+    const tagRows = await db.select().from(schema.tag).returning({ title: schema.tag.title })
+    const uniqueTags = el.tags.filter((o) => {
+      const res = tagRows.filter((r) => r.title == o.title )
+      return res.length == 0 
+    })
+    const tagObjs = []
+    for(const tag of uniqueTags) {
+      tagObjs.push(await db.insert(schema.tag).values({
+        title: tag
+      }))
+    }
+    // Y: Associate all values with element
+    for(const tag of tagObjs) {
+      await db.insert(schema.elementToTag).values({
+        elementId: el.id,
+        tagId: tag.id
+      })
+    }
   }
 }
+
+
+
 main()
+
 
 function reFrontmatter(values:any, field:string):string {
   if(field == 'audience' && typeof(values) == typeof([ 'string' ])) {
@@ -143,7 +174,8 @@ function reFrontmatter(values:any, field:string):string {
   }
 }
 
-function inherit(obj:any, field:string, lib:any):string {
+function inherit(field:string, path:string, lib:any):string {
+  // Inherit the plain text value from valid decedents
   if(!obj[field]) {
     // console.log("Inheriting " + field + ' for ' + obj.path)
     const f = decedentField(obj.path, field, lib)
