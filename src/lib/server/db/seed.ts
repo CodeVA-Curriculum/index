@@ -23,20 +23,11 @@ async function main() {
 
   const db = drizzle({ schema: schema, client: client });
   const users = await db.select().from(schema.user)
-
-  // seed subjects and courses
-  // const { subjects, courses } = await seedSubjects(db, schema)
-
-  // seed standards
-  // const { standards } = await seedStandards(db, schema, subjects, courses)
-
-  // TODO: seed library elements
-    // Add static elements: grades, types, audiences
-  const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
-  const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
-  const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-  const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
-
+  
+  // clear database for seeding
+  await db.delete(schema.standard)
+  await db.delete(schema.elementToSubj)
+  await db.delete(schema.subject)
   await db.delete(schema.elementToTag)
   await db.delete(schema.tag)
   await db.delete(schema.elementToType)
@@ -46,6 +37,20 @@ async function main() {
   await db.delete(schema.elementToGrade)
   await db.delete(schema.grade)
   await db.delete(schema.element)
+
+
+  // seed subjects and courses
+  const { subjects, courses } = await seedSubjects(db, schema)
+
+  // seed standards
+  const { standards } = await seedStandards(db, schema, subjects, courses)
+
+  // TODO: seed library elements
+    // Add static elements: grades, types, audiences
+  const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
+  const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
+  const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+  const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
   for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
     id: i,
@@ -164,6 +169,27 @@ async function main() {
         elementId: el.id,
         tagId: tag.id
       })
+    }
+    
+    // Subjects
+    // Simple comma split
+    el.subjects = inherit(el, 'subjects', path, elsByPath)
+    if(typeof(el.subjects) == typeof('string')) {
+      el.subjects = el.subjects.split(', ')
+    }
+    // console.log(el.subjects)
+    // return
+    
+    // Create an association row for each subject in the list
+    const dbSubjs = await db.select().from(schema.subject)
+    for(const subj of el.subjects) {
+      const res = dbSubjs.filter((o) => subj == o.title)
+      if(res.length > 0) {
+        await db.insert(schema.elementToSubj).values({
+          elementId: el.id,
+          subjectId: res[0].id
+        })
+      } 
     }
   }
 }
