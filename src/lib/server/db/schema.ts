@@ -128,7 +128,7 @@ export const elementToStandard = sqliteTable('element_to_standard', {
 	elementId: integer('element_id').references(() => element.id),
 	standardId: integer('standard_id').references(() => standard.id)
 },
-	(t) => [primaryKey({ columns: [t.elementId, t.standardId]standard })]
+	(t) => [primaryKey({ columns: [t.elementId, t.standardId]})]
 )
 
 export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject, standard, elementToStandard }, (r) => ({
