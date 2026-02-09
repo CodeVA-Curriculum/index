@@ -77,6 +77,11 @@ export const grade = sqliteTable('grade', {
 })
 export type Grade = typeof grade.$inferSelect
 
+export const tag = sqliteTable('tag', {
+	id: integer('id').primaryKey(),
+	title: text()
+})
+
 export const audience = sqliteTable('audience', {
 	id: integer('id').primaryKey(),
 	title: text()
@@ -108,8 +113,14 @@ export const elementToType = sqliteTable('element_to_type', {
 	},
 	(t) => [primaryKey({ columns: [t.elementId, t.typeId] })]
 )
+export const elementToTag = sqliteTable('element_to_tag', {
+		elementId: integer('element_id').references(() => element.id),
+		tagId: integer('tag_id').references(() => tag.id)
+	},
+	(t) => [primaryKey({ columns: [t.elementId, t.tagId] })]
+)
 
-export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience }, (r) => ({
+export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag }, (r) => ({
 	element: {
 		grades: r.many.grade({
 			from: r.element.id.through(r.elementToGrade.elementId),
@@ -122,6 +133,10 @@ export const relations = defineRelations({grade, element, elementToGrade, elemen
 		audiences: r.many.audience({
 			from: r.element.id.through(r.elementToAudience.elementId),
 			to: r.audience.id.through(r.elementToAudience.audienceId)
+		}),
+		tags: r.many.tag({
+			from: r.element.id.through(r.elementToTag.elementId),
+			to: rm.tag.id.through(r.elementToTag.tagId)
 		})
 	}
 }))
