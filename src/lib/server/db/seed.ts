@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm'
+import { eq, like } from 'drizzle-orm'
 import remarkParse from 'remark-parse'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
@@ -25,6 +25,7 @@ async function main() {
   const users = await db.select().from(schema.user)
   
   // clear database for seeding
+  await db.delete(schema.elementToStandard)
   await db.delete(schema.standard)
   await db.delete(schema.elementToSubj)
   await db.delete(schema.subject)
@@ -191,6 +192,29 @@ async function main() {
         })
       } 
     }
+
+    // Do not inherit standards
+    el.standards = el.standards? el.standards: []
+    if(typeof(el.standards) == typeof('string')) {
+      el.standards= el.standards.split(', ')
+    }
+    let dbStandards = []
+    for(const s of el.standards) {
+      const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
+      let gs = expandDashNotation(gradeToken)
+      for(const g of gs) {
+        let searchString = `${g}.${subjToken ? subjToken : '%'}.${strandToken? strandToken : '%'}.${indexToken? indexToken : '%'}`
+        const res = await db.select().from(schema.standard).where(like(schema.standard.abbr, searchString))
+        dbStandards = [...dbStandards, ...res]
+      }
+    }
+    for(const s of dbStandards) {
+      await db.insert(schema.elementToStandard).values({
+        elementId: el.id,
+        standardId: s.id
+      })
+    }
+    
   }
 }
 
