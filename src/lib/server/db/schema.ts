@@ -120,15 +120,37 @@ export const elementToTag = sqliteTable('element_to_tag', {
 	(t) => [primaryKey({ columns: [t.elementId, t.tagId] })]
 )
 export const elementToSubj = sqliteTable('element_to_subj', {
-	elementId: integer('element_id').references(() => element.id),
-	subjectId: integer('subject_id').references(() => subject.id)
+		elementId: integer('element_id').references(() => element.id),
+		subjectId: integer('subject_id').references(() => subject.id)
+	},
+	(t) => [primaryKey({ columns: [t.elementId, t.subjectId] })]
+)
+export const standard = sqliteTable('standard', {
+	id: integer('id').primaryKey(),
+	abbr: text(),
+	title: text(),
+	gradeId: integer('grade_id').references(() => grade.id),
+	subjectId: integer('subject_id').references(() => subject.id),
+	text: text() // HTML
 })
+export type Standard = typeof standard.$inferSelect
 
-export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject }, (r) => ({
+export const elementToStandard = sqliteTable('element_to_standard', {
+	elementId: integer('element_id').references(() => element.id),
+	standardId: integer('standard_id').references(() => standard.id)
+},
+	(t) => [primaryKey({ columns: [t.elementId, t.standardId] })]
+)
+
+export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject, standard, elementToStandard }, (r) => ({
 	element: {
 		subjects: r.many.subject({
 			from: r.element.id.through(r.elementToSubj.elementId),
 			to: r.subject.id.through(r.elementToSubj.subjectId)
+		}),
+		standards: r.many.standard({
+			from: r.element.id.through(r.elementToStandard.elementId),
+			to: r.standard.id.through(r.elementToStandard.standardId)
 		}),
 		grades: r.many.grade({
 			from: r.element.id.through(r.elementToGrade.elementId),
@@ -149,15 +171,6 @@ export const relations = defineRelations({grade, element, elementToGrade, elemen
 	}
 }))
 
-export const standard = sqliteTable('standard', {
-	id: integer('id').primaryKey(),
-	abbr: text(),
-	title: text(),
-	gradeId: integer('grade_id').references(() => grade.id),
-	subjectId: integer('subject_id').references(() => subject.id),
-	text: text() // HTML
-})
-export type Standard = typeof standard.$inferSelect
 // export const relationStandardsGrades = defineRelations({ standard, grade, subject }, (r) => ({
 // 	standard: {
 // 		grade: r.one.grade({
