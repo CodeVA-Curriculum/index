@@ -1,26 +1,34 @@
 <script lang='ts'>
-  import Help from '$lib/components/Help.svelte'
+  import Fa from 'svelte-fa'
+  // import type { Element } from '$lib/server/db/schema'
+  import FilterAnchorPill from '$lib/components/FilterAnchorPill.svelte';
+import Help from '$lib/components/Help.svelte'
+    import { dbObjTitles } from '$lib/utils';
+    import { faBookmark, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+
+  let { obj } = $props()
 </script>
 <article class='card'>
   <div class='grade-tab'>
-    <span>KINDERGARTEN</span>
+    <span>{#if obj.grades.length > 1}GRADES {/if} {obj.gradesAbbr}</span>
   </div>
   <div class='thumbnail'>
     <img src="https://placecats.com/850/1100" >
   </div>
   <div class='body'>
-    <h3>Element Title</h3>
-    <p>A short description of the resource, about 1 line long.</p>
-    <span>items: 8</span>
+    <h3>{obj.title}</h3>
+    <p>{obj.short}</p>
+    <span>items: TODO</span>
   </div>
   <div class='stats'>
-      <span>Type: Lesson Plan (1h) <Help>A Lesson Plan is a continuous learning experience, usually about 1 instructional hour. Some are longer; check the lesson details for estimated duration of a lesson.</Help></span>
-      <span>subj: 4</span>
-      <span>sols: 3</span>
+      <span>Type: {obj.types[0].title}</span>
+      <span>Audiences: {dbObjTitles(obj.audiences)}</span>
+      <span>Subjects: {dbObjTitles(obj.subjects)}</span>
+      {#if obj.standards.length > 0}<span>SOLs: {#each obj.standards as o}o.title{/each}</span>{/if}
   </div>
   <div class='buttons'>
-    <a role='button' href="TODO:">open</a>
-    <button>save</button>
+    <a role='button' href="TODO:">Open <Fa icon={faFolderOpen} /></a>
+    <button>Save <Fa icon={faBookmark} /></button>
   </div>
 </article>
 

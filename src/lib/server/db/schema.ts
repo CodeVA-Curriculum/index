@@ -37,7 +37,7 @@ export const element = sqliteTable('element', {
 	authors: text().default("CodeVA Curriculum"),
 	content: text(),
 	link: text(),
-	hidden: integer({ mode: 'boolean' }),
+	// hidden: integer({ mode: 'boolean' }),
 	gradesAbbr: text()
 })
 export type Element = typeof element.$inferSelect;
