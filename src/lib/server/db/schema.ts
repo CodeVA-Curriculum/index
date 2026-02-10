@@ -36,7 +36,9 @@ export const element = sqliteTable('element', {
 	long: text('long').default("Long description"),
 	authors: text().default("CodeVA Curriculum"),
 	content: text(),
-	link: text()
+	link: text(),
+	hidden: integer({ mode: 'boolean' }),
+	gradesAbbr: text()
 })
 export type Element = typeof element.$inferSelect;
 
@@ -131,34 +133,6 @@ export const elementToStandard = sqliteTable('element_to_standard', {
 	(t) => [primaryKey({ columns: [t.elementId, t.standardId]})]
 )
 
-export const relations = defineRelations({grade, element, elementToGrade, elementType, elementToType, audience, elementToAudience, tag, elementToTag, elementToSubj, subject, standard, elementToStandard }, (r) => ({
-	element: {
-		subjects: r.many.subject({
-			from: r.element.id.through(r.elementToSubj.elementId),
-			to: r.subject.id.through(r.elementToSubj.subjectId)
-		}),
-		standards: r.many.standard({
-			from: r.element.id.through(r.elementToStandard.elementId),
-			to: r.standard.id.through(r.elementToStandard.standardId)
-		}),
-		grades: r.many.grade({
-			from: r.element.id.through(r.elementToGrade.elementId),
-			to: r.grade.id.through(r.elementToGrade.gradeId)
-		}),
-		types: r.many.elementType({
-			from: r.element.id.through(r.elementToType.elementId),
-			to: r.elementType.id.through(r.elementToType.typeId)
-		}),
-		audiences: r.many.audience({
-			from: r.element.id.through(r.elementToAudience.elementId),
-			to: r.audience.id.through(r.elementToAudience.audienceId)
-		}),
-		tags: r.many.tag({
-			from: r.element.id.through(r.elementToTag.elementId),
-			to: r.tag.id.through(r.elementToTag.tagId)
-		})
-	}
-}))
 
 // Trail Guide Stuff
 export const node = sqliteTable('node', {

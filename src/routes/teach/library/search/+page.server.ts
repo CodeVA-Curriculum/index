@@ -6,7 +6,17 @@ import { guide } from '$lib/server/db/schema'
 
 export const load:PageLoad = async ({ params }) => {
   // pull trail guides from database
-  const elements:Element[] = await db.select().from(schema.element)
+  const elements:Element[] = await db.query.element.findMany({
+    with: {
+      subjects: true,
+      types: true,
+      audiences: true,
+      standards: true,
+      tags: true,
+      grades: true
+    },
+    where: { hidden: false }
+  })
   
   return {
     elements: elements
