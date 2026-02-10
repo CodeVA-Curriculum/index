@@ -7,8 +7,9 @@
 
   let { data } = $props();
 
-  const items = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-  let selected = 4
+  let selected = $state(-1)
+
+  function sel(i:number) { selected = i; console.log("selecte") }
 </script>
 <div class='page'>
   <div class='results container'>
@@ -49,28 +50,33 @@
               <Element obj={el} />
               </td>
             </tr>
-          {/if}
-          <tr>
+          {:else}
+          <tr onclick={() => sel(i)}>
             <td>{el.gradesAbbr}</td>
             <td class='title'>{el.title}</td>
-            <td><FilterAnchorPill obj={el.types[0]} />{el.types.length-1 > 0? ' +' + String(el.types.length-1):''}</td>
+            <td><FilterAnchorPill obj={el.types[0]} /></td>
             <td>TODO:</td>
             <td>{#each el.subjects as s}<FilterAnchorPill obj={s} />{/each}</td>
             <td>{#each el.audiences as a}<FilterAnchorPill obj={a} />{/each}</td>
             <td>{#each el.tags as t }<FilterAnchorPill obj={t} />{/each}</td>
           </tr>
+          {/if}
         {/each}
       </tbody>
+      </table>
     </section>
   </div>
   <div class='data-view'>
-    <ElementPanel />
   </div>
 </div>
 
 <style lang='scss'>
   // tr { display: flex; }
+  tr:hover {
+    & > td { background-color: whitesmoke; }
+  }
   td {
+    // &:hover { background-color: red;}
     // line-height: 1;
     // padding: 2px;
     // flex: 1 1 1;
@@ -103,7 +109,7 @@
     padding: 0;
     background-color: pink;
   }
-  .selected { & > td { padding: 1rem 0; } }
+  .selected { & > td { padding: 1rem 0; background-color: whitesmoke; padding-left: 1rem; padding-right: 1rem; } }
 
   // Table styles
   .narrow {
