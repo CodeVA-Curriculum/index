@@ -14,9 +14,6 @@ import { read } from 'to-vfile'
 import YAML from 'yaml'
 import { seedSubjects } from './seedSubjects'
 import { seedStandards } from './seedStandards'
-import type { AnyAaaaRecord } from 'dns'
-import type { Z_UNKNOWN, Z_VERSION_ERROR } from 'zlib'
-// import { expandDashNotation } from '$lib/components/pacing-guide/util'
 
 async function main() {
   const client = new Database(process.env.DATABASE_URL);
@@ -80,7 +77,9 @@ async function main() {
       short: el.short,
       path: el.path,
       content: el.content,
-      link: el.links ? el.links.drive : null
+      link: el.links ? el.links.drive : null,
+      gradesAbbr: el.grades,
+      hidden: el.hidden
     }).returning({ id: schema.element.id }))[0] as any
     el.id = id
     // el.id = dbObj[0].id
@@ -97,6 +96,7 @@ async function main() {
     console.log("inherited authors values for " + path + ", updating database", el.authors)
     await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
     // inherit and update grades
+    // TODO: double-association
     el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
     for(const grade of el.grades) {
       await db.insert(schema.elementToGrade).values({
@@ -284,6 +284,7 @@ async function fileToElementObj(path:string):Promise<any> {
     
     return {
       ...frontmatter,
+      hidden: path.includes('.meta.md'),
       content: file.toString(),
       path: path
       // literal: {
