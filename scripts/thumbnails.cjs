@@ -1,5 +1,9 @@
 var fs = require('fs'),
+var env = require('env')
     request = require('request');
+    var path = require('path')
+    var os = require('os')
+    const {google} = require('googleapis');
 
 var download = function(uri, filename, callback){
   request.head(uri, function(err, res, body){
@@ -53,7 +57,29 @@ async function main() {
     // }
     // console.log(files)
     // getThumbnails(files)
-    getFile("11kOGV1Oh2A9tRXDm4lwY5cU41lamSAsHYFP3cIP73Sc")
+    // getFile("11kOGV1Oh2A9tRXDm4lwY5cU41lamSAsHYFP3cIP73Sc")
+  //   const auth = new google.auth.GoogleAuth({
+  //   keyfilePath: path.join(__dirname, 'scripts/client_secret.json'),
+  //   scopes: 'https://www.googleapis.com/auth/drive.readonly',
+  // });
+  // const client = await auth.getClient();
+  // google.options({auth: client});
+  // 
+    const drive = google.drive({version: 'v3', auth: env.DRIVE_API_KEY});
+    const fileId = '1EkgdLY3T-_9hWml0VssdDWQZLEc8qqpMB77Nvsx6khA';
+  const destPath = path.join(os.tmpdir(), 'important.zip');
+  const dest = fs.createWriteStream(destPath);
+  const res = await drive.files.export(
+    {fileId, mimeType: 'application/zip'},
+    {responseType: 'stream'},
+  );
+  await new Promise((resolve, reject) => {
+    res.data
+      .on('error', reject)
+      .pipe(dest)
+      .on('error', reject)
+      .on('finish', resolve);
+  });
 }
 
 main()
