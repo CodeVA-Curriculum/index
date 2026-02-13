@@ -22,6 +22,20 @@
   button, a[role="button"] {
     border-radius: 0;
   }
+  span.tag {
+    font-size: 11pt;
+    background-color: theme.$dark-blue;
+    color: white;
+    padding: 4px 8px;
+    margin: 2px 2px;
+    font-style: normal;
+    font-weight: bolder;
+    white-space: nowrap;
+    &.light {
+      color: theme.$dark-blue;
+      background-color: theme.$light-blue
+    }
+  }
   /* td { */
     /* background-color: red; */
     /* &:hover { */
