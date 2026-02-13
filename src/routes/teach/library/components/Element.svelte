@@ -17,18 +17,41 @@ import Help from '$lib/components/Help.svelte'
   </div>
   <div class='body'>
     <h3>{obj.title}</h3>
+    <p class='subtitle'>A {obj.gradesAbbr} {obj.types[0].title}</p>
     <p>{obj.short}</p>
-    <span>items: TODO</span>
+    <details>
+      <summary>
+        <i>View Items in {obj.types[0].title}</i>
+      </summary>
+      List of items
+    </details>
   </div>
   <div class='stats'>
-      <span>Type: {obj.types[0].title}</span>
-      <span>Audiences: {dbObjTitles(obj.audiences)}</span>
-      <span>Subjects: {dbObjTitles(obj.subjects)}</span>
-      {#if obj.standards.length > 0}<span>SOLs: {#each obj.standards as o}o.title{/each}</span>{/if}
+    <div class='subjects'>
+      <span>Subjects:</span>
+      {#each obj.subjects as subj}
+        {#if subj.abbr != 'CS'}
+      <span class='tag light'>{subj.abbr}</span>
+      {/if}
+      {/each}      
+    </div>
+    <div class='sols'>
+      <span>SOLs:</span>
+      {#if obj.standards.length > 15}
+      {obj.standardsAbbr}
+      {:else}
+      {#each obj.standards as s}
+        <span class='tag light'>{s.abbr}</span>
+      {/each}
+      {/if}
+    </div>
+    <div class='tags'>
+      Tags:
+    </div>
   </div>
   <div class='buttons'>
-    <a role='button' href="TODO:">Open <Fa icon={faFolderOpen} /></a>
-    <button>Save <Fa icon={faBookmark} /></button>
+    <a role='button' href="TODO:"><span>Open </span><Fa icon={faFolderOpen} /></a>
+    <a role='button'><span>Save </span><Fa icon={faBookmark} /></a>
   </div>
 </article>
 
@@ -45,25 +68,60 @@ import Help from '$lib/components/Help.svelte'
     flex-direction: column;
     margin: 1rem 0;
     margin-left: 1rem;
+    h3 {
+      margin-bottom: 0;
+    }
+    p.subtitle {
+      margin: 8px 0;
+      margin-bottom: 0.75rem;
+      font-size: 11pt;
+    }
   }
-  .thumbnail { flex-shrink: 1; flex-basis: 100px; align-items: center; }
-  .thumbnail > img { height: 100%; width: auto; }
+  .thumbnail { flex-shrink: 1; align-items: center; }
+  .thumbnail > img { width: auto; max-height: 180px; }
   .body {
-    // background-color: lightcyan;
+    min-width: 30%;
     flex-grow: 2;
+    padding-bottom: 0;
+    details {
+      margin-bottom: 2px;
+    }
+    // background-color: lightcyan;
+    // flex-grow: 2;
   }
   .stats {
+    border-left: 1px solid whitesmoke;
+    padding-left: 12px;
+    font-size: 11pt;
+    flex-direction: column;
+    gap: 0;
+    min-width: 120px;
+    max-width: 240px;
+    * {
+      margin: 0 0;
+      padding: 0 0;
+      font-style: italic;
+      flex-grow: 1;
+      display: inline-block;
+    }
     // background-color: lightgreen;
-    flex-grow: 1;
+    // flex-grow: 1;
   }
   .buttons {
     // background-color: powderblue;
-    justify-content: center;
+    // justify-content: center;
     align-items: center;
     display: flex;
     flex-direction: column;
-    * { width: 240px; margin: 0rem 0; flex-grow: 1; margin-bottom: 0.8rem; }
-    *:last-child {
+    span {
+      font-size: 18pt;
+    }
+    a { gap: 20px; display: flex; flex-grow: 1; width: 160px; margin: 0rem 0; justify-content: center; align-items: center; margin-bottom: 0.8rem;
+    * {
+      flex: 1;
+    }
+     }
+    & *:last-child {
       margin-bottom: 0;
     }
   }
