@@ -79,7 +79,8 @@ async function main() {
       content: el.content,
       link: el.links ? el.links.drive : null,
       gradesAbbr: el.grades,
-      // hidden: el.hidden
+      standardsAbrr: el.standards,
+      hidden: el.hidden? true : false
     }).returning({ id: schema.element.id }))[0] as any
     el.id = id
     // el.id = dbObj[0].id

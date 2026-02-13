@@ -14,6 +14,9 @@ export const load:PageLoad = async ({ params }) => {
       standards: true,
       tags: true,
       grades: true
+    },
+    where: {
+      hidden: { eq: false}
     }
   })
   
