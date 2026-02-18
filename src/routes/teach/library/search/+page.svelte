@@ -4,6 +4,8 @@
   import ElementPanel from '../components/ElementPanel.svelte'
   import Element from '../components/Element.svelte'
   import SearchBar from '../components/SearchBar.svelte'
+  import Fa from 'svelte-fa'
+  import { faX } from '@fortawesome/free-solid-svg-icons'
 
   let { data } = $props();
 
@@ -21,24 +23,19 @@
       </div>
       <table>
         <colgroup>
+          <col>
           <col class='narrow'>
-          <col>
-          <col>
-          <col>
-          <col>
           <col>
           <col>
           <col>
         </colgroup>
       <thead>
         <tr>
+          <th class='title' scope="col">Title</th>
           <th scope="col">Grades</th>
-          <th scope="col">Title</th>
           <th scope="col">Type</th>
-          <th scope="col">Items</th>
           <th scope="col">Subjects</th>
-          <th scope="col">Audiences</th>
-          <th scope="col">Tags</th>
+          <th class='tags' scope="col">Tags</th>
           
         </tr>
       </thead>
@@ -46,19 +43,31 @@
         {#each data.elements as el, i}
           {#if i == selected}
             <tr class='selected' style="background-color: powderblue;">
-              <td colspan="7">
+              <td colspan="5">
+              <button onclick={()=>selected=-1} class='close'><Fa icon={faX} /></button>
               <Element obj={el} />
               </td>
             </tr>
           {:else}
           <tr onclick={() => sel(i)}>
+            <td class=''>{el.title}</td>
             <td>{el.gradesAbbr}</td>
-            <td class='title'>{el.title}</td>
-            <td><FilterAnchorPill obj={el.types[0]} /></td>
-            <td>TODO:</td>
-            <td>{#each el.subjects as s}<FilterAnchorPill obj={s} />{/each}</td>
-            <td>{#each el.audiences as a}<FilterAnchorPill obj={a} />{/each}</td>
-            <td>{#each el.tags as t }<FilterAnchorPill obj={t} />{/each}</td>
+            <td>{el.types[0].title}</td>
+            <td>
+              {#if el.subjects.length < 5}
+              <span class='tag light'>CS</span>
+              {#each el.subjects.filter((o) => o.abbr != 'CS') as subj}
+                <span class='tag light'>{subj.abbr}</span>
+              {/each}
+              {/if}
+            </td>
+            <td class='tags'>
+              <div>
+              {#each el.tags as tag}
+                <span class='tag light'>{tag.title}</span>
+              {/each}
+              </div>
+            </td>
           </tr>
           {/if}
         {/each}
@@ -73,18 +82,19 @@
 <style lang='scss'>
   // tr { display: flex; }
   tr:hover {
+    cursor: pointer;
     & > td { background-color: whitesmoke; }
   }
-  td {
-    // &:hover { background-color: red;}
-    // line-height: 1;
-    // padding: 2px;
-    // flex: 1 1 1;
-    max-width: 50px;
-    overflow-x: hidden;
-  &.title { min-width: 100px; max-width: 200px; }
+  th.title {
+    min-width: 400px;
   }
-  tr:hover { background-color: powderblue; cursor: pointer; }
+  td.tags {
+    min-width: 100px;
+    max-width: 200px;
+    & > div {
+      overflow-y: scroll;
+    }
+  }
   .page {
     display: flex;
     flex-direction: row;
@@ -109,11 +119,22 @@
     padding: 0;
     background-color: pink;
   }
-  .selected { & > td { padding: 1rem 0; background-color: whitesmoke; padding-left: 1rem; padding-right: 1rem; } }
+  .selected { position: relative; & > td { padding: 1rem 0; background-color: whitesmoke; padding-left: 1rem; padding-right: 1rem; } }
 
   // Table styles
   .narrow {
     width: 50px;
     overflow-x: hidden;
+  }
+  .close {
+    position: absolute;
+    left: -64px;
+    background-color: white;
+    border: 1px solid gray;
+    color: gray;
+    height: 56px;
+    width: 56px;
+    border-radius: 28px;
+    top: 0;
   }
 </style>
