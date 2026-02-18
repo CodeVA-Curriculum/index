@@ -38,6 +38,7 @@
 		"@node-rs/argon2": "^2.0.2",
 		"@picocss/pico": "^2.1.1",
 		"better-sqlite3": "^12.5.0",
+		"css": "^3.0.0",
 		"googleapis": "^171.4.0",
 		"hastscript": "^9.0.1",
 		"quill": "^2.0.3",
