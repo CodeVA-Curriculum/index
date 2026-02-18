@@ -31,6 +31,7 @@ export type User = typeof user.$inferSelect;
 export const element = sqliteTable('element', {
 	// table schema contain exclusively read-only properties. Relational fields are expressed in other areas of this file.
 	id: integer('id').primaryKey({ autoIncrement: true }),
+	path: text('path'),
 	title: text('title'),
 	short: text('short').default("Short description"),
 	long: text('long').default("Long description"),
