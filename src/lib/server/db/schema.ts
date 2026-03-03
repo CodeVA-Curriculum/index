@@ -1,5 +1,5 @@
 import { defineRelations } from 'drizzle-orm'
-import { primaryKey, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { primaryKey, integer, sqliteTable, text, real } from 'drizzle-orm/sqlite-core';
 
 
 
@@ -137,32 +137,7 @@ export const elementToStandard = sqliteTable('element_to_standard', {
 
 
 // Trail Guide Stuff
-export const node = sqliteTable('node', {
-	id: integer().primaryKey({ autoIncrement: true }),
-	path: text(),
-	content: text(), // HTML
-	short: text(),
-	video: text(),
-	authors: text(),
-	type: text({ enum: ["tutorial", "cache"]})
-})
-export type Node = typeof node.$inferSelect;
 
-export const project = sqliteTable('project', {
-	id: integer().primaryKey({autoIncrement: true}),
-	title: text(),
-	content: text(), // HTML
-	short: text(),
-	authors: text(),
-	difficulty: integer(),
-	icon: text()
-})
-export type Project = typeof project.$inferSelect;
-
-export const pivotNodeProject = sqliteTable('pivot_node_project', {
-	nodeId: integer('node_id').references(() => node.id),
-	projectId: integer('project_id').references(() => project.id)
-})
 
 // export const projectRelations = relations({ project, user, node }, (r) => ({
 // 	project: {
@@ -185,14 +160,11 @@ export const pivotNodeProject = sqliteTable('pivot_node_project', {
 export const pivotUserElement = sqliteTable('pivot_user_element', {
 	userId: integer('user_id').references(() => user.id),
 	elementId: integer('element_id').references(() => element.id)
-})
+},
+	(t) => [primaryKey({ columns: [t.userId, t.elementId]})]
+)
 
-export const pivotUserProject = sqliteTable('pivot_user_project', {
-	userId: integer('user_id').references(() => user.id),
-	projectId: integer('project_id').references(() => user.id)
-})
 
-// Trail Guide stuff
 export const guide = sqliteTable('guide', {
 	id: integer('id').primaryKey(),
 	title: text('title'),
@@ -202,3 +174,87 @@ export const guide = sqliteTable('guide', {
 	image: text('image')
 })
 export type Guide = typeof guide.$inferSelect;
+
+export const node = sqliteTable('node', {
+	id: integer('id').primaryKey(),
+	title: text('title'),
+	type: text({ enum: ["cache", "tutorial"]}),
+	prompts: text('prompts'),
+	content: text('content'), // HTML
+	video: text('video'),
+	x: real('x'),
+	y: real('y'),
+	guide: integer('guide_id').references(() => guide.id)
+})
+export type Node = typeof node.$inferSelect
+
+export const project = sqliteTable('project', {
+	id: integer().primaryKey(),
+	hidden: integer({ mode: 'boolean' }).default(false),
+	title: text(),
+	content: text(), // HTML
+	short: text(),
+	authors: text(),
+	difficulty: integer(),
+	icon: text(),
+	guide: integer('guide_id').references(() => guide.id),
+	nodes: text({ mode: 'json' })
+})
+export type Project = typeof project.$inferSelect;
+
+export const pivotUserProject = sqliteTable('pivot_user_project', {
+	userId: integer('user_id').references(() => user.id),
+	projectId: integer('project_id').references(() => user.id),
+	complete: integer({ mode: 'boolean' }).default(false)
+},
+	(t) => [primaryKey({ columns: [t.userId, t.projectId]})]
+)
+
+export const pivotNodeProject = sqliteTable('pivot_node_project', {
+	nodeId: integer('node_id').references(() => node.id),
+	projectId: integer('project_id').references(() => project.id),
+	optional: integer({ mode: 'boolean' }).default(false)
+},
+	(t) => [primaryKey({ columns: [t.nodeId, t.projectId]})]
+)
+export const edge = sqliteTable('edge', {
+	id: integer('id').primaryKey(),
+	uid: text('uid'),
+	from: integer('from').references(() => node.id),
+	to: integer('from').references(() => node.id),
+	guide: integer('guide_id').references(() => guide.id)
+})
+export type Edge = typeof edge.$inferSelect
+
+
+export const user_to_node = sqliteTable('user_to_node', {
+	userId: integer('userId').references(() => user.id),
+	nodeId: integer('nodeId').references(() => node.id),
+	complete: integer({ mode: 'boolean' }).default(false)
+},
+	(t) => [primaryKey({ columns: [t.userId, t.nodeId]})]
+)
+export const user_to_question = sqliteTable('user_to_question', {
+	userId: integer('userId').references(() => user.id),
+	questionId: integer('questionId').references(() => question.id),
+	complete: integer({ mode: 'boolean' })
+},
+	(t) => [primaryKey({ columns: [t.userId, t.questionId]})]
+)
+
+export const question = sqliteTable('question', {
+	id: integer('id').primaryKey(),
+	content: text('content'), //HTML
+	options: text({ mode: 'json' }),
+	answer: integer('answer')
+})
+export type Question = typeof question.$inferSelect
+
+export const node_to_question = sqliteTable('node_to_question', {
+	nodeId: integer('nodeId').references(() => node.id),
+	questionId: integer('questionId').references(() => question.id)
+},
+	(t) => [primaryKey({ columns: [t.nodeId, t.questionId]})]
+)
+
+

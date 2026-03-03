@@ -6,7 +6,10 @@ import { guide } from '$lib/server/db/schema'
 export const load:PageLoad = async ({ params }) => {
   // pull trail guides from database
   const guides:Guide[] = await db.select().from(guide)
-  
+  guides.sort((a,b) => {
+    a.title < b.title
+  })
+console.log(guides[0])  
   return {
     guides: guides
   }

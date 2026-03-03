@@ -1,0 +1,25 @@
+---
+title: Your First Story
+video: https://www.youtube.com/embed/14I8C6FKINQ
+difficulty: 1
+recommended: true
+short: Make your first interactive story with Twine.
+description: This project is intended to introduce beginners to Twine, and help them create a simple interactive story. Follow this trail to learn the basics! You'll learn about how to use the Twine interface, how to write and test the different parts of your story, how to link scenes together, and how to create a simple choose-your-own-adventure-style story that offers choices for the reader that affect the outcome.
+nodes:
+    - applications/start-a-story.md
+    - ./the-whale-design-menu.md {optional}
+    - concepts/create-passage.md
+    - concepts/markdown.md {optional}
+    - concepts/link-passages.md
+    - concepts/branching-paths.md
+    - ./adapting-goldilocks.md
+    - applications/reveal-text.md {optional}
+    - concepts/css.md {optional}
+    - applications/story-with-multiple-endings.md
+    - ./the-whale-writing.md
+icon: 
+---
+
+This project is intended to introduce beginners to Twine, and help them create a simple interactive story. Follow this trail to learn the basics! You'll learn about how to use the Twine interface, how to write and test the different parts of your story, how to link scenes together, and how to create a simple choose-your-own-adventure-style story that offers choices for the reader that affect the outcome.
+
+You don't need any prerequisite knowledge to get started with this trail. Many of the other [projects](/projects) in this guide will build on the skills you develop here.
