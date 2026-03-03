@@ -1,3 +1,4 @@
+import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm'
 import { defineRelations } from 'drizzle-orm'
 import { primaryKey, integer, sqliteTable, text, real } from 'drizzle-orm/sqlite-core';
 
@@ -198,9 +199,10 @@ export const project = sqliteTable('project', {
 	difficulty: integer(),
 	icon: text(),
 	guide: integer('guide_id').references(() => guide.id),
-	nodes: text({ mode: 'json' })
+	nodes: text({ mode: 'json' }),
+	path: text()
 })
-export type Project = typeof project.$inferSelect;
+export type Project = InferSelectModel<typeof project>
 
 export const pivotUserProject = sqliteTable('pivot_user_project', {
 	userId: integer('user_id').references(() => user.id),
@@ -257,4 +259,25 @@ export const node_to_question = sqliteTable('node_to_question', {
 	(t) => [primaryKey({ columns: [t.nodeId, t.questionId]})]
 )
 
+export const nodeGroup = sqliteTable('node_group', {
+	id: integer('id').primaryKey(),
+	alias: text(),
+	projectId: integer('project_id').references(() => project.id)
+})
+export type NodeGroup = typeof nodeGroup.$inferSelect
 
+export const nodeToNodeGroup = sqliteTable('node_to_group', {
+		nodeId: integer('node_id').references(()=>node.id),
+		groupId: integer('group_id').references(() => nodeGroup.id),
+		index: integer()
+	},
+	(t) => [primaryKey({ columns: [t.nodeId, t.groupId]})]
+)
+
+export const projectToNodeGroup = sqliteTable('project_to_nodes', {
+		groupId: integer('group_id').references(() => nodeGroup.id),
+		projectId: integer('project_id').references(() => project.id),
+		index: integer()
+	},
+	(t) => [primaryKey({ columns: [t.projectId, t.groupId]})]
+)

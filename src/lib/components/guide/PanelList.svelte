@@ -1,12 +1,17 @@
 <script lang='ts'>
+  import TutorialListItem from '$lib/components/guide/TutorialListItem.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { faX } from '@fortawesome/free-solid-svg-icons'
-  let { panel, children } = $props()
-  onMount(() => {
-    console.log(panel)
-  })
+  let { panel, children, el } = $props()
+  const items = {
+    "project": ProjectListItem,
+    "tutorial": TutorialListItem
+  }
+  let component = $derived(items[el])
+  // const Component = ProjectListItem
+  let Component = $derived.by(() => items[panel.el])
 </script>
 
 <div class='panel-list'>
@@ -19,8 +24,8 @@
   </fieldset>
   </div>
   <ul>
-    {#each panel.objs as project}
-      <ProjectListItem obj={project} />
+    {#each panel.objs as item}
+      <Component obj={item} />
     {/each}
   </ul>
 </div>

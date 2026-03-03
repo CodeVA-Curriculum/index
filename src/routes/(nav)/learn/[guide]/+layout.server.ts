@@ -1,4 +1,5 @@
 import type {PageLoad} from './$types'
+import { Project } from '$lib/components/guide/Project.svelte.ts'
 import { db } from '$lib/server/db/index'
 import type { Guide } from '$lib/server/db/schema'
 import * as schema from '$lib/server/db/schema'
