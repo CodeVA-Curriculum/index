@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
   import Fa from 'svelte-fa'
   import { faX } from "@fortawesome/free-solid-svg-icons"
@@ -9,11 +10,13 @@
   const panel = {
     projects: {
       title: 'Projects',
-      objs: data.guide.projects
+      objs: data.guide.projects,
+      el: "project"
     },
     tutorials: {
       title: 'Tutorials',
-      objs: data.guide.nodes
+      objs: data.guide.nodes,
+      el: "tutorial"
     }
   }
   function toggle(title:string) {
@@ -37,7 +40,7 @@
 <div class='panel {panelOpen ? 'open': 'closed'}'>
   <div class='body {panelOpen ? 'open': 'closed'}'>
     {#if panelOpen}
-      <PanelList panel={panel[panelOpen]} >
+      <PanelList panel={panel[panelOpen]}  >
         <button class='close' onclick={() => toggle()}><Fa icon={faX} /></button>
       </PanelList>
     {/if}
@@ -52,6 +55,7 @@
     height: 100%;
     &.open { width: 30rem; }
     &.closed { width: 0rem; }
+    position: absolute;
     // -webkit-transition: width 0.25s ease-in-out;
     // -moz-transition: width 0.25s ease-in-out;
     // -o-transition: width 0.25s ease-in-out;
@@ -69,10 +73,12 @@
     background-color: pink;
   }
   .ui {
-    height: 90%;
-    position: fixed;
-    top: 4.25rem;
-    left: 1.25rem;
+    height: 100%;
+    position: relative;
+    // position: fixed;
+    // top: 4.25rem;
+    // left: 1.25rem;
+    width: 6rem;
     display: flex;
     flex-direction: column;
     .start {

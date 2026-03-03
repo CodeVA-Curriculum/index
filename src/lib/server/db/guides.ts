@@ -29,6 +29,8 @@ export async function seedGuides(db:any, schema:any) {
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
     await db.insert(schema.node).values(file)
   }
+
+  // Assemble project graph
 }
 
 function getGuideIdFromPath(path:string, guides:any[]):number {

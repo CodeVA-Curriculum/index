@@ -1,23 +1,61 @@
 <script lang='ts'>
+  import { onMount } from 'svelte'
+  import { getContext } from 'svelte'
+  import CompactTutorialListItem from '$lib/components/guide/CompactTutorialListItem.svelte'
+  import Fa from 'svelte-fa'
+  import { faFire, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
   let { obj } = $props()
+  let robj = $state({})
+  // const nodes = (obj.nodes.split('"')).length / 2
+  onMount(() => {
+    robj = getContext(obj.path)
+    console.log(robj)
+  })
+
+  let gotContext = $derived.by(() => robj? true : false)
+  function toggle() { if(gotContext) { robj.toggleComplete() } }
+
 </script>
 
 <article class='card'>
   <div class='card-body'>
-    <h3>{obj.title}</h3>
-    <p class='diff'>
-      <span>Com/Locs</span>
-      <span>{obj.difficulty}</span>
-      <span></span>
+    <heading class='card-heading'>
+    <h3>
+      <span>{obj.title}</span>
+    </h3>
+    {#if gotContext && robj.complete}<span><Fa size="1x" icon={faCheck} /></span>{/if}
+    </heading>
+    <p class='icons'>
+      <span><Fa icon={faFire} /> {obj.difficulty}</span>
     </p>
-    <p>{obj.short}</p>
+    <p>{obj.short ? obj.short : "No short description provided!"}</p>
+    <details>
+      <summary><Fa icon={faLocationDot} /> {obj.nodes.length} tutorials</summary>
+      <ol class='nodelist'>
+        {#each obj.nodes as node}
+        <li>
+          <CompactTutorialListItem node={node} />
+        </li>
+        {/each}
+      </ol>
+    </details>
+    <hr>
     <a class='select' role="button">Select in Map</a>
-    <a role="button">Save to Backpack</a>
-    <a role="button">Open in New Tab</a>
+    <a role="button">Open in Tab</a>
+    <a role="button">Save Project</a>
+    <a role="button" onclick={toggle}>Mark Complete</a>
   </div>
 </article>
 
 <style lang='scss'>
+  heading {
+    display: flex;
+    flex-direction: row;
+    & > span { margin-left: 1rem;}
+  }
+  details {
+    font-size: 14pt;
+  }
   .card-body {
     position: relative;
   }
@@ -34,7 +72,14 @@
     padding: 10px;
     font-size: $small;
   }
-  .diff { position: absolute; top: 0; right: 0; }
+  .icons { position: absolute; top: 0; right: -6px;
+    & > span {
+    // border: 1px solid grey;
+    border-radius: 24px;
+    padding: 8px;
+    padding-bottom: 6px;
+    }
+  }
   .number-pill {
     display: inline-flex;
     background-color: lightgray;
@@ -45,5 +90,8 @@
     border-radius: 1rem;
     font-weight: bold;
     margin: 0 0.5rem;
+  }
+  .nodelist > li {
+    list-style: none;
   }
 </style>

@@ -7,19 +7,11 @@
     <li><h1>{guide.title}</h1></li>
   </ul>
   <ul>
-    <li><a href="/learn/{guide.pathTitle}">Map</a></li>
+    <li><a href="/learn/{guide.pathTitle}">{guide.pathTitle.charAt(0).toUpperCase() + guide.pathTitle.slice(1)} Map</a></li>
+    <li><a href="/learn/{guide.pathTitle}/about">About</a></li>
     <li><a href="/learn/{guide.pathTitle}/projects">Projects</a></li>
     <li><a href="/learn/{guide.pathTitle}/tutorials">Tutorials</a></li>
-    <li><a href="/learn/{guide.pathTitle}/about">Backpack</a></li>
-    <li><a href="/learn/{guide.pathTitle}/about">About</a></li>
-    <li><a href="/learn">More Guides</a></li>
-    <li>
-      {#if session}
-        <a href="https://portal.codevirginia.org/dashboard">My Account</a>
-      {:else}
-      <a href="/learn/{guide.pathTitle}/login" role="button">Login</a>
-      {/if}
-    </li>
+    <li><a href="/learn/{guide.pathTitle}/about">Account</a></li>
   </ul>
 </nav>
 <style lang='scss'>

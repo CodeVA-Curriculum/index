@@ -1,11 +1,11 @@
-import * as types from '$lib/server/db/schema'
-import type { Edge } from './Edge.svelte.ts'
+import type { Project as DbProject } from '$lib/server/db/schema'
 
 export class Project {
-  db:types.Project
-  edges:Edge[] = $state([])
-  nodes:Node[] = $state([])
-  constructor(obj:types.Project) {
+  db:DbProject
+  complete:boolean = $state(false)
+  constructor(obj:DbProject) {
     this.db = obj
   }
+  toggleComplete() { this.complete = !this.complete }
+  markComplete() { this.complete = true }
 }

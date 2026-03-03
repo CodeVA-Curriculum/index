@@ -14,7 +14,7 @@ async function main() {
   const db = drizzle({ schema: schema, client: client });
   
   // clear database for seeding
-  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.project, schema.guide, schema.node]
+  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.project,  schema.node, schema.guide]
   for(const table of tables) {
     await db.delete(table)
   }
