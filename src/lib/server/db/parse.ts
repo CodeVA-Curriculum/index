@@ -1,0 +1,73 @@
+import remarkParse from 'remark-parse'
+import remarkFrontmatter from 'remark-frontmatter'
+import { unified } from 'unified'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify' 
+import rehypeFormat from 'rehype-format' 
+import remarkGfm from 'remark-gfm'
+import { read } from 'to-vfile'
+import YAML from 'yaml'
+
+export async function fileToElementObj(path:string):Promise<any> {
+  let frontmatter:any
+  const file = await unified()
+    .use(remarkParse)
+    .use(remarkFrontmatter, ['yaml'])
+    .use(() => (tree:any) => {
+      frontmatter = tree.children.length > 0? YAML.parse(tree.children[0].value) : {}
+    })
+    .use(remarkGfm)
+    // .use(remarkDirective)
+    // .use(nsfDirective)
+    // .use(supporterDirective)
+    .use(remarkRehype)
+    .use(rehypeFormat)
+    .use(rehypeStringify)
+    .process(await read(path))
+
+    // TODO: make sure the file has frontmatter;
+    // console.log(frontmatter)
+    
+    return {
+      ...frontmatter,
+      hidden: path.includes('.meta.md'),
+      content: file.toString(),
+      path: path
+      // literal: {
+      //   content: file.toString(),
+      //   author: tern(frontmatter, 'authors'),
+      //   short: tern(frontmatter, 'short'),
+      //   title: tern(frontmatter, 'title'),
+      //   path: path
+      // },
+      // relational: {
+      //   grades: frontmatter.grades? expandDashNotation(String(frontmatter.grades)): 'inherit',
+      //   audiences: frontmatter.audiences? frontmatter.audiences.split(', ') : 'inherit',
+      //   types: frontmatter.types? frontmatter.types.split(', ') : 'inherit'
+      // }
+    }
+  
+}
+
+
+export async function parseGuideFiles(paths:string[]) {
+  let files = []
+  for(const path of paths) {
+    const file = await fileToElementObj(path)
+    file.path = file.path.replace('static/trail-guides/', '')
+    files.push(file)
+  }
+  return files
+}
+export async function parseNodeFile(path) {
+  let file = await fileToElementObj(path)
+  return {
+    ...file
+  }
+}
+export async function parseProjectFile(path) {
+  let file = await fileToElementObj(path)
+  return {
+    ...file
+  }
+}

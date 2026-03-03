@@ -8,36 +8,44 @@
     <h1>Learn Computer Science</h1>
     <p>Our computing resources are designed for you to use, reuse, and misuse. Check them out!</p>
   </section>
-  <section>
+  <section class='guide-cards'>
     {#each data.guides as guide}
+      <div>
       <article class='card'>
-        <div class='img-wrap'>
-          <img src={guide.image} alt="" role="presentation" />
+        <div class='card-image'>
+          <img src={guide.image} alt="" />
         </div>
         <main class='card-body'>
           <h2>{guide.title}</h2>
-          <p class='description'>{@html guide.description}</p>
+          <p>{guide.short ? guide.short : "No description provided!"}</p>
           <a role='button' href=''>Open the Guide</a>
         </main>
       </article>
+      </div>
     {/each}
   </section>
 </div>
 
 <style lang='scss'>
   article {
-    display: flex;
-    flex-direction: row;
+    max-width: 70%;
     padding: 1.5rem;
+    display: inline-flex;
+    flex-direction: row;
+    min-width: 400px;
+  }
+  .card-image {
+    flex: 1 1;
+    margin-right: 2rem;
+    max-width: 200px;
+    img { aspect-ratio: 1/1; min-width: 200px; height: 200px; }
   }
   main {
-    display: flex;
-    flex-direction: column;
-    p { flex-grow: 1; }
-    margin: 0 1.5rem;
+    // flex: 1 0;
+    // margin: 0 1.5rem;
   }
-  .img-wrap {
-    min-width: 220px;  
-    max-width: 220px;
+  .guide-cards {
+    // display: inline-flex;
+    // flex-direction: column;
   }
 </style>
