@@ -178,6 +178,7 @@ export type Guide = typeof guide.$inferSelect;
 
 export const node = sqliteTable('node', {
 	id: integer('id').primaryKey(),
+	path: text(),
 	title: text('title'),
 	type: text({ enum: ["cache", "tutorial"]}),
 	prompts: text('prompts'),
@@ -215,7 +216,8 @@ export const pivotUserProject = sqliteTable('pivot_user_project', {
 export const pivotNodeProject = sqliteTable('pivot_node_project', {
 	nodeId: integer('node_id').references(() => node.id),
 	projectId: integer('project_id').references(() => project.id),
-	optional: integer({ mode: 'boolean' }).default(false)
+	optional: integer({ mode: 'boolean' }).default(false),
+	index: integer()
 },
 	(t) => [primaryKey({ columns: [t.nodeId, t.projectId]})]
 )
@@ -261,14 +263,16 @@ export const node_to_question = sqliteTable('node_to_question', {
 
 export const nodeGroup = sqliteTable('node_group', {
 	id: integer('id').primaryKey(),
-	alias: text(),
+	alias: text().default('$default'),
 	projectId: integer('project_id').references(() => project.id)
 })
 export type NodeGroup = typeof nodeGroup.$inferSelect
 
-export const nodeToNodeGroup = sqliteTable('node_to_group', {
+export const nodeToNodeGroup= sqliteTable('node_to_group', {
 		nodeId: integer('node_id').references(()=>node.id),
 		groupId: integer('group_id').references(() => nodeGroup.id),
+		projectId: integer('project_id').references(() => project.id),
+		optional: integer({ mode: 'boolean' }).default(false),
 		index: integer()
 	},
 	(t) => [primaryKey({ columns: [t.nodeId, t.groupId]})]

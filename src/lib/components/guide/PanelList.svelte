@@ -4,27 +4,26 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { faX } from '@fortawesome/free-solid-svg-icons'
-  let { panel, children, el } = $props()
+  let { title, list, children } = $props()
   const items = {
-    "project": ProjectListItem,
-    "tutorial": TutorialListItem
+    "Projects": ProjectListItem,
+    "Tutorials": TutorialListItem
   }
-  let component = $derived(items[el])
   // const Component = ProjectListItem
-  let Component = $derived.by(() => items[panel.el])
+  let Component = $derived.by(() => items[title])
 </script>
 
 <div class='panel-list'>
   <div class='close'>{@render children?.()}</div>
   <div class='head'>
-  <h2>{panel.title}</h2>
+  <h2>{title}</h2>
   <fieldset role="group">
     <input type="text">
     <input class='filter' type='button' value="Filters">
   </fieldset>
   </div>
   <ul>
-    {#each panel.objs as item}
+    {#each list as item}
       <Component obj={item} />
     {/each}
   </ul>

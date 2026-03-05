@@ -1,0 +1,35 @@
+import type {PageLoad} from './$types'
+import { Project } from '$lib/components/guide/Project.svelte.ts'
+import { db } from '$lib/server/db/index'
+import type { Guide } from '$lib/server/db/schema'
+import * as schema from '$lib/server/db/schema'
+import { eq } from 'drizzle-orm'
+import { error } from '@sveltejs/kit'
+import { getGuideFromParam } from '$lib/server/db/utils'
+
+export const load:PageLoad = async ({ params }) => {
+  console.log('Loading [guide]/+page.server.ts')
+  const result:Guide = await getGuideFromParam(params.guide)
+  // console.log(result)
+
+  const projects = await db.select().from(schema.project).where(eq(schema.project.guide, result.id)).orderBy(schema.project.difficulty)
+  // console.log(projects[0])
+  const projectEdges = await db.select().from(schema.nodeToNodeGroup).leftJoin(schema.project, eq(schema.nodeToNodeGroup.projectId, schema.project.id)).leftJoin(schema.node, eq(schema.nodeToNodeGroup.nodeId, schema.node.id)).leftJoin(schema.nodeGroup, eq(schema.nodeToNodeGroup.groupId, schema.nodeGroup.id)).where(eq(schema.project.guide, result.id))
+  // console.log(projectGraph[0])
+  const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
+  // console.log(nodes)
+  // TODO: construct the reactive objects from the database objects
+  // Relational query for nodes, edges, and projects based on guide
+  // const nodes = await db.select().from(schema.node).where(eq(schema.node.guide == result.id))
+  // const edges = await db.select().from(schema.edge).where(eq(schema.edge.guide == result.id))
+  // const projects = await db.select().from(schema.project).where(eq(schema.project.guide == result.id))
+  return {
+    guide: {
+      ...result,
+      pathTitle: params.guide,
+      nodes: nodes,
+      edges: projectEdges,
+      projects: projects
+    }
+  }
+}
