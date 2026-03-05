@@ -9,7 +9,6 @@ export const load:PageLoad = async ({ params }) => {
   guides.sort((a,b) => {
     a.title < b.title
   })
-console.log(guides[0])  
   return {
     guides: guides
   }

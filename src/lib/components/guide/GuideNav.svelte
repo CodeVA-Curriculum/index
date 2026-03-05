@@ -4,7 +4,7 @@
 <nav>
   <ul>
     <li class='icon'><div class='icon-wrap'><img src="/images/icon.png"></div></li>
-    <li><h1>{guide.title}</h1></li>
+    <li>{guide.title}</li>
   </ul>
   <ul>
     <li><a href="/learn/{guide.pathTitle}">{guide.pathTitle.charAt(0).toUpperCase() + guide.pathTitle.slice(1)} Map</a></li>
@@ -24,7 +24,7 @@
   }
   img {
     aspect-ratio: 1/1;
-    width: 82px;
+    width: 78px;
     position: absolute;
     margin: auto;
     // left: -43px;
