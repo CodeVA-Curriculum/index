@@ -3,6 +3,8 @@
   import { faFire, faLocationDot } from '@fortawesome/free-solid-svg-icons'
   let { obj } = $props()
   // const nodes = (obj.nodes.split('"')).length / 2
+  // 
+  // const nodes = (obj.nodes.split('"')).length / 2
 
 </script>
 <article class='card'>
@@ -11,9 +13,9 @@
     <p class='icons'>
       <span><Fa icon={faLocationDot} /> Rel. Projs</span>
     </p>
-    <p>{obj.short}</p>
+    <p>{obj.short ? obj.short : "No description provided!"}</p>
     <a class='select' role="button">Select in Map</a>
-    <a role="button">Open in Tab</a>
+    <a role="button">Open Tutorial</a>
     <a role="button">Save Tutorial</a>
     <a role="button">Mark Complete</a>
   </div>

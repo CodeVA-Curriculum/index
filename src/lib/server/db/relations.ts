@@ -27,5 +27,45 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.element.id.through(r.elementToTag.elementId),
 			to: r.tag.id.through(r.elementToTag.tagId)
 		})
+	},
+	project: {
+		nodeGroups: r.many.nodeGroup({
+			from: r.project.id,
+			to: r.nodeGroup.projectId
+		}),
+		guideObj: r.one.guide({
+			from: r.project.guide,
+			to: r.guide.id
+		})
+	},
+	nodeGroup: {
+		nodes: r.many.node({
+			from: r.nodeGroup.id.through(r.nodeToNodeGroup.groupId),
+			to: r.node.id.through(r.nodeToNodeGroup.nodeId)
+		}),
+		project: r.one.project({
+			from: r.nodeGroup.projectId,
+			to: r.project.id
+		})
+	},
+	node: {
+		projects: r.many.project({
+			from: r.node.id.through(r.nodeToNodeGroup.nodeId),
+			to: r.project.id.through(r.nodeToNodeGroup.projectId)
+		})
 	}
+	// project: {
+	// 	groups: r.many.nodeGroup({
+	// 		from: r.project.id,
+	// 		to: r.nodeGroup.projectId
+	// 	}),
+		// allNodes: r.many.node({
+		// 	from: r.project.id.through(r.nodeToNodeGroup.projectId),
+		// 	to: r.node.id.through(r.nodeToNodeGroup.nodeId)
+		// }),
+		// guide: r.one.guide({
+		// 	from: r.project.guideId,
+		// 	to: r.guide.id
+		// })
+	// }
 }))

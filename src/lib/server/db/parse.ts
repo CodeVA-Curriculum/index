@@ -61,12 +61,14 @@ export async function parseGuideFiles(paths:string[]) {
 }
 export async function parseNodeFile(path) {
   let file = await fileToElementObj(path)
+  file.path = file.path.replace('static/trail-guides/', '')
   return {
     ...file
   }
 }
 export async function parseProjectFile(path) {
   let file = await fileToElementObj(path)
+  file.path = file.path.replace('static/trail-guides/', '')
   return {
     ...file
   }

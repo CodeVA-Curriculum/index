@@ -1,35 +1,34 @@
 <script lang='ts'>
+  import GuideNav from '$lib/components/guide/GuideNav.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
   import Fa from 'svelte-fa'
   import { faX } from "@fortawesome/free-solid-svg-icons"
   import type { PageProps } from './$types'
   let { data }:PageProps = $props()
+  import { Map } from '$lib/components/guide/Map.svelte'
 
-  let panelOpen:string|false = $state('projects')
-  const panel = {
-    projects: {
-      title: 'Projects',
-      objs: data.guide.projects,
-      el: "project"
-    },
-    tutorials: {
-      title: 'Tutorials',
-      objs: data.guide.nodes,
-      el: "tutorial"
-    }
+  const map = new Map(data.guide)
+
+  let panelOpen:string|false = $state('Projects')
+  const lists = {
+    Projects: map.projects,
+    Tutorials: map.nodes
   }
-  function toggle(title:string) {
+  let workingList:Project[]|Node[] = $state(map.projects)
+  function toggle(title:"Projects"|"Tutorials") {
     panelOpen = title ? title : false;
-    
+    workingList = lists[title]
   }
 </script>
+
+<GuideNav guide={data.guide} session={data.session} />
 
 <div class='map-view'>
 <div class='ui {panelOpen ? 'open': 'closed'}'>
   <div class='start'>
-    <button onclick={() => toggle('projects')}>projects</button>
-    <button onclick={() => toggle('tutorials')}>tutorials</button>
+    <button onclick={() => toggle('Projects')}>projects</button>
+    <button onclick={() => toggle('Tutorials')}>tutorials</button>
     <button>backpack</button>
   </div>
   <div class='end'>
@@ -40,8 +39,8 @@
 <div class='panel {panelOpen ? 'open': 'closed'}'>
   <div class='body {panelOpen ? 'open': 'closed'}'>
     {#if panelOpen}
-      <PanelList panel={panel[panelOpen]}  >
-        <button class='close' onclick={() => toggle()}><Fa icon={faX} /></button>
+      <PanelList title={panelOpen} list={workingList}  >
+        <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
       </PanelList>
     {/if}
   </div>
@@ -50,6 +49,7 @@
 
 
 <style lang='scss'>
+  @import "$lib/styles/theme.scss";
   .panel {
     // position: absolute; top: 4.25rem;
     height: 100%;
@@ -108,5 +108,5 @@
     width: 100vw;
     overflow-x: hidden;
   }
-  .close{ position: absolute; right: 0; top: 0;}
+  .close{ position: absolute; right: 0; top: 0; background-color: transparent; border: none; color: $text }
 </style>

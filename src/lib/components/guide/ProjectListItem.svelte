@@ -1,19 +1,13 @@
 <script lang='ts'>
   import { onMount } from 'svelte'
   import { getContext } from 'svelte'
+  import type { Project } from '$lib/components/guide/Project.svelte'
   import CompactTutorialListItem from '$lib/components/guide/CompactTutorialListItem.svelte'
   import Fa from 'svelte-fa'
   import { faFire, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
-  let { obj } = $props()
-  let robj = $state({})
-  // const nodes = (obj.nodes.split('"')).length / 2
-  onMount(() => {
-    robj = getContext(obj.path)
-    console.log(robj)
-  })
+  let { obj} = $props()
 
-  let gotContext = $derived.by(() => robj? true : false)
-  function toggle() { if(gotContext) { robj.toggleComplete() } }
+  function toggle() {}
 
 </script>
 
@@ -23,25 +17,27 @@
     <h3>
       <span>{obj.title}</span>
     </h3>
-    {#if gotContext && robj.complete}<span><Fa size="1x" icon={faCheck} /></span>{/if}
+    {#if false}<span><Fa size="1x" icon={faCheck} /></span>{/if}
     </heading>
     <p class='icons'>
       <span><Fa icon={faFire} /> {obj.difficulty}</span>
     </p>
     <p>{obj.short ? obj.short : "No short description provided!"}</p>
+    {#each Object.entries(obj.nodeGroups) as [k,v]}
     <details>
-      <summary><Fa icon={faLocationDot} /> {obj.nodes.length} tutorials</summary>
+      <summary><Fa icon={faLocationDot} /> {v.length} tutorials</summary>
       <ol class='nodelist'>
-        {#each obj.nodes as node}
+        {#each v as node}
         <li>
           <CompactTutorialListItem node={node} />
         </li>
         {/each}
       </ol>
     </details>
+    {/each}
     <hr>
     <a class='select' role="button">Select in Map</a>
-    <a role="button">Open in Tab</a>
+    <a href="/learn/{obj.path}" role="button">Open Project</a>
     <a role="button">Save Project</a>
     <a role="button" onclick={toggle}>Mark Complete</a>
   </div>
