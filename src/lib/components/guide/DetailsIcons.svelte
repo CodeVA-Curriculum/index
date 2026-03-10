@@ -3,11 +3,10 @@
     Project:0,
     Tutorial:1
   }
-  type Type = typeof ElementType[keyof typeof ElementType];
 </script>
 <script lang='ts'>
   import Fa from 'svelte-fa'
-  import { faLocationDot, faFire, faRoute } from '@fortawesome/free-solid-svg-icons'
+  import { faLocationDot, faClipboardQuestion, faTerminal, faFire, faRoute } from '@fortawesome/free-solid-svg-icons'
   let { eltype = 0} = $props()
   
   const ElementType = {
@@ -35,10 +34,12 @@
   </div>
   {:else if eltype==ElementType.Tutorial}
   <div>
-    <span># Qs</span>
+    <span><Fa icon={faClipboardQuestion} /></span>
+    <span>0/0</span>
   </div>
   <div>
-    <span># Prompts</span>
+    <span><Fa icon={faTerminal} /></span>
+    <span>0/0</span>
   </div>
   <div>
     <span><Fa icon={faRoute} /></span>
@@ -49,17 +50,17 @@
 
 <style lang='scss'>
   .details-icons {
+    margin: 0.5rem 0;
     display: flex;
     flex-direction: row;
-    margin: 1rem 0;
     & > * {
-      padding: 8px 8px;
-      margin: 0;
+      margin: 0 0.5rem;
       display: flex;
-      flex: 1 1;
+      flex: 0 1;
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      min-width: fit-content;
       & > span {
         position: relative;
         top: 1px;
@@ -68,9 +69,11 @@
     }
   }
   .mark {
+    margin: 0;
+    margin-right: 1rem;
     min-width: fit-content;
     max-width: fit-content;
-    padding: 12px 12px;
+    padding: 8px 12px;
     font-size: 11pt;
     border-radius: 4px;
     font-size: 10pt;
