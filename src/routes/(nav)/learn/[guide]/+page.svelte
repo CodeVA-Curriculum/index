@@ -1,4 +1,6 @@
 <script lang='ts'>
+  import InteractiveMap from '$lib/components/guide/InteractiveMap.svelte'
+  import { page } from '$app/stores'
   import GuideNav from '$lib/components/guide/GuideNav.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
@@ -8,9 +10,11 @@
   let { data }:PageProps = $props()
   import { Map } from '$lib/components/guide/Map.svelte'
 
+  const params = $page.url.searchParams
+
   const map = new Map(data.guide)
 
-  let panelOpen:string|false = $state('Projects')
+  let panelOpen:string|false = $state('')
   const lists = {
     Projects: map.projects,
     Tutorials: map.nodes
@@ -36,6 +40,9 @@
     <button>import</button>
   </div>
 </div>
+  <div class='map-wrap'>
+    <InteractiveMap nodes={lists.Tutorials} />
+  </div>
 <div class='panel {panelOpen ? 'open': 'closed'}'>
   <div class='body {panelOpen ? 'open': 'closed'}'>
     {#if panelOpen}
@@ -50,7 +57,16 @@
 
 <style lang='scss'>
   @import "$lib/styles/theme.scss";
+  .map-wrap {
+    position: absolute;
+    // background-color: pink;
+    width: 100%;
+    height: 100%;
+    // z-index: -1;
+    // width: 100vw;
+  }
   .panel {
+    // z-index: 99;
     // position: absolute; top: 4.25rem;
     height: 100%;
     &.open { width: 30rem; }
@@ -70,7 +86,7 @@
   .body {
     width: 100%;
     position: relative;
-    background-color: pink;
+    // background-color: white;
   }
   .ui {
     height: 100%;
@@ -84,13 +100,13 @@
     .start {
       flex: 1;
       display: flex; flex-direction: column;
-      background-color: lightgreen;
+      // background-color: lightgreen;
       justify-content: start;
     }
     .end {
       flex: 1;
       display: flex; flex-direction: column;
-      background-color: pink;
+      // background-color: pink;
       justify-content: end;
     }
     button {
@@ -104,7 +120,7 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    background-color: powderblue;
+    // background-color: powderblue;
     width: 100vw;
     overflow-x: hidden;
   }

@@ -1,13 +1,8 @@
 {
 	"nodes":[
-		{"id":"ba4083466e1e3b09","type":"file","file":"concepts/relational-expressions.md","x":480,"y":-2920,"width":400,"height":400},
 		{"id":"23030dc2ec5ecbbf","type":"file","file":"applications/story-with-conversations-landmark.md","x":1000,"y":-1480,"width":400,"height":400},
 		{"id":"ca2e9806069c3f0c","type":"file","file":"applications/story-with-counting-landmark.md","x":680,"y":-2120,"width":400,"height":400},
 		{"id":"ea86cea80912deb2","type":"file","file":"concepts/if-unless.md","x":-1560,"y":-3120,"width":400,"height":400},
-		{"id":"73b74f0bbc112e3f","type":"file","file":"concepts/if-else.md","x":-400,"y":-3520,"width":400,"height":400},
-		{"id":"5351e295e06e1d51","type":"file","file":"applications/breakout-box-landmark.md","x":1400,"y":-3520,"width":400,"height":400},
-		{"id":"bb172ffc02bf30c1","type":"file","file":"concepts/conditions-variables.md","x":1400,"y":-2920,"width":400,"height":400},
-		{"id":"55b46c6c4ea991de","type":"file","file":"applications/puzzle-dig-landmark.md","x":1400,"y":-2320,"width":400,"height":400},
 		{"id":"ea8d121583563a0f","type":"file","file":"applications/start-a-story.md","x":-3120,"y":-1080,"width":400,"height":400},
 		{"id":"0b077049bd1704cc","type":"file","file":"projects/your-first-story/the-whale-design-menu.md","x":-2800,"y":-1920,"width":400,"height":400},
 		{"id":"496b6125d8030ebd","type":"file","file":"concepts/create-passage.md","x":-2280,"y":-1240,"width":400,"height":400},
@@ -31,7 +26,13 @@
 		{"id":"4286c978431eb924","type":"file","file":"applications/primary-documents-landmark.md","x":-760,"y":840,"width":400,"height":400},
 		{"id":"86ee5b2abdc6829f","type":"file","file":"concepts/css.md","x":-80,"y":520,"width":400,"height":400},
 		{"id":"320c3aebe35e6e4d","type":"file","file":"applications/story-with-multiple-endings.md","x":1000,"y":40,"width":400,"height":400},
-		{"id":"e984f58ce15302e8","x":1000,"y":720,"width":400,"height":400,"type":"file","file":"projects/your-first-story/the-whale-writing.md"}
+		{"id":"e984f58ce15302e8","type":"file","file":"projects/your-first-story/the-whale-writing.md","x":1000,"y":720,"width":400,"height":400},
+		{"id":"bb172ffc02bf30c1","type":"file","file":"concepts/conditions-variables.md","x":1480,"y":-3120,"width":400,"height":400},
+		{"id":"4583a9a2dd537a99","x":1480,"y":-2600,"width":400,"height":400,"type":"file","file":"concepts/logic-operators.md"},
+		{"id":"5351e295e06e1d51","type":"file","file":"applications/breakout-box-landmark.md","x":1680,"y":-3800,"width":400,"height":400},
+		{"id":"55b46c6c4ea991de","type":"file","file":"applications/puzzle-dig-landmark.md","x":1680,"y":-1920,"width":400,"height":400},
+		{"id":"ba4083466e1e3b09","type":"file","file":"concepts/relational-expressions.md","x":480,"y":-3200,"width":400,"height":400},
+		{"id":"73b74f0bbc112e3f","type":"file","file":"concepts/if-else.md","x":-480,"y":-3600,"width":400,"height":400}
 	],
 	"edges":[
 		{"id":"b75202880f413435","fromNode":"ea8d121583563a0f","fromSide":"right","toNode":"496b6125d8030ebd","toSide":"left"},
@@ -63,8 +64,6 @@
 		{"id":"f73eb25530e75ede","fromNode":"ba4083466e1e3b09","fromSide":"right","toNode":"5351e295e06e1d51","toSide":"left"},
 		{"id":"bf38ef5f7a9e9ba0","fromNode":"ea86cea80912deb2","fromSide":"right","toNode":"ba4083466e1e3b09","toSide":"left"},
 		{"id":"5943d9e5a01bfe97","fromNode":"ba4083466e1e3b09","fromSide":"right","toNode":"55b46c6c4ea991de","toSide":"left"},
-		{"id":"090c7427ee6d406b","fromNode":"bb172ffc02bf30c1","fromSide":"bottom","toNode":"55b46c6c4ea991de","toSide":"top"},
-		{"id":"9bde032b18738048","fromNode":"bb172ffc02bf30c1","fromSide":"top","toNode":"5351e295e06e1d51","toSide":"bottom"},
 		{"id":"3e7a247f58295973","fromNode":"cd68dfeaab5cb1dc","fromSide":"top","toNode":"f07858805d925579","toSide":"bottom"},
 		{"id":"47b45573f56d334b","fromNode":"ea8d121583563a0f","fromSide":"top","toNode":"0b077049bd1704cc","toSide":"left"},
 		{"id":"acc04b6a93631386","fromNode":"0b077049bd1704cc","fromSide":"bottom","toNode":"496b6125d8030ebd","toSide":"left"},
@@ -79,6 +78,13 @@
 		{"id":"896f2140bcf1bc82","fromNode":"86ee5b2abdc6829f","fromSide":"right","toNode":"320c3aebe35e6e4d","toSide":"left"},
 		{"id":"eca965cd530e402f","fromNode":"b73cf58df3eb3275","fromSide":"right","toNode":"320c3aebe35e6e4d","toSide":"left"},
 		{"id":"dd3be89ce41a6ae5","fromNode":"320c3aebe35e6e4d","fromSide":"bottom","toNode":"e984f58ce15302e8","toSide":"top"},
-		{"id":"7c1df3f0556c243d","fromNode":"cd68dfeaab5cb1dc","fromSide":"bottom","toNode":"4286c978431eb924","toSide":"top"}
+		{"id":"7c1df3f0556c243d","fromNode":"cd68dfeaab5cb1dc","fromSide":"bottom","toNode":"4286c978431eb924","toSide":"top"},
+		{"id":"6ee1d0acecaede13","fromNode":"bb172ffc02bf30c1","fromSide":"right","toNode":"55b46c6c4ea991de","toSide":"right"},
+		{"id":"86f78a27cd7e5608","fromNode":"ba4083466e1e3b09","fromSide":"right","toNode":"4583a9a2dd537a99","toSide":"left"},
+		{"id":"75527d93c88af770","fromNode":"4583a9a2dd537a99","fromSide":"bottom","toNode":"55b46c6c4ea991de","toSide":"top"},
+		{"id":"3aa86bfd2adaae58","fromNode":"4583a9a2dd537a99","fromSide":"top","toNode":"bb172ffc02bf30c1","toSide":"bottom"},
+		{"id":"d470f94942dce6e8","fromNode":"bb172ffc02bf30c1","fromSide":"bottom","toNode":"4583a9a2dd537a99","toSide":"top"},
+		{"id":"77f14c28237349da","fromNode":"bb172ffc02bf30c1","fromSide":"top","toNode":"5351e295e06e1d51","toSide":"bottom"},
+		{"id":"224db8f6b1bccec9","fromNode":"4583a9a2dd537a99","fromSide":"right","toNode":"5351e295e06e1d51","toSide":"right"}
 	]
 }

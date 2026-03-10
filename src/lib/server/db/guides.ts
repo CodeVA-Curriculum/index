@@ -1,4 +1,5 @@
 import { globby } from 'globby'
+import { read } from 'to-vfile'
 import { eq } from 'drizzle-orm'
 import * as schema from './schema'
 import { fileToElementObj, parseGuideFiles, parseProjectFile, parseNodeFile } from './parse'
@@ -25,9 +26,22 @@ export async function seedGuides(db:any, schema:any) {
   // Next, all the nodes
   const nodePaths = paths.filter((p) => !projectPaths.includes(p) && !guidePaths.includes(p))
   for(const path of nodePaths) {
+    let mapPath = path.replace('static/trail-guides/', '')
+    const guideName = mapPath.substring(0, mapPath.indexOf('/'))
     const file = await parseNodeFile(path)
+    const mapFile = (await read("static/trail-guides/"+guideName+"/map.canvas")).toString()
+    if(mapFile.length > 0) {
+      const canvas = await JSON.parse(mapFile)
+      const mapNode = canvas.nodes.filter((obj)=>guideName+"/"+obj.file==file.path)
+      if(mapNode.length > 0) {
+        console.log("adding region-map location")
+        file.x = mapNode[0].x
+        file.y = mapNode[0].y
+      }
+    }
     file.guide = getGuideIdFromPath(path, guides)
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
+    // Assign map values
     await db.insert(schema.node).values(file)
   }
 

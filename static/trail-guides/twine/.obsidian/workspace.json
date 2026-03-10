@@ -1,0 +1,195 @@
+{
+  "main": {
+    "id": "a9fd54962423532d",
+    "type": "split",
+    "children": [
+      {
+        "id": "10afed2161d058a8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c2b9c6359207a8b5",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "map.canvas",
+                "viewState": {
+                  "x": 1180.0570976063836,
+                  "y": -2213.2577061332304,
+                  "zoom": -1.779737259273061
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "map"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1a5e8bb7a2d64c68",
+    "type": "split",
+    "children": [
+      {
+        "id": "50f5d5382b30f442",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cc691427a5fce520",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "79d9b54e430529f0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "37f3959c0e00ab30",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "fd4e029dbf3d622e",
+    "type": "split",
+    "children": [
+      {
+        "id": "c3e0e6abe08b001e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8d8773a898ad1a6e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "map.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for map"
+            }
+          },
+          {
+            "id": "6aeaebb99d61e472",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "map.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from map"
+            }
+          },
+          {
+            "id": "392f6878a72dbf75",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "8cddd1c49b616eda",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "2edcb99b47e2ce10",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "map.canvas",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of map"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "c2b9c6359207a8b5",
+  "lastOpenFiles": [
+    "projects/your-first-story/index.md",
+    "map.canvas",
+    "projects/your-first-story/the-whale-outline.md"
+  ]
+}
