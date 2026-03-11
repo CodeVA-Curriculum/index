@@ -42,7 +42,7 @@ export class Cursor {
     const a = obj.x -this.localX
     const b = obj.y - this.localY
     const c = Math.sqrt(a*a+ b*b)
-    return c < obj.radius/2 // node.radius has been misnamed--it should be "diameter" but I don't feel like changing it right now
+    return c < obj.radius.get()/2 // node.radius has been misnamed--it should be "diameter" but I don't feel like changing it right now
   }
   getHovered():Node {
     return this.hovering
