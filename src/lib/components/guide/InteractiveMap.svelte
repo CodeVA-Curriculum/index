@@ -41,7 +41,7 @@
         }
         for(const node of nodes) {
           const hovering = cursor.over(node)
-          p5.text(hovering, node.x, node.y+40)
+          node.hover = hovering
           node.draw(p5)
         }
         p5.stroke(0);
