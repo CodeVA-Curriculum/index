@@ -39,8 +39,8 @@ export class Cursor {
     }
   }
   over(obj:Node):boolean {
-    const a = obj.x -this.mx
-    const b = obj.y - this.my
+    const a = obj.x -this.localX
+    const b = obj.y - this.localY
     const c = Math.sqrt(a*a+ b*b)
     return c < obj.radius/2 // node.radius has been misnamed--it should be "diameter" but I don't feel like changing it right now
   }
