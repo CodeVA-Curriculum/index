@@ -20,13 +20,13 @@
   let edges = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
-  let cursor = null
-  let camera = null
+  let cursor:Cursor|null = null
+  let camera:Camera|null = null
   const sketch = (p5:any) => {
     p5.setup = () => {
       p5.createCanvas(p5.displayWidth,p5.displayHeight*.8)
       camera = new Camera(p5, 1)
-      cursor = new Cursor(p5)
+      cursor = new Cursor()
     }
     p5.draw = () => {
       debug.cursor = cursor.mx + ', ' + cursor.my
