@@ -227,7 +227,9 @@ export const edge = sqliteTable('edge', {
 	uid: text('uid'),
 	from: integer('from').references(() => node.id),
 	to: integer('to').references(() => node.id),
-	guide: integer('guide_id').references(() => guide.id)
+	guide: integer('guide_id').references(() => guide.id),
+	fromSide: text({ enum: ["left", "right", "top", "bottom"]}),
+	toSide: text({ enum: ["left", "right", "top", "bottom"]})
 })
 export type Edge = typeof edge.$inferSelect
 

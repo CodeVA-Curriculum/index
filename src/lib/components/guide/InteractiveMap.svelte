@@ -31,6 +31,9 @@
       for(const node of nodes) {
         node.setup(p5, font)
       }
+      for(const edge of edges) {
+        edge.setup(p5)
+      }
     }
     p5.draw = () => {
       debug.cursor = cursor.mx + ', ' + cursor.my
@@ -41,7 +44,7 @@
       }
       camera.display(() => {
         for(const edge of edges) {
-          edge.draw()
+          edge.draw(p5)
         }
         for(const node of nodes) {
           const hovering = cursor.over(node)

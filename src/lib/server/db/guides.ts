@@ -58,7 +58,9 @@ export async function seedGuides(db:any, schema:any) {
         uid: edge.id,
         from: fromNode.id,
         to: toNode.id,
-        guide: guide.id
+        guide: guide.id,
+        fromSide: edge.fromSide,
+        toSide: edge.toSide
       })
     }
   }
