@@ -6,21 +6,26 @@ export class Node {
   complete:boolean = $state(false)
   x = 0; y = 0;
   // radius = null
-  radius
+  radius = new Lerp(100, 40)
+  width = 50
   hover = false
   scale = 1
   constructor(obj:DbNode) {
     this.db = obj
     this.x = obj.x
     this.y = obj.y
-    this.radius = new Lerp(50, 40)
+  }
+  setup(p5, font) {
+    const w = Math.ceil(this.getWidth(p5, font))
+    this.width = w
+    this.radius = new Lerp(Math.round(w), 40)
   }
   draw(p5:any) {
     // this.radius = this.hover ? 100 : 50;
     if(this.hover) {
-      this.radius.setTarget(100)
+      this.radius.setTarget(this.width * 1.5)
     } else {
-      this.radius.setTarget(50)
+      this.radius.setTarget(this.width)
     }
     this.radius.update(p5)
     if(this.x && this.y) {
@@ -32,6 +37,52 @@ export class Node {
     } else {
       console.warn("Tried to render "+this.db.path+" to map, but node is not present in map.canvas!")
     }
+  }
+  setWidth(p5:any, font:any) {
+    this.width = p5.getWidth(p5, font)
+  }
+  getWidth(p5:any, font:any) {
+    // find the longest series of words that will be displayed on one line (<= 150px)
+    let words = this.db.title.split(' ')
+    const lengths:number[] = []
+    let lineHeight = -1;
+    for(let i=0;i<words.length;i++) {
+      words[i] += ' '
+      let box = font.textBounds(words[i], this.x/2, this.y/2, 28)
+      lengths.push(box.w)
+      if(box.h > lineHeight) { lineHeight = box.h * 2 }
+    }
+    let lines = [{ text: '', lineLength: 0 }]
+    let linesIndex = 0
+    for(let i=0;i<words.length;i++) {
+      if(lines[linesIndex].text == "" || lines[linesIndex].lineLength + lengths[i] < 150) {
+        lines[linesIndex].text += words[i]
+        lines[linesIndex].lineLength += lengths[i]
+      } else {
+        lines.push({
+            text: words[i],
+            lineLength: lengths[i]
+        })
+        linesIndex += 1
+      }
+    }
+
+    let maxLength = -1
+    let index = 0
+    for(let i=0;i<lines.length;i++) {
+      if(maxLength < lines[i].lineLength) {
+        maxLength = lines[i].lineLength
+        index = i
+      }
+    }
+
+    // width of longest word is in `maxLength`, now need to scale the width based on how high or low that word is in the circle using `index`
+    const offsetY = (index - (lines.length -1) / 2) * lineHeight
+    // console.log(this.frontmatter.title, offsetY)
+    return Math.sqrt(offsetY*offsetY + (maxLength)*(maxLength)) + 30
+  }
+  setFonts() {
+    
   }
 }
 
