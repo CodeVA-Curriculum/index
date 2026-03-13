@@ -48,7 +48,7 @@
         }
         for(const node of nodes) {
           const hovering = cursor.over(node)
-          node.hover = hovering
+          node.setHover(hovering)
           node.draw(p5)
         }
         cursor.update(p5, camera.matrix)
