@@ -18,15 +18,15 @@ export class Node {
   setup(p5, font) {
     const w = Math.ceil(this.getWidth(p5, font))
     this.width = w
-    this.radius = new Lerp(Math.round(w), 40)
+    this.radius = new Lerp(Math.round(w), 5)
   }
   draw(p5:any) {
     // this.radius = this.hover ? 100 : 50;
-    if(this.hover) {
-      this.radius.setTarget(this.width * 1.5)
-    } else {
-      this.radius.setTarget(this.width)
-    }
+    // if(this.hover) {
+    //   this.radius.setTarget(this.width * 1.5)
+    // } else {
+    //   this.radius.setTarget(this.width)
+    // }
     this.radius.update(p5)
     p5.circle((this.x)*this.scale, this.y*this.scale, this.radius.get())
     this.debug(p5)
@@ -44,6 +44,12 @@ export class Node {
   }
   setWidth(p5:any, font:any) {
     this.width = p5.getWidth(p5, font)
+  }
+  setHover(hovering:boolean) {
+    if(this.hover != hovering) {
+      this.hover = hovering
+      this.radius.setTarget(this.hover ? this.width * 1.5 : this.width)
+    }
   }
   getWidth(p5:any, font:any) {
     // find the longest series of words that will be displayed on one line (<= 150px)
