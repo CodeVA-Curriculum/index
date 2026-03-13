@@ -21,7 +21,7 @@ export class Lerp {
     this.frames = frames
   }
   update(p5:any) {
-    this.state = this.target != this.value
+    this.state = Math.round(this.target) != Math.round(this.value)
     if(this.state) {
       // console.log(this.value, this.target)
       this.offset += 0.2 * (this.target - this.previous)

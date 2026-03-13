@@ -22,11 +22,16 @@
   let selectedNodes:Node[] = $state([])
   let cursor:Cursor|null = null
   let camera:Camera|null = null
+  let font:any
   const sketch = (p5:any) => {
-    p5.setup = () => {
+    p5.setup = async () => {
       p5.createCanvas(p5.displayWidth,p5.displayHeight*.8)
       camera = new Camera(p5, 1)
       cursor = new Cursor()
+      font = await p5.loadFont('/fonts/calibri-regular.ttf')
+      for(const node of nodes) {
+        node.setup(p5, font)
+      }
     }
     p5.draw = () => {
       debug.cursor = cursor.mx + ', ' + cursor.my
@@ -44,8 +49,6 @@
           node.hover = hovering
           node.draw(p5)
         }
-        p5.stroke(0);
-        p5.text(p5.displayWidth/2, p5.displayHeight/2, cursor.mx + ', '+cursor.my)
         cursor.update(p5, camera.matrix)
       })
       const offsetCoords = cursor.getDrag(p5)
