@@ -2,6 +2,16 @@ import * as schema from './schema'
 import { defineRelations } from 'drizzle-orm';
 
 export const relations = defineRelations(schema, (r) => ({
+	edge: {
+		toNode: r.one.node({
+			from: r.edge.to,
+			to: r.node.id
+		}),
+		fromNode: r.one.node({
+			from: r.edge.from,
+			to: r.node.id
+		})
+	},
 	element: {
 		subjects: r.many.subject({
 			from: r.element.id.through(r.elementToSubj.elementId),

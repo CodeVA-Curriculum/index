@@ -3,7 +3,7 @@ import { Project } from '$lib/components/guide/Project.svelte.ts'
 import { db } from '$lib/server/db/index'
 import type { Guide } from '$lib/server/db/schema'
 import * as schema from '$lib/server/db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 import { error } from '@sveltejs/kit'
 import { getGuideFromParam } from '$lib/server/db/utils'
 
@@ -19,7 +19,13 @@ export const load:PageLoad = async ({ params }) => {
   // TODO: assemble project objects as needed, not sure about this yet. Gonna work on rendering edges first.
 
   // TODO: load edges from canvas and compare
-  const edges = await db.select().from(schema.edge).where(eq(schema.edge.guide, result.id))
+  // const edges = await db.select().from(schema.edge).leftJoin(schema.node, or(eq(schema.edge.to, schema.node.id), eq(schema.edge.from, schema.node.id))).where(eq(schema.edge.guide, result.id))
+  const edges = await db.query.edge.findMany({
+    with: {
+      toNode: true,
+      fromNode: true
+    }
+  })
   
   const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
   // console.log(nodes)
@@ -28,12 +34,15 @@ export const load:PageLoad = async ({ params }) => {
   // const nodes = await db.select().from(schema.node).where(eq(schema.node.guide == result.id))
   // const edges = await db.select().from(schema.edge).where(eq(schema.edge.guide == result.id))
   // const projects = await db.select().from(schema.project).where(eq(schema.project.guide == result.id))
+  console.log('EDGES')
+  console.log(edges[0])
   return {
     guide: {
       ...result,
       pathTitle: params.guide,
       nodes: nodes,
-      edges: projectEdges,
+      edges: edges,
+      projectEdges: projectEdges,
       projects: projects
     }
   }
