@@ -28,21 +28,39 @@ export async function seedGuides(db:any, schema:any) {
   for(const path of nodePaths) {
     let mapPath = path.replace('static/trail-guides/', '')
     const guideName = mapPath.substring(0, mapPath.indexOf('/'))
-    const file = await parseNodeFile(path)
     const mapFile = (await read("static/trail-guides/"+guideName+"/map.canvas")).toString()
+    const canvas = await JSON.parse(mapFile)
+    const file = await parseNodeFile(path)
     if(mapFile.length > 0) {
-      const canvas = await JSON.parse(mapFile)
       const mapNode = canvas.nodes.filter((obj)=>guideName+"/"+obj.file==file.path)
       if(mapNode.length > 0) {
-        console.log("adding region-map location")
         file.x = mapNode[0].x
         file.y = mapNode[0].y
+        file.uid = mapNode[0].id
       }
     }
     file.guide = getGuideIdFromPath(path, guides)
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
     // Assign map values
     await db.insert(schema.node).values(file)
+  }
+
+  // Insert edges from canvas
+  for(const guide of guides) {
+    const guideName = guide.path.replace('/meta.md', '')
+    const mapFile = (await read("static/trail-guides/"+guideName+"/map.canvas")).toString()
+    const canvas = await JSON.parse(mapFile)
+    for(const edge of canvas.edges) {
+      const fromNode = (await db.select().from(schema.node).where(eq(schema.node.uid, edge.fromNode)))[0]
+      const toNode = (await db.select().from(schema.node).where(eq(schema.node.uid, edge.toNode)))[0]
+      if(!fromNode || !toNode) { throw new Error(`Edge ${edge.id} in ${guideName} refers to node not present in database! From: ${edge.fromNode} To: ${edge.toNode}`)}
+      await db.insert(schema.edge).values({
+        uid: edge.id,
+        from: fromNode.id,
+        to: toNode.id,
+        guide: guide.id
+      })
+    }
   }
 
   // Assemble project graph

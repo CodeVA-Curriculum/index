@@ -186,6 +186,7 @@ export const node = sqliteTable('node', {
 	video: text('video'),
 	x: real('x'),
 	y: real('y'),
+	uid: text(),
 	guide: integer('guide_id').references(() => guide.id)
 })
 export type Node = typeof node.$inferSelect
@@ -225,7 +226,7 @@ export const edge = sqliteTable('edge', {
 	id: integer('id').primaryKey(),
 	uid: text('uid'),
 	from: integer('from').references(() => node.id),
-	to: integer('from').references(() => node.id),
+	to: integer('to').references(() => node.id),
 	guide: integer('guide_id').references(() => guide.id)
 })
 export type Edge = typeof edge.$inferSelect
