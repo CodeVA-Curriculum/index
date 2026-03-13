@@ -41,7 +41,7 @@
   </div>
 </div>
   <div class='map-wrap'>
-    <InteractiveMap nodes={lists.Tutorials} edges={map.edges} />
+    <InteractiveMap nodes={map.nodes} edges={map.edges} />
   </div>
 <div class='panel {panelOpen ? 'open': 'closed'}'>
   <div class='body {panelOpen ? 'open': 'closed'}'>

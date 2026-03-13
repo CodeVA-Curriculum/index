@@ -13,20 +13,23 @@ export class Map {
       this.nodes.push(obj)
       this.elementsByPath[node.path] = obj
     }
+    for(const edge of guide.edges) {
+      const obj = new Edge(edge, this.elementsByPath)
+      this.edges.push(obj)
+    }
     for(const project of guide.projects) {
       const obj = new Project(project, this.elementsByPath)
       this.projects.push(obj)
       this.elementsByPath[project.path] = obj
     }
-    const edges = guide.edges.toSorted((a,b) => a.node_to_group.index > b.node_to_group.index)
-    for(const edge of guide.edges) {
+    const projectEdges = guide.projectEdges.toSorted((a,b) => a.node_to_group.index > b.node_to_group.index)
+    for(const edge of projectEdges) {
       const parentProject = this.elementsByPath[edge.project.path]
       const nodeObj = this.elementsByPath[edge.node.path]
       const index = edge.node_to_group.index
       const optional = edge.node_to_group.optional
       const groupAlias = edge.node_group.alias
       parentProject.appendNode(groupAlias, nodeObj, optional)
-      this.edges.push(new Edge(edge))
     }
   }
 }
