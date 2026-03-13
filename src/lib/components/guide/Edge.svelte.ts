@@ -1,8 +1,11 @@
-import * as types from '$lib/server/db/schema'
+import type { Edge as DbEdge } from '$lib/server/db/schema'
 
 export class Edge {
-  db:types.Edge;
-  constructor(obj:types.Edge) {
+  db:DbEdge;
+  constructor(obj:DbEdge) {
     this.db = obj
+  }
+  draw(p5) {
+    
   }
 }
