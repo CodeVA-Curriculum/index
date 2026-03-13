@@ -12,8 +12,8 @@ export class Node {
   scale = 1
   constructor(obj:DbNode) {
     this.db = obj
-    this.x = obj.x
-    this.y = obj.y
+    this.x = obj.x/2
+    this.y = obj.y/2
   }
   setup(p5, font) {
     const w = Math.ceil(this.getWidth(p5, font))
@@ -28,12 +28,16 @@ export class Node {
       this.radius.setTarget(this.width)
     }
     this.radius.update(p5)
+    p5.circle((this.x)*this.scale, this.y*this.scale, this.radius.get())
+    this.debug(p5)
+  }
+  debug(p5:any) {
+    
     if(this.x && this.y) {
-      p5.circle(this.x*this.scale, this.y*this.scale, this.radius.get())
-      p5.text(this.db.title, this.x*this.scale, this.y*this.scale)
-      // p5.text(this.hover, this.x*this.scale, this.y*this.scale+10)
-      p5.text(this.radius.get(), this.x*this.scale, this.y*this.scale+10)
-      p5.text(this.x + ", " + this.y, this.x*this.scale, this.y*this.scale+20)
+      p5.text(this.db.title, (this.x+this.width/1.5)*this.scale, this.y*this.scale)
+      // p5.text(this.hover, (this.x+this.width/1.5)*this.scale, this.y*this.scale+10)
+      p5.text(this.radius.get(), (this.x+this.width/1.5)*this.scale, this.y*this.scale+10)
+      p5.text((this.x+this.width/1.5) + ", " + this.y, (this.x+this.width/1.5)*this.scale, this.y*this.scale+20)
     } else {
       console.warn("Tried to render "+this.db.path+" to map, but node is not present in map.canvas!")
     }

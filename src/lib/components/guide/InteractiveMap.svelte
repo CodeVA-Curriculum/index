@@ -15,9 +15,8 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { nodes } = $props()
+  let { nodes, edges } = $props()
   // let nodes = []
-  let edges = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
   let cursor:Cursor|null = null

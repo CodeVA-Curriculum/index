@@ -1,8 +1,10 @@
 import { Project } from './Project.svelte'
 import { Node } from './Node.svelte'
+import { Edge } from './Edge.svelte'
 export class Map {
   projects:Project[] = []
   nodes:Node[] = []
+  edges:Edge[] = []
   elementsByPath:any = {}
   
   constructor(guide:any) {
@@ -24,6 +26,7 @@ export class Map {
       const optional = edge.node_to_group.optional
       const groupAlias = edge.node_group.alias
       parentProject.appendNode(groupAlias, nodeObj, optional)
+      this.edges.push(new Edge(edge))
     }
   }
 }
