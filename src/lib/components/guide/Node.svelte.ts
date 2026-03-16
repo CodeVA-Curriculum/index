@@ -10,6 +10,7 @@ export class Node {
   width = 50
   hover = false
   scale = 1
+  icon:any = false;
   constructor(obj:DbNode) {
     this.db = obj
     this.x = obj.x/2
@@ -19,6 +20,11 @@ export class Node {
     const w = Math.ceil(this.getWidth(p5, font))
     this.width = w
     this.radius = new Lerp(Math.round(w), 5)
+    if(this.db.type == "cache") {
+      p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
+        this.icon = img
+      })
+    }
   }
   draw(p5:any) {
     // this.radius = this.hover ? 100 : 50;
@@ -28,8 +34,23 @@ export class Node {
     //   this.radius.setTarget(this.width)
     // }
     this.radius.update(p5)
-    p5.circle((this.x)*this.scale, this.y*this.scale, this.radius.get())
+    let w = this.radius.get()
+    let x = this.x*this.scale
+    let y = this.y*this.scale
+    p5.circle(x, y, w)
     this.debug(p5)
+    if(this.db.type == "cache" && this.icon) {
+      let iconScale = 0.5
+      if(this.hover) {
+        x = x + w/2 * Math.cos(45 * p5.PI/180)
+        y = y + w/2 * Math.sin(45 * p5.PI/180)
+        p5.circle(x, y, 50)
+        iconScale = 0.25
+      }
+      x = x-this.width*iconScale/2
+      y = y - this.width * iconScale / 2
+      p5.image(this.icon, x, y, this.width*iconScale, this.width*iconScale)
+    }
   }
   debug(p5:any) {
     
