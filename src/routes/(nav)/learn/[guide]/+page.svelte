@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Capture from '$lib/components/Capture.svelte'
   import InteractiveMap from '$lib/components/guide/InteractiveMap.svelte'
   import { page } from '$app/stores'
   import GuideNav from '$lib/components/guide/GuideNav.svelte'
@@ -13,6 +14,11 @@
   const params = $page.url.searchParams
 
   const map = new Map(data.guide)
+  let interactable = $state(true)
+  function handleCapture(flag:boolean) {
+    interactable = flag
+    console.log("Capture bump")
+  }
 
   let panelOpen:string|false = $state('')
   const lists = {
@@ -29,29 +35,33 @@
 <GuideNav guide={data.guide} session={data.session} />
 
 <div class='map-view'>
-<div class='ui {panelOpen ? 'open': 'closed'}'>
-  <div class='start'>
-    <button onclick={() => toggle('Projects')}>projects</button>
-    <button onclick={() => toggle('Tutorials')}>tutorials</button>
-    <button>backpack</button>
-  </div>
-  <div class='end'>
-    <button>export</button>
-    <button>import</button>
-  </div>
-</div>
   <div class='map-wrap'>
-    <InteractiveMap nodes={map.nodes} edges={map.edges} />
+    <InteractiveMap interact={interactable} nodes={map.nodes} edges={map.edges} />
   </div>
-<div class='panel {panelOpen ? 'open': 'closed'}'>
-  <div class='body {panelOpen ? 'open': 'closed'}'>
-    {#if panelOpen}
-      <PanelList title={panelOpen} list={workingList}  >
-        <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
-      </PanelList>
-    {/if}
+  <div class='ui {panelOpen ? 'open': 'closed'}'>
+    <div class='start'>
+      <Capture on:capture={(e) => handleCapture(e.detail)}>
+        <button onclick={() => toggle('Projects')}>projects</button>
+        <button onclick={() => toggle('Tutorials')}>tutorials</button>
+        <button>backpack</button>
+      </Capture>
+    </div>
+    <div class='end'>
+      <Capture on:capture={(e) => handleCapture(e.detail)}>
+        <button>export</button>
+        <button>import</button>
+      </Capture>
+    </div>
   </div>
-</div>
+  <div class='panel {panelOpen ? 'open': 'closed'}'>
+    <div class='body {panelOpen ? 'open': 'closed'}'>
+      {#if panelOpen}
+        <PanelList title={panelOpen} list={workingList}  >
+          <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
+        </PanelList>
+      {/if}
+    </div>
+  </div>
 </div>
 
 
@@ -94,7 +104,7 @@
     // position: fixed;
     // top: 4.25rem;
     // left: 1.25rem;
-    width: 6rem;
+    width: 8rem;
     display: flex;
     flex-direction: column;
     .start {
@@ -110,7 +120,7 @@
       justify-content: end;
     }
     button {
-      margin: 1rem 0;
+      margin: 1rem 1rem;
     }
     // .open { z-index: -99; }
     // .closed { z-index: 99; }
