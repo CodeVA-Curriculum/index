@@ -21,12 +21,14 @@
   }
 
   let panelOpen:string|false = $state('')
+  let selected = $state([])
   const lists = {
     Projects: map.projects,
-    Tutorials: map.nodes
+    Tutorials: map.nodes,
+    Selected: selected
   }
   let workingList:Project[]|Node[] = $state(map.projects)
-  function toggle(title:"Projects"|"Tutorials") {
+  function toggle(title:string) {
     panelOpen = title ? title : false;
     workingList = lists[title]
   }
@@ -36,13 +38,14 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
-    <InteractiveMap interact={interactable} nodes={map.nodes} edges={map.edges} />
+    <InteractiveMap bind:selected interact={interactable} nodes={map.nodes} edges={map.edges} />
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
         <button onclick={() => toggle('Projects')}>projects</button>
         <button onclick={() => toggle('Tutorials')}>tutorials</button>
+        <button onclick={() => toggle('Selected')}>selected {selected.length}</button>
         <button>backpack</button>
       </Capture>
     </div>
@@ -56,9 +59,11 @@
   <div class='panel {panelOpen ? 'open': 'closed'}'>
     <div class='body {panelOpen ? 'open': 'closed'}'>
       {#if panelOpen}
-        <PanelList title={panelOpen} list={workingList}  >
-          <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
-        </PanelList>
+        <Capture on:capture={(e) => handleCapture(e.detail)}>
+          <PanelList title={panelOpen} list={workingList}>
+            <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
+          </PanelList>
+        </Capture>
       {/if}
     </div>
   </div>
@@ -82,16 +87,17 @@
     &.open { width: 30rem; }
     &.closed { width: 0rem; }
     position: absolute;
-    // -webkit-transition: width 0.25s ease-in-out;
-    // -moz-transition: width 0.25s ease-in-out;
-    // -o-transition: width 0.25s ease-in-out;
-    // transition: width 0.25s ease-in-out;
+    -webkit-transition: width 0.25s ease-in-out;
+    -moz-transition: width 0.25s ease-in-out;
+    -o-transition: width 0.25s ease-in-out;
+    transition: width 0.25s ease-in-out;
     overflow-y: scroll;
     // &.closed { width: 0; }
     // &.open { width: auto; }
     // z-index: 99;
     box-shadow: 5px 5px 5px 0px grey;
     z-index: 98;
+    background-color: white;
   }
   .body {
     width: 100%;

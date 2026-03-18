@@ -10,7 +10,10 @@
     "Tutorials": TutorialListItem
   }
   // const Component = ProjectListItem
-  let Component = $derived.by(() => items[title])
+  // let Component = $derived.by(() => items[title])
+  let selected = $derived.by(() => list.filter((obj) => {
+    return obj.selected
+  }))
 </script>
 
 <div class='panel-list'>
@@ -22,9 +25,17 @@
     <input class='filter' type='button' value="Filters">
   </fieldset>
   </div>
+  {#if selected.length > 0}
+  <ul class='selected'>
+    {#each selected as item}
+      <ProjectListItem map={true} obj={item} />
+    {/each}
+  </ul>
+  {/if}
+  <hr>
   <ul>
     {#each list as item}
-      <Component obj={item} />
+      <ProjectListItem map={true} obj={item} />
     {/each}
   </ul>
 </div>

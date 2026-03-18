@@ -17,7 +17,7 @@
 
 <article class='card'>
     <heading class='card-heading'>
-      <p>{obj.title}</p>
+      <p>{obj.db.title}</p>
       <div>
         <DetailsIcons eltype={objType} />
       </div>
@@ -61,7 +61,7 @@
     & > p {
       font-family: Poppins;
       font-weight: bold;
-      font-size: 24pt;
+      font-size: 18pt;
       margin: 0;
     }
     margin-bottom: 0.5rem;

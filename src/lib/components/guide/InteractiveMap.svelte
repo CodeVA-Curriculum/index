@@ -7,7 +7,7 @@
   import { Cursor } from './Cursor.svelte'
   import { Camera } from './Camera.svelte'
 
-  let selected = $derived(page.url.searchParams.getAll('select'))
+  // let selected = $derived(page.url.searchParams.getAll('select'))
   let debug = $state({})
 
   // function route() {
@@ -15,7 +15,7 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { nodes, edges, interact } = $props()
+  let { selected = $bindable([]), nodes, edges, interact } = $props()
   // let nodes = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
@@ -46,6 +46,7 @@
     p5.draw = () => {
       debug.cursor = cursor.mx + ', ' + cursor.my
       debug.local = cursor.localX + ', ' + cursor.localY
+      debug.selected = selected.length
       p5.background(180);
       for(const project of selectedProjects) {
         project.highlight()
@@ -67,18 +68,19 @@
     }
     p5.mouseClicked = () => {
       if(!interact) { return }
-      console.log("Click!")
+      // console.log("Click!")
       const hoveredNodes = cursor.getHovered()
-      console.log(hoveredNodes.length)
       if(hoveredNodes.length > 0) {
         const status = hoveredNodes[0].toggleSelect()
         if(status) {
+          selected = hoveredNodes
           // zoom in
           const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
           camera.moveCenterTo(location.x, location.y)
           camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
         } else {
-          // zoom out
+          // zoom out & deselect
+          selected = []
           camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
         }
       }
@@ -115,7 +117,7 @@
   </div>
 </div>
 <style lang='scss'>
-  .debug { position: absolute; display: none; }
+  .debug { position: absolute; right: 2rem; display: none; }
   .interactive-map {
     display: flex;
     flex-direction: column;
