@@ -19,8 +19,8 @@
   // let nodes = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
-  let cursor:Cursor|null = null
-  let camera:Camera|null = null
+  let cursor:Cursor
+  let camera:Camera 
   let font:any
   const sketch = (p5:any) => {
     p5.setup = async () => {
@@ -28,9 +28,14 @@
       camera = new Camera(p5, 1)
       cursor = new Cursor()
       font = await p5.loadFont('/fonts/calibri-regular.ttf')
+      let avgX = 0; let avgY = 0
       for(const node of nodes) {
         node.setup(p5, font)
+        avgX += node.x; avgY += node.y
       }
+      avgX = avgX / nodes.length; avgY = avgY / nodes.length
+      camera.moveCenterTo(avgX, avgY)
+      camera.zoom({x:camera.ix, y:camera.iy}, 0.25, true)
       for(const edge of edges) {
         edge.setup(p5)
       }
@@ -49,6 +54,7 @@
         for(const edge of edges) {
           edge.draw(p5)
         }
+        cursor.hovering = []
         for(const node of nodes) {
           const hovering = cursor.over(node)
           node.setHover(hovering)
@@ -59,11 +65,21 @@
       const offsetCoords = cursor.getDrag(p5)
       let lerpComplete = camera.offsetTransform(offsetCoords)
     }
-    p5.onMouseClicked = () => {
+    p5.mouseClicked = () => {
+      console.log("Click!")
       const hoveredNodes = cursor.getHovered()
+      console.log(hoveredNodes.length)
       if(hoveredNodes.length > 0) {
-        hoveredNodes[0].select()
-        selectedNodes.push(hoveredNodes[0])
+        const status = hoveredNodes[0].toggleSelect()
+        if(status) {
+          // zoom in
+          const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
+          camera.moveCenterTo(location.x, location.y)
+          camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
+        } else {
+          // zoom out
+          camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
+        }
       }
     }
     p5.mouseWheel = (e:any) => {
@@ -95,7 +111,7 @@
   </div>
 </div>
 <style lang='scss'>
-  .debug { position: absolute; }
+  .debug { position: absolute; display: none; }
   .interactive-map {
     display: flex;
     flex-direction: column;

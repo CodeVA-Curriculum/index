@@ -62,7 +62,8 @@ export class Camera {
         this.transform.y = -(absoluteLocation.y - (absoluteLocation.y * factor) + (-this.transform.y * factor));
     }
 
-    moveCenterTo(absolutePosition:Coords) {
+    moveCenterTo(x:number, y:number) {
+        const absolutePosition = { x: x, y: y }
         console.log("Got call to move to", absolutePosition)
         // figure out transformation needed to move camera to correct screen coordinate
         const dx = this.ix - absolutePosition.x

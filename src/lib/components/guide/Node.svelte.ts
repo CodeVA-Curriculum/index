@@ -4,6 +4,7 @@ import { Lerp } from '$lib/utils'
 export class Node {
   db:DbNode
   complete:boolean = $state(false)
+  selected:booleanl = $state(false)
   x = 0; y = 0;
   // radius = null
   radius = new Lerp(100, 40)
@@ -40,7 +41,13 @@ export class Node {
     let w = this.radius.get()
     let x = this.x*this.scale
     let y = this.y*this.scale
-    p5.circle(x, y, w)
+    if(this.selected) {
+      p5.fill(0, 255, 0)
+      p5.circle(x, y, w)
+      p5.fill(255)
+    } else {
+      p5.circle(x, y, w)
+    }
     // this.debug(p5)
     if(this.db.type == "cache" && this.icon) {
       let iconScale = 0.50
@@ -77,7 +84,7 @@ export class Node {
   }
   setHover(hovering:boolean) {
     if(this.hover != hovering) {
-      this.hover = hovering
+      this.hover = hovering || this.selected
       const lowerTarget = this.db.type == 'cache' ? 100 : this.width
       this.radius.setTarget(this.hover ? this.width * 1.5 : lowerTarget)
     }
@@ -127,6 +134,11 @@ export class Node {
   }
   setFonts() {
     
+  }
+  toggleSelect():boolean {
+    console.log("Selected", this.db.title)
+    this.selected = !this.selected
+    return this.selected
   }
 }
 
