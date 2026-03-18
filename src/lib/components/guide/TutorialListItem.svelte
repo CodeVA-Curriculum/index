@@ -1,7 +1,7 @@
 <script lang='ts'>
   import Fa from 'svelte-fa'
   import { faFire, faLocationDot } from '@fortawesome/free-solid-svg-icons'
-  let { obj } = $props()
+  let { obj, map = false } = $props()
   // const nodes = (obj.nodes.split('"')).length / 2
   // 
   // const nodes = (obj.nodes.split('"')).length / 2
@@ -9,12 +9,14 @@
 </script>
 <article class='card'>
   <div class='card-body'>
-    <h3>{obj.title}</h3>
+    <h3>{obj.db.title}</h3>
     <p class='icons'>
       <span><Fa icon={faLocationDot} /> Rel. Projs</span>
     </p>
     <p>{obj.short ? obj.short : "No description provided!"}</p>
+    {#if map}
     <a class='select' role="button">Select in Map</a>
+    {/if}
     <a role="button">Open Tutorial</a>
     <a role="button">Save Tutorial</a>
     <a role="button">Mark Complete</a>

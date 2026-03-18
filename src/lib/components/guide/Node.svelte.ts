@@ -4,7 +4,7 @@ import { Lerp } from '$lib/utils'
 export class Node {
   db:DbNode
   complete:boolean = $state(false)
-  selected:booleanl = $state(false)
+  selected:boolean = $state(false)
   x = 0; y = 0;
   // radius = null
   radius = new Lerp(100, 40)
