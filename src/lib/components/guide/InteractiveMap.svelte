@@ -15,7 +15,7 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { nodes, edges } = $props()
+  let { nodes, edges, interact } = $props()
   // let nodes = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
@@ -66,6 +66,7 @@
       let lerpComplete = camera.offsetTransform(offsetCoords)
     }
     p5.mouseClicked = () => {
+      if(!interact) { return }
       console.log("Click!")
       const hoveredNodes = cursor.getHovered()
       console.log(hoveredNodes.length)
@@ -83,6 +84,9 @@
       }
     }
     p5.mouseWheel = (e:any) => {
+      if(!interact) { 
+        return true // disable map scrolling, but allow the page to scroll 
+      }
       let scaleFactor = null;
       const zoomSensitivity = 0.1
       if (e.delta < 0) {
