@@ -17,8 +17,11 @@ export class Node {
     this.y = obj.y/2
   }
   setup(p5, font) {
-    const w = Math.ceil(this.getWidth(p5, font))
+    const fontData = this.getWidth(p5, font)
+    const minDiameter = fontData.lines * 20 + 175
+    let w = Math.ceil(fontData.w) > minDiameter ? Math.ceil(fontData.w) : minDiameter
     this.width = w
+    if(this.db.type == "cache") { w = 100 }
     this.radius = new Lerp(Math.round(w), 5)
     if(this.db.type == "cache") {
       p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
@@ -38,18 +41,23 @@ export class Node {
     let x = this.x*this.scale
     let y = this.y*this.scale
     p5.circle(x, y, w)
-    this.debug(p5)
+    // this.debug(p5)
     if(this.db.type == "cache" && this.icon) {
-      let iconScale = 0.5
+      let iconScale = 0.50
       if(this.hover) {
-        x = x + w/2 * Math.cos(45 * p5.PI/180)
-        y = y + w/2 * Math.sin(45 * p5.PI/180)
-        p5.circle(x, y, 50)
-        iconScale = 0.25
+        p5.text(this.db.title, x-150/2, y, 150)
+        let ix = x + w/2 * Math.cos(45 * p5.PI/180)
+        let iy = y + w/2 * Math.sin(45 * p5.PI/180)
+        p5.circle(ix, iy, 100)
+        // iconScale = 0.25
+        p5.image(this.icon, ix-100*iconScale/2, iy-100*iconScale/2, 100*iconScale, 100*iconScale)
+      } else {
+        x = x-100*iconScale/2
+        y = y - 100 * iconScale / 2
+        p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
       }
-      x = x-this.width*iconScale/2
-      y = y - this.width * iconScale / 2
-      p5.image(this.icon, x, y, this.width*iconScale, this.width*iconScale)
+    } else if(this.db.type != "cache") {
+      p5.text(this.db.title, x-150/2, y, 150)
     }
   }
   debug(p5:any) {
@@ -64,12 +72,14 @@ export class Node {
     }
   }
   setWidth(p5:any, font:any) {
-    this.width = p5.getWidth(p5, font)
+    const { w } = p5.getWidth(p5, font)
+    this.width = w
   }
   setHover(hovering:boolean) {
     if(this.hover != hovering) {
       this.hover = hovering
-      this.radius.setTarget(this.hover ? this.width * 1.5 : this.width)
+      const lowerTarget = this.db.type == 'cache' ? 100 : this.width
+      this.radius.setTarget(this.hover ? this.width * 1.5 : lowerTarget)
     }
   }
   getWidth(p5:any, font:any) {
@@ -110,7 +120,10 @@ export class Node {
     // width of longest word is in `maxLength`, now need to scale the width based on how high or low that word is in the circle using `index`
     const offsetY = (index - (lines.length -1) / 2) * lineHeight
     // console.log(this.frontmatter.title, offsetY)
-    return Math.sqrt(offsetY*offsetY + (maxLength)*(maxLength)) + 30
+    return {
+      lines: lines.length,
+      w: Math.sqrt(offsetY*offsetY + (maxLength)*(maxLength)) + 30    
+    }
   }
   setFonts() {
     

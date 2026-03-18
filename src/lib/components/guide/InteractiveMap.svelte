@@ -34,6 +34,9 @@
       for(const edge of edges) {
         edge.setup(p5)
       }
+      p5.textSize(28)
+      p5.textWrap('WORD')
+      p5.textAlign(p5.CENTER, p5.CENTER)
     }
     p5.draw = () => {
       debug.cursor = cursor.mx + ', ' + cursor.my
