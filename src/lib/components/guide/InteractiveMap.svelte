@@ -78,10 +78,15 @@
           const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
           camera.moveCenterTo(location.x, location.y)
           camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
+
+          // Write to url
+          goto("?view="+selected[0].db.path)
         } else {
           // zoom out & deselect
           selected = []
           camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
+          // Write to url
+          goto("?")
         }
       }
     }
