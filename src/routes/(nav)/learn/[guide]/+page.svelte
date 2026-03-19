@@ -20,19 +20,27 @@
     console.log("Capture bump")
   }
 
-  let panelOpen:string|false = $state('')
+  let panelOpen:boolean = $derived.by(() => $page.url.searchParams.get('view'))
   let selected = $state([])
   const lists = {
     Projects: map.projects,
     Tutorials: map.nodes,
-    Selected: selected
+    Selected: [ map.nodes[0] ]
   }
   let workingList:Project[]|Node[] = $state(map.projects)
+  let listName:string = $state("")
   function toggle(title:string) {
     panelOpen = title ? title : false;
     workingList = lists[title]
+    listName = title
   }
 </script>
+
+{#snippet displayList(list:(Node|Project)[])}
+  {#each list as item}
+    <ProjectListItem map={true} obj={item} />
+  {/each}
+{/snippet}
 
 <GuideNav guide={data.guide} session={data.session} />
 
@@ -43,10 +51,9 @@
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
-        <button onclick={() => toggle('Projects')}>projects</button>
-        <button onclick={() => toggle('Tutorials')}>tutorials</button>
-        <button onclick={() => toggle('Selected')}>selected {selected.length}</button>
-        <button>backpack</button>
+        <a href="?view=projects" role="button">projects</a>
+        <a href="?view=tutorials" role="button">tutorials</a>
+        <a href="{$page.url}" role="button">backpack</a>
       </Capture>
     </div>
     <div class='end'>
@@ -60,8 +67,8 @@
     <div class='body {panelOpen ? 'open': 'closed'}'>
       {#if panelOpen}
         <Capture on:capture={(e) => handleCapture(e.detail)}>
-          <PanelList title={panelOpen} list={workingList}>
-            <button class='close' onclick={() => toggle(false)}><Fa icon={faX} /></button>
+          <PanelList title={panelOpen} {map}>
+              <a role="button" href="?" class='close' onclick={() => toggle(false)}><Fa icon={faX} /></a>
           </PanelList>
         </Capture>
       {/if}
@@ -125,7 +132,7 @@
       // background-color: pink;
       justify-content: end;
     }
-    button {
+    a[role="button"], button {
       margin: 1rem 1rem;
     }
     // .open { z-index: -99; }
