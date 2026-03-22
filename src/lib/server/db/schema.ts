@@ -180,14 +180,16 @@ export const node = sqliteTable('node', {
 	id: integer('id').primaryKey(),
 	path: text(),
 	title: text('title'),
+	short: text(),
+	description: text(),
 	type: text({ enum: ["cache", "tutorial"]}),
-	prompts: text('prompts'),
 	content: text('content'), // HTML
 	video: text('video'),
 	x: real('x'),
 	y: real('y'),
 	uid: text(),
-	guide: integer('guide_id').references(() => guide.id)
+	guide: integer('guide_id').references(() => guide.id),
+	quickTake: text()
 })
 export type Node = typeof node.$inferSelect
 
@@ -251,18 +253,21 @@ export const user_to_question = sqliteTable('user_to_question', {
 
 export const question = sqliteTable('question', {
 	id: integer('id').primaryKey(),
+	title: text(),
+	raw: text({ mode: 'json' }),
 	content: text('content'), //HTML
 	options: text({ mode: 'json' }),
-	answer: integer('answer')
+	node: integer('node_id').references(() => node.id)
 })
 export type Question = typeof question.$inferSelect
 
-export const node_to_question = sqliteTable('node_to_question', {
-	nodeId: integer('nodeId').references(() => node.id),
-	questionId: integer('questionId').references(() => question.id)
-},
-	(t) => [primaryKey({ columns: [t.nodeId, t.questionId]})]
-)
+export const prompt = sqliteTable('prompt', {
+	id: integer('id').primaryKey(),
+	title: text(),
+	raw: text({mode: 'json'}),
+	content: text(),
+	node: integer('node_id').references(() => node.id)
+})
 
 export const nodeGroup = sqliteTable('node_group', {
 	id: integer('id').primaryKey(),

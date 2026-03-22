@@ -20,6 +20,7 @@ export async function seedGuides(db:any, schema:any) {
     const file = await parseProjectFile(path)
     file.guide = getGuideIdFromPath(path, guides)
     file.hidden = path.includes('_')
+    file.url = path
     await db.insert(schema.project).values(file)
   }
 
@@ -41,8 +42,21 @@ export async function seedGuides(db:any, schema:any) {
     }
     file.guide = getGuideIdFromPath(path, guides)
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
-    // Assign map values
-    await db.insert(schema.node).values(file)
+
+    const { id } = (await db.insert(schema.node).values(file).returning())[0]
+
+    // Add and associate questions
+    for(const question of file.questions) {
+      const o = {
+        node: id,
+        title: question.name ? question.name : "No title given",
+        raw: JSON.stringify(question),
+        content: question.text,
+        options: JSON.stringify(question.options),
+      }      
+      await db.insert(schema.question).values(o)
+    }
+    
   }
 
   // Insert edges from canvas

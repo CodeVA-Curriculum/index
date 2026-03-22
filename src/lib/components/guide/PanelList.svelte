@@ -1,6 +1,8 @@
 <script lang='ts'>
+  import { Project } from './Project.svelte'
+  import { Node } from './Node.svelte'
+  import ElementTabs from './ElementTabs.svelte'
   import DetailsIcons from './DetailsIcons.svelte'
-  import ElementView from './ElementView.svelte'
   import TutorialListItem from '$lib/components/guide/TutorialListItem.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import { onMount } from 'svelte'
@@ -26,6 +28,14 @@
       return modes.ELEMENT
     }
   })
+  let history:string[] = $state([])
+  $effect(() => {
+    // track panels during life of component
+    if(history.length == 0) { history.push(title); return }
+    if(history[history.length-1] != title) {
+      history.push(title)
+    }
+  })
 </script>
 
 {#snippet listHeader(title)}
@@ -37,20 +47,35 @@
 {/snippet}
 
 {#snippet elementHeader(obj)}
-  <h2>{obj.db.title}</h2>
-  <DetailsIcons eltype={0} />
+    <h2>{obj.db.title}</h2>
+    <DetailsIcons eltype={0} />
 {/snippet}
 
 {#snippet elementContent(obj)}
-  <p>{obj.db.title}</p>
+  {#if obj instanceof Node}
+  <ElementTabs {obj} />
+  {:else if obj instanceof Project}
+  <p>project stuffa</p>
+  {/if}
 {/snippet}
 
 <div class='panel-list'>
   <div class='close'>{@render children?.()}</div>
+    {#if history.length > 1}
+    <nav aria-label="breadcrumb">
+      <ul>
+        {#each history as h}
+          <li>{h}</li>
+        {/each}
+      </ul>
+    </nav>
+    {/if}
   <div class='head'>
     {#if mode == modes.LIST}
       {@render listHeader(title)}
     {:else if mode == modes.ELEMENT}
+      {@render elementHeader(map.elementsByPath[title])}
+    {:else if mode == modes.PROJECT}
       {@render elementHeader(map.elementsByPath[title])}
     {/if}
   </div>
@@ -70,11 +95,17 @@
 
 <style lang='scss'>
   @import "$lib/styles/theme.scss";
+  nav {
+    position: absolute;
+    top: 0;
+  }
   .head {
-    margin-top: 2rem;
+    margin: 0 1rem;
+    margin-top: 3rem;
+    position: relative;
   }
   .panel-list {
-    padding: 1rem;
+    padding: 0rem;
   }
   input {
   height: 2rem;
@@ -85,6 +116,7 @@
     background-color: $dark-blue;
   }
   .close{ position: absolute; right: 0; top: 0;}
+  nav { margin: 0 1.5rem; }
   .lists ul {
     overflow-y: scroll;
     & > * {

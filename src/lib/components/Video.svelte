@@ -9,5 +9,6 @@
     display: flex;
     width: 100%;
   }
-  iframe { aspect-ratio: 16 / 9; width: 100%; }
+  iframe { border-radius: 12px; aspect-ratio: 16 / 9; width: 100%; }
+
 </style>

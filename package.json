@@ -41,6 +41,7 @@
 		"css": "^3.0.0",
 		"gifenc": "^1.0.3",
 		"googleapis": "^171.4.0",
+		"hast-util-to-html": "^9.0.5",
 		"hastscript": "^9.0.1",
 		"p5": "^2.2.2",
 		"quill": "^2.0.3",
@@ -56,6 +57,7 @@
 		"svelte-fa": "^4.0.4",
 		"to-vfile": "^8.0.0",
 		"unified": "^11.0.5",
+		"unist-util-remove": "^4.0.0",
 		"unist-util-visit": "^5.0.0",
 		"yaml": "^2.8.2"
 	}
