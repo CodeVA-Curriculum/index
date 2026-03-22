@@ -11,7 +11,7 @@ export class Project {
   nodes:Node[] = []
   nodeGroups:any = {}
   groups:number = -1
-  constructor(obj:DbProject, edges:any[], elementsByPath:any) {
+  constructor(obj:DbProject) {
     this.db = obj
     this.title = obj.title
     this.short = obj.short

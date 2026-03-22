@@ -6,17 +6,19 @@
   import ProjectDetailsAccordion from '$lib/components/guide/ProjectDetailsAccordion.svelte'
   import TutorialListItem from '$lib/components/guide/TutorialListItem.svelte'
   import Minimap from '$lib/components/guide/Minimap.svelte'
+
+  let { obj } = $props()
 </script>
 <div class='project-view'>
   <aside>
     <header>
       <details class='nomark'>
         <summary>
-          <h1>Project Title</h1>
+          <h1>{obj.db.title}</h1>
           <DetailsIcons eltype={ElementType.Project} />
         </summary>
         <Video />
-        <p class='description'>{@html 'project.description, in <code>HTML</code>'}</p>
+        <p class='description'>{@html obj.db.description}</p>
         <hr>
       </details>
     </header>
@@ -45,7 +47,7 @@
       </ul>
     </nav>
     <section>
-      <NodeView />
+      Node view
     </section>
   </main>
 </div>
@@ -80,11 +82,6 @@
     height: 100vh;
     // background-color: powderblue;
     overflow-y: hidden;
-    & > * {
-      height: 92vh;// --calc(100vh - 8.28vh);
-      position: relative;
-      top: 8.60vh;
-    }
   }
   .stats { background-color: lightblue;
     margin: 1rem 0;

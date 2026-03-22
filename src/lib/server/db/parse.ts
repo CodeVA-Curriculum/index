@@ -7,9 +7,12 @@ import rehypeFormat from 'rehype-format'
 import remarkGfm from 'remark-gfm'
 import { read } from 'to-vfile'
 import YAML from 'yaml'
+import { practice, quick_take } from '$lib/utils'
 
 export async function fileToElementObj(path:string):Promise<any> {
   let frontmatter:any
+  let qt:string = ''
+  let qs:object[] = []
   const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -21,6 +24,13 @@ export async function fileToElementObj(path:string):Promise<any> {
     // .use(nsfDirective)
     // .use(supporterDirective)
     .use(remarkRehype)
+    .use(() => (tree:any) => {
+        qt = quick_take(tree)
+    })
+    .use(() => (tree:any) => {
+        const q = practice(tree, path)
+        qs.push(...q)
+    })
     .use(rehypeFormat)
     .use(rehypeStringify)
     .process(await read(path))
@@ -32,6 +42,8 @@ export async function fileToElementObj(path:string):Promise<any> {
       ...frontmatter,
       hidden: path.includes('.meta.md'),
       content: file.toString(),
+      questions: qs,
+      quickTake: qt,
       path: path
       // literal: {
       //   content: file.toString(),

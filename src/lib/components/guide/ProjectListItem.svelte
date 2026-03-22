@@ -2,6 +2,7 @@
   import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
   import { onMount } from 'svelte'
   import { getContext } from 'svelte'
+  import { page } from '$app/stores'
   import CompactTutorialListItem from '$lib/components/guide/CompactTutorialListItem.svelte'
   import Fa from 'svelte-fa'
   import { faFire, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
@@ -12,17 +13,19 @@
   let noun = $derived(objType == ElementType.Project ? "Project":"Tutorial")
 
   function toggle() {}
-
+  let param = obj.db.path
+  let mapBase = `/learn/${obj.db.path.substring(0, obj.db.path.indexOf('/'))}`
+  let titleLink = map ? `${mapBase}?view=${param}` : `/learn/${obj.db.path}`
 </script>
 
 <article class='card'>
     <heading class='card-heading'>
-      <p>{obj.db.title}</p>
+      <a href={titleLink}><p>{obj.db.title}</p></a>
       <div>
         <DetailsIcons eltype={objType} />
       </div>
     </heading>
-    <p>{obj.short ? obj.short : "No short description provided!"}</p>
+    <p>{obj.db.short ? obj.db.short : "No short description provided!"}</p>
     {#if "nodeGroups" in obj}
     {#each Object.entries(obj.nodeGroups) as [k,v]}
     <details class='nomark'>
@@ -39,14 +42,15 @@
     {/if}
     <footer>
       {#if map }
-      <a class='select' role="button">Select in Map</a>
+      <a href={titleLink} class='select' role="button">Select in Map</a>
       {/if}
-      <a href="/learn/{obj.path}" role="button">Open {noun}</a>
+      <a href="/learn/{obj.db.path}" role="button">Open {noun}</a>
       <a role="button">Save {noun}</a>
     </footer>
 </article>
 
 <style lang='scss'>
+  @import "$lib/styles/theme.scss";
   details.nomark > summary::after {
     display: none;
   }
@@ -58,11 +62,19 @@
   }
   heading {
     & > span { margin-left: 1rem;}
-    & > p {
+    & p {
       font-family: Poppins;
       font-weight: bold;
       font-size: 18pt;
       margin: 0;
+      color: $text;
+      &:hover { text-decoration: underline; }
+    }
+    & a {
+      padding: 0;
+      color: $text;
+      margin: 0;
+      text-decoration: none;
     }
     margin-bottom: 0.5rem;
   }
