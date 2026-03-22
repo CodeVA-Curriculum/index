@@ -2,6 +2,7 @@
   import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
   import { ElementType } from '$lib/components/guide/DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
+  let { obj } = $props()
 </script>
 <div class='nodeview'>
   <header>
@@ -9,14 +10,15 @@
       <Video id={"14I8C6FKINQ"} />
     </div>
     <div class='info'>
-      <h1>Node Title</h1>
+      <h1>{obj.db.title}</h1>
       <DetailsIcons eltype={ElementType.Tutorial} />
-      <p>node.description: lorem ipsum dolor sit amet</p>
+      <p>{obj.db.description}</p>
     </div>
   </header>
+  <hr>
   <main>
     <section>
-      {@html '<p>Render node content here</p>'}
+      {@html obj.db.content}
     </section>
   </main>
 </div>
@@ -24,10 +26,14 @@
   main {
     margin-top: 8rem;
   }
+  .info > p {
+    margin-top: 1rem;
+  }
   .nodeview{
     width: 100%;
   }
   .nodeview > header {
+    margin-top: 3rem;
     display: flex;
     gap: 3rem;
     flex-direction: row;
