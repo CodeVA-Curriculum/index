@@ -6,6 +6,7 @@
 
   let { project, map } = $props()
   const minimap = new Map(map)
+
 </script>
 <div class='project-view'>
   <aside>

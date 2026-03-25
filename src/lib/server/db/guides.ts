@@ -84,26 +84,20 @@ export async function seedGuides(db:any, schema:any) {
   for(const project of projects) {
     const guide = (await db.select().from(schema.guide).where(eq(schema.guide.id, project.guide)))[0]
     const pathStem = guide.path.replace('meta.md', '')
-    if(Array.isArray(project.nodes)) {
-      // all the nodes are in one group
-      const group = (await db.insert(schema.nodeGroup).values({
-        projectId: project.id
-      }).returning())[0]
-      await groupNodes(db, group, project, project.nodes, pathStem)
-    } else {
       // the nodes are grouped
-      let groups = []
-      for(const group of project.nodes) {
-        groups = [...groups, ...(await db.insert(schema.nodeGroup).values({
-          projectId: project.id,
-          alias: group,
-        }))]
-      }
-      for(const group of groups) {
-        const nodeList = project.nodes[group.alias]
-        await groupNodes(db, group, project, nodeList, pathStem)
-      }
+    let groups = []
+    for(const [k,v] of Object.entries(project.nodes)) {
+      groups = [...groups, ...(await db.insert(schema.nodeGroup).values({
+        projectId: project.id,
+        alias: k,
+      }).returning())]
     }
+    for(const group of groups) {
+      const nodeList = project.nodes[group.alias]
+      await groupNodes(db, group, project, nodeList, pathStem)
+    }
+    // Create associations between edges and node_groups
+
   }
   // for(const node of projects.nodes) {
   //   console.log(node)
