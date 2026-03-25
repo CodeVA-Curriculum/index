@@ -15,7 +15,7 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { selected = $bindable([]), nodes, edges, interact } = $props()
+  let { selected = $bindable([]), nodes, edges, interact, width=-1, height=-1 } = $props()
   // let nodes = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
@@ -24,7 +24,7 @@
   let font:any
   const sketch = (p5:any) => {
     p5.setup = async () => {
-      p5.createCanvas(p5.displayWidth,p5.displayHeight*.8)
+      p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
       camera = new Camera(p5, 1)
       cursor = new Cursor()
       font = await p5.loadFont('/fonts/calibri-regular.ttf')
