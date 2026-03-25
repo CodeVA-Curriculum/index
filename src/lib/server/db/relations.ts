@@ -19,7 +19,7 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 		standards: r.many.standard({
 			from: r.element.id.through(r.elementToStandard.elementId),
-			to: r.standard.id.through(r.elementToStandard.standardId)
+		to: r.standard.id.through(r.elementToStandard.standardId)
 		}),
 		grades: r.many.grade({
 			from: r.element.id.through(r.elementToGrade.elementId),
