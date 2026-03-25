@@ -1,29 +1,27 @@
 <script lang='ts'>
-  import { ElementType } from '$lib/components/guide/DetailsIcons.svelte'
+  import Minimap from './Minimap.svelte'
+  import DetailsIcons from './DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
-  import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
-  import NodeView from '$lib/components/guide/NodeView.svelte'
-  import ProjectDetailsAccordion from '$lib/components/guide/ProjectDetailsAccordion.svelte'
-  import TutorialListItem from '$lib/components/guide/TutorialListItem.svelte'
-  import Minimap from '$lib/components/guide/Minimap.svelte'
+  import { Map } from './Map.svelte'
 
-  let { obj } = $props()
+  let { project, map } = $props()
+  const minimap = new Map(map)
 </script>
 <div class='project-view'>
   <aside>
     <header>
       <details class='nomark'>
         <summary>
-          <h1>{obj.db.title}</h1>
-          <DetailsIcons eltype={ElementType.Project} />
+          <h1>{project.title}</h1>
+          <DetailsIcons eltype={0} />
         </summary>
         <Video />
-        <p class='description'>{@html obj.db.description}</p>
+        <p class='description'>{@html project.description}</p>
         <hr>
       </details>
     </header>
     <main>
-      <Minimap />
+      <Minimap map={minimap} />
       <div class='selected-node'>
         <p>Click to load the first tutorial!</p>
       </div>

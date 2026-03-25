@@ -7,6 +7,7 @@ interface ControlPoint {
 export class Edge {
   db:DbEdge;
   shape:any = $state();
+  highlight:any = $state();
   from:Node;
   to:Node
   x = 0; y = 0;
@@ -39,8 +40,19 @@ export class Edge {
     this.shape.stroke(this.shape.color(0, 0, 0));
     this.shape.strokeWeight(1)
     this.shape.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
+
+    this.highlight = p5.createGraphics(w,h)
+    this.highlight.fill('rgba(0, 0, 0, 0)')
+    // if(this.optional) {
+    //   this.highlight.stroke(this.highlight.color(0, 255, 0))
+    // } else {
+      this.highlight.stroke(this.highlight.color(255, 0, 0))
+    // }
+    this.highlight.strokeWeight(12)
+    this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
+
   }
   draw(p5) {
-    p5.image(this.shape, this.x, this.y)
+    p5.image(this.highlighted?  this.highlight : this.shape, this.x, this.y)
   }
 }

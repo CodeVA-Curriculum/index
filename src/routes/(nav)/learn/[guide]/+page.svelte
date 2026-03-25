@@ -27,8 +27,6 @@
     Tutorials: map.nodes,
     Selected: [ map.nodes[0] ]
   }
-  let workingList:Project[]|Node[] = $state(map.projects)
-  let listName:string = $state("")
   function toggle(title:string) {
     panelOpen = title ? title : false;
     workingList = lists[title]

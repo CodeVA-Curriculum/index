@@ -1,8 +1,12 @@
 <script lang='ts'>
-  let { project } = $props()
+  import InteractiveMap from './InteractiveMap.svelte'
+  import { onMount } from 'svelte'
+  let { map } = $props()
+  onMount(() => {
+  })
 </script>
 <div class='minimap'>
-  <canvas>Could not load minimap!</canvas>
+<InteractiveMap interact={false} nodes={[]} edges={[]} />
 </div>
 <dialog>
   <article>
@@ -16,7 +20,8 @@
   .minimap {
     border: 1px solid black;
     margin: 1rem 0;
-    width: 100%;
     aspect-ratio: 16/9;
+    height: 248px;
+    overflow-x: hidden;
   }
 </style>
