@@ -29,8 +29,6 @@
   }
   function toggle(title:string) {
     panelOpen = title ? title : false;
-    workingList = lists[title]
-    listName = title
   }
 </script>
 
@@ -44,7 +42,7 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
-    <InteractiveMap bind:selected interact={interactable} nodes={map.nodes} edges={map.edges} />
+    <InteractiveMap bind:selected interact={interactable} projects={map.projects} nodes={map.nodes} edges={map.edges} />
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
