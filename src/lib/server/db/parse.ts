@@ -80,6 +80,11 @@ export async function parseNodeFile(path) {
 }
 export async function parseProjectFile(path) {
   let file = await fileToElementObj(path)
+  if(typeof(file.nodes) == typeof(["string"])) {
+    file.nodes = {
+      $default: file.nodes
+    }
+  }
   file.path = file.path.replace('static/trail-guides/', '')
   return {
     ...file

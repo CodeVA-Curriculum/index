@@ -5,6 +5,7 @@ export class Node {
   db:DbNode
   complete:boolean = $state(false)
   selected:boolean = $state(false)
+  highlighted:boolean = $state(false)
   x = 0; y = 0;
   // radius = null
   radius = new Lerp(100, 40)
@@ -43,11 +44,14 @@ export class Node {
     let y = this.y*this.scale
     if(this.selected) {
       p5.fill(0, 255, 0)
-      p5.circle(x, y, w)
-      p5.fill(255)
-    } else {
-      p5.circle(x, y, w)
     }
+    if(this.highlighted) {
+      p5.stroke(255, 0, 0)
+      p5.strokeWeight(8)
+    }
+    p5.circle(x, y, w)
+    if(this.selected) { p5.fill(255) }
+    if(this.highlighted) { p5.stroke(0); p5.strokeWeight(1)}
     // this.debug(p5)
     if(this.db.type == "cache" && this.icon) {
       let iconScale = 0.50
@@ -145,9 +149,11 @@ export class Node {
 export class NodeInGroup {
   obj:Node
   optional:boolean = $state(false)
-  constructor(node:Node, optional:boolean) {
+  index:number = -1
+  constructor(node:Node, index:number, optional:boolean) {
     this.obj = node
     this.optional = optional
+    this.index = index
   }
   
 }

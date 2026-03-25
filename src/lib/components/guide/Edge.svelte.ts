@@ -56,3 +56,12 @@ export class Edge {
     p5.image(this.highlighted?  this.highlight : this.shape, this.x, this.y)
   }
 }
+
+export class EdgeInGroup {
+  obj:Edge
+  optional = false
+  constructor(obj:Edge, optional:boolean) {
+    this.obj = obj
+    this.optional = optional
+  }
+}

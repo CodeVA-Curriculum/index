@@ -15,7 +15,7 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { selected = $bindable([]), nodes, edges, interact, width=-1, height=-1 } = $props()
+  let { selected = $bindable([]), nodes, edges, projects, interact, width=-1, height=-1 } = $props()
   // let nodes = []
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
@@ -42,15 +42,13 @@
       p5.textSize(28)
       p5.textWrap('WORD')
       p5.textAlign(p5.CENTER, p5.CENTER)
+      projects[0].highlight()
     }
     p5.draw = () => {
-      debug.cursor = cursor.mx + ', ' + cursor.my
-      debug.local = cursor.localX + ', ' + cursor.localY
-      debug.selected = selected.length
+      // debug.cursor = cursor.mx + ', ' + cursor.my
+      // debug.local = cursor.localX + ', ' + cursor.localY
+      // debug.selected = selected.length
       p5.background(180);
-      for(const project of selectedProjects) {
-        project.highlight()
-      }
       camera.display(() => {
         for(const edge of edges) {
           edge.draw(p5)
@@ -60,6 +58,9 @@
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
+        }
+        for(const project of projects) {
+          project.draw(p5)
         }
         cursor.update(p5, camera.matrix)
       })
