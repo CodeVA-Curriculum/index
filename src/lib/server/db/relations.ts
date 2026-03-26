@@ -43,6 +43,14 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.project.id,
 			to: r.nodeGroup.projectId
 		}),
+		pivot: r.many.nodeToNodeGroup({
+			from: r.project.id,
+			to: r.nodeToNodeGroup.projectId
+		}),
+		// order: r.many.nodeToNodeGroup({
+		// 	from: r.project.id,
+		// 	to: r.nodeToNodeGroup.projectId
+		// }),
 		guideObj: r.one.guide({
 			from: r.project.guide,
 			to: r.guide.id
@@ -53,6 +61,7 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.nodeGroup.id.through(r.nodeToNodeGroup.groupId),
 			to: r.node.id.through(r.nodeToNodeGroup.nodeId)
 		}),
+		
 		project: r.one.project({
 			from: r.nodeGroup.projectId,
 			to: r.project.id

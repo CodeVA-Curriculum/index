@@ -11,17 +11,14 @@
             "id": "c2b9c6359207a8b5",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "map.canvas",
-                "viewState": {
-                  "x": 603.6384218313908,
-                  "y": -2510.8433475081515,
-                  "zoom": -2.1230705926063957
-                }
+                "file": "projects/_archeological-puzzle/index.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "map"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ]
@@ -188,8 +185,8 @@
   },
   "active": "c2b9c6359207a8b5",
   "lastOpenFiles": [
-    "projects/your-first-story/index.md",
     "map.canvas",
+    "projects/your-first-story/index.md",
     "projects/your-first-story/the-whale-outline.md"
   ]
 }
