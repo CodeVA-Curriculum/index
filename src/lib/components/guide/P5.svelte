@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount, onDestroy, createEventDispatcher } from 'svelte';
 	import type p5 from 'p5';
-	import type { Sketch } from '$lib/types';
 
 	// Component props
-	export let target: HTMLElement = undefined;
-	export let sketch: Sketch = undefined;
+	export let target: HTMLElement|undefined = undefined
+	export let sketch: any= undefined;
 	export let parentDivStyle: string = 'display: block;';
 	export let debug = false;
 
-	let project: p5 = undefined;
+	let project: p5;
 
 	// Event generation
 	const event = createEventDispatcher();
@@ -76,6 +75,10 @@
 		dispatch.ref();
 		dispatch.instance();
 	});
+	onDestroy(() => {
+		project = null
+		sketch = null
+	})
 </script>
 
 <div use:ref style={parentDivStyle} class="m-0" />
