@@ -26,7 +26,7 @@ export class Map {
       this.elementsByPath[obj.db.uid] = obj
     }
     for(const project of map.projects) {
-      const obj = new Project(project, this.elementsByPath, this.edges)
+      const obj = new Project(project, this.elementsByPath, map.edges)
       this.projects.push(obj)
       this.elementsByPath[project.path] = obj
     }

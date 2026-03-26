@@ -39,6 +39,9 @@
       for(const edge of edges) {
         edge.setup(p5)
       }
+      for(const project of projects) {
+        project.setup(p5)
+      }
       p5.textSize(28)
       p5.textWrap('WORD')
       p5.textAlign(p5.CENTER, p5.CENTER)
@@ -54,13 +57,13 @@
           edge.draw(p5)
         }
         cursor.hovering = []
+        for(const project of projects) {
+          project.draw(p5)
+        }
         for(const node of nodes) {
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
-        }
-        for(const project of projects) {
-          project.draw(p5)
         }
         cursor.update(p5, camera.matrix)
       })
