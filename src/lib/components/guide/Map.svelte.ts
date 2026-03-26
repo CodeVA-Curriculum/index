@@ -23,6 +23,7 @@ export class Map {
     for(const edge of map.edges) {
       const obj = new Edge(edge, this.elementsByPath)
       this.edges.push(obj)
+      this.elementsByPath[obj.db.uid] = obj
     }
     for(const project of map.projects) {
       const obj = new Project(project, this.elementsByPath, this.edges)

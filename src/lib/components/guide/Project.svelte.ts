@@ -3,7 +3,6 @@ import type { Map } from "./Map.svelte"
 import type { Node } from './Node.svelte'
 import type { Edge } from './Edge.svelte'
 import { NodeInGroup } from './Node.svelte'
-import { EdgeInGroup } from './Edge.svelte'
 
 interface Input {
   nodeGroups:object,
@@ -28,16 +27,18 @@ export class Project {
     this.short = i.short
     this.difficulty = i.difficulty
 
+
     // build node groups and edges
     for(const g of i.nodeGroups) {
-      let group = new Group(g, elementsByPath)
-      group.addEdges(allEdges)
+      let group = new Group(g, i.pivot, elementsByPath)
+      group.addEdges(allEdges, this.db, elementsByPath)
       this.nodeGroups.push(group)
     }
     
   }
   highlight() {
-    this.highlight = !this.highlight
+    console.log(this.nodeGroups[0])
+    this.highlighted = !this.highlighted
     for(const g of this.nodeGroups) {
       g.highlight()
     }
@@ -45,6 +46,7 @@ export class Project {
   toggleComplete() { this.complete = !this.complete }
   markComplete() { this.complete = true }
   draw(p5){
+
     // this is for debugging purposes only
   }
 }
@@ -55,14 +57,23 @@ class Group {
   nodeMask:boolean = []
   edges:Edge[] = []
   edgeMask:boolean[] = []
-  constructor(db:any, elementsByPath:any) {
+  constructor(db:any, order:object, elementsByPath:any) {
     this.title = db.alias
-    for(const n of db.nodes) {
-      this.nodes.push(elementsByPath[n.path])
+    order.sort((a,b) => a.index - b.index)
+    for(const c of order) {
+      const node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
+      this.nodes.push(elementsByPath[node.path])
     }
   }
-  addEdges(edges:Edge[]) {
+  addEdges(edges:Edge[], parent:Project, elementsByPath:any) {
     // TODO: Find the edge between each consecutive node in `this.nodes` and add it to `this.edges`
+    let ids:number[] = []
+    for(const node of this.nodes) {
+      ids.push(node.db.id)
+    }
+    const e = edges.filter((o) => ids.includes(o.to.db.id) && ids.includes(o.from.db.id) && Math.abs(ids.indexOf(o.from.db.id) - ids.indexOf(o.to.db.id)) == 1)
+    console.log(`Found ${e.length} edges for group ${this.title} in project ${parent.path}`)
+    this.edges = e
   }
   highlight() {
     for(const n of this.nodes) {

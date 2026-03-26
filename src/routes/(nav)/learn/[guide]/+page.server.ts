@@ -12,7 +12,7 @@ export const load:PageLoad = async ({ params }) => {
   const result:Guide = await getGuideFromParam(params.guide)
 
   const projects = await db.query.project.findMany({
-    with: { nodeGroups: { with: { nodes: true }}},
+    with: { pivot: true, nodeGroups: { with: { nodes: true }}},
     where: { guide: result.id }
   })
   const edges = await db.query.edge.findMany({
