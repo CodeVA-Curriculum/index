@@ -37,9 +37,15 @@ export class Project {
     
   }
   highlight() {
-    this.highlighted = !this.highlighted
+    this.highlighted = true
     for(const g of this.nodeGroups) {
       g.highlight()
+    }
+  }
+  dehighlight() {
+    this.highlighted = false
+    for(const g of this.nodeGroups) {
+      g.dehighlight()
     }
   }
   toggleComplete() { this.complete = !this.complete }
@@ -121,6 +127,14 @@ class Group {
     }
     for(const e of this.edges) {
       e.highlighted = true
+    }
+  }
+  dehighlight() {
+    for(const n of this.nodes) {
+      n.highlighted = false
+    }
+    for(const e of this.edges) {
+      e.highlighted = false
     }
   }
 }

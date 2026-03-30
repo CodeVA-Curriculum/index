@@ -8,7 +8,21 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { faX } from '@fortawesome/free-solid-svg-icons'
-  let { title, map, children} = $props()
+  let { hoverList = $bindable([]), title, map, children} = $props()
+
+  function mouseIn(item:Node|Project) {
+    if(!hoverList.includes(item.db.path)) {
+      hoverList.push(item.db.path)
+    }
+    console.log("hover in")
+  }
+
+  function mouseOut(item:Node|Project) {
+    if(hoverList.includes(item.db.path)) {
+      hoverList.splice(hoverList.findIndex((path) => path == item.db.path), 1)
+    }
+    console.log("hoverout")
+  }
 
   const modes = {
     LIST: 0,
@@ -73,9 +87,7 @@
   <div class='head'>
     {#if mode == modes.LIST}
       {@render listHeader(title)}
-    {:else if mode == modes.ELEMENT}
-      {@render elementHeader(map.elementsByPath[title])}
-    {:else if mode == modes.PROJECT}
+    {:else if mode == modes.ELEMENT || mode == modes.PROJECT}
       {@render elementHeader(map.elementsByPath[title])}
     {/if}
   </div>
@@ -84,7 +96,9 @@
     {#if mode == modes.LIST}
     <ul>
       {#each list as item}
+        <div on:mouseenter={() => mouseIn(item)} on:mouseleave={() => mouseOut(item)} class='hover-bound'>
         <ProjectListItem map={true} obj={item} />
+        </div>
       {/each}
     </ul>
     {:else if mode == modes.ELEMENT}
