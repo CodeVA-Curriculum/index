@@ -45,7 +45,7 @@
       p5.textSize(28)
       p5.textWrap('WORD')
       p5.textAlign(p5.CENTER, p5.CENTER)
-      projects[0].highlight()
+      // projects[0].highlight()
     }
     p5.draw = () => {
       // debug.cursor = cursor.mx + ', ' + cursor.my

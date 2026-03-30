@@ -32,7 +32,6 @@ export class Project {
     for(const g of i.nodeGroups) {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
-      console.log(group.edges)
       this.nodeGroups.push(group)
     }
     
@@ -68,7 +67,7 @@ class Group {
     for(const c of order) {
       const node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
       this.nodes.push(elementsByPath[node.path])
-      this.nodeMask.push(order.optional)
+      this.nodeMask.push(c.optional)
     }
   }
   setup(p5) {
@@ -93,12 +92,28 @@ class Group {
     for(const dbEdge of e) {
       const o = new Edge(dbEdge, elementsByPath)
 
-      // const node0optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.to.db.id)]
-      // const node1optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.from.db.id)]
-      o.optional = true
+      const node0optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.to.db.id)]
+      const node1optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.from.db.id)]
+      o.optional = node0optional || node1optional
       this.edges.push(o)
     }
-    // console.log("Edgemask success", this.edgeMask.length == this.edges.length)
+    // add edges between non-optional nodes
+    let pairs = []
+    let lastFalse:number = 0
+    let inCut:boolean = false
+    console.log(this.nodeMask)
+    for(let i=0;i<this.nodeMask.length;i++) {
+      inCut = this.nodeMask[i]
+      if(!inCut && i-lastFalse > 1) {
+        // console.log(`Need edge between ${i} and ${lastFalse}`)
+        const e = edges.filter((o) => (o.toNode.id == this.nodes[i].db.id && o.fromNode.id == this.nodes[lastFalse].db.id) || (o.fromNode.id == this.nodes[lastFalse].db.id && o.toNode.id == this.nodes[i].db.id))[0]
+        // console.log(`Found ${e.length} edges to base new Edge off of`)
+        const o = new Edge(e, elementsByPath)
+        o.optional = false
+        this.edges.push(o)
+      }
+      if(!inCut) { lastFalse = i}
+    }
   }
   highlight() {
     for(const n of this.nodes) {
