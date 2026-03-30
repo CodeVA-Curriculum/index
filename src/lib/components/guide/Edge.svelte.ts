@@ -5,6 +5,7 @@ interface ControlPoint {
   y:number
 }
 export class Edge {
+  points:object
   db:DbEdge;
   optional:boolean = false
   optionEdge:any 
@@ -14,8 +15,8 @@ export class Edge {
   to:Node
   x = 0; y = 0;
   stroke = 1;
-  c1:ControlPoint
-  c2:ControlPoint
+  cx:number = 0
+  cy:number = 0
   highlighted:boolean = $state(false)
   constructor(obj:DbEdge, elementsByPath:any) {
     this.db = obj
@@ -37,6 +38,9 @@ export class Edge {
     const p2 = p5.createVector(this.c2.x, this.c2.y)
     const p3 = p5.createVector(this.from.x, this.from.y)
 
+    this.cx = this.x + w/2
+    this.cy = this.y + h/2
+
     this.shape = p5.createGraphics(w, h)
     this.shape.fill('rgba(0, 0, 0, 0)')
     this.shape.stroke(this.shape.color(0, 0, 0));
@@ -49,18 +53,67 @@ export class Edge {
     this.highlight.strokeWeight(12)
     this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
+    this.points = { p0: p0, p1:p1, p2:p2, p3:p3}
     this.optionEdge = p5.createGraphics(w,h)
-    this.optionEdge.fill('rgba(0, 0, 0, 0)')
-    this.optionEdge.stroke(255, 0, 0)
-    this.optionEdge.strokeWeight(12)
-    this.optionEdge.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
+    this.generateOptionEdge(p5)
+    // this.optionEdge.fill('rgba(0, 0, 0, 0)')
+    // this.optionEdge.stroke(0, 255, 0)
+    // this.optionEdge.strokeWeight(12)
+    // this.optionEdge.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
   }
   draw(p5) {
     p5.image(this.highlighted?  this.highlight : this.shape, this.x, this.y)
     // p5.image(this.highlight, this.x, this.y)
   }
+  debug(p5){
+    p5.text(this.db.uid, this.cx,  this.cy)
+  }
   projectDraw(p5) {
+    // p5.text(this.db.uid, this.cx,  this.cy)
     if(this.highlighted) { p5.image(this.optional ? this.optionEdge : this.highlight, this.x, this.y)}
+  }
+  generateOptionEdge(p5) {
+    this.optionEdge.fill('rgba(0, 0, 0, 0)')
+    this.optionEdge.stroke(255, 0, 0)
+    this.optionEdge.strokeWeight(12)
+    // this.optionEdge.bezier(this.points.p0.x - this.x, this.points.p0.y - this.y, this.points.p1.x - this.x, this.points.p1.y - this.y, this.points.p2.x - this.x, this.points.p2.y - this.y, this.points.p3.x - this.x, this.points.p3.y - this.y)
+    // this.optionEdge.bezier()
+    // this.bezier(p5, this.points.p0.x-this.x, this.points.p0.y-this.y ,this.points.p1.x-this.x, this.points.p1.y-this.y ,this.points.p2.x-this.x, this.points.p2.y-this.y, this.points.p3.x-this.x, this.points.p3.y-this.y, 0.1)
+    const t = 0.1
+    let o = 0
+    for(let i=0;i<1.0001;i+=t) {
+        let v = cubic(p5, this.points.p0,this.points.p1,this.points.p2,this.points.p3,i)
+        if(o % 2 == 0) {
+            // console.log(`Begin ${v.x}, ${v.y}`)
+            this.optionEdge.beginShape()
+            this.optionEdge.vertex(v.x-this.x,v.y-this.y)
+        } else {
+    //         console.log("end")
+            this.optionEdge.vertex(v.x-this.x,v.y-this.y)
+            this.optionEdge.endShape()
+            // console.log(`End ${v.x}, ${v.y}`)
+        }
+        o++
+    }
   }
 }
 
+export function quadratic(p5:any, p0:Coords, p1:Coords, p2:Coords, t:number):Coords {
+    const x1 = p5.lerp(p0.x, p1.x, t)
+    const y1 = p5.lerp(p0.y, p1.y, t)
+    const x2 = p5.lerp(p1.x, p2.x, t)
+    const y2 = p5.lerp(p1.y, p2.y, t)
+    const x = p5.lerp(x1, x2, t)
+    const y = p5.lerp(y1, y2, t)
+    return p5.createVector(x,y)
+    // return { x:x, y:y}
+}
+
+export function cubic(p5:any, p0:Coords, p1:Coords, p2:Coords, p3:Coords, t:number):Coords {
+    const v1 = quadratic(p5, p0,p1,p2,t)
+    const v2 = quadratic(p5, p1,p2,p3,t)
+    const x = p5.lerp(v1.x, v2.x, t)
+    const y = p5.lerp(v1.y, v2.y, t)
+    return p5.createVector(x, y)
+    // return { x:x, y:y}
+}
