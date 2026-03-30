@@ -22,6 +22,7 @@
 
   let panelOpen:boolean = $derived.by(() => $page.url.searchParams.get('view'))
   let selected = $state([])
+  let hoverList = $state([])
   const lists = {
     Projects: map.projects,
     Tutorials: map.nodes,
@@ -29,6 +30,7 @@
   }
   function toggle(title:string) {
     panelOpen = title ? title : false;
+    if(!title) { hoverList = [] }
   }
 </script>
 
@@ -42,7 +44,7 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
-    <InteractiveMap bind:selected interact={interactable} projects={map.projects} nodes={map.nodes} edges={map.edges} />
+    <InteractiveMap bind:hoverList bind:selected interact={interactable} {...map} />
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
@@ -63,7 +65,7 @@
     <div class='body {panelOpen ? 'open': 'closed'}'>
       {#if panelOpen}
         <Capture on:capture={(e) => handleCapture(e.detail)}>
-          <PanelList title={panelOpen} {map}>
+          <PanelList bind:hoverList title={panelOpen} {map}>
               <a role="button" href="?" class='close' onclick={() => toggle(false)}><Fa icon={faX} /></a>
           </PanelList>
         </Capture>
