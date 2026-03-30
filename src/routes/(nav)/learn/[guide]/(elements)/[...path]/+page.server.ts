@@ -1,7 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db/index'
 import { eq, and, inArray } from 'drizzle-orm'
-let schema = {}
 import * as schema from '$lib/server/db/schema'
 import { getGuideFromParam } from '$lib/server/db/utils'
 // Construct the map and load it in

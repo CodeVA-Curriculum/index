@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { untrack } from 'svelte'
   import P5 from './P5.svelte'
   import { goto } from '$app/navigation'
   import { page} from '$app/state'
@@ -15,10 +16,34 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { selected = $bindable([]), nodes, edges, projects, interact, width=-1, height=-1 } = $props()
-  // let nodes = []
+  let { hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1 } = $props()
+  let oldList = $state([])
+  // Highlight elements in the `hoverList` array
   let selectedProjects:Project[] = $state([])
   let selectedNodes:Node[] = $state([])
+
+  $effect(() => {
+    console.log(hoverList.length)
+    const old = untrack(() => oldList)
+    console.log(old)
+    for(const path of hoverList) {
+      if(!old.includes(path)) {
+        elementsByPath[path].highlight()
+      }
+    }
+    for(const path of old) {
+      if(!hoverList.includes(path)) {
+        elementsByPath[path].dehighlight()
+      }
+    }
+    oldList = [...hoverList]
+    // project.dehighlight()
+    // if(hoverList.includes(project.db.path)) {
+    //   project.highlight()
+    //   console.log(`${project.db.title} is hovered!`)
+    // }
+  })
+  
   let cursor:Cursor
   let camera:Camera 
   let font:any
