@@ -92,7 +92,6 @@
         }
         cursor.update(p5, camera.matrix)
       })
-      p5.text(interact, p5.displayWidth- 100, 20)
       const offsetCoords = cursor.getDrag(p5)
       if(interact) { 
         camera.offsetTransform(offsetCoords)

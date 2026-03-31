@@ -4,7 +4,7 @@
 
 <div class='container'>
   <section>
-  <h1>About the Guide</h1>
+  <h1>About the {data.guide.title}</h1>
   {@html data.guide.content}
   </section>
 </div>
