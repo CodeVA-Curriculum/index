@@ -61,15 +61,15 @@
       </Capture>
     </div>
   </div>
-  <div class='panel {panelOpen ? 'open': 'closed'}'>
+  <div onmouseenter={() => interactable = false} onmouseleave={() => interactable = true} class='panel {panelOpen ? 'open': 'closed'}'>
     <div class='body {panelOpen ? 'open': 'closed'}'>
-      {#if panelOpen}
         <Capture on:capture={(e) => handleCapture(e.detail)}>
+          {#if panelOpen}
           <PanelList bind:hoverList title={panelOpen} {map}>
               <a role="button" href="?" class='close' onclick={() => toggle(false)}><Fa icon={faX} /></a>
           </PanelList>
+        {/if}
         </Capture>
-      {/if}
     </div>
   </div>
 </div>

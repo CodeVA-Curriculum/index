@@ -92,8 +92,11 @@
         }
         cursor.update(p5, camera.matrix)
       })
+      p5.text(interact, p5.displayWidth- 100, 20)
       const offsetCoords = cursor.getDrag(p5)
-      let lerpComplete = camera.offsetTransform(offsetCoords)
+      if(interact) { 
+        camera.offsetTransform(offsetCoords)
+      }
     }
     p5.mouseClicked = () => {
       if(!interact) { return }

@@ -6,7 +6,7 @@
   })
 </script>
 <div class='minimap'>
-<InteractiveMap interact={false} nodes={[]} edges={[]} />
+<InteractiveMap interact={false} projects={[]} nodes={[]} edges={[]} />
 </div>
 <dialog>
   <article>
