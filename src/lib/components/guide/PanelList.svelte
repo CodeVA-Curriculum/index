@@ -97,7 +97,7 @@
     <ul>
       {#each list as item}
         <div on:mouseenter={() => mouseIn(item)} on:mouseleave={() => mouseOut(item)} class='hover-bound'>
-        <ProjectListItem map={true} obj={item} />
+          <ProjectListItem map={true} obj={item} />
         </div>
       {/each}
     </ul>
@@ -120,6 +120,7 @@
   }
   .panel-list {
     padding: 0rem;
+    height: 100%;
   }
   input {
   height: 2rem;

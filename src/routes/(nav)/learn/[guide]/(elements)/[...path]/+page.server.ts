@@ -35,7 +35,8 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
       with: {
         nodeGroups: {
           with: { nodes: true }
-        }
+        },
+        pivot: true
       },
       where: {
         id: element.id
@@ -46,23 +47,34 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
     // for the nodes on this route, just combine all the nodes from the nodeGroups
 
     // Get edges based on nodes for this route
-    let nodes = await db.select().from(schema.nodeToNodeGroup).leftJoin(schema.node, eq(schema.node.id, schema.nodeToNodeGroup.nodeId)).leftJoin(schema.nodeGroup, eq(schema.nodeGroup.id, schema.nodeToNodeGroup.groupId)).where(eq(project.id, schema.nodeToNodeGroup.projectId))
-    console.log(`Found ${nodes.length} nodes in project ${project.path}`)
-    let edges = []
+    let res = await db.select().from(schema.nodeToNodeGroup).leftJoin(schema.node, eq(schema.node.id, schema.nodeToNodeGroup.nodeId)).leftJoin(schema.nodeGroup, eq(schema.nodeGroup.id, schema.nodeToNodeGroup.groupId)).where(eq(project.id, schema.nodeToNodeGroup.projectId))
+    console.log(`Found ${res.length} res in project ${project.path}`)
+    let nodes = []
+    for(const r of res) {
+      nodes.push(r.node)
+    }
+    let edges = await db.query.edge.findMany({
+      with: {
+        toNode: { projects: true },
+        fromNode: { projects: true }
+      },
+      where: {
+       OR:[ { toNode: { projects: { id: project.id }}}, { fromNode: { projects: { id: project.id } } }]
+      }
+    })
     for(let i=1;i<project.nodeGroups.length;i ++) {
-      const node0 = project.nodeGroups[i-1]
-      const node1 = project.nodeGroups[i]
+      const node0 = project.nodeGroups[i-1].nodes[project.nodeGroups[i-1].length-1]
+      const node1 = project.nodeGroups[i].nodes[0]
       let newEdge = await db.query.edge.findFirst({
-        // with: { toNode: true, fromNode: true},
+        with: { toNode: true, fromNode: true},
         where: {
-          OR: [{ to: 33, from: 12}, { from: 33, to: 12}]
+          OR: [{ to: node0.id, from: node1.id}, { from: node1.id, to: node0.id}]
         }
       })
       if(!newEdge) { throw new Error(`Could not find edge between ${node0.path} and ${node1.path}`)}
       edges.push(newEdge)
-      nodes.push(node0)
+      res.push(node0)
     }
-
 
     return {
       map: {
