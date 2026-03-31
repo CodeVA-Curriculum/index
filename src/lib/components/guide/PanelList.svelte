@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import ProjectPanel from './ProjectPanel.svelte'
   import { Project } from './Project.svelte'
   import { Node } from './Node.svelte'
   import ElementTabs from './ElementTabs.svelte'
@@ -69,7 +70,7 @@
   {#if obj instanceof Node}
   <ElementTabs {obj} />
   {:else if obj instanceof Project}
-  <p>project stuffa</p>
+  <ProjectPanel project={obj} />
   {/if}
 {/snippet}
 
@@ -77,9 +78,9 @@
   <div class='close'>{@render children?.()}</div>
     {#if history.length > 1}
     <nav aria-label="breadcrumb">
-      <ul>
+      <ul class='subtitle'>
         {#each history as h}
-          <li>{h}</li>
+          <li>{h == 'projects' || h == 'tutorials' ? h.charAt(0).toUpperCase() + h.substring(1) : map.elementsByPath[h].db.title}</li>
         {/each}
       </ul>
     </nav>
