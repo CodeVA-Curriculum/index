@@ -2,14 +2,9 @@
   import { Project } from '$lib/components/guide/Project.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import {onMount} from 'svelte'
+  import { Map } from '$lib/components/guide/Map.svelte'
   let { data } = $props()
-  const projects:Project[] = []
-  data.projects.forEach((o) => {
-    projects.push(new Project(o))
-  })
-  // onMount(() => {
-  //   console.log(data)
-  // })
+  const map = new Map(data.guide)
 </script>
 <div class='container'>
 <section>
@@ -23,7 +18,7 @@
   </form>
 </section>
 <section>
-  {#each projects as project}
+  {#each map.projects as project}
     <ProjectListItem map obj={project} />
   {/each}
 </section>

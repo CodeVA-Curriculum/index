@@ -20,6 +20,8 @@ export class Project {
   nodeGroups:Group = []
   highlighted = $state(false)
   groups:number = -1
+  groupPos = $state(0)
+  nodePos = $state(0)
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
     this.db = i
@@ -60,6 +62,9 @@ export class Project {
       g.draw(p5)
     }
   }
+  getNext(path = "default") {
+    if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
+  }
 }
 
 class Group {
@@ -86,6 +91,18 @@ class Group {
     for(const e of this.edges) {
       e.projectDraw(p5)
     }
+  }
+  getNext(path = "default") {
+    let s = []
+    if(path == "default") { return [ this.nodes[0].db.path ] }
+    let pos = this.nodes.findIndex((n) => n.db.path == path)
+    for(let i=pos+1;i<this.nodes.length;i++) {
+      s.push(this.nodes[i].db.path)
+      if(!this.nodes[i].optional) {
+        break
+      }
+    }
+    return s
   }
   addEdges(edges:Edge[], order:object, elementsByPath:any) {
     // TODO: Find the edge between each consecutive node in `this.nodes` and add it to `this.edges`

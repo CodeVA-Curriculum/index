@@ -1,11 +1,27 @@
 <script lang='ts'>
+  import ProjectListItem from './ProjectListItem.svelte'
   import Minimap from './Minimap.svelte'
   import DetailsIcons from './DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
   import { Map } from './Map.svelte'
+  import { onMount } from 'svelte'
+  import { page } from '$app/stores'
 
-  let { project, map } = $props()
+  let { map } = $props()
   const minimap = new Map(map)
+  let loaded:boolean = $state(false)
+  let selectedGroup = $state(0)
+  let selectedNode = $state(0)
+  const params = $page.url.searchParams
+  const p = minimap.projects[0]
+  let nextUp = $state([])
+  const pathParam = $page.url.searchParams.get("view")
+  const project = minimap.projects[0]
+  onMount(() => {
+    loaded = true;
+    let next = project.getNext()
+    nextUp = [...nextUp, ...next]
+  })
 
 </script>
 <div class='project-view'>
@@ -13,18 +29,17 @@
     <header>
       <details class='nomark'>
         <summary>
-          <h1>{project.title}</h1>
+          <h1>{p.title}</h1>
           <DetailsIcons eltype={0} />
         </summary>
         <Video />
-        <p class='description'>{@html project.description}</p>
+        <p class='description'>{@html p.description}</p>
         <hr>
       </details>
     </header>
     <main>
       <Minimap map={minimap} />
       <div class='selected-node'>
-        <p>Click to load the first tutorial!</p>
       </div>
       <!-- <TutorialListItem /> -->
       <details>
@@ -32,9 +47,9 @@
       </details>
       <h2>Next Up</h2>
       <div class='buttons'>
-        <a role="button">node.title</a>
-        <a role="button">node.title</a>
-        <a class="optional" role="button">node.title optional</a>
+        {#each nextUp as path}
+          <a role="button">{minimap.elementsByPath[path].db.title}</a>
+        {/each}
       </div>
     </main>
   </aside>
@@ -59,7 +74,6 @@
     margin: 0 4rem;
   }
   .selected-node {
-    padding: 3rem;
     border: 3px dashed black;
     margin-bottom: 1rem;
     & > * { margin: 0; padding: 0; text-align: center; }
