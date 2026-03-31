@@ -54,10 +54,6 @@
       </Capture>
     </div>
     <div class='end'>
-      <Capture on:capture={(e) => handleCapture(e.detail)}>
-        <button>export</button>
-        <button>import</button>
-      </Capture>
     </div>
   </div>
   <div onmouseenter={() => interactable = false} onmouseleave={() => interactable = true} class='panel {panelOpen ? 'open': 'closed'}'>
