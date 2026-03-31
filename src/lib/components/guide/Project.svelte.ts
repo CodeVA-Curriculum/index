@@ -65,6 +65,17 @@ export class Project {
   getNext(path = "default") {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
   }
+  getGroupNodeCount() {
+    let groupsCount = this.nodeGroups.length
+    let nodesCount = 0
+    for(const g of this.nodeGroups) {
+      nodesCount += g.nodes.length
+    }
+    return {
+      groups: groupsCount,
+      nodes: nodesCount
+    }
+  }
 }
 
 class Group {
