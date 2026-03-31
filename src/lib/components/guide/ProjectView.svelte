@@ -48,7 +48,7 @@
       <h2>Next Up</h2>
       <div class='buttons'>
         {#each nextUp as path}
-          <a role="button">{minimap.elementsByPath[path].db.title}</a>
+          <a href="?view={minimap.elementsByPath[path].db.path}" role="button">{minimap.elementsByPath[path].db.title}</a>
         {/each}
       </div>
     </main>
