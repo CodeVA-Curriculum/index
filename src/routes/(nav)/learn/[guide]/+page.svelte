@@ -51,7 +51,6 @@
       <Capture on:capture={(e) => handleCapture(e.detail)}>
         <a href="?view=projects" role="button">projects</a>
         <a href="?view=tutorials" role="button">tutorials</a>
-        <a href="{$page.url}" role="button">backpack</a>
       </Capture>
     </div>
     <div class='end'>
