@@ -13,6 +13,7 @@ interface Input {
 export class Project {
   db:DbProject
   title:string = "No title!"
+  x:number; y:number
   short:string = "No description provided!"
   difficulty:integer = 0
   complete:boolean = $state(false)
@@ -22,6 +23,7 @@ export class Project {
   groups:number = -1
   groupPos = $state(0)
   nodePos = $state(0)
+  selected = $state(false)
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
     this.db = i
@@ -36,7 +38,34 @@ export class Project {
       group.addEdges(allEdges, i.pivot, elementsByPath)
       this.nodeGroups.push(group)
     }
+    // Find center
+    let { x, y } = this.findCenter()
+    this.x = x; this.y = y
+    console.log(`Found center for ${this.db.path} at ${x}, ${y}`)
     
+  }
+  private findCenter() {
+    let minGroupX; let maxGroupX; let minGroupY; let maxGroupY;
+    for(const g of this.nodeGroups) {
+      if(g.nodes.length == 0) { throw new Error(`Cannot find project at ${this.db.path} center, no nodes loaded`)}
+      // find project center
+      let minX; let maxX; let minY; let maxY;
+      for(let i=0;i<g.nodes.length;i++) {
+          const node = g.nodes[i]
+          if(!minX || node.x < minX) { minX = node.x }
+          if(!maxX || node.x > maxX) { maxX = node.x }
+          if(!maxY || node.y > maxY) { maxY = node.y }
+          if(!minY || node.y < minY) { minY = node.y }
+      }
+      let coords = { x: ((minX as number)) + ((maxX as number) - (minX as number))/2, y: ((minY as number)) + ((maxY as number) - (minY as number))/2 }
+      g.setCenter(coords.x, coords.y)
+      if(!minGroupX || g.x < minGroupX) { minGroupX = g.x }
+      if(!maxGroupX || g.x > maxGroupX) { maxGroupX = g.x }
+      if(!maxGroupY || g.y > maxGroupY) { maxGroupY = g.y }
+      if(!minGroupY || g.y < minGroupY) { minGroupY = g.y }
+    }
+    let coords = { x: ((minGroupX as number)/2) + ((maxGroupX as number) - (minGroupX as number))/4, y: ((minGroupY as number)/2) + ((maxGroupY as number) - (minGroupY as number))/4 }
+    return coords
   }
   highlight() {
     this.highlighted = true
@@ -61,6 +90,9 @@ export class Project {
     for(const g of this.nodeGroups) {
       g.draw(p5)
     }
+    if(this.highlighted) {
+      p5.circle(this.centerX, this.centerY, 40)
+    }
   }
   getNext(path = "default") {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
@@ -76,6 +108,13 @@ export class Project {
       nodes: nodesCount
     }
   }
+  toggleSelected() {
+    this.selected = !this.selected
+  }
+  setSelect(status:boolean) {
+    this.selected = status
+    this.highlight()
+  }
 }
 
 class Group {
@@ -83,6 +122,7 @@ class Group {
   nodes:Node[] = []
   nodeMask:boolean = []
   edges:Edge[] = []
+  x = 0; y = 0
   constructor(db:any, order:object, elementsByPath:any) {
     this.title = db.alias
     order.sort((a,b) => a.index - b.index)
@@ -91,6 +131,10 @@ class Group {
       this.nodes.push(elementsByPath[node.path])
       this.nodeMask.push(c.optional)
     }
+  }
+  setCenter(x, y) {
+    this.centerX = x
+    this.centerY = y
   }
   setup(p5) {
     for(const e of this.edges) {
