@@ -51,7 +51,7 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
-    <InteractiveMap map={map} bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
