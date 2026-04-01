@@ -1,4 +1,5 @@
 import { Project } from './Project.svelte'
+import { Camera } from './Camera.svelte'
 import { Node } from './Node.svelte'
 import { Edge } from './Edge.svelte'
 
@@ -13,7 +14,7 @@ export class Map {
   nodes:Node[] = []
   edges:Edge[] = []
   elementsByPath:any = {}
-  
+  camera:Camera|null = null
   constructor(map:Input) {
     for(const node of map.nodes) {
       const obj = new Node(node)
@@ -29,6 +30,14 @@ export class Map {
       const obj = new Project(project, this.elementsByPath, map.edges)
       this.projects.push(obj)
       this.elementsByPath[project.path] = obj
+    }
+  }
+  setup(cam:Camera) {
+    this.camera = cam
+  }
+  pushOut() {
+    if(this.camera) {
+      this.camera.zoom({x:this.camera.ix, y:this.camera.iy}, 0.5, true)
     }
   }
 }

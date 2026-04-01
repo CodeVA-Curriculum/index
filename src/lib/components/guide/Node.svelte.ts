@@ -144,6 +144,9 @@ export class Node {
     this.selected = !this.selected
     return this.selected
   }
+  setSelect(status:boolean) {
+    this.selected = status
+  }
 }
 
 export class NodeInGroup {

@@ -16,7 +16,7 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1 } = $props()
+  let { hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
   // Highlight elements in the `hoverList` array
   let selectedProjects:Project[] = $state([])
@@ -47,11 +47,18 @@
   let cursor:Cursor
   let camera:Camera 
   let font:any
+  export function deselect() {
+    for(const el of selected) {
+      el.setSelect(false)
+    }
+    selected = []
+  }
   const sketch = (p5:any) => {
     p5.setup = async () => {
       p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
       camera = new Camera(p5, 1)
       cursor = new Cursor()
+      map.setup(camera)
       font = await p5.loadFont('/fonts/calibri-regular.ttf')
       let avgX = 0; let avgY = 0
       for(const node of nodes) {
