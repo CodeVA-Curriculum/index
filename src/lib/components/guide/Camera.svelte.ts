@@ -12,10 +12,9 @@ export class Camera {
 
     constructor(p5:any, scale:number) {
         this.p5 = p5;
-        this.x = this.p5.width/2
-        this.y = this.p5.height/2
-        this.ix = this.x
-        this.iy = this.y
+        this.ix = this.p5.width/2
+        this.iy = this.p5.height/2
+        // this.setCenter(1)
 
         this.p5.push();
         this.p5.translate(this.transform.x, this.transform.y);
@@ -48,7 +47,6 @@ export class Camera {
         // this.p5.line(this.p5.width/2, this.p5.height/2 - 15, this.p5.width/2, this.p5.height/2 + 15)
         // this.p5.line(this.p5.width/2 + 15, this.p5.height/2, this.p5.width/2 - 15, this.p5.height/2)
         // this.p5.fill(0)
-        // this.p5.text(`${this.x},${this.y}`, this.p5.width/2, this.p5.height/2 - 30)
     }
     zoom(absoluteLocation:Coords, deltaZoom:number, absolute:boolean) {
         let factor;
@@ -74,19 +72,19 @@ export class Camera {
     getLocalCoords(coords:Coords) {
         return getLocalCoords(this.p5, this.matrix, coords)
     }
-    getScreenCoords(coords:Coords, center:number) {
+    getScreenCoords(coords:Coords) {
         const screenCoords = this.matrix
         .transformPoint(
             new DOMPoint(
-                coords.x * this.p5.pixelDensity() - this.p5.width * center,
+                coords.x * this.p5.pixelDensity() - this.p5.width * 0.5,
                 coords.y * this.p5.pixelDensity()
             )
         );
         return screenCoords
     }
     setCenter(factor:number) {
-        this.ix = this.p5.WIDTH * factor
-        this.iy = this.p5.HEIGHT * factor
+        this.ix = this.p5.displayWidth * factor
+        this.iy = this.p5.displayHeight * factor
     }
 }
 

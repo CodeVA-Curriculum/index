@@ -16,16 +16,12 @@
   //   url.searchParams.set('select', 'hey')
   //   goto(url.toString(), { replaceState: false })
   // }
-  let { hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
+  let { view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
-  // Highlight elements in the `hoverList` array
-  let selectedProjects:Project[] = $state([])
-  let selectedNodes:Node[] = $state([])
 
+  // hover visualization update
   $effect(() => {
-    console.log(hoverList.length)
     const old = untrack(() => oldList)
-    console.log(old)
     for(const path of hoverList) {
       if(!old.includes(path)) {
         elementsByPath[path].highlight()
@@ -37,17 +33,17 @@
       }
     }
     oldList = [...hoverList]
-    // project.dehighlight()
-    // if(hoverList.includes(project.db.path)) {
-    //   project.highlight()
-    //   console.log(`${project.db.title} is hovered!`)
-    // }
+    console.log(selected)
   })
+
+  // Select from params
+
   
   let cursor:Cursor
   let camera:Camera 
   let font:any
   export function deselect() {
+    console.log("Deselecting...")
     for(const el of selected) {
       el.setSelect(false)
     }
@@ -60,14 +56,20 @@
       cursor = new Cursor()
       map.setup(camera)
       font = await p5.loadFont('/fonts/calibri-regular.ttf')
-      let avgX = 0; let avgY = 0
+      let maxX = 0; let maxY = 0; let minX = 0; let minY = 0
       for(const node of nodes) {
         node.setup(p5, font)
-        avgX += node.x; avgY += node.y
+        maxX = node.x > maxX ? node.x : maxX;
+        maxY = (node.y) > (maxY) ? node.y : maxY
+        minX = (node.x) < (minX) ? node.x : minX;
+        minY = (node.y) < (minY) ? node.y : minY
       }
-      avgX = avgX / nodes.length; avgY = avgY / nodes.length
-      camera.moveCenterTo(avgX, avgY)
-      camera.zoom({x:camera.ix, y:camera.iy}, 0.25, true)
+      console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
+      // camera.moveCenterTo(maxX - (maxX - minX)/2, maxY - (maxY - minY)/2)
+      const offsetX = (maxX - (maxX - minX)/2) - p5.displayWidth/2
+      const offsetY = (maxY - (maxY - minY)/2) - p5.displayHeight/2
+      camera.offsetTransform({ x: offsetX, y: offsetY + 100 })
+      camera.zoom({x: camera.ix, y: camera.iy}, 0.25, true)
       for(const edge of edges) {
         edge.setup(p5)
       }
@@ -80,6 +82,15 @@
       // projects[0].highlight()
     }
     p5.draw = () => {
+      const el = map.elementsByPath[view]
+      if(selected.length == 0 && el){
+        selected = [ el ]
+        el.setSelect(true)
+        const offsetX = el.x
+        const offsetY = el.y 
+        camera.offsetTransform({ x: offsetX, y: offsetY })
+        camera.zoom({x: camera.ix, y: camera.iy}, 0.5, true)
+      }
       // debug.cursor = cursor.mx + ', ' + cursor.my
       // debug.local = cursor.localX + ', ' + cursor.localY
       // debug.selected = selected.length
@@ -106,6 +117,7 @@
     }
     p5.mouseClicked = () => {
       if(!interact) { return }
+      console.log(`Camera Location: ${camera.ix}, ${camera.iy}`)
       // console.log("Click!")
       const hoveredNodes = cursor.getHovered()
       if(hoveredNodes.length > 0) {
