@@ -26,11 +26,18 @@
   const lists = {
     Projects: map.projects,
     Tutorials: map.nodes,
-    Selected: [ map.nodes[0] ]
+    Selected: [ ]
   }
   function toggle(title:string) {
     panelOpen = title ? title : false;
-    if(!title) { hoverList = [] }
+    if(!title) {
+      hoverList = []
+      for(const el of selected) {
+        el.setSelect(false)
+      }
+      selected = []
+      map.pushOut()
+    }
   }
 </script>
 
@@ -44,7 +51,7 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
-    <InteractiveMap bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap map={map} bind:hoverList bind:selected interact={interactable} {...map} />
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
