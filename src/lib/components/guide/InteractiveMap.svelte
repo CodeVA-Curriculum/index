@@ -36,9 +36,17 @@
     console.log(selected)
   })
 
-  // Select from params
+  // Camera movement on param update
+  $effect(() => {
+    const el = map.elementsByPath[view]
+    if(camera && el) {
+      const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
+      camera.moveCenterTo(location.x, location.y)
+      camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
+    }
+  })
 
-  
+
   let cursor:Cursor
   let camera:Camera 
   let font:any
@@ -65,11 +73,19 @@
         minY = (node.y) < (minY) ? node.y : minY
       }
       console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
-      // camera.moveCenterTo(maxX - (maxX - minX)/2, maxY - (maxY - minY)/2)
-      const offsetX = (maxX - (maxX - minX)/2) - p5.displayWidth/2
-      const offsetY = (maxY - (maxY - minY)/2) - p5.displayHeight/2
-      camera.offsetTransform({ x: offsetX, y: offsetY + 100 })
-      camera.zoom({x: camera.ix, y: camera.iy}, 0.25, true)
+      if(!view) {
+        
+        camera.moveCenterTo(maxX - (maxX - minX)/2, maxY - (maxY - minY)/2)
+        const offsetX = (maxX - (maxX - minX)/2) - p5.displayWidth/2
+        const offsetY = (maxY - (maxY - minY)/2) - p5.displayHeight/2
+        camera.offsetTransform({ x: offsetX, y: offsetY + 100 })
+        camera.zoom({x: camera.ix, y: camera.iy}, 0.25, true)
+      } else if(map.elementsByPath[view]){
+        const loc = camera.getScreenCoords(map.elementsByPath[view], 0)
+        camera.moveCenterTo(loc.x, loc.y)
+        camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
+      }
+
       for(const edge of edges) {
         edge.setup(p5)
       }
@@ -86,15 +102,15 @@
       if(selected.length == 0 && el){
         selected = [ el ]
         el.setSelect(true)
-        const offsetX = el.x
-        const offsetY = el.y 
-        camera.offsetTransform({ x: offsetX, y: offsetY })
-        camera.zoom({x: camera.ix, y: camera.iy}, 0.5, true)
+        // const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
+        // camera.moveCenterTo(location.x - p5.displayWidth * 0.1, location.y)
+        // camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
       }
       // debug.cursor = cursor.mx + ', ' + cursor.my
       // debug.local = cursor.localX + ', ' + cursor.localY
       // debug.selected = selected.length
       p5.background(180);
+      // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
       camera.display(() => {
         for(const edge of edges) {
           edge.draw(p5)
@@ -125,16 +141,16 @@
         if(status) {
           selected = hoveredNodes
           // zoom in
-          const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
-          camera.moveCenterTo(location.x, location.y)
-          camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
+          // const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
+          // camera.moveCenterTo(location.x, location.y)
+          // camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
 
           // Write to url
           goto("?view="+selected[0].db.path)
         } else {
           // zoom out & deselect
           selected = []
-          camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
+          // camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
           // Write to url
           goto("?")
         }
