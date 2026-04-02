@@ -76,7 +76,7 @@ export class Camera {
         const screenCoords = this.matrix
         .transformPoint(
             new DOMPoint(
-                coords.x * this.p5.pixelDensity() - this.p5.width * 0.5,
+                coords.x * this.p5.pixelDensity(),
                 coords.y * this.p5.pixelDensity()
             )
         );
