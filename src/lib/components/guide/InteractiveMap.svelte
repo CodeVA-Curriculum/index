@@ -42,7 +42,8 @@
     if(camera && el) {
       const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
       camera.moveCenterTo(location.x, location.y)
-      camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
+      let z = el.nodeGroups ? 0.25 : 1
+      camera.zoom({x:camera.ix, y:camera.iy}, z, true)
     }
   })
 
@@ -76,14 +77,12 @@
       if(!view) {
         
         camera.moveCenterTo(maxX - (maxX - minX)/2, maxY - (maxY - minY)/2)
-        const offsetX = (maxX - (maxX - minX)/2) - p5.displayWidth/2
-        const offsetY = (maxY - (maxY - minY)/2) - p5.displayHeight/2
-        camera.offsetTransform({ x: offsetX, y: offsetY + 100 })
         camera.zoom({x: camera.ix, y: camera.iy}, 0.25, true)
       } else if(map.elementsByPath[view]){
         const loc = camera.getScreenCoords(map.elementsByPath[view], 0)
         camera.moveCenterTo(loc.x, loc.y)
-        camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
+        let z = map.elementsByPath[view].nodeGroups ? 0.25 : 1
+        camera.zoom({x: camera.ix, y: camera.iy}, z, true)
       }
 
       for(const edge of edges) {
@@ -150,7 +149,7 @@
         } else {
           // zoom out & deselect
           selected = []
-          // camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
+          camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
           // Write to url
           goto("?")
         }

@@ -1,4 +1,6 @@
 <script lang='ts'>
+  import NodeView from './NodeView.svelte'
+  import ProjectNodeAccordion from './ProjectNodeAccordion.svelte'
   import ProjectListItem from './ProjectListItem.svelte'
   import Minimap from './Minimap.svelte'
   import DetailsIcons from './DetailsIcons.svelte'
@@ -8,24 +10,31 @@
   import { page } from '$app/stores'
 
   let { map } = $props()
-  const minimap = new Map(map)
+  let mapObj:Map = new Map(map)
   let loaded:boolean = $state(false)
-  let selectedGroup = $state(0)
-  let selectedNode = $state(0)
-  const params = $page.url.searchParams
-  const p = minimap.projects[0]
+  const p = $derived.by(() => map.projects[0] )
   let nextUp = $state([])
-  const pathParam = $page.url.searchParams.get("view")
-  const project = minimap.projects[0]
+  let pathParam = $state(null)
+
+  let project = $state()
   onMount(() => {
     loaded = true;
-    let next = project.getNext()
-    nextUp = [...nextUp, ...next]
+    pathParam = $page.url.searchParams.get("view")
+    // let next = project.getNext()
+    // nextUp = [...nextUp, ...next]
   })
+  $effect(() => {
+    pathParam = $page.url.searchParams.get("view")
+  })
+  const loadMap = new Promise(async (resolve, reject) => {
+    await import("./Minimap.svelte")
+    resolve(mapObj)
+  });
 
 </script>
 <div class='project-view'>
   <aside>
+    <div class='aside-stick'>
     <header>
       <details class='nomark'>
         <summary>
@@ -38,30 +47,39 @@
       </details>
     </header>
     <main>
-      <Minimap map={minimap} />
+      {#await loadMap then { default: MiniMap }}
+      <Minimap view={pathParam} bind:map={mapObj} />
       <div class='selected-node'>
+        {#if pathParam}
+        <ProjectListItem obj={mapObj.elementsByPath[pathParam]} />
+        {/if}
       </div>
-      <!-- <TutorialListItem /> -->
-      <details>
-        <summary>Browse All # Tutorials</summary>
-      </details>
       <h2>Next Up</h2>
       <div class='buttons'>
-        {#each nextUp as path}
-          <a href="?view={minimap.elementsByPath[path].db.path}" role="button">{minimap.elementsByPath[path].db.title}</a>
+        {#each mapObj.projects[0].getNext(pathParam ? mapObj.elementsByPath[pathParam].db.path : "default") as res}
+          <a class={res.optional ? "optional" : ""} href="?view={res.path}" role="button">{res.title}{#if res.optional}<i>(Optional)</i>{/if}</a>
         {/each}
       </div>
+      <div class='nodeGroups'>
+        <ProjectNodeAccordion project={mapObj.projects[0]} />
+      </div>
+      {/await}
     </main>
+    </div>
   </aside>
-  <main class='container'>
+  <main class='container nodeview'>
+    {#if pathParam && mapObj}
     <nav aria-label="breadcrumb">
       <ul>
-        <li>project.title</li>
-        <li>node.title</li>
+        <li>{mapObj.projects[0].db.title}</li>
+        <li>{mapObj.elementsByPath[pathParam].db.title}</li>
       </ul>
     </nav>
-    <section>
-      Node view
+    {/if}
+    <section class="">
+      {#if mapObj && pathParam}
+      <NodeView obj={mapObj.elementsByPath[pathParam]} />
+      {/if}
     </section>
   </main>
 </div>
@@ -71,7 +89,6 @@
   h2 { margin-top: 3rem; }
   .container {
     width: 100%;
-    margin: 0 4rem;
   }
   .selected-node {
     border: 3px dashed black;
@@ -92,23 +109,38 @@
     width: 100%;
     position: absolute;
     flex-direction: row;
-    height: 100vh;
     // background-color: powderblue;
-    overflow-y: hidden;
   }
   .stats { background-color: lightblue;
     margin: 1rem 0;
+  }
+  .aside-stick {
+    top: 0;
+    position: sticky;
+    overflow-y: scroll;
+    padding: 1rem;     
+    height: 100vh;
   }
   aside {
     box-shadow: 5px 5px 5px 0px grey;
     min-width: 24rem;
     border: 1px solid whitesmoke;
-    padding: 1rem;     
-    overflow-y: scroll;
+    position: relative;
+    // height: 100%;
   }
   details.nomark > summary::after {
     display: none;
   }
   .description { margin-top: 1rem; }
+  a.optional {
+    background-color: white;
+    border: 3px dashed black;
+    i {
+      padding-left: 0.5rem;
+    }
+  }
   hr { margin-bottom: 4rem; }
+  .nodeview {
+    padding: 0 4rem;
+  }
 </style>

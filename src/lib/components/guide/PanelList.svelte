@@ -79,8 +79,10 @@
     {#if history.length > 1}
     <nav aria-label="breadcrumb">
       <ul class='subtitle'>
-        {#each history as h}
+        {#each history as h, i}
+          {#if i > 0}
           <li>{h == 'projects' || h == 'tutorials' ? h.charAt(0).toUpperCase() + h.substring(1) : map.elementsByPath[h].db.title}</li>
+          {/if}
         {/each}
       </ul>
     </nav>
@@ -110,6 +112,9 @@
 
 <style lang='scss'>
   @import "$lib/styles/theme.scss";
+  .subtitle {
+    font-size: 0.75rem;
+  }
   nav {
     position: absolute;
     top: 0;

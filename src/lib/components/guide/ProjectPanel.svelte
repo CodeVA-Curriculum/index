@@ -14,7 +14,7 @@
     </div>
   {/if}
   <div class='description'>
-    <p>{project.db.long}</p>
+    <p>{project.db.short}</p>
   </div>
   <div class='nodeGroups'>
     <details>

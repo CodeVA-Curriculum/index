@@ -12,6 +12,7 @@ interface Input {
 
 export class Project {
   db:DbProject
+  groupsPathMap = {}
   title:string = "No title!"
   x:number; y:number
   short:string = "No description provided!"
@@ -36,7 +37,11 @@ export class Project {
     for(const g of i.nodeGroups) {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
+      const paths = group.getPaths()
       this.nodeGroups.push(group)
+      for(const path of paths) {
+        this.groupsPathMap[path] = this.nodeGroups.length-1
+      }
     }
     // Find center
     let { x, y } = this.findCenter()
@@ -45,27 +50,19 @@ export class Project {
     
   }
   private findCenter() {
-    let minGroupX; let maxGroupX; let minGroupY; let maxGroupY;
+    let minX = 0; let minY = 0; let maxX = 0; let maxY = 0;
     for(const g of this.nodeGroups) {
-      if(g.nodes.length == 0) { throw new Error(`Cannot find project at ${this.db.path} center, no nodes loaded`)}
-      // find project center
-      let minX; let maxX; let minY; let maxY;
-      for(let i=0;i<g.nodes.length;i++) {
-          const node = g.nodes[i]
-          if(!minX || node.x < minX) { minX = node.x }
-          if(!maxX || node.x > maxX) { maxX = node.x }
-          if(!maxY || node.y > maxY) { maxY = node.y }
-          if(!minY || node.y < minY) { minY = node.y }
+      for(const node of g.nodes) {
+        minX = node.x < minX ? node.x : minX
+        minY = node.y < minY ? node.y : minY
+        maxX = node.x > maxX ? node.x : maxX
+        maxY = node.y > maxY ? node.y : maxY
       }
-      let coords = { x: ((minX as number)) + ((maxX as number) - (minX as number))/2, y: ((minY as number)) + ((maxY as number) - (minY as number))/2 }
-      g.setCenter(coords.x, coords.y)
-      if(!minGroupX || g.x < minGroupX) { minGroupX = g.x }
-      if(!maxGroupX || g.x > maxGroupX) { maxGroupX = g.x }
-      if(!maxGroupY || g.y > maxGroupY) { maxGroupY = g.y }
-      if(!minGroupY || g.y < minGroupY) { minGroupY = g.y }
     }
-    let coords = { x: ((minGroupX as number)/2) + ((maxGroupX as number) - (minGroupX as number))/4, y: ((minGroupY as number)/2) + ((maxGroupY as number) - (minGroupY as number))/4 }
-    return coords
+    return {
+      x: minX + (maxX - minX)/2,
+      y: minY + (maxY - minY)/2
+    }
   }
   highlight() {
     this.highlighted = true
@@ -96,6 +93,10 @@ export class Project {
   }
   getNext(path = "default") {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
+    return this.getGroupByPath(path).getNext(path)
+  }
+  getGroupByPath(path:string) {
+    return this.nodeGroups[this.groupsPathMap[path]]
   }
   getGroupNodeCount() {
     let groupsCount = this.nodeGroups.length
@@ -113,7 +114,7 @@ export class Project {
   }
   setSelect(status:boolean) {
     this.selected = status
-    this.highlight()
+    if(status) { this.highlight() } else { this.dehighlight() }
   }
 }
 
@@ -132,10 +133,6 @@ class Group {
       this.nodeMask.push(c.optional)
     }
   }
-  setCenter(x, y) {
-    this.centerX = x
-    this.centerY = y
-  }
   setup(p5) {
     for(const e of this.edges) {
       e.setup(p5)
@@ -147,13 +144,28 @@ class Group {
       e.projectDraw(p5)
     }
   }
+  getPaths() {
+    let paths = []
+    for(const n of this.nodes) {
+      paths.push(n.db.path)
+    }
+    return paths
+  }
   getNext(path = "default") {
     let s = []
-    if(path == "default") { return [ this.nodes[0].db.path ] }
+    if(path == "default") { return [ {
+      path: this.nodes[0].db.path,
+      title: this.nodes[0].db.title,
+      optional: this.nodeMask[0]
+    } ] }
     let pos = this.nodes.findIndex((n) => n.db.path == path)
     for(let i=pos+1;i<this.nodes.length;i++) {
-      s.push(this.nodes[i].db.path)
-      if(!this.nodes[i].optional) {
+      s.push({
+        path: this.nodes[i].db.path,
+        title: this.nodes[i].db.title,
+        optional: this.nodeMask[i]
+      })
+      if(!this.nodeMask[i]) {
         break
       }
     }
@@ -179,7 +191,6 @@ class Group {
     let pairs = []
     let lastFalse:number = 0
     let inCut:boolean = false
-    console.log(this.nodeMask)
     for(let i=0;i<this.nodeMask.length;i++) {
       inCut = this.nodeMask[i]
       if(!inCut && i-lastFalse > 1) {
