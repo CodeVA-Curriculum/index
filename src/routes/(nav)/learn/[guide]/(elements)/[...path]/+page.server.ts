@@ -2,20 +2,29 @@ import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db/index'
 import { eq, and, inArray } from 'drizzle-orm'
 import * as schema from '$lib/server/db/schema'
+import { error } from 'svelte'
 import { getGuideFromParam } from '$lib/server/db/utils'
 // Construct the map and load it in
 export const load: LayoutServerLoad = async ({ params, parent, url }) => {
   const { guide } = await parent();
-  const searchPath = url.toString().substring(url.toString().indexOf("/learn/")+"/learn/".length)
-  // console.log(searchPath)
+  let searchPath = url.toString().substring(url.toString().indexOf("/learn/")+"/learn/".length)
+  // searchPath = searchPath.substring(0, searchPath.indexOf("?") ? searchPath.indexOf("?") : searchPath.length)
+  if(url.searchParams.get("view")) {
+    searchPath = searchPath.substring(0, searchPath.indexOf("?"))
+  }
+  console.log(searchPath)
   let results = []
   let elType:string
   if(params.path.includes("projects")) {
     // search for a project
-    results = await db.select().from(schema.project).where(and(
-      eq(schema.project.guide, guide.id),
-      eq(schema.project.path, searchPath)
-    ))
+    // results = await db.select().from(schema.project).where(and(
+    //   eq(schema.project.guide, guide.id),
+    //   eq(schema.project.path, searchPath)
+    // ))
+    results = await db.query.project.findMany({
+      with: { pivot: true, nodeGroups: { with: { nodes: true }}},
+      where: { guide: guide.id, path: searchPath }
+    })
     elType = "project"
   } else {
     // search for a Node
@@ -26,7 +35,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
     elType = "node"
   }
   if(results.length == 0) {
-    return error(404, "File not found!")
+    throw new Error(404, "File not found!")
   }
   const element:Node|Project = results[0]
   // Do project stuff if needed
@@ -59,7 +68,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
         fromNode: { projects: true }
       },
       where: {
-       OR:[ { toNode: { projects: { id: project.id }}}, { fromNode: { projects: { id: project.id } } }]
+       AND:[ { toNode: { projects: { id: project.id }}}, { fromNode: { projects: { id: project.id } } }]
       }
     })
     for(let i=1;i<project.nodeGroups.length;i ++) {

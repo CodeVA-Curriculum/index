@@ -15,13 +15,17 @@ export const load:PageLoad = async ({ params }) => {
     with: { pivot: true, nodeGroups: { with: { nodes: true }}},
     where: { guide: result.id }
   })
+  const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
+  let nodeIds = []
+  for(const n of nodes) {
+    nodeIds.push(n.id)
+  }
   const edges = await db.query.edge.findMany({
     with: {
       toNode: true,
       fromNode: true
     }
   })
-  const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
 
   return {
     guide: {
