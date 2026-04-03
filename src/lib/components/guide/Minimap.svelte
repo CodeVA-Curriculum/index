@@ -1,12 +1,10 @@
 <script lang='ts'>
   import InteractiveMap from './InteractiveMap.svelte'
-  import { onMount } from 'svelte'
-  let { map } = $props()
-  onMount(() => {
-  })
+  let { map, view, selected = $bindable([]) } = $props()
+  let interact = $state(false)
 </script>
-<div class='minimap'>
-<InteractiveMap interact={false} projects={[]} nodes={[]} edges={[]} />
+<div class='minimap' onmouseenter={() => interact = true} onmouseleave={() => interact=false}>
+<InteractiveMap bind:selected interact={interact} view={view} {...map} map={map} height={248} width={248*(16/9)} />
 </div>
 <dialog>
   <article>

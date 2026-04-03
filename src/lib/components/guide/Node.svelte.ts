@@ -147,6 +147,12 @@ export class Node {
   setSelect(status:boolean) {
     this.selected = status
   }
+  highlight() {
+    
+  }
+  dehighlight() {
+    
+  }
 }
 
 export class NodeInGroup {

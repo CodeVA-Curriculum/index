@@ -8,7 +8,7 @@
   import { faFire, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
   import { ElementType } from './DetailsIcons.svelte'
 
-  let { obj, map = false } = $props()
+  let { obj, map = false, close } = $props()
   let objType = $derived("nodeGroups" in obj ? ElementType.Project : ElementType.Tutorial)
   let noun = $derived(objType == ElementType.Project ? "Project":"Tutorial")
 
@@ -46,6 +46,7 @@
       {/if}
       <a href="/learn/{obj.db.path}" role="button">Open {noun}</a>
       <a role="button">Save {noun}</a>
+      {@render close?.()}
     </footer>
 </article>
 

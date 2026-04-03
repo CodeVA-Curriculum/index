@@ -19,6 +19,8 @@ export class Edge {
   cy:number = 0
   highlighted:boolean = $state(false)
   constructor(obj:DbEdge, elementsByPath:any) {
+    console.log("Setting up edge", obj.uid)
+    console.log(obj.toNode.path)
     this.db = obj
     this.from = elementsByPath[obj.fromNode.path]
     this.to = elementsByPath[obj.toNode.path]
