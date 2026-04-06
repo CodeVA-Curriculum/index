@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import ProjectListItemSearch from './ProjectListItemSearch.svelte'
   import ProjectPanel from './ProjectPanel.svelte'
   import { Project } from './Project.svelte'
   import { Node } from './Node.svelte'
@@ -37,6 +38,7 @@
       return [ ]
     }
   })
+  let res = $state([])
   let mode = $derived.by(() => {
     if(title == 'projects' || title == "tutorials") { return modes.LIST }
     else {
@@ -55,10 +57,7 @@
 
 {#snippet listHeader(title)}
     <h2>{title.charAt(0).toUpperCase() + title.substring(1)}</h2>
-    <fieldset role="group">
-      <input type="text">
-      <input class='filter' type='button' value="Filters">
-    </fieldset>
+    <ProjectListItemSearch input={list} bind:results={res} />
 {/snippet}
 
 {#snippet elementHeader(obj)}
@@ -79,11 +78,13 @@
     {#if history.length > 1}
     <nav aria-label="breadcrumb">
       <ul class='subtitle'>
+        {#if history.length > 1}
         {#each history as h, i}
           {#if i > 0}
           <li>{h == 'projects' || h == 'tutorials' ? h.charAt(0).toUpperCase() + h.substring(1) : map.elementsByPath[h].db.title}</li>
           {/if}
         {/each}
+        {/if}
       </ul>
     </nav>
     {/if}
@@ -98,7 +99,7 @@
   <div class='lists'>
     {#if mode == modes.LIST}
     <ul>
-      {#each list as item}
+      {#each res as item}
         <div on:mouseenter={() => mouseIn(item)} on:mouseleave={() => mouseOut(item)} class='hover-bound'>
           <ProjectListItem map={true} obj={item} />
         </div>
@@ -112,6 +113,9 @@
 
 <style lang='scss'>
   @import "$lib/styles/theme.scss";
+  .hover-bound {
+    margin: 1rem 0;
+  }
   .subtitle {
     font-size: 0.75rem;
   }
@@ -141,7 +145,6 @@
   .lists ul {
     overflow-y: scroll;
     & > * {
-      margin: 0;
       padding: 0;
     }
   }

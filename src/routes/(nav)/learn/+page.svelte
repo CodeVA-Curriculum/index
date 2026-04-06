@@ -18,7 +18,7 @@
         <main class='card-body'>
           <h2>{guide.title}</h2>
           <p>{guide.short ? guide.short : "No description provided!"}</p>
-          <a role='button' href=''>Open the Guide</a>
+          <a role='button' href="/learn/{guide.path.replace("/meta.md", "")}">Open the Guide</a>
         </main>
       </article>
       </div>
