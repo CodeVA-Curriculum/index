@@ -1,4 +1,6 @@
 import remarkParse from 'remark-parse'
+import rehypeHighlight from 'rehype-highlight'
+import { codeAndImage } from '$lib/server/directives/codeAndImage'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
 import remarkRehype from 'remark-rehype'
@@ -8,6 +10,9 @@ import remarkGfm from 'remark-gfm'
 import { read } from 'to-vfile'
 import YAML from 'yaml'
 import { practice, quick_take } from '$lib/utils'
+import remarkDirective from 'remark-directive'
+import remarkDirectiveRehype from 'remark-directive-rehype'
+
 
 export async function fileToElementObj(path:string):Promise<any> {
   let frontmatter:any
@@ -20,10 +25,12 @@ export async function fileToElementObj(path:string):Promise<any> {
       frontmatter = tree.children.length > 0? YAML.parse(tree.children[0].value) : {}
     })
     .use(remarkGfm)
-    // .use(remarkDirective)
+    .use(remarkDirective)
+    .use(remarkDirectiveRehype)
     // .use(nsfDirective)
     // .use(supporterDirective)
     .use(remarkRehype)
+    .use(rehypeHighlight)
     .use(() => (tree:any) => {
         qt = quick_take(tree)
     })
@@ -31,6 +38,7 @@ export async function fileToElementObj(path:string):Promise<any> {
         const q = practice(tree, path)
         qs.push(...q)
     })
+    .use(codeAndImage)
     .use(rehypeFormat)
     .use(rehypeStringify)
     .process(await read(path))

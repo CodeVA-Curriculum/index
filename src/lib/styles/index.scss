@@ -1,8 +1,4 @@
-@use '@picocss/pico/scss/pico'; //with (
-  /* $modules: ( */
-    /* "themes/default": false */
-  /* ) */
-// );
+@use '@picocss/pico/scss/pico';
 @use './theme.scss';
 @use './layout.scss';
 @use './fonts/face.css'; // load font face rules: Poppins, Calibri
@@ -13,13 +9,18 @@
   width: 100vw;
 }}
 .card { margin-left: 0; margin-right: 0; }
+* {
+  
+  font-family: Calibri;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Poppins;
+}
 
+pre.hidden { display: none; }
+pre.visible { display: block; }
 
 :root {
-  font-family: Calibri;
-  h1, h2, h3, h4, h5, h6 {
-    font-family: Poppins;
-  }
   button, a[role="button"] {
     /* border-radius: 0; */
   }
@@ -37,6 +38,20 @@
       background-color: theme.$light-blue
     }
   }
+  .nodeview pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    border-width: 1px;
+    padding: 0 0;
+    font-size: 12pt;
+    margin: 0;
+}
+.nodeview p {
+  margin: 1rem 0;
+}
   /* td { */
     /* background-color: red; */
     /* &:hover { */

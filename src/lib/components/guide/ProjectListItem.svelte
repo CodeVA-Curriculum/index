@@ -57,6 +57,7 @@
   }
   article {
     max-width: 40rem;
+    margin-bottom: 0;
   }
   article > p {
     margin-top: 1rem;
