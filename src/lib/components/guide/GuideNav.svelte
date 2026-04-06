@@ -11,7 +11,7 @@
     <li><a href="/learn/{guide.pathTitle}/about">About</a></li>
     <li><a href="/learn/{guide.pathTitle}/projects">Projects</a></li>
     <li><a href="/learn/{guide.pathTitle}/tutorials">Tutorials</a></li>
-    <li><a href="/account">Account</a></li>
+    <li><a href="/learn/{guide.pathTitle}/account">Account</a></li>
   </ul>
 </nav>
 <style lang='scss'>
