@@ -11,7 +11,6 @@
   let { data }:PageProps = $props()
   import { Map } from '$lib/components/guide/Map.svelte'
 
-  const params = $page.url.searchParams
 
   const map = new Map(data.guide)
   let interactable = $state(true)
@@ -20,7 +19,10 @@
     console.log("Capture bump")
   }
 
-  let panelOpen:boolean = $derived.by(() => $page.url.searchParams.get('view'))
+  let panelOpen = $state(null)
+  $effect(() => {
+    panelOpen = $page.url.searchParams.get('view')    
+  })
   let selected = $state([])
   let hoverList = $state([])
   const lists = {
