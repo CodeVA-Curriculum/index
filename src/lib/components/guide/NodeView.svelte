@@ -2,6 +2,7 @@
   import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
   import { ElementType } from '$lib/components/guide/DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
+ import CodeAndImage from '$lib/components/guide/CodeAndImage.svelte'
   let { obj } = $props()
 </script>
 <div class='nodeview'>
