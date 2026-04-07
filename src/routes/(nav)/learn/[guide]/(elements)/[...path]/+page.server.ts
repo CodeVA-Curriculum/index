@@ -12,7 +12,6 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
   if(url.searchParams.get("view")) {
     searchPath = searchPath.substring(0, searchPath.indexOf("?"))
   }
-  console.log(searchPath)
   let results = []
   let elType:string
   if(params.path.includes("projects")) {
@@ -83,8 +82,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
       if(!newEdge) { throw new Error(`Could not find edge between ${node0.path} and ${node1.path}`)}
       edges.push(newEdge)
       res.push(node0)
-    }
-
+    } 
     return {
       map: {
         edges: [...edges],
@@ -92,24 +90,13 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
         projects: [ project ]
       },
       project: project,
-      node: null,
       type: "project"
     }
   }
 
-
-  // TODO: assemble project objects as needed, not sure about this yet. Gonna work on rendering edges first.
-  // TODO: load edges from canvas and compare
-  // const edges = await db.select().from(schema.edge).leftJoin(node, or(eq(schema.edge.to, node.id), eq(schema.edge.from, node.id))).where(eq(schema.edge.guide, result.id))
-  
-  // console.log(nodes)
-  // TODO: construct the reactive objects from the database objects
-  // Relational query for nodes, edges, and projects based on guide
-  // const nodes = await db.select().from(node).where(eq(node.guide == result.id))
-  // const edges = await db.select().from(schema.edge).where(eq(schema.edge.guide == result.id))
-  // const projects = await db.select().from(project).where(eq(project.guide == result.id))
+  // node page
 	return {
-	  element: results[0],
+	  node: results[0],
 	  type: elType
 	};
 };
