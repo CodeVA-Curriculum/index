@@ -1,38 +1,19 @@
-# sv
+# index
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+The place for all the things.
 
-## Creating a project
+## Deployment
 
-If you're seeing this, you've probably already done this step. Congrats!
+This application is hosted on an AWS Lightsail VPS. The server admin panel is available at [TODO:]() courtesy of [CapRover](https://caprover.com/), a server management dashboard and utility. GitHub deploys the `main` branch automatically on commit via a GitHub Action configured in CapRover. The SQLite database which backs this application sits on the VPS disk and is made avaialble to this application by simply mounting a host path to an application container path. The mounting configuration is done via the CapRover admin dashboard. The application expects to see a file called `local.db` at the application root.
 
-```sh
-# create a new project in the current directory
-npx sv create
+I set up the system above based on this video tutorial: https://www.youtube.com/watch?v=NLjolI9FwCU
 
-# create a new project in my-app
-npx sv create my-app
-```
+## Site Map
 
-## Developing
+### /learn
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+This where all the trail guides live.
 
-```sh
-npm run dev
+### /teach
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+This where all the teacher stuff lives.
