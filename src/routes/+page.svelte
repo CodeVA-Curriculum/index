@@ -9,7 +9,7 @@
       <h1>Welcome to the CodeVA Curriculum Hub!</h1>
       <p>This site contains resources, tools, lessons, and other high-quality, thoughtful materials for people learning computing and the people who teach them.</p>
       <a href="/learn" role="button">Explore Coding Resources <span><Fa icon={faArrowRight} /></span></a>
-      <a href="/teach/library" role="button">Browse the Lesson Library <span><Fa icon={faArrowRight} /></span></a>
+      <a disabled href="/teach/library" role="button">Browse the Lesson Library <span><Fa icon={faArrowRight} /></span></a>
     </div>
     <div>
       <Video id='14I8C6FKINQ' />

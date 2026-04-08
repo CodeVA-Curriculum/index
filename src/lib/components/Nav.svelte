@@ -1,15 +1,22 @@
 <script lang='ts'>
+  import { page } from '$app/state'
   let { session } = $props();
   const key = 'V5QLBdKt5AYPU5Y7iMcDa5lQ1PLYYq7EdxfgjCP1sWcih1TGIl8vAYOLa7-vVr69dX_MNZirOMjUojYPd_4-BQ'
+  let url = page.url.toString()
 </script>
+{#snippet navLink(text:string, href:string)}
+  <a href="{href}" class={url.includes(href) ? "active": ""}>{text}</a>
+{/snippet}
 <nav>
   <ul>
     <li><img src="/images/wordmark.png"></li>
   </ul>
   <ul>
-    <li><a href="/teach">Teach</a></li>
-    <li><a href="/learn">Learn</a></li>
-    <li><a href="/teach/library">Library</a></li>
+    <!-- <li><a href="/teach">Teach</a></li> -->
+    <li>
+      {@render navLink("Learn", "/learn")}
+    </li>
+    <!-- <li><a href="/teach/library">Library</a></li> -->
     <li>
       {#if session}
         <a href="https://portal.codevirginia.org/dashboard">My Account</a>
@@ -34,5 +41,9 @@
     width: auto;
     height: 36px;
     @include xs { height: 22px; }
+  }
+  .active {
+    text-decoration: underline;
+    
   }
 </style>
