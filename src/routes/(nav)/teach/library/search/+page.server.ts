@@ -13,7 +13,8 @@ export const load:PageLoad = async ({ params }) => {
       audiences: true,
       standards: true,
       tags: true,
-      grades: true
+      grades: true,
+      children: true,
     },
     where: {
       hidden: { eq: false}
