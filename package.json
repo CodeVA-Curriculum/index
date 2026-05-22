@@ -40,6 +40,7 @@
 		"@sveltejs/adapter-node": "^5.5.4",
 		"better-sqlite3": "^12.5.0",
 		"css": "^3.0.0",
+		"env": "^0.0.2",
 		"gifenc": "^1.0.3",
 		"googleapis": "^171.4.0",
 		"hast-util-to-html": "^9.0.5",

@@ -36,6 +36,10 @@ export const relations = defineRelations(schema, (r) => ({
 		tags: r.many.tag({
 			from: r.element.id.through(r.elementToTag.elementId),
 			to: r.tag.id.through(r.elementToTag.tagId)
+		}),
+		children: r.many.element({
+			from: r.element.id.through(r.child_element_ref.parent_id),
+			to: r.element.id.through(r.child_element_ref.child_id)
 		})
 	},
 	project: {

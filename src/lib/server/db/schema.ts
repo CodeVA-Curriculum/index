@@ -39,11 +39,21 @@ export const element = sqliteTable('element', {
 	authors: text().default("CodeVA Curriculum"),
 	content: text(),
 	link: text(),
+	file: text(),
 	hidden: integer({ mode: 'boolean' }),
 	gradesAbbr: text(),
 	standardsAbbr: text()
 })
 export type Element = typeof element.$inferSelect;
+
+export const child_element_ref = sqliteTable('child_element_ref', {
+		index: integer(),
+		parent_id: integer().references(() => element.id),
+		child_id: integer().references(() => element.id),
+		id: integer().primaryKey()
+	}
+	// (t) => [primaryKey({ columns: [t.parent_id, t.child_id] })]
+)
 
 // // Subjects & Courses
 export const subject = sqliteTable('subject', {
