@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Pill from '$lib/components/Pill.svelte'
   import Fa from 'svelte-fa'
   // import type { Element } from '$lib/server/db/schema'
   import FilterAnchorPill from '$lib/components/FilterAnchorPill.svelte';
@@ -22,8 +23,13 @@ import Help from '$lib/components/Help.svelte'
     <details>
       <summary>
         <i>View Items in {obj.types[0].title}</i>
+        <Pill>{obj.children.length}</Pill>
       </summary>
-      List of items
+      <ol>
+        {#each obj.children as child}
+          <li><a href={child.path}>{child.title}</a></li>
+        {/each}
+      </ol>
     </details>
   </div>
   <div class='stats'>
@@ -50,7 +56,7 @@ import Help from '$lib/components/Help.svelte'
     </div>
   </div>
   <div class='buttons'>
-    <a role='button' href="TODO:"><span>Open </span><Fa icon={faFolderOpen} /></a>
+    <a role='button' href="browse/{obj.path}"><span>Open </span><Fa icon={faFolderOpen} /></a>
     <a role='button'><span>Save </span><Fa icon={faBookmark} /></a>
   </div>
 </article>
@@ -77,19 +83,17 @@ import Help from '$lib/components/Help.svelte'
       font-size: 11pt;
     }
   }
-  .thumbnail { flex-shrink: 1; align-items: center; }
-  .thumbnail > img { width: auto; max-height: 180px; }
+  .thumbnail { flex: 1; align-items: center; }
+  // .thumbnail > img { width: 180px; }
   .body {
-    min-width: 30%;
-    flex-grow: 2;
+    flex: 2 0 30%;
     padding-bottom: 0;
     details {
       margin-bottom: 2px;
     }
-    // background-color: lightcyan;
-    // flex-grow: 2;
   }
   .stats {
+    flex: 1;
     border-left: 1px solid whitesmoke;
     padding-left: 12px;
     font-size: 11pt;
@@ -101,22 +105,19 @@ import Help from '$lib/components/Help.svelte'
       margin: 0 0;
       padding: 0 0;
       font-style: italic;
-      flex-grow: 1;
+      flex: 1;
       display: inline-block;
     }
-    // background-color: lightgreen;
-    // flex-grow: 1;
   }
   .buttons {
-    // background-color: powderblue;
-    // justify-content: center;
     align-items: center;
     display: flex;
+    flex: 1;
     flex-direction: column;
     span {
       font-size: 18pt;
     }
-    a { gap: 20px; display: flex; flex-grow: 1; width: 160px; margin: 0rem 0; justify-content: center; align-items: center; margin-bottom: 0.8rem;
+    a { gap: 20px; display: flex; flex: 1; width: 160px; margin: 0rem 0; justify-content: center; align-items: center; margin-bottom: 0.8rem;
     * {
       flex: 1;
     }

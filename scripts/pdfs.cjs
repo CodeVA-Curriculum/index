@@ -67,19 +67,19 @@ async function main() {
   // 
     const drive = google.drive({version: 'v3', auth: env.DRIVE_API_KEY});
     const fileId = '1EkgdLY3T-_9hWml0VssdDWQZLEc8qqpMB77Nvsx6khA';
-  const destPath = path.join(os.tmpdir(), 'important.zip');
-  const dest = fs.createWriteStream(destPath);
-  const res = await drive.files.export(
-    {fileId, mimeType: 'application/zip'},
-    {responseType: 'stream'},
-  );
-  await new Promise((resolve, reject) => {
-    res.data
-      .on('error', reject)
-      .pipe(dest)
-      .on('error', reject)
-      .on('finish', resolve);
-  });
+    const destPath = path.join(os.tmpdir(), 'important.zip');
+    const dest = fs.createWriteStream(destPath);
+    const res = await drive.files.export(
+      {fileId, mimeType: 'application/pdf'},
+      {responseType: 'stream'},
+    );
+    await new Promise((resolve, reject) => {
+      res.data
+        .on('error', reject)
+        .pipe(dest)
+        .on('error', reject)
+        .on('finish', resolve);
+    });
 }
 
 main()

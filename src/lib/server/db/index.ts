@@ -8,6 +8,6 @@ import { relations } from './relations'
 
 
 // TODO: make this a conditional based on build status
-  const client = new Database("/app/data/local.db");
+  const client = new Database("local.db");
 
   export const db = drizzle({ schema: schema, client: client, relations: relations});

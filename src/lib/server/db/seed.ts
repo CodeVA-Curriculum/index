@@ -14,7 +14,7 @@ async function main() {
   const db = drizzle({ schema: schema, client: client });
   
   // clear database for seeding
-  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element,   schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.question, schema.node, schema.guide]
+  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element,   schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.question, schema.node, schema.guide]
   for(const table of tables) {
     await db.delete(table)
   }
@@ -22,187 +22,223 @@ async function main() {
   await seedGuides(db, schema)
 
   // seed subjects and courses
-  // const { subjects, courses } = await seedSubjects(db, schema)
+  const { subjects, courses } = await seedSubjects(db, schema)
 
   // seed standards
-  // const { standards } = await seedStandards(db, schema, subjects, courses)
+  const { standards } = await seedStandards(db, schema, subjects, courses)
 
   // TODO: seed library elements
     // Add static elements: grades, types, audiences
-  // const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
-  // const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
-  // const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
-  // const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
+  const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
+  const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
+  const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+  const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
-  // for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
-  //   id: i,
-  //   title: grades[i],
-  //   abbr: gradeAbbr[i]
-  // })}
-  // for(const a of audiences) {
-  //   await db.insert(schema.audience).values({ title: a })
-  // }
-  // for(const t of types) {
-  //   await db.insert(schema.elementType).values({ title: t })
-  // }
+  for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
+    id: i,
+    title: grades[i],
+    abbr: gradeAbbr[i]
+  })}
+  for(const a of audiences) {
+    await db.insert(schema.audience).values({ title: a })
+  }
+  for(const t of types) {
+    await db.insert(schema.elementType).values({ title: t })
+  }
   
 
-  // // Pull all files
-  // const paths = await globby(['static/library', '!static/library/README.md'], {
-  //   expandDirectories: { files: ['*.md', '.*.md'] }
-  // })
-  // const els:any[] = []
-  // const elsByPath:any = {}
-  // for(const path of paths){
-  //   console.log("Processing "+path)
-  //   let el = await fileToElementObj(path)
-  //   let { id }  = (await db.insert(schema.element).values({
-  //     title: el.title,
-  //     short: el.short,
-  //     path: el.path,
-  //     content: el.content,
-  //     link: el.links ? el.links.drive : null,
-  //     gradesAbbr: el.grades,
-  //     path: path.replace("static/library/", ''),
-  //     // hidden: el.hidden
-  //     standardsAbrr: el.standards,
-  //     hidden: el.hidden? true : false
-  //   }).returning({ id: schema.element.id }))[0] as any
-  //   el.id = id
-  //   // el.id = dbObj[0].id
-  //   // console.log(literal, dbObj)
-  //   // els.push({ literal: literal, relational: relational })
-  //   elsByPath[path] = el
-  //   // console.log("Successfully added " + path + " to DB")
-  // }
-  // for(const path of paths) {
-  //   const el =elsByPath[path]
+  // Pull all files
+  const paths = await globby(['static/library', '!static/library/README.md'], {
+    expandDirectories: { files: ['*.md', '.*.md'] }
+  })
+  const els:any[] = []
+  const elsByPath:any = {}
+  for(const path of paths){
+    console.log("Processing "+path)
+    let el = await fileToElementObj(path)
+    const frontmatter = el.frontmatter
+    let { id }  = (await db.insert(schema.element).values({
+      title: el.title,
+      short: el.short,
+      long: el.long,
+      path: el.path,
+      content: el.content,
+      link: el.links ? el.links.drive : null,
+      gradesAbbr: el.grades,
+      path: path.replace("static/library/", ''),
+      // hidden: el.hidden
+      standardsAbrr: el.standards,
+      hidden: el.hidden? true : false
+    }).returning({ id: schema.element.id }))[0] as any
+    el.id = id
+    el.frontmatter = frontmatter
+    // el.id = dbObj[0].id
+    // console.log(literal, dbObj)
+    // els.push({ literal: literal, relational: relational })
+    elsByPath[path] = el
+    // console.log("Successfully added " + path + " to DB")
+  }
+  for(const path of paths) {
+    const el =elsByPath[path]
 
-  //   // inherit and update authors
-  //   el.authors= inherit(el, 'authors', path, elsByPath)
-  //   console.log("inherited authors values for " + path + ", updating database", el.authors)
-  //   await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
-  //   // inherit and update grades
-  //   // TODO: double-association
-  //   el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
-  //   for(const grade of el.grades) {
-  //     await db.insert(schema.elementToGrade).values({
-  //       elementId: el.id,
-  //       gradeId: gradeAbbr.indexOf(grade)
-  //     })
-  //   }
+    // connect children by reference
+    let children = []
+    let toPush = []
+    if(el.contents && el.contents.length > 0) {
+    for(let i=0;i<el.contents.length;i++) {
+      const ref = el.contents[i].charAt(0) == '.' ? el.contents[i].replace('.', path.substring(0, path.lastIndexOf('/'))) : "static/library/" + el.contents[i]
+      if(!ref.includes('.md')) {
+        // child path is a directory
+        children = paths.filter((p) => {
+          console.log(p.substring(0, p.lastIndexOf("/")), ref)
+          return p.substring(0, p.lastIndexOf("/")) == ref
+        })
+        console.log(`Added ${children.length} children from group ${ref}`)
+      } else if(paths.includes(ref)) {
+        // child path is a file
+        children = [ ref ]
+        console.log(`Added ${ref}`)
+      } else {
+        throw new Error(`Can't find ${ref} in paths!`)
+      }
+      for(let i=0;i<children.length;i++) {
+        const child_el = elsByPath[children[i]]
+        if(!child_el) { throw new Error("Could not find element at child path " + child)}
+        toPush.push({
+          index: i,
+          parent_id: el.id,
+          child_id: child_el.id
+        })
+      }
+    }
+      console.log(toPush)
+      await db.insert(schema.child_element_ref).values(toPush)
+    }
 
-  //   // inherit and update audiences
-  //   const audienceRows = await db.select().from(schema.audience).orderBy(schema.audience.id)
-  //   let audienceByTitle:any = {}
-  //   for(const a of audienceRows) {
-  //     audienceByTitle[a.title] = a
-  //   }
-  //   console.log("Inheriting audiences for " + path)
-  //   el.audiences = inherit(el, 'audiences', path, elsByPath)
-  //   // I truly have no idea why this is necessary. Sometimes we end up with the audiences as
-  //   // an array instead of as a string to split and I have no idea why.
-  //   if(typeof(el.audiences) == 'object') { el.audiences = el.audiences[0] }
-  //   el.audiences = el.audiences.split(', ')
-  //   for(const audience of el.audiences) {
-  //     if(!audienceByTitle[audience]) {
-  //       const o = await db.insert(schema.audience).values({title: audience}).returning()
-  //       // console.log("Inserted new audience " + audience)
-  //       audienceByTitle[o[0].title] = o[0]
-  //     }
-  //     // console.log("Associating " + audience + " with " + el.path)
-  //     await db.insert(schema.elementToAudience).values({
-  //       elementId: el.id,
-  //       audienceId: audienceByTitle[audience].id
-  //     })
-  //   }
+    // inherit and update authors
+    el.authors= inherit(el, 'authors', path, elsByPath)
+    console.log("inherited authors values for " + path + ", updating database", el.authors)
+    await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
+    // inherit and update grades
+    // TODO: double-association
+    el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
+    for(const grade of el.grades) {
+      await db.insert(schema.elementToGrade).values({
+        elementId: el.id,
+        gradeId: gradeAbbr.indexOf(grade)
+      })
+    }
 
-  //   // inherit and update types
-  //   el.types = inherit(el,'types',  path, elsByPath)
-  //   const typeRows = await db.select().from(schema.elementType).orderBy(schema.elementType.id)
-  //   // console.log(el.types)
-  //   el.types = typeof(el.types) == typeof([ 'string' ]) ? el.types : el.types.split(', ')
-  //   for(const type of el.types) {
-  //     // console.log("Associating " + type + " with " + el.path)
-  //     const result = typeRows.filter((obj) => obj.title == type)
-  //     // console.log(result)
-  //     await db.insert(schema.elementToType).values({
-  //       elementId: el.id,
-  //       typeId: result[0].id
-  //     })
-  //   }
-    
-  //   // update tags (do not inherit)
-  //   // this is different bc it's not associating only--it's:
-  //   // first, split into valid [ "string" ] type, then:
-  //   // N: inherit
-  //   // el.types = inherit(el, 'types', )
-  //   // Y: split
-  //   el.tags = el.tags ? el.tags.split(', ') : []
-  //   // Y: Add unique values to database
-  //   const tagRows = await db.select().from(schema.tag)
-  //   const uniqueTags = el.tags.filter((o) => {
-  //     const res = tagRows.filter((r) => r.title == o.title )
-  //     return res.length == 0 
-  //   })
-  //   const tagObjs = []
-  //   for(const tag of uniqueTags) {
-  //     tagObjs.push((await db.insert(schema.tag).values({
-  //       title: tag
-  //     }).returning({ id: schema.tag.id }))[0])
-  //   }
-  //   // Y: Associate all values with element
-  //   for(const tag of tagObjs) {
-  //     await db.insert(schema.elementToTag).values({
-  //       elementId: el.id,
-  //       tagId: tag.id
-  //     })
-  //   }
-    
-  //   // Subjects
-  //   // Simple comma split
-  //   el.subjects = inherit(el, 'subjects', path, elsByPath)
-  //   if(typeof(el.subjects) == typeof('string')) {
-  //     el.subjects = el.subjects.split(', ')
-  //   }
-  //   // console.log(el.subjects)
-  //   // return
-    
-  //   // Create an association row for each subject in the list
-  //   const dbSubjs = await db.select().from(schema.subject)
-  //   for(const subj of el.subjects) {
-  //     const res = dbSubjs.filter((o) => subj == o.title)
-  //     if(res.length > 0) {
-  //       await db.insert(schema.elementToSubj).values({
-  //         elementId: el.id,
-  //         subjectId: res[0].id
-  //       })
-  //     } 
-  //   }
+    // inherit and update audiences
+    const audienceRows = await db.select().from(schema.audience).orderBy(schema.audience.id)
+    let audienceByTitle:any = {}
+    for(const a of audienceRows) {
+      audienceByTitle[a.title] = a
+    }
+    console.log("Inheriting audiences for " + path)
+    el.audiences = inherit(el, 'audiences', path, elsByPath)
+    // I truly have no idea why this is necessary. Sometimes we end up with the audiences as
+    // an array instead of as a string to split and I have no idea why.
+    if(typeof(el.audiences) == 'object') { el.audiences = el.audiences[0] }
+    el.audiences = el.audiences.split(', ')
+    for(const audience of el.audiences) {
+      if(!audienceByTitle[audience]) {
+        const o = await db.insert(schema.audience).values({title: audience}).returning()
+        // console.log("Inserted new audience " + audience)
+        audienceByTitle[o[0].title] = o[0]
+      }
+      // console.log("Associating " + audience + " with " + el.path)
+      await db.insert(schema.elementToAudience).values({
+        elementId: el.id,
+        audienceId: audienceByTitle[audience].id
+      })
+    }
 
-  //   // Do not inherit standards
-  //   el.standards = el.standards? el.standards: []
-  //   if(typeof(el.standards) == typeof('string')) {
-  //     el.standards= el.standards.split(', ')
-  //   }
-  //   let dbStandards = []
-  //   for(const s of el.standards) {
-  //     const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
-  //     let gs = expandDashNotation(gradeToken)
-  //     for(const g of gs) {
-  //       let searchString = `${g}.${subjToken ? subjToken : '%'}.${strandToken? strandToken : '%'}.${indexToken? indexToken : '%'}`
-  //       const res = await db.select().from(schema.standard).where(like(schema.standard.abbr, searchString))
-  //       dbStandards = [...dbStandards, ...res]
-  //     }
-  //   }
-  //   for(const s of dbStandards) {
-  //     await db.insert(schema.elementToStandard).values({
-  //       elementId: el.id,
-  //       standardId: s.id
-  //     })
-  //   }
+    // inherit and update types
+    el.types = inherit(el,'types',  path, elsByPath)
+    const typeRows = await db.select().from(schema.elementType).orderBy(schema.elementType.id)
+    // console.log(el.types)
+    el.types = typeof(el.types) == typeof([ 'string' ]) ? el.types : el.types.split(', ')
+    for(const type of el.types) {
+      // console.log("Associating " + type + " with " + el.path)
+      const result = typeRows.filter((obj) => obj.title == type)
+      // console.log(result)
+      await db.insert(schema.elementToType).values({
+        elementId: el.id,
+        typeId: result[0].id
+      })
+    }
     
-  // }
+    // update tags (do not inherit)
+    // this is different bc it's not associating only--it's:
+    // first, split into valid [ "string" ] type, then:
+    // N: inherit
+    // el.types = inherit(el, 'types', )
+    // Y: split
+    el.tags = el.tags ? el.tags.split(', ') : []
+    // Y: Add unique values to database
+    const tagRows = await db.select().from(schema.tag)
+    const uniqueTags = el.tags.filter((o) => {
+      const res = tagRows.filter((r) => r.title == o.title )
+      return res.length == 0 
+    })
+    const tagObjs = []
+    for(const tag of uniqueTags) {
+      tagObjs.push((await db.insert(schema.tag).values({
+        title: tag
+      }).returning({ id: schema.tag.id }))[0])
+    }
+    // Y: Associate all values with element
+    for(const tag of tagObjs) {
+      await db.insert(schema.elementToTag).values({
+        elementId: el.id,
+        tagId: tag.id
+      })
+    }
+    
+    // Subjects
+    // Simple comma split
+    el.subjects = inherit(el, 'subjects', path, elsByPath)
+    if(typeof(el.subjects) == typeof('string')) {
+      el.subjects = el.subjects.split(', ')
+    }
+    // console.log(el.subjects)
+    // return
+    
+    // Create an association row for each subject in the list
+    const dbSubjs = await db.select().from(schema.subject)
+    for(const subj of el.subjects) {
+      const res = dbSubjs.filter((o) => subj == o.title)
+      if(res.length > 0) {
+        await db.insert(schema.elementToSubj).values({
+          elementId: el.id,
+          subjectId: res[0].id
+        })
+      } 
+    }
+
+    el.standards = el.standards? el.standards: []
+    if(typeof(el.standards) == typeof('string')) {
+      el.standards= el.standards.split(', ')
+    }
+    let dbStandards = []
+    for(const s of el.standards) {
+      const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
+      let gs = expandDashNotation(gradeToken)
+      for(const g of gs) {
+        let searchString = `${g}.${subjToken ? subjToken : '%'}.${strandToken? strandToken : '%'}.${indexToken? indexToken : '%'}`
+        const res = await db.select().from(schema.standard).where(like(schema.standard.abbr, searchString))
+        dbStandards = [...dbStandards, ...res]
+      }
+    }
+    for(const s of dbStandards) {
+      await db.insert(schema.elementToStandard).values({
+        elementId: el.id,
+        standardId: s.id
+      })
+    }
+    
+  }
 }
 
 
