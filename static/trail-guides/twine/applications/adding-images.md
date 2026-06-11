@@ -1,9 +1,9 @@
 ---
 title: Adding Images to Passages
-author: Jon Stapleton
+authors: Jon Stapleton, Michael Taylor
 short: Learn how to add images to your Twine passages.
-description: Images are a great way of adding new interest to your Twine passages. They can convey a mood, provide additional information for the reader, or even create something for the reader to investigate as they make choices to move the story forward. This tutorial demonstrates how to add images from the web to a Twine passage.
-video: https://youtube.com/embed/-s3nCDMkPKE
+description: Images are a great way of adding new interest to your Twine passages. They can convey a mood, provide additional information for the reader, or even create something for the reader to investigate as they make choices to move the story forward. This tutorial demonstrates how to add images from the web, or custom images you make yourself, to a Twine passage.
+video: https://youtube.com/embed/-s3nCDMkPKE __LEGACY__
 type: tutorial
 layout: location
 ---
@@ -14,6 +14,7 @@ The first thing to do if you want to add an image to a Twine passage is to find 
 
 * Search for a stock image on [Unsplash](https://unsplash.com/)
 * Find an image from the [Library of Virginia](https://edu.lva.virginia.gov/dbva/) Document Bank
+* Make the image yourself! Drawings, photos and digital art you create are yours to use
 
 Just make sure you have permission to use the image from the person who owns it! [Unsplash](https://unsplash.com/) only has stock photos, which means you can use them in your stories no problem. It's important to only use images that you have permission to use!
 
@@ -63,26 +64,14 @@ You should see your image in your Twine story!
 
 ---
 
-## Adding Images from Google Drive
+## Using Your Own Images
 
-If you can find images you want to use in your story online or on Unsplash, that's all you'll need. However, lots of people like creating their own images for their stories. Adding original images to a Twine story is a little complicated; the easiest way is to upload it to [Google Drive](https://drive.google.com) and then insert the link to the Google Drive-hosted copy of the image.
+If you can find images you want to use in your story online or on Unsplash, that's all you'll need. However, lots of people like creating their own images for their stories. To use an image you made yourself, you first need to put it somewhere on the web that gives you a *direct image link*. Once you have a direct image link, you can add your custom image to Twine *exactly* like you did with Unsplash.
 
-1. First, you'll need to upload the image you'd like to use to [Google Drive](https://drive.google.com). If you don't already have a Google account, you'll need to create one. Drag and drop the image onto the Google Drive window to upload it.
-<!-- ![The process of uploading a file to Google Drive, animated](TODO:) -->
-2. Then, right-click the file in Google Drive, go to `Share` set the visibility to "anyone with the link can view" (be sure that the image doesn't include any private or sensitive personal information before you do this). Then, click `Copy Link`.
-<!-- ![Updating sharing settings and copying the sharing link in Google Drive, animated](TODO:) -->
-3. Now, you need to find the *Google Drive file ID*. It's a string of seemingly random characters that appears in the link you copied between `https://drive.google.com/file/d/` and `/view`. For example, if a document has a link `https://drive.google.com/uc?id=18m-b02xNTee9gLRwVASKYqtxmoiIq6T9`, then the file ID for that link is `18m-b02xNTee9gLRwVASKYqtxmoiIq6T9`.
-<!-- ![A Google Drive sharing link with the file ID highlighted](TODO:) -->
-4. Finally, get ready to add the image to your Twine passage! Everything is the same as above **except for the `image:` field**. Instead of pasting the image URL after `image:`, write `https://drive.google.com/uc?id=` and paste the Google Drive file ID you found earlier after the `=`. Check out the passage below for an example:
-
-:::code-and-image{name="Google Drive Image Example" src="/images/drive-image-example.png"}
-```
-Here's an image from my Google Drive:
-
-{embed image: "https://drive.google.com/uc?id=18m-b02xNTee9gLRwVASKYqtxmoiIq6T9", alt: "An image from my Google Drive"}
-
-Copy and paste this code into your own story to try it out!
-```
-:::
+1. First, you'll need to **identify where your image will be hosted**. Ask your teacher where to upload images for class, as many classes use a shared folder or class website for file hosting. If your class does not use one of these solutions, you can use a *free file hosting resource* like [postimages.org](postimages.org).
+<!-- ![SCREENSHOTS/PROCESS OF UPLOADING AND COPYING LINK FROM POSTIMAGES.ORG](TODO:) -->
+2. Next, you will **upload your image to that location**. If you are using [postimages.org](postimages.org), click `Upload` and select the image from your computer that you want to use. (be sure that the image doesn't include any private or sensitive personal information before you do this).
+3. Now you will **copy the image link**. On [postimages.org](postimages.org) the image link will appear as something like `https://postimg.cc/vxMgCjmC`.
+4. Finally, **add the image to your Twine passage**! Everything is the same as above **except for the `image:` field**, delete the word *Unsplash* since the image is not from unsplash, and use the link you retrieved from [postimages.org](postimages.org) or your school's hosting website.
 
 If you have trouble getting this working, check out the video above for a demonstration!
