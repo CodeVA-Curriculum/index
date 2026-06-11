@@ -66,7 +66,7 @@ You should see your image in your Twine story!
 
 ## Using Your Own Images
 
-If you can find images you want to use in your story online or on Unsplash, that's all you'll need. However, lots of people like creating their own images for their stories. To use an image you made yourself, you nfirst need to put it somewhere on the web that gives you a *direct image link*. Once you have a direct image link, you can add your custom image to Twine *exactly* like you did with Unsplash.
+If you can find images you want to use in your story online or on Unsplash, that's all you'll need. However, lots of people like creating their own images for their stories. To use an image you made yourself, you first need to put it somewhere on the web that gives you a *direct image link*. Once you have a direct image link, you can add your custom image to Twine *exactly* like you did with Unsplash.
 
 1. First, you'll need to **identify where your image will be hosted**. Ask your teacher where to upload images for class, as many classes use a shared folder or class website for file hosting. If your class does not use one of these solutions, you can use a *free file hosting resource* like [postimages.org](postimages.org).
 <!-- ![SCREENSHOTS/PROCESS OF UPLOADING AND COPYING LINK FROM POSTIMAGES.ORG](TODO:) -->
