@@ -72,7 +72,8 @@
 {/each}
 </div>
 
-<aside class:open >
+<aside class='{open? "open" : ""} has-shadow'>
+    <div class="list" >
     <div class='bread'>
         <nav aria-label="breadcrumb">
             <ul>
@@ -83,7 +84,6 @@
             </ul>
         </nav>
     </div>
-    <div class="list" >
         <div class='heading'>
         <h3>Select SOLs</h3>
         <button onclick={close}>
@@ -109,6 +109,13 @@
         nav {
             ul {
                 display: flex;
+                li { position: relative; }
+                li::after {
+                    display: flex;
+                    position: absolute;
+                    right: -1.25rem;
+                    top: 0.5rem;
+                }
             }
         }
     }
@@ -127,6 +134,7 @@
         left: 0;
         top: 0;
         overflow-y: scroll;
+        height: 95vh;
     }
     p {
         padding: 12px; margin: 0;
@@ -195,7 +203,7 @@
             color: black;
         }
     }
-    .open {
+    aside.open {
         width: 586px;
     }
     .tag {

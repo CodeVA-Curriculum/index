@@ -4,7 +4,7 @@
   let { data, form } = $props()
 
 </script>
-<div style='position: relative;'>
+<div class='pacing-guide' >
 <div class='container'>
   <section>
     <Dismiss>
@@ -17,3 +17,9 @@
   </section>
 </div>
 </div>
+<style lang='scss'>
+  .pacing-guide {
+    position: relative;
+    height: 100%;
+  }
+</style>
