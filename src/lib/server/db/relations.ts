@@ -41,12 +41,12 @@ export const relations = defineRelations(schema, (r) => ({
 			to: r.subject.id
 		})
 	},
-	activity: {
-		standards: r.many.standard({
-			from: r.activity.id.through(r.activityToStandard.activityId),
-			to: r.standard.id.through(r.activityToStandard.standardId)
-		})
-	},
+	// activity: {
+	// 	standards: r.many.standard({
+	// 		from: r.activity.id.through(r.activityToStandard.activityId),
+	// 		to: r.standard.id.through(r.activityToStandard.standardId)
+	// 	})
+	// },
 	element: {
 		collection: r.one.collection({
 			from: r.element.id,

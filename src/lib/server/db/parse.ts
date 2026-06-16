@@ -1,5 +1,5 @@
 import remarkParse from 'remark-parse'
-import { expandDashNotation } from '$lib/server/db/seed'
+import { expandDashNotation } from '$lib/server/db/utils'
 import { getDbStandardsFromAbbrList } from '$lib/server/db'
 import { globby } from 'globby'
 import rehypeHighlight from 'rehype-highlight'
@@ -123,7 +123,7 @@ export async function seedActivities(db, schema) {
     let pivots = []
     for(const obj of newActivities) {
       let solAbbrs = expandDashNotation(obj.standardsRaw.split(", "))
-      let sols = await getDbStandardsFromAbbrList(db, schema, solAbbrs)
+      let sols = await getDbStandardsFromAbbrList(solAbbrs)
       for(const sol of sols) {
         pivots.push({
           standardId: sol.id,

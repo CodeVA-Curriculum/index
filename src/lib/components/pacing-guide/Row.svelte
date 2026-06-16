@@ -42,7 +42,11 @@
     <div class='td-wrap'>
       <Carousel rowIndex={row.unit} sols={selectedSOLs} elements={elements} >
       <div class='empty'>
-        <form method="POST" action="?/load" use:enhance>
+        <form method="POST" action="?/load" use:enhance={() => {
+          return async ({ update }) => {
+            await update({ reset: false }); // Resets hidden and visible inputs
+          };
+        }}>
           <input name="ids" id="ids" style="display: none;" type="text" value={JSON.stringify({ "ids": test })} />
           <input name="rowIndex" id="rowIndex" style="display: none;" type="text" value={row.unit} />
           <input type="submit" disabled={selectedSOLs.length == 0} value="Load Resources"/>

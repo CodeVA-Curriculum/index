@@ -8,6 +8,7 @@ import * as schema from './schema'
 import { seedSubjects } from './seedSubjects'
 import { fileToElementObj, seedActivities } from './parse'
 import { seedStandards } from './seedStandards'
+import { expandDashNotation } from '$lib/server/db/utils'
 
 async function main() {
   const client = new Database(process.env.DATABASE_URL);
@@ -15,8 +16,10 @@ async function main() {
   const db = drizzle({ schema: schema, client: client });
   
   // clear database for seeding
-  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.activityToStandard, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.activity, schema.pivotNodeProject,  schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.prompt, schema.question, schema.node, schema.guide]
+  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.pivotNodeProject,  schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.prompt, schema.question, schema.node, schema.guide]
+  let count = 0
   for(const table of tables) {
+    console.log(count++)
     await db.delete(table)
   }
   console.log("deleted tables")
@@ -197,7 +200,7 @@ async function main() {
     if(typeof(el.standards) == typeof('string')) {
       el.standards= el.standards.split(', ')
     }
-    let dbStandards = await getDbStandardsFromAbbrList(db, schema, el.standards)
+    let dbStandards = await getDbStandardsFromAbbrList(el.standards)
 //     for(const s of el.standards) {
 //       const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
 //       let gs = expandDashNotation(gradeToken)
@@ -315,25 +318,4 @@ function getDashNotation(grades:string[]):string {
   }
   if(out.charAt(out.length-1) == "-") { out += grades[grades.length-1]}
   return out
-}
-export function expandDashNotation(fmGrade:string|number):string[] {
-    fmGrade = String(fmGrade)
-    // console.log("Expanding ", fmGrade)
-    const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'MS', 'HS']
-    // split grades along commas
-    const grades = fmGrade.replace(' ', '').split(',')
-    // process dash notation
-    for(let i=0;i<grades.length;i++) {
-        if(grades[i].includes('-')) {
-            const first:number = gradeList.indexOf(grades[i].substring(0, grades[i].indexOf('-')))
-            const last:number  = gradeList.indexOf(grades[i].substring(grades[i].indexOf('-')+1, grades[i].length)) + 1
-            for(let i=first;i<last;i++) {
-                if(!grades.includes(gradeList[i])) {
-                    grades.push(String(gradeList[i]))
-                }
-            }
-        }
-    }
-    // console.log(grades)
-    return [...grades.filter(grade=>!grade.includes('-')) ]// remove dash item from array
 }

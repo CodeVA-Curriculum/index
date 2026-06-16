@@ -41,7 +41,7 @@ export const actions = {
       const actObj = res.activity      
       actObj.standards = []
       for(const p of result) {
-        const pivot = p.activity_to_standard
+        const pivot = p.activityToStandard
         const standard = p.standard
         if(!actObj.standards.includes(pivot.standardId)) { actObj.standards.push(p.standard) }
       }

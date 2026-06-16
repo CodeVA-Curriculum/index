@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { expandDashNotation } from '$lib/server/db/seed'
+import { expandDashNotation } from '$lib/server/db/utils'
 import { redirect } from '@sveltejs/kit'
 import Database from 'better-sqlite3';
 import { like } from 'drizzle-orm'
@@ -71,7 +71,7 @@ export const getProjectRelations = (userId:number) => {
   t.status.where = { userId: userId }
   return t
 }
-export async function getDbStandardsFromAbbrList(db, schema, abbrs:string[]) {
+export async function getDbStandardsFromAbbrList(abbrs:string[]) {
     let dbStandards = []
     for(const s of abbrs) {
       const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
@@ -83,8 +83,9 @@ export async function getDbStandardsFromAbbrList(db, schema, abbrs:string[]) {
       }
     }
     return dbStandards
-  }
+}
 
 // TODO: make this a conditional based on build status
 const client = new Database("local.db");
 export const db = drizzle({ schema: schema, client: client, relations: relations});
+// export const db = null

@@ -79,7 +79,6 @@ export type Element = typeof element.$inferSelect;
 export const activity = sqliteTable('activity', {
 	id: integer().primaryKey(),
 	title: text(),
-	elementId: integer().references(() => element.id),
 	assessmentLink: text(),
 	short: text(),
 	source: text(),
