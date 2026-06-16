@@ -1,0 +1,8 @@
+@use "$lib/styles/theme";
+@mixin gradeStyles {
+  &.gk2 { background-color: theme.$gk2; } 
+  &.g35 { background-color: theme.$g35; } 
+  &.g68 { background-color: theme.$g68; } 
+  &.g912 { background-color: theme.$g912; }
+  &.gk12 { background-color: theme.$gk12; }
+}

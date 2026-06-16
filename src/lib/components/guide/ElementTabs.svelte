@@ -2,6 +2,7 @@
   import Fa from 'svelte-fa'
   import { faSave } from '@fortawesome/free-solid-svg-icons'
   import Video from '$lib/components/Video.svelte'
+  import { Prompt, PracticeQuestion } from '$lib/components/guide/directives'
   let { obj, short } = $props()
   const tabs = [ "Overview", "Quick Take", "Questions", "Prompts" ]
   let active = $state("Overview")
@@ -18,11 +19,15 @@
     },
     "Questions": {
       snippet: questions,
-      icon: numberpill
+      icon: numberpill,
+      complete: obj.db.prompts.filter((obj) => obj.status.length > 0 && obj.status[0].complete),
+      length: obj.db.questions.length
     },
     "Prompts": {
       snippet: prompts,
-      icon: numberpill
+      icon: numberpill,
+      complete: obj.db.prompts.filter((obj) => obj.status.length > 0 && obj.status[0].complete),
+      length: obj.db.prompts.length
     }
   }
 </script>
@@ -37,10 +42,22 @@
   <p><i>No quick take yet! Read the full tutorial or watch the tutorial video by visiting the <a href="{obj.db.path}">tutorial page linked here.</a></p>
 {/snippet}
 {#snippet questions(obj)}
+  {#if obj.db.questions}
+    {#each obj.db.questions as question, i}
+      <PracticeQuestion title={question.title} question={question} />
+    {/each}
+  {:else}
   <p><i>No questions yet! Check back later.</i></p>
+  {/if}
 {/snippet}
 {#snippet prompts(obj)}
+  {#if obj.db.prompts}
+    {#each obj.db.prompts as prompt}
+      <Prompt title={prompt.title} obj={prompt} />
+    {/each}
+  {:else}
   <p><i>No prompts yet! Check back later.</i></p>
+  {/if}
 {/snippet}
 
 {#snippet numberpill(a, b)}
@@ -55,7 +72,7 @@
         <button onclick={() => select(i)} class='{tab == active ? "select" : "deselect"}'>
           <span>{tab}</span>
           {#if sectionMap[tab].icon}
-          {@render numberpill(0, 0)}
+          {@render numberpill(sectionMap[tab].complete.length, sectionMap[tab].length)}
           {/if}
         </button>
       </li>

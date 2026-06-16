@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { makeShadow, getCompleteImage } from '$lib/components/guide/Node.svelte.ts'
   import { untrack } from 'svelte'
   import P5 from './P5.svelte'
   import { goto } from '$app/navigation'
@@ -10,12 +11,9 @@
 
   // let selected = $derived(page.url.searchParams.getAll('select'))
   let debug = $state({})
+  let tick = 0
+  let start = "twine/applications/start-a-story.md"
 
-  // function route() {
-  //   const url = new URL(page.url)
-  //   url.searchParams.set('select', 'hey')
-  //   goto(url.toString(), { replaceState: false })
-  // }
   let { view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
 
@@ -33,7 +31,6 @@
       }
     }
     oldList = [...hoverList]
-    console.log(selected)
   })
 
   // Camera movement on param update
@@ -50,6 +47,7 @@
 
   let cursor:Cursor
   let camera:Camera 
+  let startImage:any
   let font:any
   export function deselect() {
     console.log("Deselecting...")
@@ -66,12 +64,33 @@
       map.setup(camera)
       font = await p5.loadFont('/fonts/calibri-regular.ttf')
       let maxX = 0; let maxY = 0; let minX = 0; let minY = 0
+      const completeImage = getCompleteImage(p5, 200, 200)      
+      const sw = 200; const sh=250;
+      startImage = p5.createGraphics(200, sh)
+      startImage.textSize(28)
+      startImage.textWrap('WORD')
+      startImage.textAlign(p5.CENTER, p5.CENTER)
+
+      // Generate the startImage
+      const nodeWidth = 50
+      const radius = 125
+      const length = 125
+      startImage.fill("#232323")
+      startImage.stroke(0)
+      startImage.strokeWeight(5)
+      startImage.triangle(sw/2-radius/2, nodeWidth*1.5, sw/2+radius/2, nodeWidth*1.5, sw/2, nodeWidth*1.5 + length)
+      startImage.circle(sw/2, nodeWidth*1.5, radius)
+      startImage.strokeWeight(1)
+      startImage.fill(255)
+      startImage.text("Start Here", sw/4, nodeWidth*1.5, 100)
+
       for(const node of nodes) {
-        node.setup(p5, font)
+        await node.setup(p5, font)
         maxX = node.x > maxX ? node.x : maxX;
         maxY = (node.y) > (maxY) ? node.y : maxY
         minX = (node.x) < (minX) ? node.x : minX;
         minY = (node.y) < (minY) ? node.y : minY
+        node.completeImage = completeImage
       }
       console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
       if(!view) {
@@ -97,6 +116,7 @@
       // projects[0].highlight()
     }
     p5.draw = () => {
+      tick++
       const el = map.elementsByPath[view]
       if(selected.length == 0 && el){
         selected = [ el ]
@@ -108,7 +128,7 @@
       // debug.cursor = cursor.mx + ', ' + cursor.my
       // debug.local = cursor.localX + ', ' + cursor.localY
       // debug.selected = selected.length
-      p5.background(180);
+      p5.background("#f5f5f5");
       // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
       camera.display(() => {
         for(const edge of edges) {
@@ -118,10 +138,22 @@
         for(const project of projects) {
           project.draw(p5)
         }
+
+        let pastStroke = p5.strokeWeight(8)
         for(const node of nodes) {
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
+          if(start == node.db.path) {
+            const floatDist = 24;
+            const rate = 0.5
+            const offsetY = (Math.floor(tick*rate) % floatDist * 2) - floatDist
+            p5.image(startImage, node.x- startImage.width/2, node.y - 18 - startImage.height + (Math.abs(offsetY)))
+          }
+          if(node.db.path == start && !node.complete) {
+            let offsetY = Math.abs((tick/3) % 30 - 15)
+            // }
+          }
         }
         cursor.update(p5, camera.matrix)
       })

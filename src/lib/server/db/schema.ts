@@ -1,16 +1,33 @@
 import { type InferSelectModel, type InferInsertModel } from 'drizzle-orm'
 import { defineRelations } from 'drizzle-orm'
 import { primaryKey, integer, sqliteTable, text, real } from 'drizzle-orm/sqlite-core';
+import { sql } from "drizzle-orm";
 
 
 
 // userland
+export const accessCode = sqliteTable('access_code', {
+	id: integer('id').primaryKey(),
+	alias: text(),
+	active: text({ mode: "boolean"}),
+	scope: text({ mode: "json" }),
+	owner: integer().references(() => user.id),
+	created: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`),
+	check: text().default("No check text provided!")
+})
+export type AccessCode = typeof accessCode.$inferSelect;
+
+
+
 export const user = sqliteTable('user', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
 	email: text('email'),
 	username: text('username'),
-	passwordHash: text('password_hash')
+	passwordHash: text('password_hash'),
+	codeId: integer().references(() => accessCode.id)
 });
+
+
 
 // TODO: refactor: apply these columns to any element that can be saved to the user's profile
 // export const userSaveable = {
@@ -18,11 +35,24 @@ export const user = sqliteTable('user', {
 // 	userId: integer('user_id').references(() => user.id)
 // }
 
+
+
+
 export const session = sqliteTable('session', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
+	id: text('id').primaryKey(),
 	userId: integer('user_id').references(() => user.id),
-	expiresAt: integer('expires_at', { mode: 'timestamp' })
+	expiresAt: integer('expires_at', { mode: 'timestamp' }),
+	codeId: integer().references(() => accessCode.id),
+	alias: text().default("No alias")
 });
+
+
+export const userToAccessCode = sqliteTable('user_to_access_code', {
+		codeId: integer().references(() => accessCode.id),
+		userId: integer().references(() => user.id)
+	},
+	(t) => [primaryKey({ columns: [t.codeId, t.userId] })]
+)
 
 
 export type Session = typeof session.$inferSelect;
@@ -31,7 +61,7 @@ export type User = typeof user.$inferSelect;
 // Library Elements
 export const element = sqliteTable('element', {
 	// table schema contain exclusively read-only properties. Relational fields are expressed in other areas of this file.
-	id: integer('id').primaryKey({ autoIncrement: true }),
+	id: integer('id').primaryKey(),
 	path: text('path'),
 	title: text('title'),
 	short: text('short').default("Short description"),
@@ -46,6 +76,24 @@ export const element = sqliteTable('element', {
 })
 export type Element = typeof element.$inferSelect;
 
+export const activity = sqliteTable('activity', {
+	id: integer().primaryKey(),
+	title: text(),
+	elementId: integer().references(() => element.id),
+	assessmentLink: text(),
+	short: text(),
+	source: text(),
+	standardsRaw: text()
+})
+export type Activity = typeof activity.$inferSelect;
+
+export const activityToStandard = sqliteTable('activity_to_standard', {
+		activityId: integer().references(() => activity.id),
+		standardId: integer().references(() => standard.id)
+	},
+	(t) => [primaryKey({ columns: [t.activityId, t.standardId] })]
+)
+
 export const child_element_ref = sqliteTable('child_element_ref', {
 		index: integer(),
 		parent_id: integer().references(() => element.id),
@@ -54,6 +102,15 @@ export const child_element_ref = sqliteTable('child_element_ref', {
 	}
 	// (t) => [primaryKey({ columns: [t.parent_id, t.child_id] })]
 )
+
+export const collection = sqliteTable('collection', {
+	id: integer().primaryKey(),
+	title: text(),
+	short: text(),
+	image: text(),
+	elementId: integer().references(() => element.id)
+})
+export type Collection = typeof collection.$inferSelect;
 
 // // Subjects & Courses
 export const subject = sqliteTable('subject', {
@@ -64,14 +121,6 @@ export const subject = sqliteTable('subject', {
 	strands: text({ mode: 'json' })
 })
 export type Subject = typeof subject.$inferSelect;
-export const course = sqliteTable('course', {
-	id: integer('id').primaryKey(),
-	title: text(),
-	subjectId: integer('subject_id').references(() => subject.id),
-	abbr: text(),
-	strands: text({ mode: 'json' })
-})
-export type Course = typeof course.$inferSelect;
 
 // Static content: grade levels, audiences, element types
 export const grade = sqliteTable('grade', {
@@ -135,7 +184,8 @@ export const standard = sqliteTable('standard', {
 	title: text(),
 	gradeId: integer('grade_id').references(() => grade.id),
 	subjectId: integer('subject_id').references(() => subject.id),
-	text: text() // HTML
+	text: text(), // HTML
+	subs: text({ mode: 'json'})
 })
 export type Standard = typeof standard.$inferSelect
 
@@ -219,11 +269,12 @@ export const project = sqliteTable('project', {
 export type Project = InferSelectModel<typeof project>
 
 export const pivotUserProject = sqliteTable('pivot_user_project', {
+	id: integer().primaryKey(),
 	userId: integer('user_id').references(() => user.id),
-	projectId: integer('project_id').references(() => user.id),
-	complete: integer({ mode: 'boolean' }).default(false)
-},
-	(t) => [primaryKey({ columns: [t.userId, t.projectId]})]
+	itemId: integer().references(() => user.id),
+	complete: integer({ mode: 'boolean' }).default(false),
+	date: text({ mode: "timestamp"}).default(sql`(CURRENT_TIMESTAMP)`)
+}
 )
 
 export const pivotNodeProject = sqliteTable('pivot_node_project', {
@@ -247,18 +298,21 @@ export type Edge = typeof edge.$inferSelect
 
 
 export const user_to_node = sqliteTable('user_to_node', {
-	userId: integer('userId').references(() => user.id),
-	nodeId: integer('nodeId').references(() => node.id),
-	complete: integer({ mode: 'boolean' }).default(false)
-},
-	(t) => [primaryKey({ columns: [t.userId, t.nodeId]})]
+		id: integer().primaryKey(),
+		userId: integer('userId').references(() => user.id),
+		itemId: integer().references(() => node.id),
+		complete: integer({ mode: 'boolean' }).default(false),
+		date: text({ mode: "timestamp"}).default(sql`(CURRENT_TIMESTAMP)`)
+	}
 )
 export const user_to_question = sqliteTable('user_to_question', {
+	id: integer().primaryKey(),
 	userId: integer('userId').references(() => user.id),
-	questionId: integer('questionId').references(() => question.id),
-	complete: integer({ mode: 'boolean' })
-},
-	(t) => [primaryKey({ columns: [t.userId, t.questionId]})]
+	itemId: integer().references(() => question.id),
+	answer: text(),
+	complete: integer({ mode: 'boolean' }),
+	date: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`)
+}
 )
 
 export const question = sqliteTable('question', {
@@ -278,6 +332,16 @@ export const prompt = sqliteTable('prompt', {
 	content: text(),
 	node: integer('node_id').references(() => node.id)
 })
+export type Prompt = typeof prompt.$inferSelect
+export const userToPrompt = sqliteTable('user_to_prompt', {
+	id: integer().primaryKey(),
+	userId: integer('userId').references(() => user.id),
+	itemId: integer().references(() => prompt.id),
+	answer: text(),
+	complete: integer({ mode: 'boolean' }),
+	date: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`)
+}
+)
 
 export const nodeGroup = sqliteTable('node_group', {
 	id: integer('id').primaryKey(),

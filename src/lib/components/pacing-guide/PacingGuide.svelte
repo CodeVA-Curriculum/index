@@ -6,12 +6,23 @@
     import Editable from './Editable.svelte';
 
 
-  let { elements } = $props()
+  let { elements, standards, form  } = $props()
   let rows:any[] = $state([new Row(1)])
+
+  let map = {}
+  for(const s of standards) {
+    if(!map[s.grade.title]) {
+      map[s.grade.title] = {}
+    }
+    if(!map[s.grade.title][s.subject.title]) {
+       map[s.grade.title][s.subject.title] = []
+    }
+    map[s.grade.title][s.subject.title].push(s)
+  }
 
   function addRow():undefined {
     const lastRow = rows[rows.length-1]
-    rows.push(new Row(lastRow.unit + 1))
+    rows.push(new Row(lastRow ? lastRow.unit + 1 : 1))
   }
   function reIndex() {
     for(let i=0;i<rows.length;i++) {
@@ -63,6 +74,9 @@
         first={i==0}
         operations={opsFactory(i)}
         elements={elements}
+        standards={standards}
+        map={map}
+        form={form}
       />
     {/each}
     <tr>

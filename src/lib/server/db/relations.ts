@@ -2,6 +2,25 @@ import * as schema from './schema'
 import { defineRelations } from 'drizzle-orm';
 
 export const relations = defineRelations(schema, (r) => ({
+	user: {},
+	question: {
+		status: r.many.user_to_question({
+			from: r.question.id,
+			to: r.user_to_question.itemId
+		}),
+	},
+	prompt: {
+		status: r.many.userToPrompt({
+			from: r.prompt.id,
+			to: r.userToPrompt.itemId
+		}),
+	},
+	collection: {
+		element: r.one.element({
+			from: r.collection.elementId,
+			to: r.element.id
+		})
+	},
 	edge: {
 		toNode: r.one.node({
 			from: r.edge.to,
@@ -12,7 +31,27 @@ export const relations = defineRelations(schema, (r) => ({
 			to: r.node.id
 		})
 	},
+	standard: {
+		grade: r.one.grade({
+			from: r.standard.gradeId,
+			to: r.grade.id
+		}),
+		subject: r.one.subject({
+			from: r.standard.subjectId,
+			to: r.subject.id
+		})
+	},
+	activity: {
+		standards: r.many.standard({
+			from: r.activity.id.through(r.activityToStandard.activityId),
+			to: r.standard.id.through(r.activityToStandard.standardId)
+		})
+	},
 	element: {
+		collection: r.one.collection({
+			from: r.element.id,
+			to: r.collection.elementId
+		}),
 		subjects: r.many.subject({
 			from: r.element.id.through(r.elementToSubj.elementId),
 			to: r.subject.id.through(r.elementToSubj.subjectId)
@@ -43,6 +82,10 @@ export const relations = defineRelations(schema, (r) => ({
 		})
 	},
 	project: {
+		status: r.many.pivotUserProject({
+			from: r.project.id,
+			to: r.pivotUserProject.itemId
+		}),
 		nodeGroups: r.many.nodeGroup({
 			from: r.project.id,
 			to: r.nodeGroup.projectId
@@ -72,23 +115,21 @@ export const relations = defineRelations(schema, (r) => ({
 		})
 	},
 	node: {
+		status: r.many.user_to_node({
+			from: r.node.id,
+			to: r.user_to_node.itemId
+		}),
+		prompts: r.many.prompt({
+			from: r.node.id,
+			to: r.prompt.node
+		}),
+		questions: r.many.question({
+			from: r.node.id,
+			to: r.question.node
+		}),
 		projects: r.many.project({
 			from: r.node.id.through(r.nodeToNodeGroup.nodeId),
 			to: r.project.id.through(r.nodeToNodeGroup.projectId)
 		})
 	}
-	// project: {
-	// 	groups: r.many.nodeGroup({
-	// 		from: r.project.id,
-	// 		to: r.nodeGroup.projectId
-	// 	}),
-		// allNodes: r.many.node({
-		// 	from: r.project.id.through(r.nodeToNodeGroup.projectId),
-		// 	to: r.node.id.through(r.nodeToNodeGroup.nodeId)
-		// }),
-		// guide: r.one.guide({
-		// 	from: r.project.guideId,
-		// 	to: r.guide.id
-		// })
-	// }
 }))

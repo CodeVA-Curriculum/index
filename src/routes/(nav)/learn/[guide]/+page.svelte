@@ -49,7 +49,7 @@
   {/each}
 {/snippet}
 
-<GuideNav guide={data.guide} session={data.session} />
+<GuideNav guide={data.guide} session={data.session} user={data.user} />
 
 <div class='map-view'>
   <div class='map-wrap'>

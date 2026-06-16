@@ -1,7 +1,12 @@
 import { error } from '@sveltejs/kit'
+import { projectRelations } from '$lib/server/db'
 import { db } from '$lib/server/db/index'
 import * as schema from '$lib/server/db/schema'
 import { eq } from 'drizzle-orm'
+
+export async function initiateTestSession() {
+  // TODO: create a new session for a fake user
+}
 
 export async function getGuideFromParam(param:string){
   const searchPath = `${param}/meta.md`
@@ -14,9 +19,7 @@ export async function getGuideFromParam(param:string){
 
 export async function getProjectsFromGuide(guideId:number) {
   return await db.query.project.findMany({
-    with: {
-      nodeGroups: true
-    },
+    with: projectRelations,
     where: {
       guide: guideId
     }

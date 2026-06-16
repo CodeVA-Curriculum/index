@@ -62,7 +62,7 @@
 
 {#snippet elementHeader(obj)}
     <h2>{obj.db.title}</h2>
-    <DetailsIcons eltype={0} />
+    <DetailsIcons obj={obj} eltype={1} />
 {/snippet}
 
 {#snippet elementContent(obj)}

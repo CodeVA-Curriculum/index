@@ -22,7 +22,7 @@
     <heading class='card-heading'>
       <a href={titleLink}><p>{obj.db.title}</p></a>
       <div>
-        <DetailsIcons eltype={objType} />
+        <DetailsIcons eltype={objType} obj={obj} />
       </div>
     </heading>
     <p>{obj.db.short ? obj.db.short : "No short description provided!"}</p>

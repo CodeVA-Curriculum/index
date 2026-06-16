@@ -1,6 +1,7 @@
 export const load = async ({ locals }) => {
   return {
     session: locals.session,
-    user: locals.session
+    user: locals.user,
+    accessCode: locals.accessCode
   }
 }

@@ -1,25 +1,39 @@
 <script lang='ts' module>
+
   export const ElementType = {
     Project:0,
     Tutorial:1
   }
 </script>
 <script lang='ts'>
+  import { enhance } from '$app/forms';
   import Fa from 'svelte-fa'
   import { faLocationDot, faClipboardQuestion, faTerminal, faFire, faRoute } from '@fortawesome/free-solid-svg-icons'
-  let { eltype = 0} = $props()
-  
+  let { eltype = 0, obj } = $props()
+  let form;
+  let id = obj.db.id
+  let completePrompts = obj.db.prompts.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
+  let completeQuestions = obj.db.questions.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
   const ElementType = {
     Project:0,
     Tutorial:1
   }
-  type Type = typeof ElementType[keyof typeof ElementType];
+  async function update() {
+		await fetch('/learn', {
+			method: 'POST',
+			body: JSON.stringify({
+			  type: eltype == 0 ? "project" : "node",
+			  itemId: obj.db.id,
+			  complete: obj.complete
+			})
+		});
+  }
 </script>
 <div class='details-icons'>
-  <div class='mark'>
-    <input type="checkbox">
+    <div class='mark'>
+      <input onchange={update} type="checkbox" bind:checked={obj.complete}>
       Mark Complete
-  </div>
+    </div>
   {#if eltype == ElementType.Project}
   <div>
     <Fa icon={faLocationDot} />
@@ -35,15 +49,11 @@
   {:else if eltype==ElementType.Tutorial}
   <div>
     <span><Fa icon={faClipboardQuestion} /></span>
-    <span>0/0</span>
+    <span>{completeQuestions.length}/{obj.db.questions.length}</span>
   </div>
   <div>
     <span><Fa icon={faTerminal} /></span>
-    <span>0/0</span>
-  </div>
-  <div>
-    <span><Fa icon={faRoute} /></span>
-    <span>0</span>
+    <span>{completePrompts.length}/{obj.db.prompts.length}</span>
   </div>
   {/if}
 </div>

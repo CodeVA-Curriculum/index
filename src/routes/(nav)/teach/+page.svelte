@@ -11,9 +11,11 @@
           <img src="/images/library.png"/>
           </div>
           <div class='text'>
+            <div>
         <h2>Computing Curriculum Library</h2>
           <p>The CodeVA Curriculum Library is a free, open resource with high-quality CS lessons for teachers to explore and use in their classrooms. Check out the library and download, remix, or modify lessons to your heart's content!</p>
           <p>All of our free material is licensed under CC-BY-SA-NC, which means its yours to use as you wish as long as it's not for commercial purposes! Just make sure you credit CodeVA for the materials you adapt from us.</p>
+          </div>
           <a href="/teach/library" role="button">Visit the Library</a>
           </div>
         </div>

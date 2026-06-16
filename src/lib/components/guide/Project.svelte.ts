@@ -31,6 +31,7 @@ export class Project {
     this.title = i.title
     this.short = i.short
     this.difficulty = i.difficulty
+    this.complete = i.status.length > 0 ? i.status[0].complete : false 
 
 
     // build node groups and edges

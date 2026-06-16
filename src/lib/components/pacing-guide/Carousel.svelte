@@ -4,31 +4,35 @@
   import { getFilter, filterFrontmatter, renderGradesAsIndices } from './util';
   import { page } from '$app/stores'
 
-  let { sols, elements } = $props()
+  let { children, rowIndex, sols, elements } = $props()
 
-  let lessons = $state([])
-  let loaded = $state(false)
+  // let lessons = $state([])
+  // let loaded = $state(false)
   let position = $state(0)
+  let loaded = $state(false)
 
-  async function load() {
-    let params = new URLSearchParams()
-    for(let i=0;i<sols.length;i++) {
-      params.append("sol", sols[i])
-    }
-    let filter = await getFilter(params, elements.meta)
-    const res = await filterFrontmatter(filter, elements.frontmatters)
-    lessons.push(...res.results)
+$effect(() => {
+  if(elements.length > 0) {
     loaded = true
   }
+})
+  // async function load() {
+  //   let params = new URLSearchParams()
+  //   for(let i=0;i<sols.length;i++) {
+  //     params.append("sol", sols[i])
+  //   }
+  //   let filter = await getFilter(params, elements.meta)
+  //   const res = await filterFrontmatter(filter, elements.frontmatters)
+  //   lessons.push(...res.results)
+  //   loaded = true
+  // }
   function next() {
     position++
-    if(position > lessons.length-1) { position = 0 }
-    console.log(position)
+    if(position > elements.length-1) { position = 0 }
   }
   function prev() {
     position--
-    if(position < 0) {position = lessons.length-1}
-    console.log(position)
+    if(position < 0) {position = elements.length-1}
   }
 </script>
 <div class='carousel'>
@@ -37,25 +41,20 @@
   </button>
   <article class='center'>
       {#if !loaded}
-      <div class='empty'>
-        <button disabled={sols.length == 0} onclick={load}>Load Resources</button>
-        <p>Select standards, then click above to search!</p>
-      </div>
+        {@render children() }
       {:else}
       <div class='thumbnail'>
         <img src="https://curriculum.codevirginia.org/thumbnails/1_NNnWXrd5p8tU29M0L1M_lBuXGGJXRczbqOvGy-ZsOQ.png" />
       </div>
-          <div class='info'>
-            <span class='card-title'>{lessons[position].title}</span>
-            <!-- <p>{@html lessons[0].content.replaceAll("<h2>Summary</h2>", "").replaceAll("<h2>Overview</h2>", "")}</p> -->
-            <p>Check out this lesson from CodeVA!</p>
-            <!-- <ul>
-              <li><strong>Grade: </strong> {lessons[0].grades}</li>
-              <li><strong>Subjects: </strong> {lessons[0].subjects}</li>
-              <li><strong>SOLs: </strong> {lessons[0].standards}</li>
-            </ul> -->
-            <a role="button" href="{lessons[position].links.drive}" target="_blank">View Details</a>
-          </div>
+      <div class='info'>
+        <span class='card-title'>{elements[position].title}</span>
+        <!-- <p>{@html lessons[0].content.replaceAll("<h2>Summary</h2>", "").replaceAll("<h2>Overview</h2>", "")}</p> -->
+        <!-- <ul>
+          <li><strong>Grade: </strong> {lessons[0].grades}</li>
+          <li><strong>Subjects: </strong> {lessons[0].subjects}</li>
+          <li><strong>SOLs: </strong> {lessons[0].standards}</li>
+        </ul> -->
+      </div>
     {/if}
   </article>
   <button onclick={next} disabled={!loaded} class='right'>

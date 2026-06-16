@@ -1,4 +1,5 @@
 import type { LayoutServerLoad } from './$types';
+import { projectRelations } from '$lib/server/db'
 import { db } from '$lib/server/db/index'
 import { eq, and, inArray } from 'drizzle-orm'
 import * as schema from '$lib/server/db/schema'
@@ -21,7 +22,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
     //   eq(schema.project.path, searchPath)
     // ))
     results = await db.query.project.findMany({
-      with: { pivot: true, nodeGroups: { with: { nodes: true }}},
+      with: projectRelations,
       where: { guide: guide.id, path: searchPath }
     })
     elType = "project"
@@ -40,12 +41,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
   // Do project stuff if needed
   if(elType == "project") {
     const project = await db.query.project.findFirst({
-      with: {
-        nodeGroups: {
-          with: { nodes: true }
-        },
-        pivot: true
-      },
+      with: projectRelations,
       where: {
         id: element.id
       }
