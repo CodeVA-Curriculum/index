@@ -1,5 +1,4 @@
-import type { Actions } from './$types'
-import { projectRelations } from '$lib/server/db'
+import { loadNodesForGuide, projectRelations } from '$lib/server/db'
 import { nodeRelations } from '$lib/server/db'
 import type {PageLoad} from './$types'
 import { Project } from '$lib/components/guide/Project.svelte.ts'
@@ -21,31 +20,7 @@ export const load:PageLoad = async ({ params, locals }) => {
   })
   // const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
   let relations = {...nodeRelations}
-  const nodes = await db.query.node.findMany({
-    with: {
-      questions: {
-        with: { status: {
-          orderBy: { date: "desc"},
-          limit: 1,
-          where: { userId: locals.user.id }
-        }}
-      },
-      prompts: {
-        with: { status: {
-          orderBy: { date: "desc"},
-          limit: 1,
-          where: { userId: locals.user.id }
-        }}
-      },
-      status: {
-        limit: 1,
-        orderBy: { date: "desc" }
-      }
-    },
-    where: {
-      guide: result.id
-    }
-  })
+  const nodes = await loadNodesForGuide(db, result.id, locals.user)
   let nodeIds = []
   for(const n of nodes) {
     nodeIds.push(n.id)

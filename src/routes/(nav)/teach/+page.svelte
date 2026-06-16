@@ -25,7 +25,7 @@
       <article>
         <h2>CS Education Hub</h2>
         <p>Your resource for computer science teaching, containing information about CS standards of learning, vocabulary, lesson ideas, and tools to help you design high quality computing instruction for your students.</p> 
-        <a role='button' href="/teach/cs/hub">Coming soon!</a>
+        <a role='button' disabled  href="/teach/cs/hub">Coming soon!</a>
       </article>
       <article>
         <h2>CS Integration Tools</h2>
@@ -61,7 +61,6 @@
     width: 100%;
     margin-top: auto;
     margin-bottom: 0;
-    background-color: #0F3760;
   }
   p {
     flex-grow: 1;

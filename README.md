@@ -7,29 +7,29 @@ The place for all the things.
 - [x] Return activities from pacing guide search
 - [x] Render activities in Carousel
 - [x] Fix activity nav
-- [ ] Write instructions for /pacing-guide-creator
-- [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
+- [x] Write instructions for /pacing-guide-creator
+- [x] Make image for pacing guide
+- [x] Fix /learn/tools
+- [x] Fix /learn
 - [ ] Migrate activities to database
-- [ ] Make image for pacing guide
-- [ ] Fix /learn/tools
-- [ ] Fix /learn
+- [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
 - [x] Track trail guide completion in the database
   - [x] Track practice questions
   - [x] Track prompts
   - [x] Track nodes
-  - [ ] Track projects
-- [-] Make DetailIcons responsive to node stats
+  - [x] Track projects
+- [x] Make DetailIcons responsive to node stats
   - [x] Make Node icons responsive
-  - [ ] Make Project icons responsive
-- [ ] Render quick takes in the trail guide
-- [ ] Render code-and-image in the trail guide
+  - [x] Make Project icons responsive
+- [ ] Render quick takes in the trail guide (add toggle to node banner)
+- [ ] Render code-and-image in the trail guide (fix image source link)
 - [ ] Implement library search
 - [ ] Complete "view PDF of library element" workflow
-- [ ] Complete "save element to backpack" workflow
-- [ ] Complete "view saved elements" workflow
-- [ ] Complete "save library element" workflow
-- [ ] Render trail guide progress dashboards for users/access codes
-- [ ] Add standard search to StandardSelect
+- [/] Complete "save element to backpack" workflow
+- [/] Complete "view saved elements" workflow
+- [/] Complete "save library element" workflow
+- [/] Render trail guide progress dashboards for users/access codes
+- [/] Add standard search to StandardSelect
 
 ## Deployment
 

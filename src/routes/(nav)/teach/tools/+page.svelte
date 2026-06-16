@@ -2,7 +2,7 @@
   <section>
     <article>
       <div class='img'>
-        <img src="https://placecats.com/400/400" alt="TODO" >
+        <img src="/images/pacing-guide.jpg" alt="A group of teachers sitting around a table planning curriculum. Sourced from Adode Stock Images." >
       </div>
       <div class='body'>
         <h2>Pacing Guide Creator</h2>
@@ -24,16 +24,13 @@
     justify-content: start;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
   }
   .img {
     width: 12rem;
-    height: 12rem;
+    img { object-fit: cover; width: 100%; height: 100%; }
   }
   button, a {
-    align-items:flex-end;  
     width: 100%;
-    margin-top: auto;
     margin-bottom: 0;
   }
 </style>

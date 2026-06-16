@@ -25,6 +25,7 @@ export class Project {
   groupPos = $state(0)
   nodePos = $state(0)
   selected = $state(false)
+  size = 0
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
     this.db = i
@@ -39,6 +40,7 @@ export class Project {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
       const paths = group.getPaths()
+      this.size += paths.length
       this.nodeGroups.push(group)
       for(const path of paths) {
         this.groupsPathMap[path] = this.nodeGroups.length-1
@@ -64,6 +66,15 @@ export class Project {
       x: minX + (maxX - minX)/2,
       y: minY + (maxY - minY)/2
     }
+  }
+  getCompletePercent() {
+    let count = 0
+    for(const group of this.nodeGroups) {
+      const groupNodes = group.getNodes()
+      const completeNodes = groupNodes.filter((obj) => obj.complete)
+      count += completeNodes.length
+    }
+    return count
   }
   highlight() {
     this.highlighted = true
@@ -144,6 +155,9 @@ class Group {
     for(const e of this.edges) {
       e.projectDraw(p5)
     }
+  }
+  getNodes() {
+    return this.nodes
   }
   getPaths() {
     let paths = []

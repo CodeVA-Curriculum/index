@@ -8,6 +8,9 @@ export const POST: RequestHandler = async ( { request, locals } ) => {
 	console.log("Got request to update data")
 	const req = await request.json()
 	const user = locals.user
+	if(!user) { return json({
+		"Status": "Not logged in!"
+	})}
 	switch(req.type) {
 		case "question":
 		case "prompt":

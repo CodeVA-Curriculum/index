@@ -59,6 +59,34 @@ export const getNodeRelations = (userId:number) => {
   return t
   } else { return nodeRelations }
 }
+export async function loadNodesForGuide(db, guideId:number, user) {
+  const nodes = await db.query.node.findMany({
+    with: {
+      questions: {
+        with: { status: {
+          orderBy: { date: "desc"},
+          limit: 1,
+          where: { userId: user?.id }
+        }}
+      },
+      prompts: {
+        with: { status: {
+          orderBy: { date: "desc"},
+          limit: 1,
+          where: { userId: user?.id }
+        }}
+      },
+      status: {
+        limit: 1,
+        orderBy: { date: "desc" }
+      }
+    },
+    where: {
+      guide: guideId
+    }
+  })
+  return nodes
+}
 
 export const projectRelations = {
  status: {

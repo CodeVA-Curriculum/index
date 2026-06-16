@@ -25,7 +25,7 @@ export class Node {
     this.db = obj
     this.x = obj.x/SCALE
     this.y = obj.y/SCALE
-    this.complete = obj.status.length > 0 ? obj.status[0].complete : false
+    this.complete = obj.status?.length > 0 ? obj.status[0].complete : false
   }
   async setup(p5, font) {
     const fontData = this.getWidth(p5, font)

@@ -12,7 +12,7 @@
     </div>
     <div class='info'>
       <h1>{obj.db.title}</h1>
-      <DetailsIcons eltype={ElementType.Tutorial} />
+      <DetailsIcons eltype={ElementType.Tutorial} obj={obj} />
       <p>{obj.db.description}</p>
     </div>
   </header>
