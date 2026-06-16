@@ -2,6 +2,37 @@
 
 The place for all the things.
 
+## Roadmap
+
+- [ ] Return activities from pacing guide search
+- [ ] Render activities in Carousel
+- [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
+- [ ] Migrate activities to database
+- [ ] Make image for pacing guide
+- [ ] Fix /learn/tools
+- [ ] Fix /learn
+- [x] Track trail guide completion in the database
+  - [x] Track practice questions
+  - [x] Track prompts
+  - [x] Track nodes
+  - [ ] Track projects
+- [-] Make DetailIcons responsive to node stats
+  - [x] Make Node icons responsive
+  - [ ] Make Project icons responsive
+- [ ] Render quick takes in the trail guide
+- [ ] Render code-and-image in the trail guide
+- [ ] Implement library search
+- [ ] Complete "view PDF of library element" workflow
+- [ ] Complete "save element to backpack" workflow
+- [ ] Complete "view saved elements" workflow
+- [ ] Complete "save library element" workflow
+- [ ] Render trail guide progress dashboards for users/access codes
+- [x] Account owner and access code authentication workflows complete
+- [x] Render practice questions in the trail guide
+- [x] Render prompts in the trail guide
+- [x] Render "start here" pin on map
+- [x] Add activities as another database that we'll enter manually
+
 ## Deployment
 
 Dis: https://youtu.be/LwzoWuHjOWk?si=5aoLNSs4nT0xhDTY
