@@ -42,6 +42,7 @@ pre.visible { display: block; }
     font-style: normal;
     font-weight: bolder;
     white-space: nowrap;
+    border-radius: 8px;
     &.light {
       color: theme.$dark-blue;
       background-color: theme.$light-blue

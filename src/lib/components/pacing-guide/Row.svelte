@@ -10,11 +10,11 @@
  let { form, map, children, row = $bindable(), first, last, operations, standards, standardMenu }= $props();
   let editable:any = $state()
   let editingState = false;
-
-  let selectedSOLs = $state([])
   let test = [ 10 ]
+  let selectedSOLs = $state([])
   let elements = $state([])
   $effect(() => {
+    console.log("Row", selectedSOLs)
     if(form?.success) {
       elements = form.success.activities
       console.log("Adding activities to row", row.unit)
@@ -47,7 +47,7 @@
             await update({ reset: false }); // Resets hidden and visible inputs
           };
         }}>
-          <input name="ids" id="ids" style="display: none;" type="text" value={JSON.stringify({ "ids": test })} />
+          <input name="ids" id="ids" style="display: none;" type="text" value={JSON.stringify({ "ids": selectedSOLs })} />
           <input name="rowIndex" id="rowIndex" style="display: none;" type="text" value={row.unit} />
           <input type="submit" disabled={selectedSOLs.length == 0} value="Load Resources"/>
         </form>

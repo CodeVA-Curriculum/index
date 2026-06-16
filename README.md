@@ -1,11 +1,12 @@
-# index
+# INDEX
 
 The place for all the things.
 
 ## Roadmap
 
-- [ ] Return activities from pacing guide search
-- [ ] Render activities in Carousel
+- [x] Return activities from pacing guide search
+- [x] Render activities in Carousel
+- [ ] Fix activity nav
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
 - [ ] Migrate activities to database
 - [ ] Make image for pacing guide
@@ -27,11 +28,7 @@ The place for all the things.
 - [ ] Complete "view saved elements" workflow
 - [ ] Complete "save library element" workflow
 - [ ] Render trail guide progress dashboards for users/access codes
-- [x] Account owner and access code authentication workflows complete
-- [x] Render practice questions in the trail guide
-- [x] Render prompts in the trail guide
-- [x] Render "start here" pin on map
-- [x] Add activities as another database that we'll enter manually
+- [ ] Add standard search to StandardSelect
 
 ## Deployment
 

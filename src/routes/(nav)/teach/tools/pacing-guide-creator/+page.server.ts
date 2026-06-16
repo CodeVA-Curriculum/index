@@ -31,7 +31,11 @@ export const actions = {
   load: async (event) => {
     // TODO: load carousel items
     const form = await event.request.formData()
-    const standardIds = (JSON.parse(form.get("ids"))).ids
+    const formObjs = (JSON.parse(form.get("ids"))).ids
+    let standardIds = []
+    for(const o of formObjs) {
+      standardIds.push(o.id)
+    }
     const rowIndex = Number(form.get("rowIndex"))
     console.log("Getting activities for IDs", standardIds)
     const result = await db.select().from(schema.activity).innerJoin(schema.activityToStandard, inArray(schema.activityToStandard.standardId, standardIds)).innerJoin(schema.standard, inArray(schema.standard.id, standardIds))
@@ -41,9 +45,9 @@ export const actions = {
       const actObj = res.activity      
       actObj.standards = []
       for(const p of result) {
-        const pivot = p.activityToStandard
-        const standard = p.standard
-        if(!actObj.standards.includes(pivot.standardId)) { actObj.standards.push(p.standard) }
+        const pivot = p?.activity_to_standard
+        const standard = p?.standard
+        if(pivot && !actObj.standards.includes(pivot.standardId)) { actObj.standards.push(p.standard) }
       }
       activities.push(actObj)
     }

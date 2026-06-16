@@ -39,23 +39,25 @@ $effect(() => {
   <button onclick={prev} disabled={!loaded} class='left'>
     <Fa icon={faArrowLeft} />
   </button>
-  <article class='center'>
+  <article class=''>
+    <div class='center'>
       {#if !loaded}
         {@render children() }
       {:else}
-      <div class='thumbnail'>
-        <img src="https://curriculum.codevirginia.org/thumbnails/1_NNnWXrd5p8tU29M0L1M_lBuXGGJXRczbqOvGy-ZsOQ.png" />
-      </div>
       <div class='info'>
         <span class='card-title'>{elements[position].title}</span>
-        <!-- <p>{@html lessons[0].content.replaceAll("<h2>Summary</h2>", "").replaceAll("<h2>Overview</h2>", "")}</p> -->
-        <!-- <ul>
-          <li><strong>Grade: </strong> {lessons[0].grades}</li>
-          <li><strong>Subjects: </strong> {lessons[0].subjects}</li>
-          <li><strong>SOLs: </strong> {lessons[0].standards}</li>
-        </ul> -->
+        <div class='tags'>
+        {#each elements[position].standards as sol}
+          <span class='tag'>{sol.abbr}</span>
+        {/each}
+        </div>
+        <p>{elements[position].short}</p>
       </div>
     {/if}
+      </div>
+    <footer>
+      <a>View Source</a>
+    </footer>
   </article>
   <button onclick={next} disabled={!loaded} class='right'>
     <Fa icon={faArrowRight} />
@@ -73,7 +75,6 @@ $effect(() => {
     padding-bottom: 10px;
   }
   .info {
-    display: flex;
     flex-direction: column;
     font-size: 12pt;
     a {
@@ -91,8 +92,6 @@ $effect(() => {
       -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
     }
-    margin-left: 1rem;
-    // background-color: pink;
   }
   .carousel {
     display: flex;
@@ -109,13 +108,19 @@ $effect(() => {
     padding: 0 10px;
     align-items: center;
   }
-  .center {
-    display: flex;
+  article {
     margin: 0 10px;
-    flex-grow: 0;
+    width: 100%;
     // background-color: powderblue;
     // min-width: 200px;
+    footer {
+      padding: 8px 12px; 
+      a {
+        font-size: 11pt;
+      }
+    }
   }
+  .center { display: flex; flex: 1; }
   ul {
     position: relative;
     right: 1rem;
@@ -138,6 +143,10 @@ $effect(() => {
       font-size: 12pt;
       padding: 10px 1rem;
     }
+  }
+  .tags {
+    padding: 0;
+    margin: 4px 0;
   }
 </style>
 
