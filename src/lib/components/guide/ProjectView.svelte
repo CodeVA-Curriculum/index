@@ -33,7 +33,7 @@
 
 </script>
 <div class='project-view'>
-  <aside>
+  <aside class='has-shadow'>
     <div class='aside-stick'>
     <header>
       <details class='nomark'>
@@ -122,8 +122,7 @@
     height: 100vh;
   }
   aside {
-    box-shadow: 5px 5px 5px 0px grey;
-    min-width: 24rem;
+  min-width: 24rem;
     border: 1px solid whitesmoke;
     position: relative;
     // height: 100%;

@@ -6,7 +6,7 @@ The place for all the things.
 
 - [x] Return activities from pacing guide search
 - [x] Render activities in Carousel
-- [ ] Fix activity nav
+- [x] Fix activity nav
 - [ ] Write instructions for /pacing-guide-creator
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
 - [ ] Migrate activities to database
