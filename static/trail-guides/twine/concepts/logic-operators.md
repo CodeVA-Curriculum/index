@@ -59,7 +59,7 @@ Here's a more complete version of the story that uses a logical operation as dem
 
 ![GIF of a reader playing through the Unlit Brazier story below](/the-unlit-brazier-demo.gif)
 
-:::code-and-image{name="The Unlit Brazier" src="/images/unlit-room.png" tabs}
+:::code-and-image{name="The Unlit Brazier" src="unlit-room.png" tabs}
 ```intro
 flint: false
 steel: false

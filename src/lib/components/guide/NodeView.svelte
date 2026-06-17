@@ -8,20 +8,20 @@
 </script>
 <div class='nodeview'>
   <header>
+    {#if obj.db.video}
     <div class='video-wrap'>
-      <Video id={"14I8C6FKINQ"} />
+      <Video id={obj.db.video} />
     </div>
+    {/if}
     <div class='info'>
       <h1>{obj.db.title}</h1>
       <DetailsIcons eltype={ElementType.Tutorial} obj={obj} />
       <p>{obj.db.description}</p>
     </div>
   </header>
+  <QuickTake boxed content={obj.db.quickTake} />
   <hr>
   <main>
-    <section>
-      <QuickTake content={obj.db.quickTake} />
-    </section>
     <section>
       {@html obj.db.content}
     </section>

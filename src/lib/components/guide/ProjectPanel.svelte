@@ -8,9 +8,9 @@
 </script>
 
 <div class='project-panel'>
-  {#if project.db.video || true}
+  {#if project.db.video}
     <div class='video'>
-      <Video />
+      <Video id={project.db.video} />
     </div>
   {/if}
   <div class='description'>

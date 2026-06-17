@@ -8,7 +8,7 @@ type: tutorial
 layout: location
 ---
 
-:::quick-take{src="/images/linked-passages.png"}
+:::quick-take{src="linked-passages.png"}
 1. Click on your Untitled Passage and edit the text.
 2. At the bottom of your text, add `[[title of next passage]]` *(replace "title of next passage" with what you want your title to be)*
 3. This creates the next passage, links it to the current passage, and titles it for you!
@@ -18,7 +18,7 @@ layout: location
 
 Most Twine stories are made up of little pages connected together by **links**--little buttons on the page that allow the reader to click through one page of the story to the next one. Here's an example:
 
-![GIF of the story of Jack and the beanstalk told in Twine passages](/jack-beanstalk-demo.gif)
+![GIF of the story of Jack and the beanstalk told in Twine passages](jack-beanstalk-demo.gif)
 
 In this tutorial, you'll learn how to create passages and link them together.
 
@@ -84,7 +84,7 @@ After adding the link, return to the main story editor. You'll see that your two
 
 Test your story by pressing the `Play` button. You'll notice that you can click the link at the end of your first passage, and the screen changes to show the next passage! A typical Twine story will have a lot of passages, and a *lot* of links connecting them. You can add as many passages and links as you like!
 
-:::code-and-image{name="Linked Passages Example" src="/images/spider-clearing.gif" tabs}
+:::code-and-image{name="Linked Passages Example" src="spider-clearing.gif" tabs}
 ```intro
 Once upon a time, a spider was looking for a place to spin thier web. They walked into the forest alone, looking for a good spot to make their new home. Over the hill, they spotted a peaceful clearing.
 
@@ -101,7 +101,7 @@ The spider explored the beautiful clearing, but all the trees were too far apart
 
 Sometimes, you might want to use a different name for the link in the story versus in the editor. For example, I might want something like this:
 
-:::code-and-image{name="Jack & the Beanstalk" src="/images/named-link.png"}
+:::code-and-image{name="Jack & the Beanstalk" src="named-link.png"}
 ```
 # Jack & the Beanstalk
 
@@ -113,7 +113,7 @@ The link in the passage above connects the reader to the passage called `intro`,
 
 To accomplish this, you can create *named links*:
 
-:::code-and-image{name="Jack & the Beanstalk" src="/images/named-link.png"}
+:::code-and-image{name="Jack & the Beanstalk" src="named-link.png"}
 ```
 # Jack & the Beanstalk
 

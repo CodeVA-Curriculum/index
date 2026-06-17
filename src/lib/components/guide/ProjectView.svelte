@@ -41,7 +41,9 @@
           <h1>{p.title}</h1>
           <DetailsIcons eltype={0} />
         </summary>
-        <Video />
+        {#if p.video}
+        <Video id={p.video}/>
+        {/if}
         <p class='description'>{@html p.description}</p>
         <hr>
       </details>

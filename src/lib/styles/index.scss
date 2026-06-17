@@ -65,6 +65,29 @@ pre.visible { display: block; }
   .has-shadow {
     box-shadow: 5px 5px 5px 0px grey;
   }
+  .quicktake {
+    /* background-color: pink; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3rem;
+    & > * {
+      flex: 1 300px;
+      align-items: center;
+    }
+    img{
+      border-radius: 12px;
+    }
+  }
+  .boxed > .quicktake > .children {
+    margin-top: 1rem;
+    &::before {
+      content: "Quick Take";
+      position: relative;
+      top: -1rem;
+      font-weight: bold;
+    }
+  }
   /* td { */
     /* background-color: red; */
     /* &:hover { */

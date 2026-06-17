@@ -15,7 +15,7 @@ Number-type variables have a special capability that `string` variables do not: 
 
 You may have already learned how to create and modify variables in the *[Variable Basics](/tutorials/concepts/variable-basics)* tutorial; but if not, here's an example of a passage where I have the computer create a variable called `age` and store the number `15` in it:
 
-:::code-and-image{name="Passage With a Variable" src="/images/var-simple.png"}
+:::code-and-image{name="Passage With a Variable" src="var-simple.png"}
 ```
 age: 15
 --
@@ -26,7 +26,7 @@ I am {age} years old.
 
 If I wanted to, I could write out a mathematical expression instead of the number `15`, like so:
 
-:::code-and-image{name="Passage With an Expression" src="/images/var-simple.png"}
+:::code-and-image{name="Passage With an Expression" src="var-simple.png"}
 ```
 age: 10 + (2+3)
 --
@@ -52,7 +52,7 @@ The computer will "do" the math, and store the result in the variable! It doesn'
 
 Just writing mathematical expressions instead of numbers in your code isn't all that useful. However, because the computer will interpret `number`-type variables as number data, we can use variables as *operands* in mathematical expressions. This opens up a couple of interesting possibilties that are worth highlighting here. For example:
 
-:::code-and-image{name="Using Variables as Operands" src="/images/var-expression.png"}
+:::code-and-image{name="Using Variables as Operands" src="var-expression.png"}
 ```
 age: 15
 age_in_days: age * 365.25
@@ -68,7 +68,7 @@ In the passage above, I am using the variable called `age` in the equation that 
 
 You can also write expressions like this to **increment** a variable. "Increment" means to increase a variable's value by one. For example, imagine you wanted to create a `count` variable that could keep track of how many passages the reader has visited. First, you would make an `Intro` passage that sets the initial value of the variable called `count`:
 
-:::code-and-image{name="intro" src="/images/count1.png"}
+:::code-and-image{name="intro" src="count1.png"}
 ```
 count: 0
 --
@@ -81,7 +81,7 @@ You have visited {count} passages.
 
 Then, in each following passage, you would include something like this:
 
-:::code-and-image{name="passage1" src="/images/count2.png"}
+:::code-and-image{name="passage1" src="count2.png"}
 ```
 count: count + 1
 --
@@ -103,7 +103,7 @@ In step #2, the computer discards `count`'s old value (`0`), and replaces it wit
 
 I'll put something very similar into the `Passage2` passage:
 
-:::code-and-image{name="passage2" src="/images/count3.png"}
+:::code-and-image{name="passage2" src="count3.png"}
 ```
 count: count + 1
 --
@@ -120,9 +120,9 @@ The story map now looks like this, with a "loop" between `Passage1` and `Passage
 
 You can play through the story by [clicking here](/examples/count). When you play through it, you can see that the `count` variable keeps going up, even as I return to `Passage1`! There are lots of creative ways to use variables (making a counter is interesting, but perhaps not all that useful); try it out! You can test out the story below by [clicking here](/examples/count):
 
-<!-- TODO: <iframe src="/images/examples/count" title="A Twine story demonstrating incrementing variables"></iframe> -->
+<!-- TODO: <iframe src="examples/count" title="A Twine story demonstrating incrementing variables"></iframe> -->
 
-:::code-and-image{name="Incrementing Loop Example" src="/images/var-map.png" tabs}
+:::code-and-image{name="Incrementing Loop Example" src="var-map.png" tabs}
 ```intro
 count: 0
 --

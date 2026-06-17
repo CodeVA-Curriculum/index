@@ -12,7 +12,7 @@ import rehypeFormat from 'rehype-format'
 import remarkGfm from 'remark-gfm'
 import { read } from 'to-vfile'
 import YAML from 'yaml'
-import { practice, quick_take, prompt } from '$lib/utils'
+import { img, practice, quick_take, prompt } from '$lib/utils'
 import remarkDirective from 'remark-directive'
 import remarkDirectiveRehype from 'remark-directive-rehype'
 
@@ -35,8 +35,11 @@ export async function fileToElementObj(path:string):Promise<any> {
     // .use(supporterDirective)
     .use(remarkRehype)
     .use(rehypeHighlight)
+    .use(() => (tree:any) =>{
+      img(tree, path)
+    })
     .use(() => (tree:any) => {
-        qt = quick_take(tree)
+        qt = quick_take(tree, path)
     })
     .use(() => (tree:any) => {
         const q = practice(tree, path)
@@ -46,7 +49,9 @@ export async function fileToElementObj(path:string):Promise<any> {
       const p = prompt(tree, path)
       ps.push(...p)
     })
-    .use(codeAndImage)
+    .use(() => (tree:any) => {
+      codeAndImage(tree, path)
+    })
     .use(rehypeFormat)
     .use(rehypeStringify)
     .process(await read(path))
@@ -91,6 +96,9 @@ export async function parseGuideFiles(paths:string[]) {
 }
 export async function parseNodeFile(path) {
   let file = await fileToElementObj(path)
+  if(file.video?.includes("embed")) {
+    file.video = file.video.substring(file.video.lastIndexOf("/")+1)
+  }
   file.path = file.path.replace('static/trail-guides/', '')
   return {
     ...file

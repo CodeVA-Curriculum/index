@@ -21,8 +21,10 @@ The place for all the things.
 - [x] Make DetailIcons responsive to node stats
   - [x] Make Node icons responsive
   - [x] Make Project icons responsive
-- [ ] Render quick takes in the trail guide (add toggle to node banner)
-- [ ] Render code-and-image in the trail guide (fix image source link)
+- [x] Render quick takes in the trail guide (add toggle to node banner)
+- [x] Render code-and-image in the trail guide (fix image source link)
+- [x] Fix images
+- [x] Fix guide video
 - [ ] Implement library search
 - [ ] Complete "view PDF of library element" workflow
 - [/] Complete "save element to backpack" workflow

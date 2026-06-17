@@ -1,5 +1,6 @@
 <script lang='ts'>
   import Fa from 'svelte-fa'
+  import QuickTake from '$lib/components/guide/QuickTake.svelte'
   import { faSave } from '@fortawesome/free-solid-svg-icons'
   import Video from '$lib/components/Video.svelte'
   import { Prompt, PracticeQuestion } from '$lib/components/guide/directives'
@@ -33,7 +34,9 @@
 </script>
 
 {#snippet overview(obj)}
-  <Video />
+  {#if obj.db.video}
+  <Video id={obj.db.video} />
+  {/if}
   {#if !short}
   <p>{obj.db.description ? obj.db.description : obj.db.short }</p>
   {/if}
@@ -55,7 +58,7 @@
   {/if}
 {/snippet}
 {#snippet prompts(obj)}
-  {#if obj.db.prompts}
+  {#if obj.db.prompts && obj.db.prompts.length > 0}
     {#each obj.db.prompts as prompt}
       <Prompt title={prompt.title} obj={prompt} />
     {/each}

@@ -75,7 +75,7 @@ If you can find images you want to use in your story online or on Unsplash, that
 <!-- ![A Google Drive sharing link with the file ID highlighted](TODO:) -->
 4. Finally, get ready to add the image to your Twine passage! Everything is the same as above **except for the `image:` field**. Instead of pasting the image URL after `image:`, write `https://drive.google.com/uc?id=` and paste the Google Drive file ID you found earlier after the `=`. Check out the passage below for an example:
 
-:::code-and-image{name="Google Drive Image Example" src="/images/drive-image-example.png"}
+:::code-and-image{name="Google Drive Image Example" src="drive-image-example.png"}
 ```
 Here's an image from my Google Drive:
 

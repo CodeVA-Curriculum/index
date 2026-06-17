@@ -18,8 +18,8 @@
   let iconSnippet
   let iconParams = []
   if(eltype == 1) {
-    let completePrompts = obj.db.prompts.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
-    let completeQuestions = obj.db.questions.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
+    let completePrompts = obj.db.prompts.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
+    let completeQuestions = obj.db.questions.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
     iconSnippet = elementIcons
     iconParams = [completeQuestions.length, obj.db.questions.length, completePrompts.length, obj.db.prompts.length]
   } else {

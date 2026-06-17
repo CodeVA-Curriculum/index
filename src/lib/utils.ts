@@ -1,4 +1,4 @@
-import { visit } from 'unist-util-visit'
+import { visit, SKIP } from 'unist-util-visit'
 import {toHtml} from 'hast-util-to-html'
 import {remove} from 'unist-util-remove'
 import {h} from 'hastscript'
@@ -221,7 +221,7 @@ function getFeedback(node:any):string {
     return fb;
 }
 
-export function quick_take(tree:any):string {
+export function quick_take(tree:any, path:string):string {
     let content:string = ''
     visit(tree, function (node:any) {
         if(node.tagName == 'quick-take' && node.children) {
@@ -230,12 +230,43 @@ export function quick_take(tree:any):string {
             // ])
             // el.properties.src = node.properties.src
             console.log("found quick take!", node.properties.src)
-            content += toHtml( h('div.children', [node.children]))
             if(node.properties.src) {
-                content += toHtml(h('div.img-wrap', [h('img', {src: node.properties.src})]))
+                let temp = path.substring("static/trail-guides/".length)
+                const guideTitle = temp.substring(0, temp.indexOf("/"))
+                content += toHtml(h('div.img-wrap', [h('img', {src: `/images/${guideTitle}/${node.properties.src}`})]))
             }
+            content += toHtml( h('div.children', [node.children]))
         }
     })
     remove(tree, (node:any) => node.tagName == 'quick-take')
     return content
 }
+
+export function img(tree, path) {
+      visit(tree, function (node:object, index:number, parent:object):any {
+        if(node.tagName == 'img') {
+            // TODO: error reporting
+            const alt = node.properties.alt ? node.properties.alt : "no alt text provided"
+            const src = node.properties.src ? node.properties.src : "no src provided"
+            
+            // `<div class='has-text-centered' style='margin-left: auto; margin-right: auto;'>
+            //     <figure class="image is-inline-block">
+            //         <img alt="${alt}" src="${base}/images${src}" />
+            //     </figure>
+            // </div>`
+            // const html= h('div', { classList: 'has-text-centered', style: 'margin-left: auto; margin-right: auto;'}, 
+            //                 h('figure.image.is-inline-block',
+            //                     h('img', { alt: alt, src: `${base}/images${src}` })
+            //                 )
+            //             )
+            // node.tagName = 'div'
+            // node.properties.class = 'has-text-centered, parsed'
+            // node.children = html.children
+            if(!src.charAt(0) == "/") { src = "/" + src }
+            let temp = path.substring("static/trail-guides/".length)
+            const guideTitle = temp.substring(0, temp.indexOf("/"))
+            node.properties.src = `/images/${guideTitle}${src}`
+            // return SKIP
+        }
+      })
+  }

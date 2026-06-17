@@ -59,7 +59,7 @@ My new passage needs some links! One of them will lead back to `The Clearing`, a
 
 Here's what my story editor looks like after adding the the links to my `Rotten Log` passage. You can play through the story by [clicking here](/examples/branching-paths), if you'd like.
 
-:::code-and-image{name="Branching Paths Example" src="/images/new-branch.png" tabs}
+:::code-and-image{name="Branching Paths Example" src="new-branch.png" tabs}
 ```the-road
 Once upon a time, a spider was looking for a place to spin thier web. They walked into the forest alone, looking for a good spot to make their new home. Over the hill, they spotted a peaceful clearing; to the right, they spotted a rotten old log.
 

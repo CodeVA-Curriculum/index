@@ -2,42 +2,43 @@
 import { visit } from "unist-util-visit"
 import { h } from 'hastscript'
 
-export function codeAndImage() {
-    return function (tree:any) {
-        let index = 0;
-        visit(tree, function (node:any) {
-            if(node.tagName == 'code-and-image') {
-                let tabTitles:string[] = []
-                for(let i=0;i<node.children.length;i++) {
-                    const child = node.children[i]
-                    if(child.tagName == 'pre') {
-                        // This assumes a lot:
-                        // 1. That the second className is the "language" class (this is only true if the pre elements also have the hljs class, which is added by the rehype-highlight package in parse.ts)
-                        // 2. That the language class is always `language-[lang]`
-                        // 3. That if the language is not set, the class is `language-undefined`
+export function codeAndImage(tree, path) {
+    let index = 0;
+    visit(tree, function (node:any) {
+        if(node.tagName == 'code-and-image') {
+            let tabTitles:string[] = []
+            for(let i=0;i<node.children.length;i++) {
+                const child = node.children[i]
+                if(child.tagName == 'pre') {
+                    // This assumes a lot:
+                    // 1. That the second className is the "language" class (this is only true if the pre elements also have the hljs class, which is added by the rehype-highlight package in parse.ts)
+                    // 2. That the language class is always `language-[lang]`
+                    // 3. That if the language is not set, the class is `language-undefined`
 
-                        // Get the tab titles
-                        let title = 'none_'+index
-                        if(child.children[0].properties.className && child.children[0].properties.className.length > 1) {
-                            title= child.children[0].properties.className[1].substring('language-'.length)+"_"+String(index)
-                        }
-                        child.properties.name = title
-                        child.properties.id = title
-                        child.properties.className = ['code-and-image']
-                        if(title != 'none_'+index) {
-                            child.properties.className.push('has-tabs')
-                        }
-                        if (title != 'undefined') {
-                            // Cast first letter as uppercase
-                            tabTitles = [...tabTitles, title] //.charAt(0).toUpperCase() + title.slice(1)]
-                        }
-                        index += 1
+                    // Get the tab titles
+                    let title = 'none_'+index
+                    if(child.children[0].properties.className && child.children[0].properties.className.length > 1) {
+                        title= child.children[0].properties.className[1].substring('language-'.length)+"_"+String(index)
                     }
+                    child.properties.name = title
+                    child.properties.id = title
+                    child.properties.className = ['code-and-image']
+                    if(title != 'none_'+index) {
+                        child.properties.className.push('has-tabs')
+                    }
+                    if (title != 'undefined') {
+                        // Cast first letter as uppercase
+                        tabTitles = [...tabTitles, title] //.charAt(0).toUpperCase() + title.slice(1)]
+                    }
+                    index += 1
                 }
-                node.properties.tabs = JSON.stringify(tabTitles)
             }
-        })
-    }
+            node.properties.tabs = JSON.stringify(tabTitles)
+            let temp = path.substring("static/trail-guides/".length)
+            const guideTitle = temp.substring(0, temp.indexOf("/"))
+            node.properties.src = "/images/"+guideTitle+"/"+node.properties.src
+        }
+    })
 }
 
 export const getComponent = (title:string, tabTitles:string[]) => {

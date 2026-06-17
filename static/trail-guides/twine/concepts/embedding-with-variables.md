@@ -23,7 +23,7 @@ Check out the story below: the `bonfire` passage describes a bonfire. Using vari
 
 First, I'll create the `intro` passage that sets up the variables, and then the `bonfire` passage with the bonfire and a link to another passage. Click through the tabs below to see the content of each passage:
 
-:::code-and-image{name="Bonfire Embedded Passage Example" src="/images/bonfire-map.png" tabs}
+:::code-and-image{name="Bonfire Embedded Passage Example" src="bonfire-map.png" tabs}
 ```intro
 fire: 'Roaring'
 --
@@ -64,7 +64,7 @@ The fire sputters, sending sparks and ash into the air. A trail of white smoke f
 The `search` passage now *modifies* the variable called `fire`, changing its value to `Dying`. Now, when the reader returns to the fire, the `bonfire` passage will reference the passage called `dying` rather than the passage called `roaring`. This will emphasize the time the reader has "spent" collecting berries nearby. Here's the story map with all of the links in place:
 
 ![The Twine editor, showing the passages described above](/bonfire-map.png)
-:::code-and-image{name="The Bonfire" src="/images/bonfire-map.png" tabs}
+:::code-and-image{name="The Bonfire" src="bonfire-map.png" tabs}
 ```intro
 fire: 'Roaring'
 --
@@ -106,7 +106,7 @@ If you've read the *[Embedding Passages](/tutorials/concepts/embedding-passages)
 
 In this story, I've embedded the passage named `raven` into all of the `stanza` passages. Each `stanza` passage has a link to the next part of the poem, allowing the reader to progress through the poem step-by-step. Here's the `Stanza1` passage as an example:
 
-:::code-and-image{name="The Poem" src="/images/new-raven-stanza1.png" tabs}
+:::code-and-image{name="The Poem" src="new-raven-stanza1.png" tabs}
 ```stanza1
 Then, methought, the air grew denser, perfumed from an unseen censer
 Swung by Seraphim whose foot-falls tinkled on the tufted floor.
@@ -180,7 +180,7 @@ Nothing here, for now
 
 Because the `raven` passage is responsible for the link, I can add all sorts of fancy features to make the embedded material more dramatic:
 
-:::code-and-image{name="Raven (Fancy)" src="/images/raven-delay-embed-demo.gif"}
+:::code-and-image{name="Raven (Fancy)" src="raven-delay-embed-demo.gif"}
 ```raven
 Quoth the Raven...
 

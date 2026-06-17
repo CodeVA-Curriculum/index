@@ -25,7 +25,7 @@ Here's what that story looks like in the editor:
 
 ...and here are the first two passages, called `intro` and `shop`:
 
-:::passage{name="The Shop" src="/images/the-shop-intro-demo.gif" tabs}
+:::code-and-image{name="The Shop" src="the-shop-intro-demo.gif" tabs}
 ```intro
 greeting: "Hello! Welcome to my shop."
 --
@@ -48,7 +48,7 @@ The passage called `intro` sets up a variable called `greeting`, and then sends 
 
 Then, the passage provides the reader with a choice between two different passages--a "nice" option that leads to the passage called `nice`, and a "rude" option that leads to a passage called `rude`. Here's what the `nice` and `rude` passages look like:
 
-:::passage{name="The Shop" src="/images/the-shop-demo.gif" tabs}
+:::code-and-image{name="The Shop" src="the-shop-demo.gif" tabs}
 ```nice
 greeting: "It's nice to see you again! Need anything?"
 --
@@ -69,7 +69,7 @@ You step outside, and then think better of it. You turn around, and head back in
 
 Pay close attention to the "vars" section of the `nice` and `rude` passages--each one *modifies* the value of the `greeting` variable differently. When the code directs the computer to modify a variable that already has a value, the computer *discards* the old value and replaces it with the new one. Then, when the reader shows up to the `shop` passage for a second time the passage still reads the `greeting`, but the value has changed!
 
-![The new Nice version of the shop dialogue](/shop-return-new.png)
+![The new Nice version of the shop dialogue](shop-return-new.png)
 
 Here's what happens in the demo above in order from start to finish, including variable changes:
 
