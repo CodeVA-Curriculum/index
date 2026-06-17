@@ -1,9 +1,12 @@
 // Typography
 $small: 12pt;
+$medium: 18pt;
 $text: black;
 $background: white;
 $dark: #666;
+$title-font: "Poppins";
 
+// Brand
 $dark-blue: #0F3760; // rgb(15, 55, 96); 
 $dark-blue-hover: rgb(35, 75, 116); // lighter
 $highlight-blue: #22A5E6; // rgb(34, 165, 230)
@@ -17,4 +20,14 @@ $highlight-green: #75bc4a; // rgb(117, 188, 74)
 $highlight-green-hover: rgb(97, 168, 54);
 $light-green: #e0eac1; // rgb(224, 234, 193)
 $light-green-hover: rgb(204, 214, 173);
+
+// UI
+$danger: red;
+
+// Grades
+$gk2: $highlight-green;
+$g35: $dark;
+$g68: $dark;
+$g912: $highlight-green;
+$gk12: $highlight-blue;
 

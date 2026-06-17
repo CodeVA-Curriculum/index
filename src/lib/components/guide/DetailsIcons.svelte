@@ -1,51 +1,71 @@
 <script lang='ts' module>
+
   export const ElementType = {
     Project:0,
     Tutorial:1
   }
 </script>
 <script lang='ts'>
+  import { enhance } from '$app/forms';
   import Fa from 'svelte-fa'
   import { faLocationDot, faClipboardQuestion, faTerminal, faFire, faRoute } from '@fortawesome/free-solid-svg-icons'
-  let { eltype = 0} = $props()
-  
+  let { eltype = 0, obj } = $props()
+  let form;
   const ElementType = {
     Project:0,
     Tutorial:1
   }
-  type Type = typeof ElementType[keyof typeof ElementType];
+  let iconSnippet
+  let iconParams = []
+  if(eltype == 1) {
+    let completePrompts = obj.db.prompts.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
+    let completeQuestions = obj.db.questions.filter((obj) => obj.status.length > 0 && obj.status[0].complete)
+    iconSnippet = elementIcons
+    iconParams = [completeQuestions.length, obj.db.questions.length, completePrompts.length, obj.db.prompts.length]
+  } else {
+    iconSnippet = projectIcons
+    iconParams = [obj.size, obj.db.difficulty, obj.getCompletePercent()]
+  }
+  async function update() {
+		await fetch('/learn', {
+			method: 'POST',
+			body: JSON.stringify({
+			  type: eltype == 0 ? "project" : "node",
+			  itemId: obj.db.id,
+			  complete: obj.complete
+			})
+		});
+  }
 </script>
-<div class='details-icons'>
-  <div class='mark'>
-    <input type="checkbox">
-      Mark Complete
-  </div>
-  {#if eltype == ElementType.Project}
-  <div>
-    <Fa icon={faLocationDot} />
-    <span>0</span>
-  </div>
-  <div>
-    <Fa icon={faFire} />
-    <span>0</span>
-  </div>
-  <div>
-    <span>0%</span>
-  </div>
-  {:else if eltype==ElementType.Tutorial}
+{#snippet elementIcons(a, b, c, d)}
   <div>
     <span><Fa icon={faClipboardQuestion} /></span>
-    <span>0/0</span>
+    <span>{a}/{b}</span>
   </div>
   <div>
     <span><Fa icon={faTerminal} /></span>
-    <span>0/0</span>
+    <span>{c}/{d}</span>
+  </div>
+{/snippet}
+{#snippet projectIcons(a, b, c)}
+  <div>
+    <Fa icon={faLocationDot} />
+    <span>{a}</span>
   </div>
   <div>
-    <span><Fa icon={faRoute} /></span>
-    <span>0</span>
+    <Fa icon={faFire} />
+    <span>{b}</span>
   </div>
-  {/if}
+  <div>
+    <span>{c}%</span>
+  </div>
+{/snippet}
+<div class='details-icons'>
+    <div class='mark'>
+      <input onchange={update} type="checkbox" bind:checked={obj.complete}>
+      Mark Complete
+    </div>
+    {@render iconSnippet(iconParams[0], iconParams[1], iconParams[2], iconParams.length == 4 ? iconParams[3] : null)}
 </div>
 
 <style lang='scss'>

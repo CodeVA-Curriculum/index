@@ -20,38 +20,46 @@ export function generateSessionToken() {
 	return token;
 }
 
-export async function createSession(token: string, userId:number) {
+export async function createSession(token: string, userId:number, codeId:number, alias:string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: table.Session = {
-		// id: sessionId,
-		userId,
+		id: sessionId,
+		userId: userId,
+		codeId: codeId,
+		alias: alias,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
-	await db.insert(table.session).values(session);
+	let { id } = await db.insert(table.session).values(session).returning();
 	return session;
 }
 
 export async function validateSessionToken(token: string) {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	// console.log("validating session token...")
 	const [result] = await db
 		.select({
-			// Adjust user table here to tweak returned data
-			user: { id: table.user.id, username: table.user.username },
-			session: table.session
+			user: table.user,
+			session: table.session,
+			accessCode: table.accessCode
 		})
 		.from(table.session)
 		.innerJoin(table.user, eq(table.session.userId, table.user.id))
+		.innerJoin(table.accessCode, eq(table.session.codeId, table.accessCode.id))
 		.where(eq(table.session.id, sessionId));
 
-	if (!result) {
-		return { session: null, user: null };
-	}
-	const { session, user } = result;
 
+	if (!result) {
+		// console.log("Failed to validate token")
+		return { session: null, user: null, accessCode: null };
+	}
+	console.log(result)
+	const { session, user, accessCode } = result
+
+	// console.log("validating token with accessCode", accessCode.alias)
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
 		await db.delete(table.session).where(eq(table.session.id, session.id));
-		return { session: null, user: null };
+		return { session: null, user: null, accessCode: null };
 	}
 
 	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
@@ -63,7 +71,7 @@ export async function validateSessionToken(token: string) {
 			.where(eq(table.session.id, session.id));
 	}
 
-	return { session, user };
+	return { session, user, accessCode };
 }
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
@@ -80,6 +88,7 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent) {
+	console.log("Deleting session cookie...")
 	event.cookies.delete(sessionCookieName, {
 		path: '/'
 	});

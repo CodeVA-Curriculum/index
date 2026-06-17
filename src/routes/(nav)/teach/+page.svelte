@@ -11,9 +11,11 @@
           <img src="/images/library.png"/>
           </div>
           <div class='text'>
+            <div>
         <h2>Computing Curriculum Library</h2>
           <p>The CodeVA Curriculum Library is a free, open resource with high-quality CS lessons for teachers to explore and use in their classrooms. Check out the library and download, remix, or modify lessons to your heart's content!</p>
           <p>All of our free material is licensed under CC-BY-SA-NC, which means its yours to use as you wish as long as it's not for commercial purposes! Just make sure you credit CodeVA for the materials you adapt from us.</p>
+          </div>
           <a href="/teach/library" role="button">Visit the Library</a>
           </div>
         </div>
@@ -23,7 +25,7 @@
       <article>
         <h2>CS Education Hub</h2>
         <p>Your resource for computer science teaching, containing information about CS standards of learning, vocabulary, lesson ideas, and tools to help you design high quality computing instruction for your students.</p> 
-        <a role='button' href="/teach/cs/hub">Coming soon!</a>
+        <a role='button' disabled  href="/teach/cs/hub">Coming soon!</a>
       </article>
       <article>
         <h2>CS Integration Tools</h2>
@@ -59,7 +61,6 @@
     width: 100%;
     margin-top: auto;
     margin-bottom: 0;
-    background-color: #0F3760;
   }
   p {
     flex-grow: 1;

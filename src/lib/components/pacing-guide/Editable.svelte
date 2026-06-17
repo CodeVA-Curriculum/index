@@ -62,7 +62,7 @@
       cursor: pointer;
     }
   }
-  span { align-items: top;}
+  span { align-items: top; margin: 0 8px; }
   input {
     flex-basis: 100%;
   margin: 0 0 ;

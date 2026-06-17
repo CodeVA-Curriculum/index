@@ -1,13 +1,15 @@
-<script>
+<script lang='ts'>
     import { faSliders} from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
 
     let filterToggle = $state(false)
+    let { filters } = $props()
 </script>
-{#snippet dropdown(label, list)}
+{#snippet dropdown(label: string, list: string[])}
 <div class='dropdown-wrap'>
   <p class='dropdown-label'>{label}</p>
   <details class="dropdown">
+    <!-- svelte-ignore a11y_no_redundant_roles -->
     <summary class='dropdown-button secondary' role='button'>
       Select one or more...
     </summary>
@@ -26,9 +28,12 @@
 {/snippet}
 <div class='search'>
 <form>
+  <!-- svelte-ignore a11y_no_redundant_roles -->
   <fieldset role="group">
-    <input type="text" />
+    <input type="text" placeholder="Search for lessons..." />
+    {#if filters}
     <button onclick={() => filterToggle = !filterToggle}><Fa size=1.0x icon={faSliders} /> <span>Filters</span></button>
+    {/if}
     <input class='search-button' type="submit" value="Search" />
   </fieldset>
   <div class='filters {filterToggle? 'selected':''}'>
@@ -39,10 +44,11 @@
 
       <div>
         <p class='dropdown-label'>Tags</p>
+        <!-- svelte-ignore a11y_no_redundant_roles -->
         <fieldset class="tag-search" role='group'>
           <input type='text' />
         </fieldset>
-    </div>
+      </div>
   </div>
 </form>
 </div>
@@ -51,6 +57,9 @@
   .search {
     display: flex;
     flex-direction: row;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    fieldset { margin: 0; }
   }
   form { flex: 1; }
   .search-button { width: 260px; }
@@ -83,7 +92,7 @@
    padding-bottom: 4px;
    font-weight: bold;
   }
-  .filters, .dropdowns{
+  .filters {
     gap: 12px;
     display: flex;
     flex-direction: row;

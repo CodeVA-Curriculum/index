@@ -1,5 +1,8 @@
 import type { Edge as DbEdge } from '$lib/server/db/schema'
 
+const STROKE_WEIGHT = 8;
+const SELECT_FACTOR = 3
+
 interface ControlPoint {
   x:number,
   y:number
@@ -19,8 +22,8 @@ export class Edge {
   cy:number = 0
   highlighted:boolean = $state(false)
   constructor(obj:DbEdge, elementsByPath:any) {
-    console.log("Setting up edge", obj.uid)
-    console.log(obj.toNode.path)
+    // console.log("Setting up edge", obj.uid)
+    // console.log(obj.toNode.path)
     this.db = obj
     this.from = elementsByPath[obj.fromNode.path]
     this.to = elementsByPath[obj.toNode.path]
@@ -46,22 +49,18 @@ export class Edge {
     this.shape = p5.createGraphics(w, h)
     this.shape.fill('rgba(0, 0, 0, 0)')
     this.shape.stroke(this.shape.color(0, 0, 0));
-    this.shape.strokeWeight(1)
+    this.shape.strokeWeight(STROKE_WEIGHT)
     this.shape.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
     this.highlight = p5.createGraphics(w,h)
     this.highlight.fill('rgba(0, 0, 0, 0)')
     this.highlight.stroke(255, 0, 0)
-    this.highlight.strokeWeight(12)
+    this.highlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
     this.points = { p0: p0, p1:p1, p2:p2, p3:p3}
     this.optionEdge = p5.createGraphics(w,h)
     this.generateOptionEdge(p5)
-    // this.optionEdge.fill('rgba(0, 0, 0, 0)')
-    // this.optionEdge.stroke(0, 255, 0)
-    // this.optionEdge.strokeWeight(12)
-    // this.optionEdge.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
   }
   draw(p5) {
     p5.image(this.highlighted?  this.highlight : this.shape, this.x, this.y)
@@ -77,7 +76,7 @@ export class Edge {
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')
     this.optionEdge.stroke(255, 0, 0)
-    this.optionEdge.strokeWeight(12)
+    this.optionEdge.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     // this.optionEdge.bezier(this.points.p0.x - this.x, this.points.p0.y - this.y, this.points.p1.x - this.x, this.points.p1.y - this.y, this.points.p2.x - this.x, this.points.p2.y - this.y, this.points.p3.x - this.x, this.points.p3.y - this.y)
     // this.optionEdge.bezier()
     // this.bezier(p5, this.points.p0.x-this.x, this.points.p0.y-this.y ,this.points.p1.x-this.x, this.points.p1.y-this.y ,this.points.p2.x-this.x, this.points.p2.y-this.y, this.points.p3.x-this.x, this.points.p3.y-this.y, 0.1)

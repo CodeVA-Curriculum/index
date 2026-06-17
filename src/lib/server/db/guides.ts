@@ -11,6 +11,7 @@ export async function seedGuides(db:any, schema:any) {
 
   // First, add all the guides
   const guidePaths = paths.filter((p) => p.includes('meta.md'))
+  console.log(guidePaths)
   let els = await parseGuideFiles(guidePaths)
   const guides = await db.insert(schema.guide).values(els).returning()
 
@@ -27,6 +28,7 @@ export async function seedGuides(db:any, schema:any) {
   // Next, all the nodes
   const nodePaths = paths.filter((p) => !projectPaths.includes(p) && !guidePaths.includes(p))
   for(const path of nodePaths) {
+    console.log("Rendering node", path)
     let mapPath = path.replace('static/trail-guides/', '')
     const guideName = mapPath.substring(0, mapPath.indexOf('/'))
     const mapFile = (await read("static/trail-guides/"+guideName+"/map.canvas")).toString()
@@ -49,12 +51,21 @@ export async function seedGuides(db:any, schema:any) {
     for(const question of file.questions) {
       const o = {
         node: id,
-        title: question.name ? question.name : "No title given",
+        title: question.title? question.title: "No title given",
         raw: JSON.stringify(question),
         content: question.text,
         options: JSON.stringify(question.options),
       }      
       await db.insert(schema.question).values(o)
+    }
+    // add and associate prompts
+    for(const prompt of file.prompts) {
+      const o = {
+        node: id,
+        title: prompt.title? prompt.title: "No title given",
+        content: prompt.text
+      }      
+      await db.insert(schema.prompt).values(o)
     }
     
   }

@@ -1,4 +1,5 @@
 import type {PageLoad} from './$types'
+import type { Actions } from './$types'
 import { db } from '$lib/server/db/index'
 import type { Guide } from '$lib/server/db/schema'
 import { guide } from '$lib/server/db/schema'

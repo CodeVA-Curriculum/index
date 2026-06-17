@@ -19,4 +19,18 @@ section { margin: $section-gap 0rem; }
   }
 }
 
+.buttons {
+  display: flex;
+  gap: 12px;
+  & > * {
+    flex: 1;
+  }
+}
+
+.with-icon {
+  span {
+    margin-left: 12px;
+  }
+}
+
 

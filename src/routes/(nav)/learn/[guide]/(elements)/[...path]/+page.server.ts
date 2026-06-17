@@ -1,11 +1,12 @@
-import type { LayoutServerLoad } from './$types';
-import { db } from '$lib/server/db/index'
+import type { PageServerLoad } from './$types';
+import { projectRelations } from '$lib/server/db'
+import { db, nodeRelations } from '$lib/server/db/index'
 import { eq, and, inArray } from 'drizzle-orm'
 import * as schema from '$lib/server/db/schema'
 import { error } from 'svelte'
 import { getGuideFromParam } from '$lib/server/db/utils'
 // Construct the map and load it in
-export const load: LayoutServerLoad = async ({ params, parent, url }) => {
+export const load: PageServerLoad= async ({ params, parent, url }) => {
   const { guide } = await parent();
   let searchPath = url.toString().substring(url.toString().indexOf("/learn/")+"/learn/".length)
   // searchPath = searchPath.substring(0, searchPath.indexOf("?") ? searchPath.indexOf("?") : searchPath.length)
@@ -21,16 +22,24 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
     //   eq(schema.project.path, searchPath)
     // ))
     results = await db.query.project.findMany({
-      with: { pivot: true, nodeGroups: { with: { nodes: true }}},
+      with: projectRelations,
       where: { guide: guide.id, path: searchPath }
     })
     elType = "project"
   } else {
     // search for a Node
-    results = await db.select().from(schema.node).where(and(
-      eq(schema.node.guide, guide.id),
-      eq(schema.node.path, searchPath)
-    ))
+    // results = await db.select().from(schema.node).where(and(
+    //   eq(schema.node.guide, guide.id),
+    //   eq(schema.node.path, searchPath)
+    // ))
+    results = await db.query.node.findMany({
+       with: nodeRelations,
+       where: {
+          guide: guide.id,
+         path: searchPath
+       }   
+    })
+    console.log(results)
     elType = "node"
   }
   if(results.length == 0) {
@@ -40,12 +49,7 @@ export const load: LayoutServerLoad = async ({ params, parent, url }) => {
   // Do project stuff if needed
   if(elType == "project") {
     const project = await db.query.project.findFirst({
-      with: {
-        nodeGroups: {
-          with: { nodes: true }
-        },
-        pivot: true
-      },
+      with: projectRelations,
       where: {
         id: element.id
       }

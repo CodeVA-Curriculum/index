@@ -1,8 +1,15 @@
 import type { Node as DbNode } from '$lib/server/db/schema'
 import { Lerp } from '$lib/utils'
 
+export const STROKE_WEIGHT= 8
+export const BACKGROUND_COLOR = "#ffffff"
+export const HIGHLIGHT_COLOR = "#00ff00";
+export const HOVER_COLOR = "ffffff"
+const SCALE = 1.5 // bigger = less spacing
+
 export class Node {
   db:DbNode
+  // status
   complete:boolean = $state(false)
   selected:boolean = $state(false)
   highlighted:boolean = $state(false)
@@ -13,12 +20,14 @@ export class Node {
   hover = false
   scale = 1
   icon:any = false;
+  stroke = STROKE_WEIGHT;
   constructor(obj:DbNode) {
     this.db = obj
-    this.x = obj.x/2
-    this.y = obj.y/2
+    this.x = obj.x/SCALE
+    this.y = obj.y/SCALE
+    this.complete = obj.status?.length > 0 ? obj.status[0].complete : false
   }
-  setup(p5, font) {
+  async setup(p5, font) {
     const fontData = this.getWidth(p5, font)
     const minDiameter = fontData.lines * 20 + 175
     let w = Math.ceil(fontData.w) > minDiameter ? Math.ceil(fontData.w) : minDiameter
@@ -26,40 +35,38 @@ export class Node {
     if(this.db.type == "cache") { w = 100 }
     this.radius = new Lerp(Math.round(w), 5)
     if(this.db.type == "cache") {
-      p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
+       await p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
         this.icon = img
       })
     }
+    if(this.db.status.date) { this.lastUpdated = this.db.status.date }
+    // make shadow
+    // this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
   }
   draw(p5:any) {
-    // this.radius = this.hover ? 100 : 50;
-    // if(this.hover) {
-    //   this.radius.setTarget(this.width * 1.5)
-    // } else {
-    //   this.radius.setTarget(this.width)
-    // }
     this.radius.update(p5)
     let w = this.radius.get()
     let x = this.x*this.scale
     let y = this.y*this.scale
-    if(this.selected) {
-      p5.fill(0, 255, 0)
-    }
-    if(this.highlighted) {
-      p5.stroke(255, 0, 0)
-      p5.strokeWeight(8)
-    }
+    let pastFill
+    let styleFlag = false
+    // if(this.highlighted) {
+    //   p5.stroke("#ff0000")
+    //   p5.strokeWeight(STROKE_WEIGHT * 2)
+    // }
     p5.circle(x, y, w)
-    if(this.selected) { p5.fill(255) }
-    if(this.highlighted) { p5.stroke(0); p5.strokeWeight(1)}
-    // this.debug(p5)
+    // if(styleFlag) {
+    //   p5.stroke(0)
+    //   p5.strokeWeight(STROKE_WEIGHT)
+    // }
+
     if(this.db.type == "cache" && this.icon) {
       let iconScale = 0.50
       if(this.hover) {
-        p5.text(this.db.title, x-150/2, y, 150)
         let ix = x + w/2 * Math.cos(45 * p5.PI/180)
         let iy = y + w/2 * Math.sin(45 * p5.PI/180)
         p5.circle(ix, iy, 100)
+        p5.text(this.db.title, x-150/2, y, 150)
         // iconScale = 0.25
         p5.image(this.icon, ix-100*iconScale/2, iy-100*iconScale/2, 100*iconScale, 100*iconScale)
       } else {
@@ -67,9 +74,14 @@ export class Node {
         y = y - 100 * iconScale / 2
         p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
       }
-    } else if(this.db.type != "cache") {
+    } else if(this.db.type != "cache" || (this.db.type == 'cache' && this.hover)) {
       p5.text(this.db.title, x-150/2, y, 150)
     }
+    if(this.complete) {
+      // Draw checkmark
+      p5.image(this.completeImage, this.x, this.y)
+    }
+    // p5.image(this.shadow, x, y)
   }
   debug(p5:any) {
     
@@ -154,6 +166,28 @@ export class Node {
     
   }
 }
+export function  getCompleteImage(p5:any, w:number,h:number) {
+    const img = p5.createGraphics(w,h)
+    let cx = w*.37; let cy=h*.75;
+    img.fill(0)
+    img.strokeWeight(h/4)
+    img.line(cx, cy, cx - w/4, cy - w/4)
+    img.line(cx, cy, cx + w/2, cy - w/2)
+    img.stroke('rgb(72, 199, 116)');
+    img.strokeWeight(h/5)
+    img.line(cx, cy, cx - w/4, cy - w/4)
+    img.line(cx, cy, cx + w/2, cy - w/2)
+    return img
+  }
+
+export function getDefaultNodeStyle() {
+  return {
+    stroke: STROKE_WEIGHT,
+    fill: BACKGROUND_COLOR,
+    highlight: HIGHLIGHT_COLOR,
+    hover: HOVER_COLOR
+  }
+}
 
 export class NodeInGroup {
   obj:Node
@@ -165,4 +199,31 @@ export class NodeInGroup {
     this.index = index
   }
   
+}
+export function makeShadow(p5, radius, sigma, shadowColor, opacity) {
+  // Gaussian goes to approx. 0 at 3sigma
+  // away from the mean; pad image with
+  // 3sigma on all sides to give space
+  const newW = radius*2 + 6 * sigma;
+  const newH = radius*2 + 6 * sigma;
+  const g = p5.createGraphics(newW, newH);
+  
+  g.fill(0)
+  g.circle(g.width/2, g.height/2, 40);
+  g.filter(g.BLUR, sigma);
+  
+  // const shadow = g.get();
+  // const c = p5.color(shadowColor);
+  // shadow.loadPixels();
+  // const numVals = 4 * shadow.height * shadow.height
+  // for (let i = 0; i < numVals; i+=4) {
+  //   shadow.pixels[i + 0] = c.levels[0];
+  //   shadow.pixels[i + 1] = c.levels[1];
+  //   shadow.pixels[i + 2] = c.levels[2];
+  //   shadow.pixels[i + 3] *= opacity;
+  // }
+  // shadow.updatePixels();
+  
+  // g.remove();
+  return g;
 }

@@ -19,7 +19,7 @@
       <h1>Search CS Lessons & Resources</h1>
       <p>Use the search bar and filters to browse our library of computer science resources!</p>
       <div class='sticky'>
-        <SearchBar />
+        <SearchBar filters />
       </div>
       <table>
         <colgroup>
@@ -31,31 +31,35 @@
         </colgroup>
       <thead>
         <tr>
-          <th class='title' scope="col">Title</th>
           <th scope="col">Grades</th>
+          <th class='title' scope="col">Title</th>
           <th scope="col">Type</th>
-          <th scope="col">Subjects</th>
+          <th scope="col">Subjects (CS+)</th>
           <th class='tags' scope="col">Tags</th>
-          
         </tr>
       </thead>
       <tbody>
         {#each data.elements as el, i}
           {#if i == selected}
-            <tr class='selected' style="background-color: powderblue;">
+            <tr class='selected'>
+              <td>
+                <div class='ui-buttons'>
+                  <a href="/teach/library/browse/{el.path}" target="_blank" role='button'>Open</a>
+                  <button>Save</button>
+                  <button onclick={()=>selected=-1} class='close'>Dismiss</button>
+                </div>
+              </td>
               <td colspan="5">
-              <button onclick={()=>selected=-1} class='close'><Fa icon={faX} /></button>
-              <Element obj={el} />
+                <Element user={data.user} obj={el} />
               </td>
             </tr>
           {:else}
           <tr onclick={() => sel(i)}>
-            <td class=''>{el.title}</td>
             <td>{el.gradesAbbr}</td>
+            <td class=''>{el.title}</td>
             <td>{el.types[0].title}</td>
             <td>
               {#if el.subjects.length < 5}
-              <span class='tag light'>CS</span>
               {#each el.subjects.filter((o) => o.abbr != 'CS') as subj}
                 <span class='tag light'>{subj.abbr}</span>
               {/each}
@@ -81,10 +85,14 @@
 
 <style lang='scss'>
   // tr { display: flex; }
-  tr:hover {
-    cursor: pointer;
-    & > td { background-color: whitesmoke; }
+  table {
+    @import "$lib/styles/table";
+    @include hoverable;
   }
+  // tr:hover {
+  //   cursor: pointer;
+  //   & > td { background-color: whitesmoke; }
+  // }
   th.title {
     min-width: 400px;
   }
@@ -126,15 +134,23 @@
     width: 50px;
     overflow-x: hidden;
   }
-  .close {
+  .ui-buttons {
+    margin-top: 1rem;
     position: absolute;
-    left: -64px;
-    background-color: white;
-    border: 1px solid gray;
-    color: gray;
-    height: 56px;
-    width: 56px;
-    border-radius: 28px;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 11pt;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    * {
+      border-radius: 0;
+      width: 100%;
+      flex: 1;
+      // background-color: white;
+      font-size: 11pt;
+    }
   }
 </style>

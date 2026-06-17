@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { enhance } from '$app/forms'
   import Carousel from '$lib/components/pacing-guide/Carousel.svelte'
   import Editable from '$lib/components/pacing-guide/Editable.svelte'
 
@@ -6,11 +7,20 @@
   import { faPencil, faPlus, faTrash, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'
   import StandardsSelect from './StandardsSelect.svelte';
 
- let { row = $bindable(), first, last, operations, elements }= $props();
+ let { form, map, children, row = $bindable(), first, last, operations, standards, standardMenu }= $props();
   let editable:any = $state()
   let editingState = false;
-
+  let test = [ 10 ]
   let selectedSOLs = $state([])
+  let elements = $state([])
+  $effect(() => {
+    console.log("Row", selectedSOLs)
+    if(form?.success) {
+      elements = form.success.activities
+      console.log("Adding activities to row", row.unit)
+    }
+
+  })
 </script>
 <tr>
   <td>
@@ -25,12 +35,25 @@
   </td>
   <td class='sols'>
     <div class='td-wrap'>
-    <StandardsSelect bind:selectedIds={selectedSOLs} />
+    <StandardsSelect map={map} bind:selected={selectedSOLs} standards={standards}  />
     </div>
   </td>
   <td class='carousel'>
     <div class='td-wrap'>
-      <Carousel sols={selectedSOLs} elements={elements} />
+      <Carousel rowIndex={row.unit} sols={selectedSOLs} elements={elements} >
+      <div class='empty'>
+        <form method="POST" action="?/load" use:enhance={() => {
+          return async ({ update }) => {
+            await update({ reset: false }); // Resets hidden and visible inputs
+          };
+        }}>
+          <input name="ids" id="ids" style="display: none;" type="text" value={JSON.stringify({ "ids": selectedSOLs })} />
+          <input name="rowIndex" id="rowIndex" style="display: none;" type="text" value={row.unit} />
+          <input type="submit" disabled={selectedSOLs.length == 0} value="Load Resources"/>
+        </form>
+        <p>Select standards, then click above to search!</p>
+      </div>
+      </Carousel>
     </div>
   </td>
   <td>
@@ -51,7 +74,6 @@
 <style lang='scss'>
   @use"$lib/styles/theme.scss";
   td {
-    position: relative;
     border: 1px solid #e7eaf0;
     // min-height: 10rem;
     padding: 0;

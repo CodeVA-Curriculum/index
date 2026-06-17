@@ -1,0 +1,6 @@
+@mixin hoverable {
+    tr:hover {
+      cursor: pointer;
+      & > td { background-color: whitesmoke; }
+    }
+}

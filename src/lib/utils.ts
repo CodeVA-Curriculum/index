@@ -52,7 +52,12 @@ export interface Question {
     options:Option[],
     completed:boolean
 }
-
+export interface Prompt {
+    title:string,
+    text:string,
+    response:string,
+    completed:boolean
+}
 export interface Option {
     text:string,
     feedback?:string,
@@ -65,6 +70,33 @@ export interface Feedback {
 }
 
 // This directive takes the slotted content of the custom element and generates props to insert into the PracticeQuestion component
+export function prompt(tree:any, path:string):object[] {
+    let content:Prompt[] = []
+    visit(tree, function (node:any) {
+        let index = 0
+        if(node.tagName == 'prompt' && node.children) {
+            const obj:Prompt= { title: 'No title given', text: '', response: '', completed: false }
+            console.log("Found prompt at", path)
+            // generate hast tree for practice questions from children of practice element
+            node.tagName = 'practice-prompt'
+            if(node.properties.title) { obj.title= node.properties.title}
+            for(let i=0;i<node.children.length;i++) {
+                const child = node.children[i]
+                obj.text += "\n"+toHtml(child)
+            }
+            content.push(obj)
+            node.properties.title = obj.title
+            node.properties.text = obj.text
+            node.properties.prompt = JSON.stringify(obj)
+            node.properties.path = path
+            node.properties.index = index
+            index++
+
+            node.children = []
+        }
+    })
+    return content
+}
 export function practice(tree:any, path:string):object[] {
     let content:Question[] = []
     visit(tree, function (node:any) {
@@ -74,7 +106,7 @@ export function practice(tree:any, path:string):object[] {
             console.log("Found practice question at", path)
             // generate hast tree for practice questions from children of practice element
             node.tagName = 'practice-question'
-            if(node.properties.name) { obj.name = node.properties.name }
+            if(node.properties.title) { obj.title = node.properties.title}
             for(let i=0;i<node.children.length;i++) {
                 const child = node.children[i]
                 if(child.tagName == 'p') { // this is content that comes before the options
@@ -91,7 +123,7 @@ export function practice(tree:any, path:string):object[] {
             }
             obj.completed = false
             content.push(obj)
-            node.properties.name = obj.name
+            node.properties.title = obj.title
             node.properties.text = obj.text
             node.properties.question = JSON.stringify(obj)
             node.properties.path = path

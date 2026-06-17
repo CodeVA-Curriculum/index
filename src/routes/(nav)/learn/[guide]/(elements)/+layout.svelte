@@ -4,5 +4,5 @@
 
   import {onMount} from 'svelte'
 </script>
-<GuideNav guide={data.guide} />
+<GuideNav guide={data.guide} user={data.user} session={data.session} />
   {@render children()}

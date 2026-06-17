@@ -1,65 +1,64 @@
 <script lang='ts'>
+    import StandardInList from '$lib/components/pacing-guide/StandardInList.svelte'
     import { onMount } from "svelte";
     import Fa from 'svelte-fa'
-    import {faAdd, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
+    import {faAdd, faHome, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
     import { getViewSelectedFields } from "drizzle-orm";
 
-    let { selectedIds = $bindable() } = $props()
+    let { selected = $bindable([]), standards, map } = $props()
 
-    let standards:any = $state()
-    let workingObj:any = $state()
-    let selected = $state([])
-    let map:any = $state()
-    let indices:string[] = $state([])
-    let loaded = $state(false)
+    const titles = [ "Grades", "Subjects", "Standards"]
+    let breadcrumbs = $state([])
+
+    let workingMap = $state(map)
     let open = $state(false)
-    onMount(async () => {
-        // load standards from API
-        standards = await (await fetch(`https://curriculum.codevirginia.org/api/standards/object.json`)).json()
-        loaded = true
-        map = standards["courseToSubjectMap"]
-        delete standards["courseToSubjectMap"]
-        workingObj = standards
-    })
-    function nav(key:string, value?:any) {
-        if(!indices.includes(key)) {
-            indices.push(key)
-        } else {
-            // remove everything after the one that was clicked
-            const i = indices.indexOf(key)
-            indices.splice(i+1)
-            if(i == 0 && indices.length == 1) {
-                indices = []
-            }
-        }
-        let wo = standards
-        for(let i=0;i<indices.length;i++) {
-            wo = wo[indices[i]]
-        }
-        workingObj = wo
-    }
     function edit() { open = true }
     function close() { open = false }
-    function add(obj:any) {
-        selected.push(obj)
-        selectedIds.push(obj["id"])
+    let menuIndex = $state(0)
+    let lastMenu = $state("")
+    function menuChange(clicked:string) {
+        if(clicked && workingMap[clicked]) {
+            console.log("nav forward")
+            workingMap = workingMap[clicked] // pass the next object in the map to the workingMap
+            breadcrumbs.push(clicked)
+            menuIndex++
+        } else {
+            if(clicked) {
+                console.log("nav back")
+                // try to go back
+                const key = breadcrumbs[0]
+                console.log(map[key])
+                workingMap = map[key]
+                menuIndex--
+                breadcrumbs = [ breadcrumbs[0] ]
+            } else {
+                console.log("reset")
+                workingMap = map // reset to home nav
+                menuIndex = 0
+                breadcrumbs = []
+            }
+        }
+        if(menuIndex == 2) {
+            let firstIndex = Number(workingMap[0].abbr.split(".")[3])
+            let sortByIndex = true
+            for(let i=1;i<workingMap.length;i++) {
+                const s = workingMap[i]
+                const index = Number(s.abbr.split('.')[3])
+                if(index == firstIndex) {
+                    console.log(index, firstIndex)
+                    sortByIndex = false
+                    break
+                }
+            }
+            if(sortByIndex) {
+                console.log("reordering...")
+                workingMap.sort((a,b) => a.abbr.split('.')[3] - b.abbr.split('.')[3])
+            }
+            
+        }
     }
-    function remove(obj:any) {
-        let index = -1
-        for(let i=0;i<selected.length;i++) {
-            if(selected[i]["id"] == obj["id"]) {
-                index = i
-                break
-            }
-        }
-        selected.splice(index, 1)
-        for(let i=0;i<selectedIds.length;i++) {
-            if(selectedIds[i] == obj["id"]) {
-                index = i
-                break
-            }
-        }
-        selectedIds.splice(index, 1)
+    function remove(i) {
+        selected.splice(i, 1)
     }
 </script>
 
@@ -67,54 +66,80 @@
     <Fa icon={faAdd} />
     <span>Add</span>
 </button>
-{#each selected as obj}
-<span class='tag'>{obj["id"]} <button onclick={() => remove(obj)} class='icon'><Fa icon={faX} size=0.25/></button></span>
+<div class='tags'>
+{#each selected as obj, i}
+<span class='tag'><span>{obj.abbr}</span> <button onclick={() => remove(i)} class='icon'><Fa icon={faX}  /></button></span>
 {/each}
+</div>
 
-<dialog open={open}>
-  <article>
-    <header>
+<aside class='{open? "open" : ""} has-shadow'>
+    <div class="list" >
+    <div class='bread'>
         <nav aria-label="breadcrumb">
             <ul>
-                {#each indices as index}
-                <li><a onclick={() => nav(index)}>{index}</a></li>
+                <li><a onclick={() => menuChange()}><Fa icon={faHome} /></a></li>
+                {#each breadcrumbs as bc, i}
+                    <li><a onclick={() => menuChange(i == 0 ? null : bc)}>{bc}</a></li>
                 {/each}
             </ul>
-            
         </nav>
-        <button onclick={close} aria-label="Close" rel="prev"></button>
-    </header>
-    {#if loaded}
-        {#each Object.entries(workingObj) as [key,value]}
-            {#if isNaN((key as unknown) as number)}
-            <div class='item'>
-                <button onclick={() => nav(key, value)}>{key}</button>
-            </div>
+    </div>
+        <div class='heading'>
+        <h3>Select SOLs</h3>
+        <button onclick={close}>
+            <Fa icon={faX} />
+        </button>
+        </div>
+        <hr>
+        {#each Object.entries(workingMap) as [k,v]}
+            {#if menuIndex == 2}
+            <StandardInList bind:selected={selected} obj={v} />
             {:else}
-            <div class='item'>
-                <div class='standard'>
-                    <div class='top'>
-                        <span class='title'>{value["id"]}</span>
-                        {#if selectedIds.includes(value["id"])}
-                        <button onclick={() => remove(value)}>
-                            Remove from Pacing Guide
-                        </button>
-                        {:else}
-                        <button onclick={() => add(value)}>
-                            Add to Pacing Guide
-                        </button>
-                        {/if}
-                    </div>
-                    <p>{value["text"]}</p>
-                </div>
-            </div>
+            <p onclick={() => menuChange(k)}><a >{k}</a></p>
             {/if}
         {/each}
-    {/if}
-  </article>
-</dialog>
+    </div>
+</aside>
+
 
 <style lang='scss'>
+    .bread {
+        width:586px;
+        margin-left: 1rem;
+        nav {
+            ul {
+                display: flex;
+                li { position: relative; }
+                li::after {
+                    display: flex;
+                    position: absolute;
+                    right: -1.25rem;
+                    top: 0.5rem;
+                }
+            }
+        }
+    }
+    div.list {
+        width: 586px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: white;
+        padding: 1rem;
+    }
+    div.list { position: relative; }
+    aside {
+        width: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow-y: scroll;
+        height: 95vh;
+    }
+    p {
+        padding: 12px; margin: 0;
+        &:hover { background-color: whitesmoke; cursor: pointer;  }
+    }
     .empty {
         background-color: white;
         color: black;
@@ -164,6 +189,42 @@
             align-items: center;
             button { flex-shrink: 1; width: auto; font-size: 12pt; padding: 10px; }
         }
+    }
+    .heading {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        h3 { flex: 1 0; }
+        button {
+            margin: 0;
+            background-color: white;
+            flex: 0 1;
+            border: none;
+            color: black;
+        }
+    }
+    aside.open {
+        width: 586px;
+    }
+    .tag {
+        border-radius: 8px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        span { flex: 1; margin-right: 12px; }
+        button {
+            background-color: transparent;
+            border: none;
+            flex: 0 1;
+            padding: 0;
+            position: relative;
+            top: 2px;
+            align-items: center;
+        }
+    }
+    .tags {
+        display: flex;
+        flex-direction: row;
     }
 </style>
 

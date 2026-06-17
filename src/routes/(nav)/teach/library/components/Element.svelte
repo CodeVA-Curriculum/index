@@ -1,25 +1,34 @@
 <script lang='ts'>
+  import { getGradeStyle } from '$lib'
   import Pill from '$lib/components/Pill.svelte'
   import Fa from 'svelte-fa'
   // import type { Element } from '$lib/server/db/schema'
   import FilterAnchorPill from '$lib/components/FilterAnchorPill.svelte';
 import Help from '$lib/components/Help.svelte'
     import { dbObjTitles } from '$lib/utils';
-    import { faBookmark, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
+    import { faLock, faBookmark, faFolderOpen, faKey } from '@fortawesome/free-solid-svg-icons';
 
-  let { obj } = $props()
+  let { user, obj } = $props()
+  let locked = $state(user ? false : true)
+  let gradeStyle = getGradeStyle(obj)
 </script>
 <article class='card'>
-  <div class='grade-tab'>
+  <div class='grade-tab {gradeStyle}'>
     <span>{#if obj.grades.length > 1}GRADES {/if} {obj.gradesAbbr}</span>
   </div>
-  <div class='thumbnail'>
+  <div class='thumbnail {locked ? "locked" : "unlocked"}'>
     <img src="https://placecats.com/850/1100" >
+    {#if locked}
+    <div>
+    <span class='icon'><Fa size='4x' icon={faKey} /></span>
+    </div>
+    {/if}
   </div>
   <div class='body'>
     <h3>{obj.title}</h3>
-    <p class='subtitle'>A {obj.gradesAbbr} {obj.types[0].title}</p>
+    <p class='subtitle'>{obj.gradesAbbr} {obj.types[0].title}</p>
     <p>{obj.short}</p>
+    {#if obj.children.length > 0}
     <details>
       <summary>
         <i>View Items in {obj.types[0].title}</i>
@@ -31,6 +40,7 @@ import Help from '$lib/components/Help.svelte'
         {/each}
       </ol>
     </details>
+    {/if}
   </div>
   <div class='stats'>
     <div class='subjects'>
@@ -55,13 +65,14 @@ import Help from '$lib/components/Help.svelte'
       Tags:
     </div>
   </div>
-  <div class='buttons'>
-    <a role='button' href="browse/{obj.path}"><span>Open </span><Fa icon={faFolderOpen} /></a>
-    <a role='button'><span>Save </span><Fa icon={faBookmark} /></a>
-  </div>
 </article>
 
 <style lang='scss'>
+  @use "$lib/styles/theme.scss";
+  // @use "$lib/styles/grades.scss" as g;
+  $small: 11pt;
+  $medium: 14pt;
+  $large: 18pt;
   article { margin: 0; padding: 0; &:hover { cursor: auto; } }
   .card {
     display: flex;
@@ -76,6 +87,7 @@ import Help from '$lib/components/Help.svelte'
     margin-left: 1rem;
     h3 {
       margin-bottom: 0;
+      font-size: 18pt;
     }
     p.subtitle {
       margin: 8px 0;
@@ -83,29 +95,45 @@ import Help from '$lib/components/Help.svelte'
       font-size: 11pt;
     }
   }
-  .thumbnail { flex: 1; align-items: center; }
+  .thumbnail {
+    flex: 1;
+    align-items: center;
+    position: relative;
+    align-items: center;
+    position: relative;
+    div {
+      display: flex;
+      width: 100%;
+      aspect-ratio: 8.5/11;
+      flex-direction: column;
+      align-items:center;
+      justify-content: center;
+      z-index: 99;
+      position: absolute;
+    }
+  }
   // .thumbnail > img { width: 180px; }
   .body {
     flex: 2 0 30%;
     padding-bottom: 0;
+    font-size: 14pt;
     details {
       margin-bottom: 2px;
     }
   }
   .stats {
-    flex: 1;
+    flex: 2;
     border-left: 1px solid whitesmoke;
-    padding-left: 12px;
+    // border-right: 1px solid whitesmoke;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding-left: 1rem;
     font-size: 11pt;
     flex-direction: column;
-    gap: 0;
-    min-width: 120px;
-    max-width: 240px;
     * {
       margin: 0 0;
       padding: 0 0;
       font-style: italic;
-      flex: 1;
       display: inline-block;
     }
   }
@@ -117,6 +145,14 @@ import Help from '$lib/components/Help.svelte'
     span {
       font-size: 18pt;
     }
+    // a {
+    //   gap: 12px;
+    //   display: flex; flex: 1 1;
+    //   width: 100%;
+    //   margin: 0rem 0;
+    //   justify-content: center;
+    //   align-items: center;
+    //   margin-bottom: 0.8rem;
     a { gap: 20px; display: flex; flex: 1; width: 160px; margin: 0rem 0; justify-content: center; align-items: center; margin-bottom: 0.8rem;
     * {
       flex: 1;
@@ -127,9 +163,11 @@ import Help from '$lib/components/Help.svelte'
     }
   }
   .grade-tab {
+    @import "$lib/styles/grades";
+    @include gradeStyles;
     display: flex;
     flex-direction: column;
-    background-color: pink;
+    // background-color: pink;
     justify-content: center;
     align-items: center;
     width: 2rem;
@@ -139,6 +177,7 @@ import Help from '$lib/components/Help.svelte'
       font-weight: bolder;
       white-space: nowrap;
       z-index: 0;
+      position: relative;
     }
   }
 </style>

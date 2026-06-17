@@ -1,12 +1,14 @@
 import { eq, like } from 'drizzle-orm'
+import { getDbStandardsFromAbbrList } from '$lib/server/db'
 import { seedGuides } from './guides'
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { globby } from 'globby'
 import Database from 'better-sqlite3';
 import * as schema from './schema'
 import { seedSubjects } from './seedSubjects'
-import { fileToElementObj } from './parse'
+import { fileToElementObj, seedActivities } from './parse'
 import { seedStandards } from './seedStandards'
+import { expandDashNotation } from '$lib/server/db/utils'
 
 async function main() {
   const client = new Database(process.env.DATABASE_URL);
@@ -14,24 +16,25 @@ async function main() {
   const db = drizzle({ schema: schema, client: client });
   
   // clear database for seeding
-  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element,   schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.question, schema.node, schema.guide]
+  const tables = [ schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.pivotNodeProject,  schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.prompt, schema.question, schema.node, schema.guide]
+  let count = 0
   for(const table of tables) {
+    console.log(count++)
     await db.delete(table)
   }
+  console.log("deleted tables")
 
   await seedGuides(db, schema)
 
   // seed subjects and courses
-  const { subjects, courses } = await seedSubjects(db, schema)
+  const { subjects} = await seedSubjects(db, schema)
 
-  // seed standards
-  const { standards } = await seedStandards(db, schema, subjects, courses)
 
   // TODO: seed library elements
     // Add static elements: grades, types, audiences
   const types = ['Lesson Plan', 'Lesson Collection', 'Teacher Resource', 'Learner Resource', 'Curricular Resource', 'Unit of Study', 'Tutorials']
-  const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
-  const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+  const grades =  ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12', 'Middle School Course', 'High School Elective']
+  const gradeAbbr=['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'MS', 'HS']
   const audiences = ['Classroom Teachers', 'Lesson Planners', 'Learners & Students']
 
   for(let i=0;i<grades.length;i++) { await db.insert(schema.grade).values({
@@ -46,6 +49,8 @@ async function main() {
     await db.insert(schema.elementType).values({ title: t })
   }
   
+  // seed standards
+  const { standards } = await seedStandards(db, schema, subjects)
 
   // Pull all files
   const paths = await globby(['static/library', '!static/library/README.md'], {
@@ -61,7 +66,6 @@ async function main() {
       title: el.title,
       short: el.short,
       long: el.long,
-      path: el.path,
       content: el.content,
       link: el.links ? el.links.drive : null,
       gradesAbbr: el.grades,
@@ -81,52 +85,25 @@ async function main() {
   for(const path of paths) {
     const el =elsByPath[path]
 
-    // connect children by reference
-    let children = []
-    let toPush = []
-    if(el.contents && el.contents.length > 0) {
-    for(let i=0;i<el.contents.length;i++) {
-      const ref = el.contents[i].charAt(0) == '.' ? el.contents[i].replace('.', path.substring(0, path.lastIndexOf('/'))) : "static/library/" + el.contents[i]
-      if(!ref.includes('.md')) {
-        // child path is a directory
-        children = paths.filter((p) => {
-          console.log(p.substring(0, p.lastIndexOf("/")), ref)
-          return p.substring(0, p.lastIndexOf("/")) == ref
-        })
-        console.log(`Added ${children.length} children from group ${ref}`)
-      } else if(paths.includes(ref)) {
-        // child path is a file
-        children = [ ref ]
-        console.log(`Added ${ref}`)
-      } else {
-        throw new Error(`Can't find ${ref} in paths!`)
-      }
-      for(let i=0;i<children.length;i++) {
-        const child_el = elsByPath[children[i]]
-        if(!child_el) { throw new Error("Could not find element at child path " + child)}
-        toPush.push({
-          index: i,
-          parent_id: el.id,
-          child_id: child_el.id
-        })
-      }
-    }
-      console.log(toPush)
-      await db.insert(schema.child_element_ref).values(toPush)
-    }
-
     // inherit and update authors
     el.authors= inherit(el, 'authors', path, elsByPath)
     console.log("inherited authors values for " + path + ", updating database", el.authors)
     await db.update(schema.element).set({ authors: el.authors }).where(eq(schema.element.id, el.id))
+    
     // inherit and update grades
-    // TODO: double-association
-    el.grades = expandDashNotation(inherit(el, 'grades', path, elsByPath))
+    const inheritedGrades = inherit(el, 'grades', path, elsByPath)
+    el.grades = expandDashNotation(inheritedGrades)
     for(const grade of el.grades) {
       await db.insert(schema.elementToGrade).values({
         elementId: el.id,
         gradeId: gradeAbbr.indexOf(grade)
       })
+    }
+    if(!el.gradesAbbr) {
+      console.log("Updating gradesAbbr for", el.path)
+      await db.update(schema.element)
+      .set({ gradesAbbr: getDashNotation(inheritedGrades) })
+      .where(eq(schema.element.id, el.id));
     }
 
     // inherit and update audiences
@@ -168,7 +145,8 @@ async function main() {
         typeId: result[0].id
       })
     }
-    
+
+ 
     // update tags (do not inherit)
     // this is different bc it's not associating only--it's:
     // first, split into valid [ "string" ] type, then:
@@ -217,20 +195,22 @@ async function main() {
       } 
     }
 
+    // Do not inherit standards
     el.standards = el.standards? el.standards: []
     if(typeof(el.standards) == typeof('string')) {
       el.standards= el.standards.split(', ')
     }
-    let dbStandards = []
-    for(const s of el.standards) {
-      const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
-      let gs = expandDashNotation(gradeToken)
-      for(const g of gs) {
-        let searchString = `${g}.${subjToken ? subjToken : '%'}.${strandToken? strandToken : '%'}.${indexToken? indexToken : '%'}`
-        const res = await db.select().from(schema.standard).where(like(schema.standard.abbr, searchString))
-        dbStandards = [...dbStandards, ...res]
-      }
-    }
+    let dbStandards = await getDbStandardsFromAbbrList(el.standards)
+//     for(const s of el.standards) {
+//       const [ gradeToken, subjToken, strandToken, indexToken ] = s.split('.')
+//       let gs = expandDashNotation(gradeToken)
+//       for(const g of gs) {
+//         let searchString = `${g}.${subjToken ? subjToken : '%'}.${strandToken? strandToken : '%'}.${indexToken? indexToken : '%'}`
+//         const res = await db.select().from(schema.standard).where(like(schema.standard.abbr, searchString))
+//         dbStandards = [...dbStandards, ...res]
+//       }
+//     }
+// export async function getDbStandardsFromAbbrList(db, schema, abbrs:string[]) {
     for(const s of dbStandards) {
       await db.insert(schema.elementToStandard).values({
         elementId: el.id,
@@ -238,7 +218,41 @@ async function main() {
       })
     }
     
+    // connect children by reference
+    let children = []
+    let toPush = []
+    if(el.contents && el.contents.length > 0) {
+    for(let i=0;i<el.contents.length;i++) {
+      const ref = el.contents[i].charAt(0) == '.' ? el.contents[i].replace('.', path.substring(0, path.lastIndexOf('/'))) : "static/library/" + el.contents[i]
+      if(!ref.includes('.md')) {
+        // child path is a directory
+        children = paths.filter((p) => {
+          return p == ref + "/meta.md"        })
+        console.log(`Added ${children.length} children from group ${ref}`)
+      } else if(paths.includes(ref)) {
+        // child path is a file
+        children = [ ref ]
+        console.log(`Added ${ref}`)
+      } else {
+        throw new Error(`Can't find ${ref} in paths!`)
+      }
+      for(let i=0;i<children.length;i++) {
+        const child_el = elsByPath[children[i]]
+        if(!child_el) { throw new Error("Could not find element at child path " + child)}
+        toPush.push({
+          index: i,
+          parent_id: el.id,
+          child_id: child_el.id
+        })
+      }
+    }
+      console.log(toPush)
+      await db.insert(schema.child_element_ref).values(toPush)
+    }
   }
+
+  // seed activities
+  await seedActivities(db, schema)
 }
 
 
@@ -285,24 +299,23 @@ function decedentField(path:string, field:string, lib:any):string {
   return decedentField(path.substring(0, path.lastIndexOf('/')), field, lib)
 }
 
-function expandDashNotation(fmGrade:string|number):string[] {
-    fmGrade = String(fmGrade)
-    // console.log("Expanding ", fmGrade)
-    const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'MS', 'HS']
-    // split grades along commas
-    const grades = fmGrade.replace(' ', '').split(',')
-    // process dash notation
-    for(let i=0;i<grades.length;i++) {
-        if(grades[i].includes('-')) {
-            const first:number = gradeList.indexOf(grades[i].substring(0, grades[i].indexOf('-')))
-            const last:number  = gradeList.indexOf(grades[i].substring(grades[i].indexOf('-')+1, grades[i].length)) + 1
-            for(let i=first;i<last;i++) {
-                if(!grades.includes(gradeList[i])) {
-                    grades.push(gradeList[i])
-                }
-            }
-        }
-    }
-    // console.log(grades)
-    return grades.filter(grade=>!grade.includes('-')) // remove dash item from array
+function getDashNotation(grades:string[]):string {
+  if(typeof(grades) == typeof("string")) { grades = expandDashNotation(grades)}
+  const gradeList = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'MS', 'HS']
+  let out = grades[0]
+  console.log(grades)
+  if(grades.includes("MS")) {
+    grades.splice(grades.indexOf("MS"), 1, "6", "7", "8")
+    console.log("MS spliced")
+  }
+  if(grades.includes("HS")) {
+    grades.splice(grades.indexOf("HS"), 1, "9", "10", '11', "12")
+  }
+  grades.sort((a,b) => gradeList.indexOf(a) - gradeList.indexOf(b))
+  for(let i=1;i<grades.length; i++) {
+    const consecutive = gradeList.indexOf(grades[i]) - gradeList.indexOf(grades[i-1]) == 1
+    if(consecutive ) { out += out.charAt(out.length-1) == "-" ? "" : "-" } else { out += grades[i]}
+  }
+  if(out.charAt(out.length-1) == "-") { out += grades[grades.length-1]}
+  return out
 }
