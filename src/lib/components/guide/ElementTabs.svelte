@@ -39,7 +39,11 @@
   {/if}
 {/snippet}
 {#snippet quicktake(obj)}
+  {#if !obj.db.quickTake || obj.db.quickTake.length == 0}
   <p><i>No quick take yet! Read the full tutorial or watch the tutorial video by visiting the <a href="{obj.db.path}">tutorial page linked here.</a></p>
+  {:else}
+  <QuickTake content={obj.db.quickTake} />
+  {/if}
 {/snippet}
 {#snippet questions(obj)}
   {#if obj.db.questions}

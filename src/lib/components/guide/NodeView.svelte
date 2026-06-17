@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import QuickTake from '$lib/components/guide/QuickTake.svelte'
   import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
   import { ElementType } from '$lib/components/guide/DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
@@ -18,6 +19,9 @@
   </header>
   <hr>
   <main>
+    <section>
+      <QuickTake content={obj.db.quickTake} />
+    </section>
     <section>
       {@html obj.db.content}
     </section>
