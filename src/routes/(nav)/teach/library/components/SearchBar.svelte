@@ -5,12 +5,22 @@
 
     let form = $state();
 
+    const dict = {
+      "Grade(s)": "grades",
+      "Audience(s)": "audiences",
+      "Subject(s)": "subjects",
+      "Resource Type(s)": "types",
+      "Tag(s)": "tags"
+    }
+
     let filterToggle = $state(false)
     let { filters } = $props()
+
 
     const query = $state(Object.create({
       text: ""
     }))
+    // load filters from API to preserve component portability
     async function search() {
       // form.submit()
     //   console.log("Sending search..")
@@ -20,7 +30,7 @@
   		// });
     }
 </script>
-{#snippet dropdown(label: string, list: string[])}
+{#snippet dropdown(label: string, list)}
 <div class='dropdown-wrap'>
   <p class='dropdown-label'>{label}</p>
   <details class="dropdown">
@@ -32,8 +42,8 @@
       {#each list as l}
       <li class='dropdown-item'>
         <label>
-          <input type="checkbox" name={l} />
-          {l}
+          <input type="checkbox" name={dict[label]} value={l.id} />
+          {l.title}
         </label>
       </li>
       {/each}
@@ -46,24 +56,17 @@
   <!-- svelte-ignore a11y_no_redundant_roles -->
   <fieldset role="group" >
     <input name="q" id="q" type="text" placeholder="Search for lessons..." />
-    {#if filters && false}
+    {#if filters }
     <button onclick={() => filterToggle = !filterToggle}><Fa size=1.0x icon={faSliders} /> <span>Filters</span></button>
     {/if}
     <input class='search-button' type="submit" value="Search" />
   </fieldset>
   <div class='filters {filterToggle? 'selected':''}'>
-      {@render dropdown("Grade(s)", ["a", "b", "c"])}
-      {@render dropdown("Subject(s)", ["a", "b", "c"])}
-      {@render dropdown("Resource Type(s)", ["a", "b", "c"])}
-      {@render dropdown("Audience(s)", ["a", "b", "c"])}
+      {@render dropdown("Grade(s)", filters.grades)}
+      {@render dropdown("Subject(s)", filters.subject)}
+      {@render dropdown("Resource Type(s)", filters.elementTypes)}
+      {@render dropdown("Audience(s)", filters.audiences)}
 
-      <div>
-        <p class='dropdown-label'>Tags</p>
-        <!-- svelte-ignore a11y_no_redundant_roles -->
-        <fieldset class="tag-search" role='group'>
-          <input type='text' />
-        </fieldset>
-      </div>
   </div>
 </form>
 </div>
@@ -111,8 +114,11 @@
     gap: 12px;
     display: flex;
     flex-direction: row;
+    background-color: pink;
+    margin-bottom: 4rem;
+    margin-top: 1rem;
   }
-  .filters { height: 0; transition: height 500ms ease-in; overflow-y: hidden; }
+  .filters { height: 0; transition: height 500ms ease-in; }
   .filters.selected { height: auto; overflow: clip;}
   .tag-search {
   // display: block;

@@ -16,7 +16,7 @@
       <div class='text'>
       <h1>CodeVA Educator's Library</h1>
       <p>We've written dozens of lessons and created tons of resources to help K-12 educators teach computer science. <a href="/teach/library/search"<>Search the free materials</a>, or subscribe to access the whole library!</p>
-      <SearchBar filters={true} />
+      <SearchBar filters={data.filters} />
       <p class='asearch'><i><a href="/teach/library/search">Advanced Search</a></i></p>
       </div>
     </div>

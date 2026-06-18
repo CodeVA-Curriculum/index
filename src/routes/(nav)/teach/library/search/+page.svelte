@@ -19,7 +19,7 @@
       <h1>Search CS Lessons & Resources</h1>
       <p>Use the search bar and filters to browse our library of computer science resources!</p>
       <div class='sticky'>
-        <SearchBar filters />
+        <SearchBar filters={data.filters} />
       </div>
       <table>
         <colgroup>

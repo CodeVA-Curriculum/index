@@ -4,37 +4,31 @@ The place for all the things.
 
 ## Roadmap
 
-- [x] Return activities from pacing guide search
-- [x] Render activities in Carousel
-- [x] Fix activity nav
-- [x] Write instructions for /pacing-guide-creator
-- [x] Make image for pacing guide
-- [x] Fix /learn/tools
-- [x] Fix /learn
+This section contains feature and release plans for future versions of the website.
+
+### v1.0
+
 - [ ] Migrate activities to database
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
-- [x] Track trail guide completion in the database
-  - [x] Track practice questions
-  - [x] Track prompts
-  - [x] Track nodes
-  - [x] Track projects
-- [x] Make DetailIcons responsive to node stats
-  - [x] Make Node icons responsive
-  - [x] Make Project icons responsive
-- [x] Render quick takes in the trail guide (add toggle to node banner)
-- [x] Render code-and-image in the trail guide (fix image source link)
-- [x] Fix images
-- [x] Fix guide video
 - [-] Implement library search
   - [x] Implement text search
   - [ ] Implement filters
 - [ ] Complete "view PDF of library element" workflow
-- [/] Implement paywall
-- [/] Complete "save element to backpack" workflow
-- [/] Complete "view saved elements" workflow
-- [/] Complete "save library element" workflow
-- [/] Render trail guide progress dashboards for users/access codes
-- [/] Add standard search to StandardSelect
+- [ ] Fix library image (/teach)
+- [ ] Implement filter search in trail guide Panel
+- [ ] Create automated deployment & backup scripts
+- [ ] Disable logins temporarily
+
+### v1.1
+
+- [ ] Implement tag search in SearchBar
+- [ ] Connect to HubSpot purchases
+- [ ] Implement paywall
+- [ ] Complete "save element to backpack" workflow
+- [ ] Complete "view saved elements" workflow
+- [ ] Complete "save library element" workflow
+- [ ] Render trail guide progress dashboards for users access codes
+- [ ] Add standard search to StandardSelect
 
 ## Deployment
 
