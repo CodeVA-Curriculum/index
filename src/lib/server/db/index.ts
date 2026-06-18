@@ -15,8 +15,7 @@ export const elementRelations = {
     standards: true,
     tags: true,
     grades: true,
-    children: { with : { grades: true }},
-    status: true
+    children: { with : { grades: true }}
 }
 
 export const questionRelations = {

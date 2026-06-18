@@ -25,8 +25,11 @@ The place for all the things.
 - [x] Render code-and-image in the trail guide (fix image source link)
 - [x] Fix images
 - [x] Fix guide video
-- [ ] Implement library search
+- [-] Implement library search
+  - [x] Implement text search
+  - [ ] Implement filters
 - [ ] Complete "view PDF of library element" workflow
+- [/] Implement paywall
 - [/] Complete "save element to backpack" workflow
 - [/] Complete "view saved elements" workflow
 - [/] Complete "save library element" workflow

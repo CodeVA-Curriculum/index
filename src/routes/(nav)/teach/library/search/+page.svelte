@@ -77,6 +77,11 @@
         {/each}
       </tbody>
       </table>
+      {#if data.elements.length == 0}
+      <div class='no-elements'>
+        <p><i>Search above for CS lessons and resources!</i></p>
+      </div>
+      {/if}
     </section>
   </div>
   <div class='data-view'>
@@ -152,5 +157,11 @@
       // background-color: white;
       font-size: 11pt;
     }
+  }
+  .no-elements {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

@@ -24,6 +24,7 @@
   <section>
     <h2>Browse Collections</h2>
     <div class='collections'>
+      {#if data.collections?.length > 0}
       {#each data.collections as collection}
       <article>
         <img src="https://placecats.com/200/100">
@@ -34,6 +35,9 @@
         </div>
       </article>
       {/each}
+      {:else}
+      <p><i>No collections yet! Check back soon.</i></p>
+      {/if}
     </div>
   </section>
 </div>

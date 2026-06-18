@@ -1,9 +1,24 @@
 <script lang='ts'>
+  import { enhance } from '$app/forms';
     import { faSliders} from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
 
+    let form = $state();
+
     let filterToggle = $state(false)
     let { filters } = $props()
+
+    const query = $state(Object.create({
+      text: ""
+    }))
+    async function search() {
+      // form.submit()
+    //   console.log("Sending search..")
+  		// await fetch('/teach/library/search', {
+  		// 	method: 'POST',
+  		// 	body: JSON.stringify(query)
+  		// });
+    }
 </script>
 {#snippet dropdown(label: string, list: string[])}
 <div class='dropdown-wrap'>
@@ -27,11 +42,11 @@
 </div>
 {/snippet}
 <div class='search'>
-<form>
+<form method="GET" action="/teach/library/search">
   <!-- svelte-ignore a11y_no_redundant_roles -->
-  <fieldset role="group">
-    <input type="text" placeholder="Search for lessons..." />
-    {#if filters}
+  <fieldset role="group" >
+    <input name="q" id="q" type="text" placeholder="Search for lessons..." />
+    {#if filters && false}
     <button onclick={() => filterToggle = !filterToggle}><Fa size=1.0x icon={faSliders} /> <span>Filters</span></button>
     {/if}
     <input class='search-button' type="submit" value="Search" />

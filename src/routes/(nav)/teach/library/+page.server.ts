@@ -14,7 +14,6 @@ export const load:PageServerLoad = async ({ params, fetch }) => {
   const collections = await db.query.collection.findMany({
     with: { element: { with: elementRelations }}
   })
-  // const collections = await db.select().from(schema.collection)
   return {
     elements: elements,
     collections: collections

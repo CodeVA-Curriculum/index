@@ -19,7 +19,9 @@
       <p>{obj.db.description}</p>
     </div>
   </header>
+  {#if obj.db.quickTake && obj.db.quickTake.length > 0}
   <QuickTake boxed content={obj.db.quickTake} />
+  {/if}
   <hr>
   <main>
     <section>
