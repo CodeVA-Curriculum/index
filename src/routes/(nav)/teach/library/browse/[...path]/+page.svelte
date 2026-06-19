@@ -1,5 +1,4 @@
 <script lang='ts'>
-
   import { pushState, goto } from "$app/navigation"
   import { page } from '$app/state'
   import Breadcrumb from '$lib/components/Breadcrumb.svelte'
@@ -12,6 +11,9 @@
  // href={row.path.includes("/meta.md") ? "/teach/library/browse/" + row.path : '?view=' + row.path} console.log(data.element.children)
 
   const locked = getLocked(data.element, data.user)
+  console.log(data.element)
+  // let driveId = data.element.db.link.substring(data.element.db.link.indexOf('/d/') + 3)
+  // driveId = driveId.substring(0, driveId.indexOf('/'))
   
   function getLocked(user, element) {
     return true;
@@ -75,14 +77,14 @@
     </table>
   </aside>
   <div class='doc'>
-    {#if locked}
+    {#if locked || !data.user}
       <div class='modal-wrap'>
         <LockedElementCTAModal obj={data.element} />
       </div>
     {/if}
     <div id="{data.element.id}" class='doc-wrap'>
       <object type="application/pdf" data="/documents/test/test.pdf">
-        <embed src="./documents/test.pdf" type="application/pdf" >
+        <embed src="{data.element.link + "/pdf"}" type="application/pdf" >
       </object>
     </div>
   </div>
