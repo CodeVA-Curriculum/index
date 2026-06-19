@@ -113,6 +113,6 @@ export async function getDbStandardsFromAbbrList(abbrs:string[]) {
 }
 
 // TODO: make this a conditional based on build status
-const client = new Database("local.db");
+const client = new Database("data/local.db");
 export const db = drizzle({ schema: schema, client: client, relations: relations});
 // export const db = null
