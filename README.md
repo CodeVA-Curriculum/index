@@ -8,15 +8,19 @@ This section contains feature and release plans for future versions of the websi
 
 ### v1.0
 
-- [ ] Migrate activities to database
 - [ ] Implement filter search in trail guide Panel
 - [ ] Disable logins temporarily
-- [ ] Add map legend
+- [x] Add map legend
+- [ ] Deploy
+
+### v1 content update
+
 - [ ] Python Trail Guide starter project
 - [ ] Processing Trail Guide starter project
 - [ ] p5js Trail Guide starter project
 - [ ] Write twine caches
 - [ ] Film new videos
+- [ ] Migrate activities to database
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
 
 ### v1.1

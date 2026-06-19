@@ -12,7 +12,6 @@
     <li><a href="/learn/{guide.pathTitle}/about">About</a></li>
     <li><a href="/learn/{guide.pathTitle}/projects">Projects</a></li>
     <li><a href="/learn/{guide.pathTitle}/tutorials">Tutorials</a></li>
-    <li><LogInButton session={session} user={user}/></li>
   </ul>
 </nav>
 <style lang='scss'>
