@@ -9,16 +9,20 @@ This section contains feature and release plans for future versions of the websi
 ### v1.0
 
 - [ ] Migrate activities to database
-- [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
-- [x] Complete "view PDF of library element" workflow
-- [ ] Fix library image (/teach)
 - [ ] Implement filter search in trail guide Panel
 - [ ] Disable logins temporarily
-- [ ] Create automated deployment & backup scripts
 - [ ] Add map legend
+- [ ] Python Trail Guide starter project
+- [ ] Processing Trail Guide starter project
+- [ ] p5js Trail Guide starter project
+- [ ] Write twine caches
+- [ ] Film new videos
+- [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
 
 ### v1.1
 
+- [ ] Fix library image (/teach)
+- [ ] Create automated deployment & backup scripts
 - [ ] Implement tag search in SearchBar
 - [ ] Connect to HubSpot purchases
 - [ ] Implement paywall
