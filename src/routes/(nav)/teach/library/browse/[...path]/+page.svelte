@@ -82,7 +82,7 @@
     {/if}
     <div id="{data.element.id}" class='doc-wrap'>
       <object type="application/pdf" data="/documents/test/test.pdf">
-        <embed src="/documents/test/test.pdf" type="application/pdf" >
+        <embed src="./documents/test.pdf" type="application/pdf" >
       </object>
     </div>
   </div>

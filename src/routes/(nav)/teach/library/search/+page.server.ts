@@ -6,14 +6,28 @@ import { guide } from '$lib/server/db/schema'
 
 export const load:PageLoad = async ({ url, params }) => {
   let elements:Elements[]= []
-  const query = url.searchParams.get("q").toLowerCase()
-  const grades = url.searchParams.get("grades") // TODO connect to frontend so I don't have to type this as a literal
+  const query = url.searchParams.get("q")?.toLowerCase()
+  const grades = [...url.searchParams.getAll("grade")] // TODO connect to frontend so I don't have to type this as a literal
+  const audiences = [...url.searchParams.getAll("audience")]
+  const subjects = [...url.searchParams.getAll("subject")]
+  const standards = [ ...url.searchParams.getAll("sol")]
+  const tags = [...url.searchParams.getAll("tag")]
+  const types = [...url.searchParams.getAll("type")]
 
   console.log("Search event", {
     query: query,
-    grades: grades
+    grades: grades,
+    audiences: audiences,
+    subjects: subjects,
+    standards: standards,
+    tags: tags,
+    types: types
   })
   // const grades = url.searchParams.get("Grades(s)")
+  const gradesFilter = getIdFilter(grades)
+  const audiencesFilter = getIdFilter(audiences)
+  const subjectsFilter = getIdFilter(subjects)
+  const typesFilter = getIdFilter(types)
   if(query) {
     elements = await db.query.element.findMany({
       with: elementRelations,
@@ -24,7 +38,20 @@ export const load:PageLoad = async ({ url, params }) => {
           { short: { like: `%${query}%`}},
           { long: { like: `%${query}%`}},
           { content: { like: `%${query}%`}}
-        ]
+        ],
+        grades: {
+          OR: gradesFilter
+        },
+        subjects: {
+          OR: subjectsFilter
+        },
+        audiences: {
+          OR: audiencesFilter 
+        },
+        types: {
+          OR: typesFilter
+        }
+        // TODO: standards, tags
       }
     })
 
@@ -42,9 +69,17 @@ export const load:PageLoad = async ({ url, params }) => {
   //     hidden: { eq: false}
   //   }
   // })
-  
+  console.log(`Found ${elements.length} elements`)
   return {
     elements: elements
   }
 }
-
+function getIdFilter(ids:string[]):Number[] {
+  let filterIds:Number[] = []
+  for(const id of ids) {
+    filterIds.push({
+      id: Number(id)
+    })
+  }
+  return filterIds
+}

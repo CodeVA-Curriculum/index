@@ -10,14 +10,12 @@ This section contains feature and release plans for future versions of the websi
 
 - [ ] Migrate activities to database
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)
-- [x] Implement library search
-  - [x] Implement text search
-  - [x] Implement filters
-- [ ] Complete "view PDF of library element" workflow
+- [x] Complete "view PDF of library element" workflow
 - [ ] Fix library image (/teach)
 - [ ] Implement filter search in trail guide Panel
 - [ ] Disable logins temporarily
 - [ ] Create automated deployment & backup scripts
+- [ ] Add map legend
 
 ### v1.1
 

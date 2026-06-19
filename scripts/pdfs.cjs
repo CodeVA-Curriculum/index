@@ -46,7 +46,7 @@ async function getFile(id) {
 }
 
 async function main() {
-    // const files = await getIds()
+    const files = await getIds()
     // for(const file of files) {
     //     if(file == "1pJcVTPSp0IOIFhm4MMoWscCbPqP8arnM") {
     //         console.log("PDF test passed!")
@@ -65,21 +65,26 @@ async function main() {
   // const client = await auth.getClient();
   // google.options({auth: client});
   // 
-    const drive = google.drive({version: 'v3', auth: env.DRIVE_API_KEY});
-    const fileId = '1EkgdLY3T-_9hWml0VssdDWQZLEc8qqpMB77Nvsx6khA';
-    const destPath = path.join(os.tmpdir(), 'important.zip');
+    const key = "AIzaSyCHanj0pjD7tyDOs-bDAD8wopzpf6DZyjw"
+    const drive = google.drive({version: 'v3', auth: key});
+    const destPath = path.join(os.tmpdir(), 'pdfs.zip');
     const dest = fs.createWriteStream(destPath);
-    const res = await drive.files.export(
-      {fileId, mimeType: 'application/pdf'},
-      {responseType: 'stream'},
-    );
-    await new Promise((resolve, reject) => {
-      res.data
-        .on('error', reject)
-        .pipe(dest)
-        .on('error', reject)
-        .on('finish', resolve);
-    });
+    dest.setMaxListeners(files.length)
+    for(const fileId of files){
+        // const fileId = '1VWtbjiB2YOoxdt_QZPbp8ElImyyGczAlWkW70gbuL4M';
+        console.log("Downloading", fileId)
+        const res = await drive.files.export(
+          {fileId, mimeType: 'application/pdf'},
+          {responseType: 'stream'},
+        );
+        new Promise((resolve, reject) => {
+          res.data
+            .on('error', reject)
+            .pipe(dest)
+            .on('error', reject)
+            .on('finish', resolve);
+        });
+    }
 }
 
 main()

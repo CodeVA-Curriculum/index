@@ -6,15 +6,17 @@
     let form = $state();
 
     const dict = {
-      "Grade(s)": "grades",
-      "Audience(s)": "audiences",
-      "Subject(s)": "subjects",
-      "Resource Type(s)": "types",
-      "Tag(s)": "tags"
+      "Grade(s)": "grade",
+      "Audience(s)": "audience",
+      "Subject(s)": "subject",
+      "Resource Type(s)": "type",
+      "Tag(s)": "tag",
+      "SOL(s)": "sol"
     }
 
     let filterToggle = $state(false)
     let { filters } = $props()
+
 
 
     const query = $state(Object.create({
@@ -63,7 +65,7 @@
   </fieldset>
   <div class='filters {filterToggle? 'selected':''}'>
       {@render dropdown("Grade(s)", filters.grades)}
-      {@render dropdown("Subject(s)", filters.subject)}
+      {@render dropdown("Subject(s)", filters.subjects)}
       {@render dropdown("Resource Type(s)", filters.elementTypes)}
       {@render dropdown("Audience(s)", filters.audiences)}
 
