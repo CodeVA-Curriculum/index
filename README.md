@@ -8,9 +8,6 @@ This section contains feature and release plans for future versions of the websi
 
 ### v1.0
 
-- [ ] Implement filter search in trail guide Panel
-- [ ] Disable logins temporarily
-- [x] Add map legend
 - [ ] Deploy
 
 ### v1 content update
@@ -26,39 +23,33 @@ This section contains feature and release plans for future versions of the websi
 ### v1.1
 
 - [ ] Fix library image (/teach)
-- [ ] Create automated deployment & backup scripts
 - [ ] Implement tag search in SearchBar
 - [ ] Connect to HubSpot purchases
-- [ ] Implement paywall
+- [ ] Load PDF from endpoint
+- [ ] Load trail guide content from endpoint
+- [ ] Implement paywall elements
+- [ ] Implement paywall projects in trail guide
 - [ ] Complete "save element to backpack" workflow
 - [ ] Complete "view saved elements" workflow
 - [ ] Complete "save library element" workflow
 - [ ] Render trail guide progress dashboards for users access codes
 - [ ] Add standard search to StandardSelect
+- [ ] Create automated deployment & backup scripts
+- [ ] Deploy v1.1
 
 ## Deployment
 
 Dis: https://youtu.be/LwzoWuHjOWk?si=5aoLNSs4nT0xhDTY
 
-First, clone the repo and seed the database (if needed):
+First, clone the repo, download the library PDFs locally, and seed the database (if needed):
 
 ```
 git clone https://github.com/codeva-curriculum/index
 cd index
 mkdir data
 yarn && yarn db:push && yarn db:seed
-```
-
-Then, build an image on the VPS using the `Dockerfile` in the repo:
-
-```
-sudo docker build -t index-deploy
-```
-
-Run the docker image to start the app:
-
-```
 sudo docker run -d -p 3000:3000 \
+sudo docker build -t index-deploy
   --mount type=bind,source="$(pwd)"/data,target=/app/data \
   index-deploy
 ```
