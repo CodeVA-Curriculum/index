@@ -1,24 +1,47 @@
 {
   "main": {
-    "id": "a9fd54962423532d",
+    "id": "2e5dcd06a33652d5",
     "type": "split",
     "children": [
       {
-        "id": "10afed2161d058a8",
+        "id": "bbdc0f6e848fc900",
         "type": "tabs",
         "children": [
           {
-            "id": "c2b9c6359207a8b5",
+            "id": "d803fcc53263e815",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "applications/story-with-multiple-endings.md",
+                "file": "projects/interactive-narrative/index.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "story-with-multiple-endings"
+              "title": "index"
+            }
+          }
+        ]
+      },
+      {
+        "id": "380331acad36efff",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1883332115f9841a",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "map.canvas",
+                "viewState": {
+                  "x": 1741.8939475357083,
+                  "y": -882.6797626577871,
+                  "zoom": -3.3739948041316032
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "map"
             }
           }
         ]
@@ -27,15 +50,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "1a5e8bb7a2d64c68",
+    "id": "e793e3ad90bcaf9d",
     "type": "split",
     "children": [
       {
-        "id": "50f5d5382b30f442",
+        "id": "a168dab77107d795",
         "type": "tabs",
         "children": [
           {
-            "id": "cc691427a5fce520",
+            "id": "67cb2f8652128250",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -48,7 +71,7 @@
             }
           },
           {
-            "id": "79d9b54e430529f0",
+            "id": "9b01208aff4a784f",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -65,7 +88,7 @@
             }
           },
           {
-            "id": "37f3959c0e00ab30",
+            "id": "085c229ed9261fc1",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -81,20 +104,20 @@
     "width": 300
   },
   "right": {
-    "id": "fd4e029dbf3d622e",
+    "id": "2321bfa23d924326",
     "type": "split",
     "children": [
       {
-        "id": "c3e0e6abe08b001e",
+        "id": "2e6ec45756b001a3",
         "type": "tabs",
         "children": [
           {
-            "id": "8d8773a898ad1a6e",
+            "id": "c8fe9f9596da54aa",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "map.canvas",
+                "file": "projects/interactive-narrative/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,25 +127,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for map"
+              "title": "Backlinks for index"
             }
           },
           {
-            "id": "6aeaebb99d61e472",
+            "id": "6dfd0f2b02f0ce93",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "map.canvas",
+                "file": "projects/interactive-narrative/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from map"
+              "title": "Outgoing links from index"
             }
           },
           {
-            "id": "392f6878a72dbf75",
+            "id": "bd490b31e94f045f",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -137,32 +160,18 @@
             }
           },
           {
-            "id": "8cddd1c49b616eda",
-            "type": "leaf",
-            "state": {
-              "type": "all-properties",
-              "state": {
-                "sortOrder": "frequency",
-                "showSearch": false,
-                "searchQuery": ""
-              },
-              "icon": "lucide-archive",
-              "title": "All properties"
-            }
-          },
-          {
-            "id": "2edcb99b47e2ce10",
+            "id": "ff14283a5fcc8374",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "map.canvas",
+                "file": "projects/interactive-narrative/index.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of map"
+              "title": "Outline of index"
             }
           }
         ]
@@ -174,22 +183,48 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "command-palette:Open command palette": false
     }
   },
-  "active": "c2b9c6359207a8b5",
+  "active": "d803fcc53263e815",
   "lastOpenFiles": [
-    "projects/your-first-story/index.md",
-    "concepts/arithmetic-expressions.md",
-    "meta.md",
-    "projects/_archeological-puzzle/index.md",
     "map.canvas",
-    "projects/your-first-story/the-whale-outline.md"
+    "projects/interactive-narrative/index.md",
+    "projects/interactive-narrative/refactoring-the-whale.md",
+    "applications/unlock-door.md",
+    "applications/register-commands.md",
+    "applications/help-text.md",
+    "applications/clear-screen.md",
+    "applications/chance-events.md",
+    "applications/getting-started.md",
+    "concepts/arithmetic-expressions.md",
+    "concepts/casting-input.md",
+    "concepts/relational-expressions.md",
+    "concepts/text-variables.md",
+    "concepts/functions.md",
+    "projects/interactive-narrative/gamifying-the-whale.md",
+    "concepts/for-loops.md",
+    "concepts/functions-with-return.md",
+    "concepts/creating-libraries.md",
+    "concepts/lists-basics.md",
+    "concepts/methods-basics.md",
+    "concepts/while-loops.md",
+    "applications/python-browser.md",
+    "concepts/if-statements.md",
+    "concepts/if-else.md",
+    "applications/story-multiple-endings.md",
+    "projects/interactive-narrative/writing-the-whale.md",
+    "projects/interactive-narrative",
+    "projects/hello-world",
+    "applications",
+    "concepts",
+    "locations",
+    "projects"
   ]
 }
