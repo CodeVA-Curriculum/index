@@ -1,6 +1,5 @@
 {
 	"nodes":[
-		{"id":"78d63e09d52a29e2","type":"file","file":"concepts/simple-input.md","x":720,"y":-960,"width":400,"height":400},
 		{"id":"45ba10db9364dfe3","type":"file","file":"concepts/relational-expressions.md","x":1400,"y":-960,"width":400,"height":400},
 		{"id":"7268a6d536cdfa93","type":"file","file":"concepts/simple-output.md","x":120,"y":-960,"width":400,"height":400},
 		{"id":"f00ceeb8e9b38913","type":"file","file":"concepts/randomization.md","x":1200,"y":-1680,"width":400,"height":400},
@@ -12,21 +11,22 @@
 		{"id":"56922c547484a353","type":"file","file":"projects/interactive-narrative/gamifying-the-whale.md","x":1400,"y":-2440,"width":400,"height":400},
 		{"id":"c9c5b42e61dc5c28","type":"file","file":"concepts/functions.md","x":2840,"y":-2440,"width":400,"height":400},
 		{"id":"d665e6533e48dc9e","type":"file","file":"concepts/creating-libraries.md","x":2840,"y":-3120,"width":400,"height":400},
-		{"id":"817bbb02becd6948","type":"file","file":"concepts/number-variables.md","x":520,"y":-1680,"width":400,"height":400},
 		{"id":"31bca7faffee5fef","type":"file","file":"projects/interactive-narrative/function-as-scene.md","x":3640,"y":-2560,"width":400,"height":400,"color":"5"},
 		{"id":"01807c93f7c5d1b9","type":"file","file":"applications/story-with-scenes.md","x":4240,"y":-3120,"width":400,"height":400,"color":"5"},
-		{"id":"8024062ae9d9681d","x":4440,"y":-2440,"width":400,"height":400,"type":"file","file":"projects/interactive-narrative/refactoring-the-whale.md"},
+		{"id":"8024062ae9d9681d","type":"file","file":"projects/interactive-narrative/refactoring-the-whale.md","x":4440,"y":-2440,"width":400,"height":400},
 		{"id":"5fba72a09cd8e2c9","type":"file","file":"applications/getting-started.md","x":-1240,"y":-960,"width":400,"height":400},
-		{"id":"8683203c7da58246","x":-720,"y":-1360,"width":400,"height":400,"type":"file","file":"applications/python-browser.md"},
+		{"id":"8683203c7da58246","type":"file","file":"applications/python-browser.md","x":-720,"y":-1360,"width":400,"height":400},
 		{"id":"50ee83646a7a3623","type":"file","file":"applications/python-vscode.md","x":-720,"y":-560,"width":400,"height":400},
 		{"id":"6004b8e55cdff4c6","type":"file","file":"applications/story-one-ending.md","x":-160,"y":-360,"width":400,"height":400,"color":"5"},
 		{"id":"27859303a2852333","type":"file","file":"concepts/text-variables.md","x":920,"y":-240,"width":400,"height":400},
 		{"id":"0df97330080cb538","type":"file","file":"concepts/string-basics.md","x":320,"y":160,"width":400,"height":400},
 		{"id":"99e64000902e9da1","type":"file","file":"concepts/logic-expressions.md","x":1520,"y":-360,"width":400,"height":400},
 		{"id":"ba441920ef2ea421","type":"file","file":"concepts/casting-input.md","x":-80,"y":-1680,"width":400,"height":400},
-		{"id":"1d9caae2a7ce2b19","type":"file","file":"applications/calculator.md","x":-360,"y":-2440,"width":400,"height":400,"color":"5"},
 		{"id":"7ff1b11e94d75c97","type":"file","file":"concepts/arithmetic-expressions.md","x":800,"y":-2320,"width":400,"height":400},
-		{"id":"7b6980fb89f6079f","x":240,"y":-2320,"width":400,"height":400,"type":"file","file":"projects/interactive-narrative/numbered-options.md"}
+		{"id":"817bbb02becd6948","type":"file","file":"concepts/number-variables.md","x":640,"y":-1600,"width":400,"height":400},
+		{"id":"78d63e09d52a29e2","type":"file","file":"concepts/simple-input.md","x":840,"y":-960,"width":400,"height":400},
+		{"id":"7b6980fb89f6079f","type":"file","file":"projects/interactive-narrative/numbered-options.md","x":120,"y":-2320,"width":400,"height":400},
+		{"id":"1d9caae2a7ce2b19","type":"file","file":"applications/calculator.md","x":-480,"y":-2640,"width":400,"height":400,"color":"5"}
 	],
 	"edges":[
 		{"id":"2fdc89d23bfc60c2","fromNode":"5fba72a09cd8e2c9","fromSide":"right","toNode":"7268a6d536cdfa93","toSide":"left"},
@@ -74,6 +74,8 @@
 		{"id":"185c50237b12fc48","fromNode":"5fba72a09cd8e2c9","fromSide":"top","toNode":"8683203c7da58246","toSide":"left"},
 		{"id":"6f976b862b349d2d","fromNode":"8683203c7da58246","fromSide":"right","toNode":"7268a6d536cdfa93","toSide":"left"},
 		{"id":"c9b87088e5d990d7","fromNode":"78d63e09d52a29e2","fromSide":"bottom","toNode":"6004b8e55cdff4c6","toSide":"right"},
-		{"id":"43138f0411a90507","fromNode":"ba441920ef2ea421","fromSide":"top","toNode":"7b6980fb89f6079f","toSide":"bottom"}
+		{"id":"43138f0411a90507","fromNode":"ba441920ef2ea421","fromSide":"top","toNode":"7b6980fb89f6079f","toSide":"bottom"},
+		{"id":"e3ce542468c72213","fromNode":"ba441920ef2ea421","fromSide":"right","toNode":"7ff1b11e94d75c97","toSide":"left"},
+		{"id":"947e575566c24975","fromNode":"7ff1b11e94d75c97","fromSide":"top","toNode":"1d9caae2a7ce2b19","toSide":"right"}
 	]
 }

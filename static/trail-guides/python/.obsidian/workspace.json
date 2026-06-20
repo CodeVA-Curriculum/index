@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "projects/interactive-narrative/index.md",
+                "file": "projects/simple-calculator/index.md",
                 "mode": "source",
                 "source": true
               },
@@ -35,9 +35,9 @@
               "state": {
                 "file": "map.canvas",
                 "viewState": {
-                  "x": 1741.8939475357083,
-                  "y": -882.6797626577871,
-                  "zoom": -3.3739948041316032
+                  "x": 748.2991016072014,
+                  "y": -1055.9334522067984,
+                  "zoom": -2.257497793135829
                 }
               },
               "icon": "lucide-layout-dashboard",
@@ -117,7 +117,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "projects/interactive-narrative/index.md",
+                "file": "projects/simple-calculator/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -136,7 +136,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "projects/interactive-narrative/index.md",
+                "file": "projects/simple-calculator/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -165,7 +165,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "projects/interactive-narrative/index.md",
+                "file": "projects/simple-calculator/index.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -195,7 +195,11 @@
   "active": "d803fcc53263e815",
   "lastOpenFiles": [
     "map.canvas",
+    "projects/simple-calculator/index.md",
+    "projects/simple-calculator",
     "projects/interactive-narrative/index.md",
+    "projects/hello-world/hello-world.md",
+    "projects/hello-world/index.md",
     "projects/interactive-narrative/refactoring-the-whale.md",
     "applications/unlock-door.md",
     "applications/register-commands.md",
@@ -217,9 +221,6 @@
     "concepts/while-loops.md",
     "applications/python-browser.md",
     "concepts/if-statements.md",
-    "concepts/if-else.md",
-    "applications/story-multiple-endings.md",
-    "projects/interactive-narrative/writing-the-whale.md",
     "projects/interactive-narrative",
     "projects/hello-world",
     "applications",
