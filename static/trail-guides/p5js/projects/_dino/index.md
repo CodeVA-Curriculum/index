@@ -17,10 +17,9 @@ nodes:
   - applications/sprite-basics.md
   - applications/sprite-movement.md
   - ./dino-sprites.md
-  - concepts/relational-expressions.md
   - concepts/if-statements.md
   - applications/orthagonal-rectangle-collision.md
   - ./dino-collision.md
-  - applications/game-state.md {optional}
+  - concepts/defining-functions.md
   - applications/simple-obstacle-game.md
 ---

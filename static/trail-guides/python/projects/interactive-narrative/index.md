@@ -5,7 +5,7 @@ difficulty: 2
 nodes:
   - applications/getting-started.md
   - applications/python-vscode.md {optional}
-  - applications/python-browser {optional}
+  - applications/python-browser.md {optional}
   - concepts/simple-output.md
   - concepts/string-basics.md {optional}
   - concepts/text-variables.md {optional}
@@ -23,7 +23,7 @@ nodes:
   - applications/story-with-chance-outcome.md {optional}
   - ./gamifying-the-whale.md {optional}
   - concepts/functions.md
-  - ./functions-as-scene.md
+  - ./function-as-scene.md
   - concepts/creating-libraries.md {optional}
   - applications/story-with-scenes.md
   - ./refactoring-the-whale.md

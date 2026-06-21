@@ -14,7 +14,7 @@ nodes:
   - ./flappy-movement.md
   - concepts/if-statements.md
   - applications/keycode-lastkey.md
-- ./flappy-flight.md
-- applications/orthagonal-rectangle-collision.md
-- ./flappy-endgame.md
+  - ./flappy-flight.md
+  - applications/orthagonal-rectangle-collision.md
+  - ./flappy-endgame.md
 ---

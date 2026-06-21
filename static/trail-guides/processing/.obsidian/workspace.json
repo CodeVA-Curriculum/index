@@ -40,17 +40,14 @@
             "id": "fa7d1a81ed99fb52",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "map.canvas",
-                "viewState": {
-                  "x": 2907.3862074918893,
-                  "y": 319.85382874021093,
-                  "zoom": -2.312060193314138
-                }
+                "file": "projects/scene-animation/index.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "map"
+              "icon": "lucide-file",
+              "title": "index"
             }
           }
         ],
@@ -225,12 +222,18 @@
   },
   "active": "fa7d1a81ed99fb52",
   "lastOpenFiles": [
+    "projects/scene-design/icon.png",
+    "projects/scene-animation/icon.png",
+    "map.canvas",
+    "projects/scene-animation/index.md",
+    "concepts/scene-setup.md",
+    "meta.md",
+    "projects/scene-design/index.md",
+    "applications/stroke-fill.mdNMWT8O.bck",
     "mosue.md",
     "activity 29.md",
-    "projects/scene-animation/index.md",
     "projects/object-control/index.md",
     "applications/top-down-game.md",
-    "map.canvas",
     "applications/modular-design.md",
     "activities/activity-28.md",
     "activities/activity-27.md",
@@ -251,10 +254,6 @@
     "_assets/modelImage_sampleScene09.gif",
     "_assets/modelImage_sampleScene06.png",
     "_assets/modelImage_sampleScene10.png",
-    "activities/activity-18.md",
-    "activities/storyboard.md",
-    "applications/draw-method.md",
-    "activities/activity-17.md",
     "projects/object-control",
     "projects/scene-animation",
     "projects/scene-design",
@@ -266,7 +265,6 @@
     "_assets/Processing_2021_logo.png",
     "_assets/imageRepositoryActivity.zip",
     "units",
-    "projects",
-    "applications"
+    "projects"
   ]
 }

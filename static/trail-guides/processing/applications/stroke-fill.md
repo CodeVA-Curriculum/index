@@ -1,3 +1,10 @@
+---
+title: Setting Fill & Stroke Colors
+authors: Jon Stapleton
+short: Learn how to modify the colors and outlines of shapes.
+description: In this tutorial, you'll learn how to use various methods to set and modify the shape outline and fill colors Processing displays when it executes shape display commands. These methods are essential if you want to use shape primitives that look different from Processing's default white.
+---
+
 Adding shapes to the screen is an important skill needed to build scenes. You'll also need to set shape colors later on when you create more complex software art, like animations and games. When the computer displays a shape, it uses a default color of "white".  Fortunately, that color can be changed and customized to meet the needs of the program.
 
 ![A screenshot showing a white circle with a thin black outline on a tan field](/TODO:)

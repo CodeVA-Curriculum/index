@@ -1,5 +1,5 @@
 ---
-title: "Asteroids: Shapes"
+title: "Asteroids Shapes"
 type: cache
 icon: 
 ---

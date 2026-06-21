@@ -107,6 +107,7 @@ export class Node {
   }
   getWidth(p5:any, font:any) {
     // find the longest series of words that will be displayed on one line (<= 150px)
+    if(!this.db.title) { console.log(this)}
     let words = this.db.title.split(' ')
     const lengths:number[] = []
     let lineHeight = -1;

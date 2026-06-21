@@ -36,6 +36,7 @@ export class Project {
 
 
     // build node groups and edges
+    console.log(i)
     for(const g of i.nodeGroups) {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
@@ -136,11 +137,11 @@ class Group {
   nodeMask:boolean = []
   edges:Edge[] = []
   x = 0; y = 0
-  constructor(db:any, order:object, elementsByPath:any) {
+  constructor(db:any, order:string[], elementsByPath:any) {
     this.title = db.alias
     order.sort((a,b) => a.index - b.index)
     for(const c of order) {
-      const node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
+      let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
       this.nodes.push(elementsByPath[node.path])
       this.nodeMask.push(c.optional)
     }
@@ -212,9 +213,13 @@ class Group {
         // console.log(`Need edge between ${i} and ${lastFalse}`)
         const e = edges.filter((o) => (o.toNode.id == this.nodes[i].db.id && o.fromNode.id == this.nodes[lastFalse].db.id) || (o.fromNode.id == this.nodes[lastFalse].db.id && o.toNode.id == this.nodes[i].db.id))[0]
         // console.log(`Found ${e.length} edges to base new Edge off of`)
+        if(e) {
         const o = new Edge(e, elementsByPath)
         o.optional = false
         this.edges.push(o)
+        } else {
+          throw new Error('wat')
+        }
       }
       if(!inCut) { lastFalse = i}
     }

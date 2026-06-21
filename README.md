@@ -10,15 +10,12 @@ This section contains feature and release plans for future versions of the websi
 
 - [ ] Fix deployment instructions
 - [ ] Fix /library
-- [ ] Deploy
-
-### v1 content update
-
-- [ ] Create collections
-- [ ] Python Trail Guide starter project
 - [ ] Processing Trail Guide starter project
+- [ ] Python Trail Guide starter project
 - [ ] p5js Trail Guide starter project
 - [ ] Write twine caches
+- [ ] Deploy
+- [ ] Create collections
 - [ ] Film new videos
 - [ ] Migrate activities to database
 - [ ] Create activity grid (optional) (/teach/tools/pacing-guide-creator/activities)

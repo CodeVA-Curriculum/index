@@ -4,10 +4,9 @@ authors: Jon Stapleton
 description: Learn how to access information from keystroke inputs via global variables like `keyCode` and `lastKey`. This tutorial covers `keyCode` and `lastKey`, and explains the relationship between `keyCode` values and individual keys.
 type: tutorial
 ---
-:::quick-take
+::quick-take{src="TODO"}
 The `keyCode` and `lastKey` variables contain information about the last key the computer sensed being pressed by the user. These variables are global, which means you do not have to initialize them or set their values.
 
-:::p5sketch
 ```javascript
 function setup() {
 	new Canvas(200,200)

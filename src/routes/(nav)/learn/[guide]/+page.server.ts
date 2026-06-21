@@ -29,6 +29,9 @@ export const load:PageLoad = async ({ params, locals }) => {
     with: {
       toNode: true,
       fromNode: true
+    },
+    where: {
+      guide: result.id
     }
   })
 

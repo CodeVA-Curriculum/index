@@ -16,6 +16,7 @@ export class Map {
   elementsByPath:any = {}
   camera:Camera|null = null
   constructor(map:Input) {
+    console.log(map)
     for(const node of map.nodes) {
       const obj = new Node(node)
       this.nodes.push(obj)

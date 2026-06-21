@@ -4,7 +4,7 @@ authors: Jon Stapleton
 description: Learn how to use the mouse position variables built into p5js and the p5play library in your game code. This tutorial covers the `mouseX` and `mouseY` global variables and the `mouse` object.
 type: tutorial
 ---
-:::quick-take
+:::quick-take{src="TODO"}
 The `mouseX` and `mouseY` variables contains values related to the coordinates of the mouse in the game window. These are global variables, which means you don't have to initialize them or set their values.
 
 :::p5sketch

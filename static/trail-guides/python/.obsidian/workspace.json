@@ -4,26 +4,6 @@
     "type": "split",
     "children": [
       {
-        "id": "bbdc0f6e848fc900",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "d803fcc53263e815",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "projects/simple-calculator/index.md",
-                "mode": "source",
-                "source": true
-              },
-              "icon": "lucide-file",
-              "title": "index"
-            }
-          }
-        ]
-      },
-      {
         "id": "380331acad36efff",
         "type": "tabs",
         "children": [
@@ -31,17 +11,14 @@
             "id": "1883332115f9841a",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "map.canvas",
-                "viewState": {
-                  "x": 748.2991016072014,
-                  "y": -1055.9334522067984,
-                  "zoom": -2.257497793135829
-                }
+                "file": "meta.md",
+                "mode": "source",
+                "source": true
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "map"
+              "icon": "lucide-file",
+              "title": "meta"
             }
           }
         ]
@@ -192,12 +169,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "d803fcc53263e815",
+  "active": "1883332115f9841a",
   "lastOpenFiles": [
-    "map.canvas",
-    "projects/simple-calculator/index.md",
-    "projects/simple-calculator",
     "projects/interactive-narrative/index.md",
+    "projects/simple-calculator/icon.png",
+    "projects/simple-calculator/calculator-solid.png",
+    "projects/interactive-narrative/icon.png",
+    "projects/hello-world/icon.png",
+    "projects/hello-world/hand-spock-solid.png",
+    "map.canvas",
+    "projects/interactive-narrative/function-as-scene.md",
+    "projects/simple-calculator/index.md",
+    "applications/python-browser.md",
+    "projects/simple-calculator",
     "projects/hello-world/hello-world.md",
     "projects/hello-world/index.md",
     "projects/interactive-narrative/refactoring-the-whale.md",
@@ -219,8 +203,6 @@
     "concepts/lists-basics.md",
     "concepts/methods-basics.md",
     "concepts/while-loops.md",
-    "applications/python-browser.md",
-    "concepts/if-statements.md",
     "projects/interactive-narrative",
     "projects/hello-world",
     "applications",

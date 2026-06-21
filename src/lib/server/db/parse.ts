@@ -106,7 +106,7 @@ export async function parseNodeFile(path) {
 }
 export async function parseProjectFile(path) {
   let file = await fileToElementObj(path)
-  if(typeof(file.nodes) == typeof(["string"])) {
+  if(Array.isArray(file.nodes)) {
     file.nodes = {
       $default: file.nodes
     }
