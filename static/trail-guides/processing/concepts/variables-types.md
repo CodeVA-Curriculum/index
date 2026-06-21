@@ -139,3 +139,104 @@ Which of the following variable data types is not a primitive type in Java?
 - [ ] `boolean`
 - [x] `String`
 :::
+
+:::prompt{title="Activity 11"}
+Using the program below as a starting point, update the code to use variables to establish values used in the code instead of “hardcoding” those values into the commands. The logo displayed should look the same after the the code has been updated:
+
+:::code-and-image{src="sampleScene11_Image.png"}
+```java
+void setup(){
+  size(400, 400);
+  background(0);
+  
+  fill(255);
+  noStroke();
+  circle(200, 150, 250);
+  
+  fill(0);
+  arc(100, 150, 150, 300, PI * -.30, PI * .30);
+  arc(300, 150, 150, 300, PI * .70, PI * 1.30);
+  
+  fill(255);
+  arc(90, 150, 150, 300, PI * -.27, PI * .27);
+  arc(310, 150, 150, 300, PI * .73, PI * 1.27);
+  
+  stroke(0);
+  strokeWeight(10);
+  line(200, 25, 200, 280);
+  line(75, 150, 325, 150);
+  
+  stroke(255);
+  strokeWeight(2);
+  line(75, 300, 325, 300);
+  textSize(44);
+  text("BASKETBALL", 80, 340);
+  line(75, 353, 325, 353);
+}
+```
+:::
+
+:::
+
+:::prompt{title="Activity-12"}
+Using the program below as a starting point, update the grayscale colors to make a more colorful version of the scene. The only requirement is that the elements of the scene that are currently the same grayscale color one another need to stay the same color. Use the current current grayscale value as the “number” to identify all the elements that will change to the same new color.
+
+:::code-and-image
+```java
+void setup(){
+	size(800, 600);
+	background(255);
+	
+	stroke(10);
+	strokeWeight(3);
+	fill(200);
+	rect(0, 0, 100, 50);
+	rect(100, 0, 300, 50);
+	fill(250);
+	rect(400, 0, 200, 50);
+	fill(100);
+	rect(600, 0, 200, 125);
+	fill(200);
+	rect(0, 50, 70, 100);
+	rect(0, 150, 70, 200);
+	fill(250);
+	rect(0, 350, 70, 200);
+	fill(200);
+	rect(0, 550, 220, 50);
+	fill(50);
+	rect(70, 50, 330, 250);
+	fill(0);
+	rect(70, 300, 150, 130);
+	fill(200);
+	rect(70, 430, 150, 120);
+	rect(220, 300, 180, 65);
+	rect(220, 365, 180, 65);
+	fill(0);
+	rect(220, 430, 180, 65);
+	fill(250);
+	rect(220, 495, 90, 105);
+	fill(200);
+	rect(310, 495, 90, 105);
+	fill(250);
+	rect(400, 50, 200, 125);
+	fill(200);
+	rect(400, 175, 100, 125);
+	rect(500, 175, 100, 125);
+	rect(400, 300, 200, 65);
+	fill(100);
+	rect(400, 365, 200, 130);
+	fill(50);
+	rect(400, 495, 200, 105);
+	rect(600, 125, 200, 125);
+	fill(200);
+	rect(600, 250, 200, 50);
+	rect(600, 300, 100, 140);
+	rect(700, 300, 100, 140);
+	fill(250);
+	rect(600, 440, 200, 110);
+	rect(600, 550, 200, 50);
+}
+```
+:::
+
+:::

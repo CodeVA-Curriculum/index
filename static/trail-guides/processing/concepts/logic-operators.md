@@ -109,3 +109,56 @@ if(xPos < 400 && yPos > 300){
 - [ ] `null`
 - [ ] `#121212`
 :::
+
+:::prompt{title="Activity 22"}
+Using the program below as a starting point, create a tug-of-war game that causes the “rope” shown on the screen to move from one side of the screen to the other until it reaches a point where one side or the other wins.
+
+```java
+int ropeWidth, ropeHeight, ropeX, ropeY;
+
+void setup(){
+  size(800, 600);
+  ropeWidth = 650;
+  ropeHeight = 40;
+  ropeX = (width - ropeWidth)/2;
+  ropeY = (height/2) - ropeHeight/2;
+}
+
+void draw(){
+  background(#ededed);
+  // draw the middle line
+  line(width/2, 0, width/2, height);
+  // draw the rope
+  fill(#5c2c06);
+  rect(ropeX, ropeY, ropeWidth, ropeHeight);
+  // draw the flag
+  fill(#ff2929);
+  rect(ropeX + ropeWidth/2 - ropeHeight/2, ropeY, ropeHeight, ropeHeight * 3);
+}
+```
+:::
+
+:::prompt{title="Activity 23"}
+Using the program below as a starting point, create an animation where a shape moves around the screen (either in a defined pattern or randomly) and changes given specific conditions (e.g. up and right movement is always red, down and left movement is always purple, etc; when the shape is in quadrant 1 it’s blue, in quadrant 2 it’s green, etc).
+
+```java
+int xPos, yPos, shapeDim;
+color shapeCol;
+
+void setup(){
+  size(800, 600);
+  shapeDim = 30;
+  xPos = shapeDim;
+  yPos = shapeDim;
+  shapeCol = color(random(0, 100), random(0, 100), random(0, 100));
+}
+
+void draw(){
+  background(#ffffff);
+  fill(shapeCol);
+  circle(xPos, yPos, shapeDim);
+  xPos += 2;
+  yPos++;
+}
+```
+:::

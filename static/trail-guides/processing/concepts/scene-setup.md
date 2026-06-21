@@ -93,3 +93,29 @@ void setup(){
 		The first argument is width (400) and the second argument is height (300).
 	:::
 :::
+
+:::prompt={title="Activity 1"}
+Using the code below, resize the screen so that all elements in the code are displayed on the screen.  *Do not try to move the elements to fit them into the existing screen size*
+
+```java
+void setup(){
+  // draw the canvas
+  size(600, 400); 
+  
+  // draw the scene
+  rect(960, 5, 125, 90);
+  rect(-30, 25, 125, 90);
+  rect(-5, 325, 125, 90);
+  rect(200, 35, 490, 250);
+  rect(360, 315, 60, 60);
+  rect(875, 100, 60, 60);
+  rect(775, 320, 300, 60);
+  rect(0, 530, 1100, 40);
+  rect(200, 480, 50, 50);
+  rect(325, 470, 220, 60);
+  rect(560, 460, 165, 70);
+  rect(780, 470, 65, 60);
+  rect(950, 470, 120, 60);
+}
+```
+:::

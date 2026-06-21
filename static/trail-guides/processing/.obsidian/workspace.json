@@ -6,24 +6,8 @@
       {
         "id": "2c3cd905393b790c",
         "type": "tabs",
+        "dimension": 66.02959309494452,
         "children": [
-          {
-            "id": "53c928210f36611b",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "region-map.canvas",
-                "viewState": {
-                  "x": 3045.1188321956442,
-                  "y": -1443.5529185385317,
-                  "zoom": -1.2585052760442095
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "region-map"
-            }
-          },
           {
             "id": "3eb43b22bd25f8b8",
             "type": "leaf",
@@ -50,6 +34,45 @@
               },
               "icon": "lucide-file",
               "title": "booleans-comparisons"
+            }
+          },
+          {
+            "id": "fa7d1a81ed99fb52",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "map.canvas",
+                "viewState": {
+                  "x": 2907.3862074918893,
+                  "y": 319.85382874021093,
+                  "zoom": -2.312060193314138
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "map"
+            }
+          }
+        ],
+        "currentTab": 2
+      },
+      {
+        "id": "851e080f0a368861",
+        "type": "tabs",
+        "dimension": 33.97040690505549,
+        "children": [
+          {
+            "id": "691d997286c7611d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "applications/modular-design.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "modular-design"
             }
           }
         ]
@@ -105,8 +128,7 @@
               "title": "Bookmarks"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -201,49 +223,50 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "23504f466c666cd7",
+  "active": "fa7d1a81ed99fb52",
   "lastOpenFiles": [
-    "concepts/attribution.md",
-    "region-map.canvas",
+    "mosue.md",
+    "activity 29.md",
+    "projects/scene-animation/index.md",
+    "projects/object-control/index.md",
+    "applications/top-down-game.md",
+    "map.canvas",
     "applications/modular-design.md",
     "activities/activity-28.md",
     "activities/activity-27.md",
-    "concepts/scene-setup.md",
+    "applications/keyboard-input.md",
     "activities/activity-26.md",
+    "applications/mouse-input.md",
     "activities/activity-25.md",
+    "concepts/if-statements.md",
     "activities/activity-24.md",
+    "concepts/logic-operators.md",
+    "activities/activity-19.md",
     "activities/activity-23.md",
     "activities/activity-22.md",
     "activities/activity-21.md",
-    "activities/activity-20.md",
     "concepts/booleans-comparisons.md",
-    "activities/activity-19.md",
-    "applications/keyboard-input.md",
-    "applications/mouse-input.md",
-    "concepts/nested-if.md",
-    "concepts/if-else-else-if.md",
-    "concepts/logic-operators.md",
-    "concepts/if-statements.md",
-    "concepts/manipulating-variables.md",
-    "activities/storyboard.md",
+    "activities/activity-20.md",
     "applications/planning-animations.md",
+    "_assets/modelImage_sampleScene09.gif",
+    "_assets/modelImage_sampleScene06.png",
+    "_assets/modelImage_sampleScene10.png",
     "activities/activity-18.md",
+    "activities/storyboard.md",
+    "applications/draw-method.md",
     "activities/activity-17.md",
-    "activities/activity-16.md",
+    "projects/object-control",
+    "projects/scene-animation",
+    "projects/scene-design",
     "_assets/sampleScene15_finished.png",
     "tutorials/concepts",
     "tutorials",
     "concepts",
     "units/scene-design.canvas",
     "_assets/Processing_2021_logo.png",
-    "_assets/modelImage_sampleScene10.png",
-    "_assets/modelImage_sampleScene09.gif",
     "_assets/imageRepositoryActivity.zip",
-    "_assets/modelImage_sampleScene06.png",
     "units",
     "projects",
-    "applications",
-    "activities",
-    "_assets"
+    "applications"
   ]
 }

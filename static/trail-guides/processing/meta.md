@@ -1,1 +1,3 @@
-# Make Games with Processing Java
+---
+title: Processing Trail Guide
+---

@@ -25,6 +25,8 @@ This section contains feature and release plans for future versions of the websi
 
 ### v1.1
 
+- [ ] Add solution support for questions
+- [ ] Add solution support for prompts
 - [ ] Fix library image (/teach)
 - [ ] Implement tag search in SearchBar
 - [ ] Connect to HubSpot purchases

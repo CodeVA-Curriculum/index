@@ -154,3 +154,43 @@ What is the name of the method used to recognize keyboard events in Java Process
 - [ ] `keyEvent()`
 - [ ] `keyCode`
 :::
+
+:::prompt{title="Activity 26"}
+Using the program below as a starting point, create a game that allows the user to control an object on the screen in order to move around the screen to collect objects and earn points.
+
+```java
+int xPos, yPos, size, counter, timer, dir;
+color bgColor, blockCol;
+
+void setup(){
+  size(800, 600);
+  bgColor = #789abc;
+  blockCol = #00ff00;
+  size = 20;
+  xPos = width/2 - size/2;
+  yPos = height/2 - size/2;
+  counter = 0;
+  timer = 20;
+  dir = 1;
+  background(bgColor);
+}
+
+void draw(){
+  noStroke();
+  fill(blockCol);
+  rect(xPos, yPos, size, size);
+  
+  counter++;
+  if(counter % timer == 0){
+    if(dir == 1){
+      xPos += size;
+    }
+  }
+  
+}
+
+void keyPressed(){
+  
+}
+```
+:::

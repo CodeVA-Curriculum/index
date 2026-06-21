@@ -318,3 +318,153 @@ Which of the following best describes the purpose of the `draw()` method? (Selec
 - [x] Call methods to display objects on the canvas
 - [x] Modify variable values to create animations
 :::
+
+:::prompt{title="Activity 17"}
+In the program below, there is a game character and a timer. The game character is not moving and the timer is not running. Make the game character move from off the left side of the screen to off the right side of the screen and make the timer run while the program is running.
+
+```java
+// Declare game character values
+PImage gameChar;
+int xPos;
+int yPos;
+
+// Declare timer values
+int counter;
+int timerX;
+int timerY;
+int timerSize;
+color timerColor;
+
+// Declare ground block values
+int blockX;
+int blockY;
+int blockWidth;
+int blockHeight;
+int blockSpacing;
+color blockColor;
+
+void setup(){
+  size(800, 600);
+  
+  // Initialize game character values
+  gameChar = loadImage("images/walkingGuy.png");
+  xPos = 0;
+  yPos = 470;
+  
+  // Initialize timer values
+  counter = 0;
+  timerX = 620;
+  timerY = 50;
+  timerSize = 40;
+  timerColor = #1e5162;
+  
+  // Initialize ground block values
+  blockX = 0;
+  blockY = 530;
+  blockWidth = 44;
+  blockHeight = 10;
+  blockSpacing = 2;
+  blockColor = #cb4154;
+}
+
+void draw(){
+  background(#add8e6);
+  buildWalk();
+  
+  // Position the character
+  image(gameChar, xPos, yPos);
+  
+  // Display the timer
+  fill(timerColor);
+  textSize(timerSize);
+  text("Timer: " + counter, timerX, timerY);
+}
+
+// This is a code simplification for building rows of blocks
+// You can ignore this code for now - you'll learn more about this in an upcoming lesson!
+void buildWalk(){
+  noStroke();
+  fill(blockColor);
+  for(int i = 0; i < 18; i++){
+    for(int j = 0; j < 3; j++){
+      rect(i * (blockWidth + blockSpacing), blockY + j * 2 * (blockHeight + blockSpacing), blockWidth, blockHeight);
+      rect(i * (blockWidth + blockSpacing) - blockWidth/2, blockY + blockHeight + blockSpacing + j * 2 * (blockHeight + blockSpacing), blockWidth, blockHeight);
+    }
+  }
+}
+```
+:::
+
+:::prompt{title="Activity 18"}
+Modify the program below to create the animation shown in the following screenshot:
+
+![GIF of sampleAnimation18_Solution.pde](/TODO:)
+
+```java
+// Scene variables
+color sky, ground;
+int skyHeight, groundHeight;
+
+// sun variables
+color sunColor;
+int sunSize, sunX, sunY;
+
+// bird flock variables
+color birdColor;
+int birdSize, birdX, birdY;
+
+// tree variables
+color treeColor, leavesColor;
+int treeWidth, treeHeight, treeX, treeY;
+
+// animal varaibles
+color headColor, bodyColor;
+int headSize, bodyWidth, bodyHeight, animalX, animalY, legSize;
+
+void setup(){
+  size(800, 600);
+  
+  // Scene values
+  sky = #87ceeb;
+  ground = #388004;
+  skyHeight = height * 2 / 3;
+  groundHeight = height - skyHeight;
+  
+  // Sun values
+  sunColor = #f5f06c;
+  sunSize = (int) random(80, 120);
+  sunX = (int) random(20, 70);
+  sunY = (int) random(30, 100);
+  
+  // Bird values
+  birdColor = #dd7746;
+  birdSize = (int) random(25, 55);
+  birdX = (int) random(750, 850);
+  birdY = (int) random(50, 80);
+  
+  // Tree values
+  treeColor = #725c42;
+  leavesColor = #90ee90;
+  treeWidth = (int) random(20, 40);
+  treeHeight = (int) random(200, 400);
+  treeX = (int) random(30, 60);
+  treeY = (int) random(420, 500);
+  
+  // animal values
+  headColor = #c4a484;
+  bodyColor =#967969;
+  headSize = (int) random(20, 30);
+  bodyWidth = (int) random(80, 120);
+  bodyHeight = bodyWidth / 3;
+  animalX = (int) random(-20, 20);
+  animalY = (int) random(skyHeight + 10, skyHeight + 100);
+  legSize = (int) random(10, 20);
+}
+
+void draw(){
+  // add code to the draw method
+  
+
+}
+```
+:::

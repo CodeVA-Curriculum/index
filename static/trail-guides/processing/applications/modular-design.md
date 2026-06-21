@@ -127,3 +127,58 @@ Which of the following could be a call to a developer-defined method?
 - [ ] `mouseClicked();`
 - [ ] `draw();`
 :::
+
+:::prompt{title="Activity 27"}
+Using the program below as a starting point, create a simple three level game that uses "if" statements to control the levels and developer-defined methods to create the unique levels for the game.
+
+```java
+int levelNum;
+
+void setup(){
+  size(800, 600);
+  levelNum = 1;
+}
+
+void draw(){
+  if(levelNum == 1){
+    levelOne();
+  } else if(levelNum == 2){
+    levelTwo();
+  } else if(levelNum == 3){
+    levelThree();
+  }
+}
+
+void keyPressed(){
+  levelNum++;
+  if(levelNum > 3){
+    levelNum = 1;
+  }
+}
+
+void levelOne(){
+  background(#ffffff);
+  textSize(40);
+  fill(#000000);
+  text("Level 1:  Intro Screen", 240, 320);
+}
+
+void levelTwo(){
+  background(#bbbbbb);
+  textSize(40);
+  fill(#ff0000);
+  text("Level 2:  Game Play", 240, 320);
+}
+
+void levelThree(){
+  background(#777777);
+  textSize(40);
+  fill(#abcedf);
+  text("Level 3:  Game Over", 240, 320);
+}
+```
+:::
+
+:::prompt{title="Activity 28"}
+Use the game you created above and add a functional non-playable character (NPC) to your game.
+:::

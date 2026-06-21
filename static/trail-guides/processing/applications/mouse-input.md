@@ -178,3 +178,41 @@ if(mouseX < width/2 && mouseY < height/2){
 - [ ] square
 - [x] triangle
 :::
+
+:::prompt{title="Activity 25"}
+Using the program below as a starting point, create a game that allows the player to earn points by clicking on objects as they appear and disappear from the screen.
+
+```java
+int xPos, yPos, size;
+color color1, color2, color3, col;
+
+void setup(){
+  size(800, 600);
+  xPos = 400;
+  yPos = 300;
+  size = 200;
+  color1 = #00ff00;
+  color2 = #ffff00;
+  color3 = #ff0000;
+  col = color1;
+}
+
+void draw(){
+  background(#ffffff);
+  noStroke();
+  fill(col);
+  circle(xPos, yPos, size);
+}
+
+void mouseClicked(){
+  int colPicker = (int) random(3);
+  if(colPicker == 0){
+    col = color1;
+  } else if(colPicker == 1){
+    col = color2;
+  } else {
+    col = color3;
+  }
+}
+```
+:::

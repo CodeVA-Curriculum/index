@@ -5,6 +5,7 @@ description: Learn how to insert images into your Processing sketches using the 
 video: https://youtube.com/embed/Mu8VDPhdPdw
 type: tutorial
 ---
+
 Drawing images with Java Processing is a little different from adding shapes. Shapes require a single method call (using methods like `rect()`, `circle()`, and `triangle()`). Displaying an image is more involved.
 
 The first step of the process is creating an image **object**. Check out the code below for an example:
@@ -153,4 +154,10 @@ Which of the following lines of code will initialize (or store) an image file in
 - [x] `block = loadImage("images/block.png");`
 - [ ] `image(block, 100, 100);`
 - [ ] `PImage("block.png", 100, 100);`
+:::
+
+:::prompt{title="Activity 9"}
+Create a new Java Processing document with code that creates an abstraction of the game scene shown in the screenshot below as closely as you can. You can find source images to use inn your program [here](TODO).
+
+![[modelImage_sampleScene09.gif]]
 :::

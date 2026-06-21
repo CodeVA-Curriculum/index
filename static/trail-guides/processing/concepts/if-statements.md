@@ -125,3 +125,49 @@ if(running){
 - [ ] `int`
 - [ ] `boolean`
 :::
+
+:::prompt{title="Activity 21"}
+Using the program below as a starting point. modify the code to make shape in the scene to move around the screen and change direction when it hits a “border” to keep the shape inside of the specified area.
+
+```java
+int size, xPos, yPos, initSpeed, xSpeed, ySpeed;
+
+void setup(){
+  size(800, 600);
+  size = 30;
+  xPos = size;
+  yPos = size;
+  initSpeed = 2;
+  xSpeed = initSpeed;
+  ySpeed = initSpeed;
+}
+
+void draw(){
+  background(#012345);
+  circle(xPos, yPos, size);
+  xPos += xSpeed;
+  yPos += ySpeed;
+}
+```
+:::
+
+:::prompt{title="Activity 24"}
+Using the starter code below, create an animation that moves from one scene to another as the animation progresses. Use well-defined events in the animation to cause the scene to switch from one to another.
+
+```java
+int level = 0;
+void setup() {
+	size(200, 200)
+}
+void draw() {
+	background(255)
+	if(level == 0) {
+		// Draw level 0
+	}
+	if(level == 1) {
+		// Draw level 1
+	}
+	// etc...
+}
+```
+:::

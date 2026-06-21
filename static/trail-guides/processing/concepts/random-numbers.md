@@ -84,3 +84,59 @@ Which of the following will store a random number of any whole or decimal value 
 - [ ] `int rng = (int) random(-10, 10);`
 - [x] `float rng = random(0, 20) - 10;`
 :::
+
+:::prompt{title="Activity 16"}
+Modify the scene below to use random values for the colors and position of the shapes. With the random values, each shape should stay in its quadrant and each shape color should match the background color of a different quadrant.
+
+```java
+void setup(){
+	size(400, 400);
+	background(0);
+	
+	// All quads values
+	int quadWidth = width/2;
+	int quadHeight = height/2;
+	int r, g, b;
+	int shapePosX;
+	int shapePosY;
+	
+	// Quad 1 values
+	color q1Color = color(0, 100, 200);
+	
+	// Quad 2 values
+	color q2Color = color(50, 25, 0);
+	
+	// Quad 3 values
+	color q3Color = color(75, 150, 225);
+	
+	// Quad 4 values
+	color q4Color = color(100, 50,0);
+	
+	noStroke();
+	// Quad 1 background and shape
+	fill(q1Color);
+	rect(0, 0, quadWidth, quadHeight);
+	fill(q2Color);
+	circle(100, 100, 100);
+	
+	// Quad 2 background and shape
+	fill(q2Color);
+	rect(quadWidth, 0, quadWidth, quadHeight);
+	fill(q3Color);
+	rect(250, 50, 100, 100);
+	
+	// Quad 3 background and shape
+	fill(q3Color);
+	rect(0, quadHeight, quadWidth, quadHeight);
+	fill(q4Color);
+	triangle(100, 250, 50, 350, 150, 350);
+	
+	// Quad 4 background and shape
+	fill(q4Color);
+	rect(quadWidth, quadHeight, quadWidth, quadHeight);
+	fill(q1Color);
+	ellipse(300, 300, 75, 100);
+}
+```
+:::
+

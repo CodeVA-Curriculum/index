@@ -121,3 +121,291 @@ Which of the following adds `10` the value of an integer variable `sunWidth`? (
 - [ ] `sunWidth *= 10;`
 - [x] `sunWidth = sunWidth + 10;`
 :::
+
+:::prompt{title="Activity 14"}
+The shapes in the program below should make a design that looks like a simplification of a scene from a classic video game. In the lines of code identified with comments, manipulate the values stored in the appropriate variables to fix mistakes in the code.
+
+```java
+void setup(){
+	size(400, 600);
+	background(0);
+	
+	// score and lives values
+	color white = #ffffff;
+	int scoreSize = 50;
+	String score = "000";
+	int scoreX = 40;
+	int scoreY = 50;
+	int livesX = 280;
+	int livesY = 35;
+	int livesRadius = 25;
+	
+	// brick values
+	int startX = 11;
+	int startY = 70;
+	int spacer = 2;
+	int brickWidth = 40;
+	int brickHeight = 10;
+	int xPos = startX;
+	int yPos = startY;
+	color red = #ff0000;
+	color orange = #fc6a03;
+	color green = #00ff00;
+	color yellow = #ffff00;
+	
+	// ball and paddle values
+	int ballX = 200;
+	int ballY = 300;
+	int ballRadius = 30;
+	int paddleX = 150;
+	int paddleY = 550;
+	int paddleWidth = 100;
+	int paddleHeight = 15;
+	
+	// Score text
+	fill(white);
+	textSize(scoreSize);
+	text(score, scoreX, scoreY);
+	
+	// Lives icons
+	circle(livesX, livesY, livesRadius);
+	circle(livesX, livesY, livesRadius); // shift to be next to first ball with a small space in between
+	circle(livesX, livesY, livesRadius); // shift to be next to second ball with a small space in between
+	
+	// Bricks
+	noStroke();
+	fill(red);
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += 0; // move the next x-position for next brick to go in a new column with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	xPos = startX;
+	yPos += 0; // move the next y-position for bricks to start a new row with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	fill(orange);
+	xPos = startX;
+	yPos += brickHeight + spacer; 
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	xPos = startX;
+	yPos += 0; // move the next y-position for bricks to start a new row with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	fill(green);
+	xPos = startX;
+	yPos += brickHeight + spacer; 
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	xPos = startX;
+	yPos += 0; // move the next y-position for bricks to start a new row with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	fill(yellow);
+	xPos = startX;
+	yPos += brickHeight + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	xPos = startX;
+	yPos += 0; // move the next y-position for bricks to start a new row with a small space in between
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	xPos += brickWidth + spacer;
+	rect(xPos, yPos, brickWidth, brickHeight);
+	
+	// paddle and ball
+	fill(white);
+	circle(ballX, ballY, ballRadius);
+	rect(paddleX, paddleY, paddleWidth, paddleHeight);
+}
+```
+:::
+
+:::prompt{title="Activity 13"}
+Use a search engine to find some famous paintings of landscapes. For example, check out *Starry Night* by Van Gogh:
+
+![The painting "Starry Night"](famousArtModel.jpg)
+
+After selecting a landscape, use Java Processing to recreate a simplified version of that scene. All values controlling the position, size, and color of the scene should be set with variables and/or objects.
+:::
+
+:::prompt{title="Activity 15}
+Using only variables and mathematical expressions, finishing setting up the top and bottom borders in the program below. The final result should look like this image:
+
+![[sampleScene15_finished.png]]
+
+You'll need the block image asset--you can download it by [clicking here](/TODO:)
+
+```java
+PImage block;
+
+void setup(){
+	size(800, 600);
+	background(0);
+	
+	// top brick values
+	color brickColor = color(0, 124, 141);
+	int brickStartX = 0;
+	int brickStartY = 30;
+	int brickWidth = 50;
+	int brickHeight = 15;
+	int brickSpacer = 2;
+	int brickXPos = brickStartX;
+	int brickYPos = brickStartY;
+	
+	// bottom block values
+	block = loadImage("images/bottomBlock.png");
+	int blockStartX = 0;
+	int blockStartY = 540;
+	int blockXPos = blockStartX;
+	int blockYPos = blockStartY;
+	int blockWidth = 40;
+	int blockHeight = 40;
+	
+	// add top bricks
+	fill(brickColor);
+	// first row
+	rect(brickXPos, brickYPos, brickWidth, brickHeight);
+	brickXPos += brickWidth + brickSpacer;
+	rect(brickXPos, brickYPos, brickWidth, brickHeight);
+	// second row
+	brickXPos = brickStartX - brickWidth/2;
+	brickYPos += brickHeight + brickSpacer;
+	rect(brickXPos, brickYPos, brickWidth, brickHeight);
+	brickXPos += brickWidth + brickSpacer;
+	rect(brickXPos, brickYPos, brickWidth, brickHeight);
+	
+	// add bottom blocks
+	// first row
+	image(block, blockXPos, blockYPos);
+	blockXPos += blockWidth;
+	image(block, blockXPos, blockYPos);
+	// second row
+	blockXPos = blockStartX;
+	blockYPos += blockHeight;
+	image(block, blockXPos, blockYPos);
+}
+```
