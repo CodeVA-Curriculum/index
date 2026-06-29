@@ -35,11 +35,10 @@ export const load: PageServerLoad= async ({ params, parent, url }) => {
     results = await db.query.node.findMany({
        with: nodeRelations,
        where: {
-          guide: guide.id,
+         guide: guide.id,
          path: searchPath
        }   
     })
-    console.log(results)
     elType = "node"
   }
   if(results.length == 0) {

@@ -139,9 +139,13 @@ class Group {
   x = 0; y = 0
   constructor(db:any, order:string[], elementsByPath:any) {
     this.title = db.alias
-    order.sort((a,b) => a.index - b.index)
+    order.sort((a,b) => a.groupId == b.groupId ? a.index - b.index : a.groupId - b.groupId )
     for(const c of order) {
+      console.log(c)
       let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
+      for(const n of db.nodes) {
+        if(n.id == 113) { console.log(n)}
+      }
       this.nodes.push(elementsByPath[node.path])
       this.nodeMask.push(c.optional)
     }

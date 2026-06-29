@@ -54,7 +54,7 @@ export class Edge {
 
     this.highlight = p5.createGraphics(w,h)
     this.highlight.fill('rgba(0, 0, 0, 0)')
-    this.highlight.stroke(255, 0, 0)
+    this.highlight.stroke("#22A5E6") // highlight blue
     this.highlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 

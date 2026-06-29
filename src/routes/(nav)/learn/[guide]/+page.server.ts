@@ -19,7 +19,6 @@ export const load:PageLoad = async ({ params, locals }) => {
     where: { guide: result.id }
   })
   // const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
-  let relations = {...nodeRelations}
   const nodes = await loadNodesForGuide(db, result.id, locals.user)
   let nodeIds = []
   for(const n of nodes) {

@@ -2,11 +2,10 @@
 title: Make an "Asteroids" Game
 video: https://www.youtube.com/embed/14I8C6FKINQ # TODO: livestream link
 nodes:
-    intro:
-        - concepts/getting-started.md
-        - concepts/calling-functions.md
-        - ./asteroids-shapes.md       
-    
+    - concepts/getting-started.md
+    - concepts/calling-functions.md
+    - ./asteroids-shapes.md
+    - concepts/variables-types.md
 authors: Jon Stapleton
 description: In this project, you'll follow along as Jon walks you through how to create a clone of the classic retro game "Asteroids." In this project, you'll learn the basics of how to create simple games with p5js, including using calling functions, using variables, using objects, and grouping objects together using arrays.
 difficulty: 4

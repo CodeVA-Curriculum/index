@@ -11,14 +11,17 @@
             "id": "289aa7a4780f5b34",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "projects/flappy-mvp/flappy-trailhead.md",
-                "mode": "source",
-                "source": false
+                "file": "map.canvas",
+                "viewState": {
+                  "x": 2342.593111808375,
+                  "y": 911.1091299841812,
+                  "zoom": -1.777775473783151
+                }
               },
-              "icon": "lucide-file",
-              "title": "flappy-trailhead"
+              "icon": "lucide-layout-dashboard",
+              "title": "map"
             }
           }
         ]
@@ -33,12 +36,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "concepts/images.md",
+                "file": "projects/_asteroids/index.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "images"
+              "title": "index"
             }
           }
         ]
@@ -180,8 +183,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "289aa7a4780f5b34",
+  "active": "ad315164aaeee32c",
   "lastOpenFiles": [
+    "map.canvas",
+    "projects/_asteroids/index.md",
+    "projects/_dino/index.md",
+    "projects/_asteroids/asteroids-shapes.md",
+    "projects/flappy-mvp/index.md",
+    "projects/flappy-mvp/flappy-trailhead.md",
+    "concepts/images.md",
     "projects/flappy-mvp/flappy-shapes.md",
     "projects/flappy-mvp/flappy-movement.md",
     "projects/flappy-mvp/flappy-flight.md",
@@ -201,14 +211,6 @@
     "applications/scene-animation-project.md",
     "applications/simple-obstacle-game.md",
     "applications/sprite-animations.md",
-    "applications/sprite-basics.md",
-    "applications/sprite-collisions.md",
-    "applications/sprite-images.md",
-    "applications/sprite-movement.md",
-    "applications/sprite-physics-basics.md",
-    "applications/triangles.md",
-    "concepts/calling-functions.md",
-    "map.canvas",
     "projects/flappy-mvp/icon.png",
     "projects/_dino/icon.png",
     "projects/_asteroids/icon.png",
