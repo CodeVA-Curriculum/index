@@ -1,3 +1,0 @@
----
-title: Rectangle-Rectangle Collision
----

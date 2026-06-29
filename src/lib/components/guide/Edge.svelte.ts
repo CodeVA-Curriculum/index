@@ -2,6 +2,7 @@ import type { Edge as DbEdge } from '$lib/server/db/schema'
 
 const STROKE_WEIGHT = 8;
 const SELECT_FACTOR = 3
+const HIGHLIGHT_COLOR = "#22A5E6"
 
 interface ControlPoint {
   x:number,
@@ -54,7 +55,7 @@ export class Edge {
 
     this.highlight = p5.createGraphics(w,h)
     this.highlight.fill('rgba(0, 0, 0, 0)')
-    this.highlight.stroke("#22A5E6") // highlight blue
+    this.highlight.stroke(HIGHLIGHT_COLOR) // highlight blue
     this.highlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
@@ -75,7 +76,7 @@ export class Edge {
   }
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')
-    this.optionEdge.stroke(255, 0, 0)
+    this.optionEdge.stroke("#22A5E6") // highlight blue
     this.optionEdge.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     // this.optionEdge.bezier(this.points.p0.x - this.x, this.points.p0.y - this.y, this.points.p1.x - this.x, this.points.p1.y - this.y, this.points.p2.x - this.x, this.points.p2.y - this.y, this.points.p3.x - this.x, this.points.p3.y - this.y)
     // this.optionEdge.bezier()

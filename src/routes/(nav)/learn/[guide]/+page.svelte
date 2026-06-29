@@ -32,13 +32,13 @@
   }
   function toggle(title:string) {
     panelOpen = title ? title : false;
+    console.log(selected)
     if(!title) {
       hoverList = []
       for(const el of selected) {
         el.setSelect(false)
       }
       selected = []
-      map.pushOut()
     }
   }
 </script>

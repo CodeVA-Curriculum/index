@@ -1,3 +1,0 @@
----
-title: Finishing Flappy Bird
----

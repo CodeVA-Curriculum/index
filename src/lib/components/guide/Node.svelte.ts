@@ -1,9 +1,9 @@
 import type { Node as DbNode } from '$lib/server/db/schema'
 import { Lerp } from '$lib/utils'
 
+export const HIGHLIGHT_COLOR = "#22A5E6"
 export const STROKE_WEIGHT= 8
 export const BACKGROUND_COLOR = "#ffffff"
-export const HIGHLIGHT_COLOR = "#00ff00";
 export const HOVER_COLOR = "ffffff"
 const SCALE = 1.5 // bigger = less spacing
 
@@ -39,6 +39,13 @@ export class Node {
         this.icon = img
       })
     }
+    this.idle = p5.createGraphics(this.width*1.125, this.width*1.125)
+    this.idle.strokeWeight(STROKE_WEIGHT)
+    this.idle.circle(this.idle.width/2, this.idle.width/2, Math.round(this.width))
+    this.highlight = p5.createGraphics(this.width * 1.25, this.width * 1.25)
+    this.highlight.stroke(HIGHLIGHT_COLOR)
+    this.highlight.strokeWeight(STROKE_WEIGHT * 2)
+    this.highlight.circle(this.highlight.width/2, this.highlight.width/2, Math.round(this.width))
     if(this.db.status.date) { this.lastUpdated = this.db.status.date }
     // make shadow
     // this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
@@ -50,11 +57,14 @@ export class Node {
     let y = this.y*this.scale
     let pastFill
     let styleFlag = false
-    // if(this.highlighted) {
-    //   p5.stroke("#ff0000")
-    //   p5.strokeWeight(STROKE_WEIGHT * 2)
-    // }
-    p5.circle(x, y, w)
+    switch (this.highlighted) {
+      case true:
+        p5.image(this.highlight, x, y, w, w)
+        break
+      default:
+        p5.image(this.idle, x, y, w, w)
+    }
+    // p5.circle(x, y, w)
     // if(styleFlag) {
     //   p5.stroke(0)
     //   p5.strokeWeight(STROKE_WEIGHT)
@@ -68,10 +78,8 @@ export class Node {
         p5.circle(ix, iy, 100)
         p5.text(this.db.title, x-150/2, y, 150)
         // iconScale = 0.25
-        p5.image(this.icon, ix-100*iconScale/2, iy-100*iconScale/2, 100*iconScale, 100*iconScale)
+        p5.image(this.icon, ix, iy, 100*iconScale, 100*iconScale)
       } else {
-        x = x-100*iconScale/2
-        y = y - 100 * iconScale / 2
         p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
       }
     } else if(this.db.type != "cache" || (this.db.type == 'cache' && this.hover)) {

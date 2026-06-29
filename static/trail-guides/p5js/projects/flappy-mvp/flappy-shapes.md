@@ -1,3 +1,0 @@
----
-title: Approximating Birds & Pipes
----

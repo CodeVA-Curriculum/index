@@ -4,7 +4,7 @@
 </script>
 <nav>
   <ul>
-    <li class='icon'><div class='icon-wrap'><img src="/images/icon.png"></div></li>
+    <li class='icon'><div class='icon-wrap'><a href="/learn"><img src="/images/icon.png"></a></div></li>
     <li>{guide.title}</li>
   </ul>
   <ul>

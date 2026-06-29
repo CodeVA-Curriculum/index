@@ -40,8 +40,11 @@
   })
   let res = $state([])
   let mode = $derived.by(() => {
-    if(title == 'projects' || title == "tutorials") { return modes.LIST }
+    if(title == 'projects' || title == "tutorials") { 
+      console.log("mode", modes.LIST)
+      return modes.LIST }
     else {
+      console.log("mode", modes.ELEMENT)
       return modes.ELEMENT
     }
   })
@@ -62,7 +65,7 @@
 
 {#snippet elementHeader(obj)}
     <h2>{obj.db.title}</h2>
-    <DetailsIcons obj={obj} eltype={1} />
+    <DetailsIcons obj={obj} eltype={obj instanceof Project ? 0 : 1} />
 {/snippet}
 
 {#snippet elementContent(obj)}

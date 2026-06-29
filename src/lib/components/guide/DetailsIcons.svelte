@@ -15,6 +15,7 @@
     Project:0,
     Tutorial:1
   }
+  console.log(obj)
   let iconSnippet
   let iconParams = []
   if(eltype == 1) {

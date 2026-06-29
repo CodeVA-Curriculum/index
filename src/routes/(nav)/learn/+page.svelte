@@ -13,7 +13,7 @@
       <div>
       <article class='card'>
         <div class='card-image'>
-          <img src={guide.image} alt="" />
+          <img src='/images/{guide.image}' alt="" />
         </div>
         <main class='card-body'>
           <h2>{guide.title}</h2>
