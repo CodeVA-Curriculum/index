@@ -63,6 +63,7 @@
     {/if}
     <input class='search-button' type="submit" value="Search" />
   </fieldset>
+  {#if filters}
   <div class='filters {filterToggle? 'selected':''}'>
       {@render dropdown("Grade(s)", filters.grades)}
       {@render dropdown("Subject(s)", filters.subjects)}
@@ -70,6 +71,7 @@
       {@render dropdown("Audience(s)", filters.audiences)}
 
   </div>
+  {/if}
 </form>
 </div>
 

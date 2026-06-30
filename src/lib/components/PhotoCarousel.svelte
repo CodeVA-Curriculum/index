@@ -1,22 +1,23 @@
 <script lang='ts'>
     import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
+
+    let { objs } = $props()
+    let index = $state(0)
     
     let loaded = $state(true)
     let sols = $state([])
-    let thumbnails = $state([
-      "https://placecats.com/850/1100"
-    ])
+
     
     function load() {
 
     }
 
     function prev() {
-
+      index = Math.abs(index - 1) % objs.length
     }
     function next() {
-
+      index = Math.abs(index + 1) % objs.length
     }
 </script>
 
@@ -26,9 +27,9 @@
   </button>
   <article class='center'>
       <div class='thumbnail'>
-        <img src={thumbnails[0]} />
+        <img src={objs[index].image} />
       </div>
-      <a role="button" href="TODO:" target="_blank">View Details</a>
+      <a role="button" href={"/teach/library/browse/" + objs[index].path} target="_blank">View Details</a>
   </article>
   <button onclick={next} disabled={!loaded} class='right'>
     <Fa icon={faArrowRight} />
@@ -37,8 +38,8 @@
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
   .thumbnail {
-    background-color: powderblue;
     overflow: hidden;
+    max-width: 24rem;
   }
   .thumbnail > img {
     object-fit: cover;
@@ -60,7 +61,7 @@
   }
   .left, .right {
     color: black;
-    flex-grow: 0;
+    flex: 0 1;
     margin: 0 0px;
     height: 100%;
     background-color: transparent;
@@ -81,8 +82,6 @@
     display: flex;
     flex-direction: column;
     flex-grow: 0;
-    // background-color: powderblue;
-    // min-width: 200px;
     a {
       font-size: small;
       padding: 4px;

@@ -11,7 +11,6 @@ export const load:LayoutServerLoad = async () => {
 
   
   return {
-    elements: [],
     filters: {
       grades: grades,
       audiences: audiences,

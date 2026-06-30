@@ -16,7 +16,7 @@ async function main() {
   const db = drizzle({ schema: schema, client: client });
   
   // clear database for seeding
-  const tables = [ schema.activityToStandard, schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.pivotNodeProject,  schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.prompt, schema.question, schema.node, schema.guide]
+  const tables = [ schema.collection, schema.activityToStandard, schema.elementToStandard, schema.standard, schema.elementToSubj, schema.subject, schema.child_element_ref, schema.elementToTag, schema.tag, schema.elementToType, schema.elementType, schema.elementToAudience, schema.audience, schema.elementToGrade, schema.grade, schema.element, schema.pivotNodeProject,  schema.nodeToNodeGroup, schema.nodeGroup, schema.project, schema.edge, schema.prompt, schema.question, schema.node, schema.guide]
   let count = 0
   for(const table of tables) {
     console.log(count++)
@@ -53,7 +53,7 @@ async function main() {
   const { standards } = await seedStandards(db, schema, subjects)
 
   // Pull all files
-  const paths = await globby(['static/library', '!static/library/README.md'], {
+  const paths = await globby(['static/library', '!static/library/README.md', '!static/library/node_modules'], {
     expandDirectories: { files: ['*.md', '.*.md'] }
   })
   const els:any[] = []
@@ -70,9 +70,9 @@ async function main() {
       link: el.links ? el.links.drive : null,
       gradesAbbr: el.grades,
       path: path.replace("static/library/", ''),
-      // hidden: el.hidden
       standardsAbrr: el.standards,
-      hidden: el.hidden? true : false
+      hidden: el.hidden? true : false,
+      image: el.image ? el.image : '/images/default-thumbnail.png'
     }).returning({ id: schema.element.id }))[0] as any
     el.id = id
     el.frontmatter = frontmatter

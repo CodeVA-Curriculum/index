@@ -69,6 +69,7 @@ export const element = sqliteTable('element', {
 	authors: text().default("CodeVA Curriculum"),
 	content: text(),
 	link: text(),
+	image: text().default('/images/default-thumbnail.png'),
 	file: text(),
 	hidden: integer({ mode: 'boolean' }),
 	gradesAbbr: text(),

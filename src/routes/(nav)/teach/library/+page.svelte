@@ -9,14 +9,12 @@
 </script>
 <div class='container page'>
   <section class='text-and-carousel'>
-    <div class='photo'>
-      <PhotoCarousel />
-    </div>
+    <PhotoCarousel objs={data.elements} />
     <div class='info'>
       <div class='text'>
       <h1>CodeVA Educator's Library</h1>
       <p>We've written dozens of lessons and created tons of resources to help K-12 educators teach computer science. <a href="/teach/library/search"<>Search the free materials</a>, or subscribe to access the whole library!</p>
-      <SearchBar filters={data.filters} />
+      <SearchBar filters={false} />
       <p class='asearch'><i><a href="/teach/library/search">Advanced Search</a></i></p>
       </div>
     </div>
@@ -24,7 +22,7 @@
   <section>
     <h2>Browse Collections</h2>
     <div class='collections'>
-      {#if data.collections?.length > 0}
+      {#if data.collections?.length > 0 && false}
       {#each data.collections as collection}
       <article>
         <img src="https://placecats.com/200/100">
@@ -60,13 +58,10 @@
     flex-direction: row;
     gap: 1rem;
   }
-  .photo {
-    max-width: 25%;
-  }
   .info {
   display: flex;
   flex-direction: column;
-    min-width: 600px;
+    // min-width: 600px;
     margin-left: 1rem;
     .text { flex: 1 1;}
   }

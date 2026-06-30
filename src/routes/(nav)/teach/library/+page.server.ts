@@ -3,19 +3,21 @@ import { db, elementRelations } from '$lib/server/db'
 import * as schema from "$lib/server/db/schema"
 import { eq } from 'drizzle-orm'
 
-export const load:PageServerLoad = async ({ params, fetch }) => {
+export const load:PageServerLoad = async ({ params, fetch, parent }) => {
   // load & return library elements
-  const elements:Elements[] = await db.query.element.findMany({
+  let { filters } = await parent()
+  const elements = await db.query.element.findMany({
     with: elementRelations,
     where: {
-      hidden: { eq: false}
+      hidden: false
     }
   })
   const collections = await db.query.collection.findMany({
     with: { element: { with: elementRelations }}
   })
   return {
-    elements: elements,
-    collections: collections
+    filters,
+    collections: collections,
+    elements: elements
   }
 }
