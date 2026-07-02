@@ -2,12 +2,26 @@
 title: Start a Story
 author: Jon Stapleton
 short: Learn how to start the Twine editor in your browser and create a new story.
-description: Twine is a tool for creating interactive, web-based stories. This tutorial shows you how to open the Twine editor and start a new story using the Chapbook format (our recommended starting point).
+long: Twine is a tool for creating interactive, web-based stories. This tutorial shows you how to open the Twine editor and start a new story using the Chapbook format (our recommended starting point).
 video: https://youtube.com/embed/K3zDCZ2LvsQ
 types: tutorial, trailhead
 layout: location
 start: true
 ---
+
+:::quick-take{src="start-story.gif"}
+First, make sure you have set up your Twine editor to use the Chapbook story format:
+
+1. Visit [Twine](https://twinery.org) in your web browser
+2. Click `Use it online`
+3. Click `Twine` tab in the area near the top-left of the screen, then click `Story Formats`
+4. Click `Chapbook`, then click `Use as Default Format`
+
+Then, make a new story:
+
+1. From the main page, click the `+ New` button near the top-left of the screen, and name your story whatever you'd like.
+2. Twine will automatically open the editor after it creates your story. To return to the main page, click the `Back` button in the top-left corner of the screen.
+:::
 
 ## First, Visit Twine in Your Web Browser
 

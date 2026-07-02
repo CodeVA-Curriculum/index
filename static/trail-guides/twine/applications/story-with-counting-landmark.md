@@ -2,7 +2,7 @@
 title: Vote Counting Story
 author: Jon Stapleton
 short: Keep a count using variables
-description: Create a story where the computer keeps track of a vote count during an important election in American history. Explore the viewpoints of the people who participated, and learn about their reactions to how events unfolded.
+long: Create a story where the computer keeps track of a vote count during an important election in American history. Explore the viewpoints of the people who participated, and learn about their reactions to how events unfolded.
 # video: https://youtube.com/embed/33OQtxF7L8g
 type: project
 # TODO: synthesize "layout" and "type"

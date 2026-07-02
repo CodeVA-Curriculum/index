@@ -62,6 +62,7 @@ async function main() {
     console.log("Processing "+path)
     let el = await fileToElementObj(path)
     const frontmatter = el.frontmatter
+    const img = el.links && el.links.drive && el.links.drive.includes('/d/') ? '/images/thumbnails/' + getDriveId(el.links.drive) + '.png' : null
     let { id }  = (await db.insert(schema.element).values({
       title: el.title,
       short: el.short,
@@ -72,7 +73,7 @@ async function main() {
       path: path.replace("static/library/", ''),
       standardsAbrr: el.standards,
       hidden: el.hidden? true : false,
-      image: el.image ? el.image : '/images/default-thumbnail.png'
+      image: img ? img : el.image ? '/images/' + el.image : '/images/default-thumbnail.png'
     }).returning({ id: schema.element.id }))[0] as any
     el.id = id
     el.frontmatter = frontmatter
@@ -318,4 +319,10 @@ function getDashNotation(grades:string[]):string {
   }
   if(out.charAt(out.length-1) == "-") { out += grades[grades.length-1]}
   return out
+}
+
+function getDriveId(url:string):string {
+    let id = url.substring(url.indexOf('/d/') + 3)
+    id = id.substring(0, id.indexOf('/'))
+    return id
 }

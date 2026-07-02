@@ -2,11 +2,29 @@
 title: Branching Paths
 author: Jon Stapleton
 short: Learn how to give your reader choices in the story that each lead to different passages.
-description: Twine stories are about choices. This tutorial covers how to add multiple links to a passage, allowing users to make choices that affect how the story ends.
+long: Twine stories are about choices. This tutorial covers how to add multiple links to a passage, allowing users to make choices that affect how the story ends.
 video: https://www.youtube.com/embed/TTIF3vf9VTg
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+Use more than one link in a passage to create a branching choice for the reader to make.
+
+:::code-and-image{title="Two Paths" src="TODO.gif" alt="Output of the program below" tabs}
+```intro
+Once upon a time, a spider was looking for a place to spin their web. They walked into the forest alone, looking for a good spot to make their new home. Over the hill, they spotted a peaceful clearing; to the right, they spotted a rotten old log.
+
+> [[The Clearing->clearing]]
+> [[The Rotten Log->log]]
+```
+```clearing
+The spider comes upon a clearing...
+```
+```log
+The spider comes upon a log...
+```
+:::
 
 ## Create a Choice
 

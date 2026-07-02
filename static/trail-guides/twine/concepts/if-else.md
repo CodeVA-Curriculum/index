@@ -2,11 +2,28 @@
 title: If-Else Blocks
 author: Jon Stapleton
 short: Use "else" blocks to show or hide two lines of text.
-description: If statements allow you write passages where events unfold differently based on the value of variables, which are invisible to the reader. Sometimes you might want the passage to offer one of two mutually exclusive options--a message that says "the key turns in the lock", or a message that says "this is the wrong key...", for example. You can accomplish this with "if" and "unless" blocks, but the Chapbook format of Twine also offers "else" blocks, which accomplish something similar.
+long: If statements allow you write passages where events unfold differently based on the value of variables, which are invisible to the reader. Sometimes you might want the passage to offer one of two mutually exclusive options--a message that says "the key turns in the lock", or a message that says "this is the wrong key...", for example. You can accomplish this with "if" and "unless" blocks, but the Chapbook format of Twine also offers "else" blocks, which accomplish something similar.
 video: https://www.youtube.com/embed/tY23AYcaA_Q
 type: tutorial
 layout: location
 ---
+
+:::quick-take{src="if-else.gif"}
+Use `[if]` and `[else]` blocks to create sections of text which the computer either hides or reveals based on a condition. The computer displays the `[if]` section if the condition is `true`, and displays the `[else]` section if it's false.
+
+```
+hasKey: true
+--
+
+You see a locked door...
+
+[if hasKey]
+> [[Unlock the door]]
+[else]
+> [[Try the door]]
+
+```
+:::
 
 ## One of Two Options with "Unless" Blocks
 

@@ -10,6 +10,7 @@
     for(const n of data.guide.nodes) {
       nodes.push(new Node(n))
     }
+    results = nodes
   })
 
 </script>

@@ -6,8 +6,29 @@ type: tutorial
 layout: location
 video: https://www.youtube.com/embed/VFjAVps7ILs
 short: Use variables with embedded passages
-description: This tutorial covers some techniques that involve using embedded passages in conjunction with variables to create story systems. Embedding & variables are powerful tools for organizing your stories, allowing you to group related features together into passages and re-use those passages across your story. This tutorial covers two techniques; using variable links in embedded passages, and using variables to control which passage the host passage embeds.
+long: This tutorial covers some techniques that involve using embedded passages in conjunction with variables to create story systems. Embedding & variables are powerful tools for organizing your stories, allowing you to group related features together into passages and re-use those passages across your story. This tutorial covers two techniques; using variable links in embedded passages, and using variables to control which passage the host passage embeds.
 ---
+
+:::quick-take
+Using a variable to refer to an embedded passage rather than typing its name explicitly is a great way to create stories that respond to readers' choices in complex ways:
+
+:::code-and-image{src="embedded-passage.png" tabs}
+```main
+where: "insert"
+--
+
+Ah, a passage.
+
+{embed passage: where }
+
+A message from another passage, it seems...
+```
+```insert
+> Here is my message!
+```
+:::
+
+:::
 
 This tutorial covers some techniques that involve using embedded passages in conjunction with variables to create story systems. Embedding & variables are powerful tools for organizing your stories, allowing you to group related features together into passages and re-use those passages across your story. This tutorial covers two techniques; using variable links in embedded passages, and using variables to control which passage the host passage embeds.
 

@@ -2,11 +2,20 @@
 title: Making Recordings
 author: Jon Stapleton
 short: Use a computer or phone to record audio.
-description: If you want to include sounds in your Twine story, you'll need to record them somehow and create an audio file to put in your story. This tutorial shows you how.
+long: If you want to include sounds in your Twine story, you'll need to record them somehow and create an audio file to put in your story. This tutorial shows you how.
 # video: https://youtube.com/embed/33OQtxF7L8g
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+You have to use another application to record your own sounds. Here are some options:
+
+* **iOS/MacOS:** The [Voice Memos](https://apps.apple.com/us/app/voice-memos/id1069512134) app
+* **Android:** [Google Keep]() (requires an account) or [Audio Recorder](https://play.google.com/store/apps/details?id=com.dimowner.audiorecorder&hl=en_US&gl=US)
+* **Windows:** The built-in [Voice Recorder](https://www.microsoft.com/en-us/p/windows-voice-recorder/9wzdncrfhwkn#activetab=pivot:overviewtab)
+* **ChromeOS:** [Soundtrap](https://www.soundtrap.com/), and online digital audio workstation
+:::
 
 ## Pick a Recording Application
 

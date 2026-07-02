@@ -44,7 +44,7 @@
         {#if p.video}
         <Video id={p.video}/>
         {/if}
-        <p class='description'>{@html p.description}</p>
+        <p class='description'>{@html p.long}</p>
         <hr>
       </details>
     </header>

@@ -2,11 +2,84 @@
 title: Relational Expressions
 author: Jon Stapleton
 short: Learn how to write relational expressions
-description: Relational expressions (or "Boolean" expressions) are a way of having the computer compare two or more values and produce a value of "true" or "false" based on the comparison. Because "true" and "false" variable values are such an important part of "if" statements and other conditional control structures, you'll find lots of uses for relational expressions in your stories that use "if" and "unless" blocks.
+long: Relational expressions (or "Boolean" expressions) are a way of having the computer compare two or more values and produce a value of "true" or "false" based on the comparison. Because "true" and "false" variable values are such an important part of "if" statements and other conditional control structures, you'll find lots of uses for relational expressions in your stories that use "if" and "unless" blocks.
 video: https://www.youtube.com/embed/YCEIuIyP1Yg
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+Use relational expressions with `[if]` statements to hide and reveal text based on conditions:
+
+:::code-and-image{name="The Great Coin Hunt" src="the-coin-hunt-demo.gif" tabs}
+```title
+score: 0
+--
+
+# The Great Coin Hunt
+
+*A story demonstrating a relational expression*
+
+> [[Begin->quest]]
+```
+```quest
+_finished: score > 2
+--
+
+You see a hunched figure in a dark cloak. They approach, and say:
+
+[if _finished]
+You have found the secret coins. Follow me, traveler...
+
+> [[Follow the hunched figure->end]]
+[else]
+"Find the hidden coins three, and I will show you the way forward"
+
+> [[Search the road->road]]
+> [[Search the forest->forest]]
+> [[Search the cabin->cabin]]
+```
+```road
+score: score + 1
+--
+
+You find a shining, gold coin buried in the dirt.
+
+> [[Return->quest]]
+```
+```forest
+score: score + 1
+--
+
+A massive, panting wolf approaches you and gently places a glistening gold coin in your hand before loping into the darkness.
+
+> [[Return->quest]]
+```
+```cabin
+score: score + 1
+--
+
+You see something shine from beneath the floorboards. You pry it up, and find a gold coin.
+
+> [[Return->quest]]
+```
+```end
+You follow the figure into the mist, to adventures unknown...
+
+# The End
+```
+:::
+
+| Operator | Name | Description | Example | Value |
+| -------- | ---- | ----------- | ------------------ | -------------- |
+| `==`     | "Is equal to" | Compares two values. If they are the same, produce `true`; otherwise, produce `false` | `5 == 5` | `true` |
+| `<`      | "Is less than" | Compares two values. If the first value is less than the second, produce `true`; otherwise, produce `false`. | `2 < 1` | `false` |
+| `>`      | "Is greater than" | Compares two values. If the first value is greater than the second, produce `true`; otherwise, produce `false`. | `4 > 3` | `true` |
+| `!=`     | "Is not equal to" | Compares two values. If they are not equal, produce `true`; otherwise, produce `false` | `5 != 5` | `false` |
+| `<=`     | "Is less than or equal to" | Compares two values. If the first value is less than or equal to the second, produce `true`; otherwise produce `false` | `3 <= 3` | `true` |
+| `>=`     | "Is greater than or equal to" | Compares two values. If the first value is greater than or equal to the second, produce `true`; otherwise produce `false` | `2 >= 1` | `true` |
+
+:::
 
 ## Shortcomings of Boolean Variables
 

@@ -40,6 +40,8 @@
   .thumbnail {
     overflow: hidden;
     max-width: 24rem;
+    min-width: 12rem;
+    aspect-ratio: 850 / 1100;
   }
   .thumbnail > img {
     object-fit: cover;

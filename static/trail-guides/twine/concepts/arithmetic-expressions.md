@@ -6,9 +6,31 @@ type: tutorial
 layout: location
 video: https://www.youtube.com/embed/Kk_Xe0Dl30k
 short: Modify number variables
-description: This tutorial shows you how to modify number variables using arithmetic expressions--lines of code that use mathematical operations to assign a variable a value. You'll learn how to write arithmetic expressions, increment variables, and use variables as operands in mathematical expressions.
+long: This tutorial shows you how to modify number variables using arithmetic expressions--lines of code that use mathematical operations to assign a variable a value. You'll learn how to write arithmetic expressions, increment variables, and use variables as operands in mathematical expressions.
 ---
 
+:::quick-take
+Use *arithmetic operators* to modify the values of variables. This is useful for keeping track of scores, tracking readers' decisions, and all sorts of other creative, tricky things.
+
+:::code-and-image{src="TODO" alt="The output of the program below"}
+```
+age: 10 + (2+3)
+--
+
+I am {age} years old.
+```
+:::
+
+| Operator | Description | Example |
+| -------- | ----------- | ------- |
+| `+` | Add two numbers together | `2 + 2` |
+| `-` | Find the difference between two numbers | `6 - 2` |
+| `*` | Muliply two numbers together | `2 * 2` |
+| `/` | Divide two numbers | `8 / 2` |
+| `**` | Raise the first operand to the power of the second | `2 ** 2` |
+| `%` | Find the remainder after dividing the two operands | `12 % 8` |
+
+:::
 ## Variables & Math
 
 Number-type variables have a special capability that `string` variables do not: you can use them to perform mathematical operations. There are lots of reasons to have the computer do math during your stories; you could have the computer keep track of a score (if the reader is playing a game), for example. There are also some ways for you to use `number` variables to hide or show different parts of the story, but I won't get into that in this tutorial. Instead, this page focuses on writing and tracing code that includes `number` variables and arithmetic expressions.

@@ -2,11 +2,38 @@
 title: Logical Operations
 author: Jon Stapleton
 short: Compare Boolean values with logic operators.
-description: When you write stories that include conditional control structures, you might find yourself wanting to have the computer display or hide text based on more than one condition. For example, you might want to offer the reader an option to pick up a key from the floor of a dark room, but only if they haven't already picked it up and they have found the flashlight beforehand. You can use logical operations to accomplish this kind of task.
+long: When you write stories that include conditional control structures, you might find yourself wanting to have the computer display or hide text based on more than one condition. For example, you might want to offer the reader an option to pick up a key from the floor of a dark room, but only if they haven't already picked it up and they have found the flashlight beforehand. You can use logical operations to accomplish this kind of task.
 video: https://www.youtube.com/embed/FnIwi1j0tJo
 type: tutorial
 layout: location
 ---
+
+:::quick-take{src="logic-operators.gif}
+Use logic operators to combine relational expressions. This is useful if you need the computer to use an `[if]` block based on the values of two or more variables:
+
+```
+hasKey: true
+hasLight: false
+--
+
+You enter the room.
+
+> [[Search the room]]
+[if hasKey && hasLight]
+
+You see a door!
+
+> [[Open the door]]
+
+```
+
+| Operator | Name | Description | Example Expression | Value Produced |
+| -------- | ---- | ----------- | ------------------ | -------------- |
+| `&&`     | "and" | Compare two Boolean values. If they are both `true`, produce `true`; Otherwise, produce `false`. | `true && false` | `false` |
+| `||`     | "or" | Compare two Boolean values. If at least one of them is `true`, produce `true`; otherwise, produce `false`. | `true && false` | `true` |
+| `!`      | "not" | Produce the opposite of one Boolean value. If the value is `true`, produce false; if it's `false`, produce `true` | `!false` | `true` |
+
+:::
 
 ## Using Logical Operators
 

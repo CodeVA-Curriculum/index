@@ -16,7 +16,7 @@
     <div class='info'>
       <h1>{obj.db.title}</h1>
       <DetailsIcons eltype={ElementType.Tutorial} obj={obj} />
-      <p>{obj.db.description}</p>
+      <p>{obj.db.long}</p>
     </div>
   </header>
   {#if obj.db.quickTake && obj.db.quickTake.length > 0}

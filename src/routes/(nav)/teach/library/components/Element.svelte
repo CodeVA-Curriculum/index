@@ -9,7 +9,7 @@ import Help from '$lib/components/Help.svelte'
     import { faLock, faBookmark, faFolderOpen, faKey } from '@fortawesome/free-solid-svg-icons';
 
   let { user, obj } = $props()
-  let locked = $state(user ? false : true)
+  let locked = $state(user ? false : false)
   let gradeStyle = getGradeStyle(obj)
 </script>
 <article class='card'>
@@ -17,7 +17,7 @@ import Help from '$lib/components/Help.svelte'
     <span>{#if obj.grades.length > 1}GRADES {/if} {obj.gradesAbbr}</span>
   </div>
   <div class='thumbnail {locked ? "locked" : "unlocked"}'>
-    <img src="./thumbnails/{obj.db.link}.png" >
+    <img src="{obj.image}" >
     {#if locked}
     <div>
     <span class='icon'><Fa size='4x' icon={faKey} /></span>

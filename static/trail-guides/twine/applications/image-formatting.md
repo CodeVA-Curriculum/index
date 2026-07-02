@@ -3,11 +3,32 @@ title: Image Formatting Using CSS
 # TODO: incorporate author into location cards
 author: Jon Stapleton
 short: Learn how to manipulate your images to display them in different ways.
-description: Images are great, but sometimes they may not look exactly right. They may be too big, or too small, or take up the wrong amount of space. They may even make it difficult to read the passage because they push the text all over the place. This tutorial covers how to use CSS to make some changes to the way Twine displays images.
+long: Images are great, but sometimes they may not look exactly right. They may be too big, or too small, or take up the wrong amount of space. They may even make it difficult to read the passage because they push the text all over the place. This tutorial covers how to use CSS to make some changes to the way Twine displays images.
 video: https://youtube.com/embed/MSqnueqV3Rw 
 type: tutorial
 layout: location
 ---
+
+:::quick-take{src="image-formatting.png"}
+Use CSS to format images so they fit with your story. This example makes a full width image:
+
+```css
+img {
+    width: 100%;
+}
+```
+
+This example makes the image "float" to the left side of the page, wrapping the text around it:
+
+```css
+img {
+    float: left;
+    position: static;
+    width: 50%;
+    margin-right: 50px;
+}
+```
+:::
 
 ## Adding CSS To Your Story
 

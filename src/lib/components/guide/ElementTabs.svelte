@@ -38,7 +38,7 @@
   <Video id={obj.db.video} />
   {/if}
   {#if !short}
-  <p>{obj.db.description ? obj.db.description : obj.db.short }</p>
+  <p>{obj.db.long ? obj.db.long : obj.db.short }</p>
   {/if}
 {/snippet}
 {#snippet quicktake(obj)}

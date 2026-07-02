@@ -4,6 +4,7 @@
   import ElementPanel from '../components/ElementPanel.svelte'
   import Element from '../components/Element.svelte'
   import SearchBar from '../components/SearchBar.svelte'
+  import ElementTable from '../components/ElementTable.svelte'
   import Fa from 'svelte-fa'
   import { faX } from '@fortawesome/free-solid-svg-icons'
 
@@ -21,62 +22,7 @@
       <div class='sticky'>
         <SearchBar filters={data.filters} />
       </div>
-      <table>
-        <colgroup>
-          <col>
-          <col class='narrow'>
-          <col>
-          <col>
-          <col>
-        </colgroup>
-      <thead>
-        <tr>
-          <th scope="col">Grades</th>
-          <th class='title' scope="col">Title</th>
-          <th scope="col">Type</th>
-          <th scope="col">Subjects (CS+)</th>
-          <th class='tags' scope="col">Tags</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each data.elements as el, i}
-          {#if i == selected}
-            <tr class='selected'>
-              <td>
-                <div class='ui-buttons'>
-                  <a href="/teach/library/browse/{el.path}" target="_blank" role='button'>Open</a>
-                  <button>Save</button>
-                  <button onclick={()=>selected=-1} class='close'>Dismiss</button>
-                </div>
-              </td>
-              <td colspan="5">
-                <Element user={data.user} obj={el} />
-              </td>
-            </tr>
-          {:else}
-          <tr onclick={() => sel(i)}>
-            <td>{el.gradesAbbr}</td>
-            <td class=''>{el.title}</td>
-            <td>{el.types[0].title}</td>
-            <td>
-              {#if el.subjects.length < 5}
-              {#each el.subjects.filter((o) => o.abbr != 'CS') as subj}
-                <span class='tag light'>{subj.abbr}</span>
-              {/each}
-              {/if}
-            </td>
-            <td class='tags'>
-              <div>
-              {#each el.tags as tag}
-                <span class='tag light'>{tag.title}</span>
-              {/each}
-              </div>
-            </td>
-          </tr>
-          {/if}
-        {/each}
-      </tbody>
-      </table>
+      <ElementTable elements={data.elements} user={data.user} />
       {#if data.elements.length == 0}
       <div class='no-elements'>
         <p><i>Search above for CS lessons and resources!</i></p>

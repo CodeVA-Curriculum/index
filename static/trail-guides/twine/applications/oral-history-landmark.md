@@ -2,7 +2,7 @@
 title: Oral History Project
 author: Jon Stapleton
 short: A project where the reader explores the story of someone's experiences in their own words, through recordings of their voice.
-description: Oral histories are accounts of historical events from one person's perspective, told in their own words. To create an oral history, an interviewer sits down with the subject and asks them questions about their life and events from their past. This project shows how you can turn an oral history into an interactive Twine story that incorporates audio recordings from an oral history interview.
+long: Oral histories are accounts of historical events from one person's perspective, told in their own words. To create an oral history, an interviewer sits down with the subject and asks them questions about their life and events from their past. This project shows how you can turn an oral history into an interactive Twine story that incorporates audio recordings from an oral history interview.
 # video: https://youtube.com/embed/33OQtxF7L8g
 type: project
 # TODO: synthesize "layout" and "type"

@@ -2,7 +2,7 @@
 title: Mystery Figure Project
 author: Jon Stapleton
 short: A project using conditionals to profile a historical figure
-description: Conditionals allow you to set up puzzles in your story for the reader to solve. These sorts of stories can feel more like games than narratives--they are interactive, and can be designed to produce surprising results for the reader to explore. In this project, you'll use conditional statements to create a puzzle where the reader must uncover the identity of a historical figure.
+long: Conditionals allow you to set up puzzles in your story for the reader to solve. These sorts of stories can feel more like games than narratives--they are interactive, and can be designed to produce surprising results for the reader to explore. In this project, you'll use conditional statements to create a puzzle where the reader must uncover the identity of a historical figure.
 # video: https://www.youtube.com/embed/VpGFJA5Fnyc
 type: project
 layout: location

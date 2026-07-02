@@ -2,11 +2,47 @@
 title: If & Unless Blocks
 author: Jon Stapleton
 short: Learn the basics of "if" and "unless" blocks in the Chapbook format of Twine.
-description: The Chapbook format of Twine includes special commands you can use in your passages called "if" and "unless" blocks. These blocks allow you to "hide" or "reveal" lines of text based on the value of a variable. This powerful "selection" feature (where the computer, as it interprets your passage, "selects" lines of code to skip or include in the passage) is useful for creating all sorts of things in your Twine stories--puzzles, secrets, alternative paths and endings, and a lot more!
+long: The Chapbook format of Twine includes special commands you can use in your passages called "if" and "unless" blocks. These blocks allow you to "hide" or "reveal" lines of text based on the value of a variable. This powerful "selection" feature (where the computer, as it interprets your passage, "selects" lines of code to skip or include in the passage) is useful for creating all sorts of things in your Twine stories--puzzles, secrets, alternative paths and endings, and a lot more!
 video: https://www.youtube.com/embed/TZXFTwgYjuA
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+Use variables and `[if]` blocks to hide links from the reader, and reveal them later when the reader re-visits the passage:
+
+:::code-and-image{name="The Locked Door" src="the-locked-door.png" tabs}
+```intro
+key: false
+--
+
+# The Locked Door
+
+A story demonstrating "if" blocks
+
+> [[Continue->door]]
+```
+```door
+You see a large, wooden door on heavy hinges with a big, iron padlock holding it shut.
+
+> [[Search the foyer->search]]
+[if key]
+> [[Try the key in the padlock->unlock]]
+```
+```search
+key: true
+--
+
+You comb the room, and as you step across the thick, dusty carpet you feel something hard under your shoe. You pull back the carpet, and see a heavy wrought-iron key sitting on wood floor below.
+
+> [[Go check the door->door]]
+```
+```unlock
+The door swings slowly open, creaking on its rusty hinges...
+```
+:::
+
+:::
 
 ## Simple "If" Blocks
 

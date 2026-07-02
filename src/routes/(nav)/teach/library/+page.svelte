@@ -2,6 +2,7 @@
   import PhotoCarousel from '$lib/components/PhotoCarousel.svelte';
     import { faSearch } from '@fortawesome/free-solid-svg-icons';
   import SearchBar from './components/SearchBar.svelte'
+  import ElementTable from './components/ElementTable.svelte'
   import Fa from 'svelte-fa'
 
   let { data } = $props()
@@ -37,6 +38,10 @@
       <p><i>No collections yet! Check back soon.</i></p>
       {/if}
     </div>
+  </section>
+  <section>
+    <h2>Browse All Materials</h2>
+    <ElementTable elements={data.elements} user={data.user} />
   </section>
 </div>
 

@@ -1,5 +1,6 @@
 <script lang='ts'>
   import { pushState, goto } from "$app/navigation"
+  import Fa from 'svelte-fa'
   import { page } from '$app/state'
   import Breadcrumb from '$lib/components/Breadcrumb.svelte'
   import Pill from '$lib/components/Pill.svelte'
@@ -24,14 +25,14 @@
   }
 </script>
 <div class='element-view'>
-  <aside class='info'>
+  <aside class='info has-shadow'>
     <header>
       <h1>{data.element.title}</h1>
       <p class='subtitle'>by {data.element.authors}</p>
       <p>{data.element.short}</p>
       <div class='stats'>
         <p>Grades: <Pill style={getGradeStyle(data.element) + " medium"}>{data.element.gradesAbbr}</Pill></p>
-        <p>Subjects: {#each data.element.subjects as subj}<span>{subj.abbr}</span>{/each}</p>
+        <p>Subjects: {#each data.element.subjects as subj, i}<span>{i > 0 ? ", " + subj.abbr : subj.abbr}</span>{/each}</p>
       </div>
           <table class='related'>
             <colgroup>
@@ -77,21 +78,34 @@
     </table>
   </aside>
   <div class='doc'>
-    {#if locked || !data.user}
+    {#if (locked || !data.user) && false }
       <div class='modal-wrap'>
         <LockedElementCTAModal obj={data.element} />
       </div>
     {/if}
+    {#if data.element.children}
+      <article class='instructions'>
+        <h2>View this Resource on Google Drive!</h2>
+        <p>This resource is a collection of several items. To view them, click the link below!</p>
+          <a role='button' href={data.element.link}><span>View on Google Drive</span></a>
+      </article>
+    {:else}
     <div id="{data.element.id}" class='doc-wrap'>
       <object type="application/pdf" data="/documents/test/test.pdf">
         <embed src="{data.element.link + "/pdf"}" type="application/pdf" >
       </object>
     </div>
+    {/if}
   </div>
 </div>
 
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
+  .instructions {
+    margin: 4rem auto;
+    width: 38rem;
+    a { width: 100%; }
+  }
   .modal-wrap {
   margin: 0;
     padding: 8rem;
@@ -111,6 +125,7 @@
     & > * {
       flex: 1;
     }
+    height: 100%;
   }
   .info {
     overflow-y: scroll;

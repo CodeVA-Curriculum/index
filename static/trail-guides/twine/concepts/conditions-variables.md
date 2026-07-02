@@ -2,11 +2,30 @@
 title: Conditions & Variables
 author: Jon Stapleton
 short: Modify variables based on a Boolean value.
-description: Conditional control structures are useful for displaying or hiding text based on the value of a variable, but what if you want to modify a variable based on the value of another variable? The Chapbook format of Twine includes a special variable assignment syntax for this exact task, allowing you to modify variables in your passages based on the results of a relational or logical expression.
+long: Conditional control structures are useful for displaying or hiding text based on the value of a variable, but what if you want to modify a variable based on the value of another variable? The Chapbook format of Twine includes a special variable assignment syntax for this exact task, allowing you to modify variables in your passages based on the results of a relational or logical expression.
 video: https://www.youtube.com/embed/TaizAxHPWDE
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+Use the special "conditional variable" syntax to set the values of variables based on a condition, sort of like an "if" statement:
+
+:::code-and-image{src="TODO.gif" alt="The output of the program below"}
+```
+lightSource: "torch"
+lightText (lightSource == "lantern"): "Light your lantern"
+lightText (lightSource == "torch"): "Light your torch"
+lightText (lightSource == "flashlight"): "Turn on your flashlight"
+--
+
+You find yourself in a dark room.
+
+{lightText}
+```
+:::
+
+:::
 
 ## Modifying Variables Based on Conditions
 

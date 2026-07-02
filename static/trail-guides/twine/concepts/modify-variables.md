@@ -6,8 +6,48 @@ type: tutorial
 layout: location
 video: https://www.youtube.com/embed/lzmWt97s9Ig
 short: Write code to modify the value of variables.
-description: In this tutorial, you'll learn how to write code in your passage to modify the value of variables across your story. Variables are a very flexible tool for crafting your stories, but they can also be tricky. It's important to have a good mental model of how they work so you can use them creatively in your narratives. Once you know how to modify variables, you can have your story react to the choices the reader makes, and change how the story is being told "behind the scenes", making your narrative feel interactive and lifelike.
+long: In this tutorial, you'll learn how to write code in your passage to modify the value of variables across your story. Variables are a very flexible tool for crafting your stories, but they can also be tricky. It's important to have a good mental model of how they work so you can use them creatively in your narratives. Once you know how to modify variables, you can have your story react to the choices the reader makes, and change how the story is being told "behind the scenes", making your narrative feel interactive and lifelike.
 ---
+
+:::quick-take
+You can reuse variables initiated in other passages, and change their value by setting them to something new in the "vars" section at the top of your passages.
+
+:::code-and-image{src="the=shop-demo.gif"}
+```intro
+greeting: "Hello! Welcome to my shop."
+--
+
+You see a friendly little shop in a woodsy clearing ahead.
+
+> [[Check out the shop->shop]]
+```
+```shop
+You see a friendly shopkeeper. A small bell rings above your head as the door swings open and you walk toward the counter. The shopkeeper waves and says:
+
+"{greeting}"
+
+> [[Hello! I'd like to purchase something->nice]]
+> [[Walk away rudely->rude]]
+```
+```nice
+greeting: "It's nice to see you again! Need anything?"
+--
+
+You step outside, and leave the shop for a while. Some time later, you find yourself outside the shop again.
+
+> [[Enter the shop->shop]]
+```
+```rude
+greeting: "You're sort of a strange person, to walk in without saying hello!"
+--
+
+You step outside, and then think better of it. You turn around, and head back into the shop.
+
+> [[Enter the shop->shop]]
+```
+:::
+
+:::
 
 Variables are somewhat useful on their own, but they are *extremely* useful and powerful when you write code to *modify* their values during your story. [Check out this story](/examples/shop), where a shopkeeper reacts differently to the reader's second visit based on their behavior during their first visit.
 

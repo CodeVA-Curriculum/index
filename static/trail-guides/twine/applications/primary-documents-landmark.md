@@ -3,7 +3,7 @@ title: Primary Documents
 # TODO: incorporate author into location cards
 author: Jon Stapleton
 short: Create a story where the reader explores primary documents from a moment in history.
-description: In this project, you'll use the Library of Virginia collections to find primary documents about a moment in history or a person from the past. Use the primary documents as the basis of a story, where the reader must investigate the documents to move the story forward.
+long: In this project, you'll use the Library of Virginia collections to find primary documents about a moment in history or a person from the past. Use the primary documents as the basis of a story, where the reader must investigate the documents to move the story forward.
 # video: https://youtube.com/embed/p91bou3cJuA
 type: project
 layout: location

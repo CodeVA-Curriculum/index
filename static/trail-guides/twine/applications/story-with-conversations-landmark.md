@@ -2,7 +2,7 @@
 title: Story With Conversations
 author: Jon Stapleton
 short: A project where characters react to the reader's choices.
-description: Create a story where the reader holds conversations with people involved in an important historical moment in American history. As the reader explores the setting, the characters should respond to the reader's choices & actions.
+long: Create a story where the reader holds conversations with people involved in an important historical moment in American history. As the reader explores the setting, the characters should respond to the reader's choices & actions.
 # video: https://youtube.com/embed/33OQtxF7L8g
 type: project
 # TODO: synthesize "layout" and "type"

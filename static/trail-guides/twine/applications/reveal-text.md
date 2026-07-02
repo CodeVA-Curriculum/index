@@ -3,11 +3,27 @@ title: Reveal Text
 # TODO: incorporate author into location cards
 author: Jon Stapleton
 short: Learn how to create links that reveal new sections of text in your Twine passages.
-description: Sometimes, you might want to use a link to reveal a new section of a passage instead of transitioning to a new part of your story. "Reveal" links do exactly that--they allow you to use a link to reveal more information to the reader in the current passage. This tutorial covers how to create "reveal" links and section in your Twine story.
+long: Sometimes, you might want to use a link to reveal a new section of a passage instead of transitioning to a new part of your story. "Reveal" links do exactly that--they allow you to use a link to reveal more information to the reader in the current passage. This tutorial covers how to create "reveal" links and section in your Twine story.
 video: https://youtube.com/embed/EUhDExXTR_U
 type: tutorial
 layout: location
 ---
+
+:::quick-take
+Use "reveal" links to have the computer display hidden text when the reader clicks a link (without moving to a new passage).
+
+:::code-and-image{name="Reveal Passage Example" src="twine-reveal-passage.gif" tabs}
+```intro
+Ranier was walking home one night when they saw {reveal link: 'something strange', passage: 'abandoned-truck'}.
+```
+```abandoned-truck
+an abandoned truck in the middle of the road, sitting alone under a streetlamp.
+
+The truck was red and rusty. Ranier approached slowly, scanning the surroundings trying to see if the owner of the truck was in trouble or needed help.
+```
+:::
+
+:::
 
 ## Simple Reveal Links
 

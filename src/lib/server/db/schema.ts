@@ -241,7 +241,7 @@ export const node = sqliteTable('node', {
 	path: text(),
 	title: text('title'),
 	short: text(),
-	description: text(),
+	long: text(),
 	type: text({ enum: ["cache", "tutorial"]}),
 	content: text('content'), // HTML
 	video: text('video'),

@@ -2,7 +2,7 @@
 title: Story with Multiple Endings
 author: Jon Stapleton
 short: Practice basic Twine storytelling skills by creating a story with more than one possible ending
-description: This project is designed to help beginner Twine authors create a simple story with links, connecting passages together to create a story with more than one possible ending.
+long: This project is designed to help beginner Twine authors create a simple story with links, connecting passages together to create a story with more than one possible ending.
 type: project
 layout: landmark
 ---

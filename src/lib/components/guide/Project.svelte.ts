@@ -36,7 +36,6 @@ export class Project {
 
 
     // build node groups and edges
-    console.log(i)
     for(const g of i.nodeGroups) {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
@@ -50,7 +49,7 @@ export class Project {
     // Find center
     let { x, y } = this.findCenter()
     this.x = x; this.y = y
-    console.log(`Found center for ${this.db.path} at ${x}, ${y}`)
+    // console.log(`Found center for ${this.db.path} at ${x}, ${y}`)
     
   }
   private findCenter() {
@@ -141,7 +140,6 @@ class Group {
     this.title = db.alias
     order.sort((a,b) => a.groupId == b.groupId ? a.index - b.index : a.groupId - b.groupId )
     for(const c of order) {
-      console.log(c)
       let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
       for(const n of db.nodes) {
         if(n.id == 113) { console.log(n)}

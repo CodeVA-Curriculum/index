@@ -6,8 +6,26 @@ type: tutorial
 layout: location
 video: https://www.youtube.com/embed/bDNB5goynEg
 short: Embed passages within other passages
-description: This tutorial shows you how to combine passages by embedding, which allows you to insert the content of one passage into another one. Embedding is a great way of organizing passages, especially in stories with a lot of repetition.
+long: This tutorial shows you how to combine passages by embedding, which allows you to insert the content of one passage into another one. Embedding is a great way of organizing passages, especially in stories with a lot of repetition.
 ---
+
+:::quick-take
+When you embed a passage, you insert it into another passage so that when the "parent" passage is displayed, it also runs the code and displays the embedded passage on the page:
+
+:::code-and-image{src="embedded-passage.png" tabs}
+```main
+Ah, a passage.
+
+{embed passage: 'insert' }
+
+A message from another passage, it seems...
+```
+```insert
+> Here is my message!
+```
+:::
+
+:::
 
 ## Creating Embedded Passages
 
