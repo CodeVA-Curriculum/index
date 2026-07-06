@@ -8,3 +8,4 @@ image: twine.png
 - [ ] adapting goldilocks video
 - [ ] your first story video
 - [ ] writing the whale video
+- [ ] quick-take media

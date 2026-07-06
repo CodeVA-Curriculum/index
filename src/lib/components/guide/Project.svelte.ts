@@ -220,7 +220,7 @@ class Group {
         o.optional = false
         this.edges.push(o)
         } else {
-          throw new Error('wat')
+          console.log("Failed to make edge between " + this.nodes[i].db.title+ " and " + this.nodes[lastFalse].db.title)
         }
       }
       if(!inCut) { lastFalse = i}

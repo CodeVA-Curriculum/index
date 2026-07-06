@@ -21,6 +21,8 @@
   </header>
   {#if obj.db.quickTake && obj.db.quickTake.length > 0}
   <QuickTake boxed content={obj.db.quickTake} />
+  {:else}
+  <p><i>We haven't written a quick take for this tutorial yet. Check back soon!</i></p>
   {/if}
   <hr>
   <main>

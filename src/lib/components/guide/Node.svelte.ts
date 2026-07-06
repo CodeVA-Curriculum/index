@@ -33,7 +33,7 @@ export class Node {
     let w = Math.ceil(fontData.w) > minDiameter ? Math.ceil(fontData.w) : minDiameter
     this.width = w
     if(this.db.type == "cache") { w = 100 }
-    this.radius = new Lerp(Math.round(w), 5)
+    this.radius = new Lerp(Math.round(w*1.25), 5)
     if(this.db.type == "cache") {
        await p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
         this.icon = img

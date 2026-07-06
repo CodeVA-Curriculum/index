@@ -258,8 +258,9 @@ export const project = sqliteTable('project', {
 	hidden: integer({ mode: 'boolean' }).default(false),
 	title: text(),
 	content: text(), // HTML
-	short: text(),
-	authors: text(),
+	short: text().default("No short description given!"),
+	long: text().default("No description given!"),
+	authors: text().default("CodeVA"),
 	difficulty: integer(),
 	icon: text(),
 	guide: integer('guide_id').references(() => guide.id),

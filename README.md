@@ -14,7 +14,6 @@ This section contains feature and release plans for future versions of the websi
 - [ ] Python Trail Guide starter project
 - [ ] p5js Trail Guide starter project
 - [-] Write twine caches
-- [ ] Write short descriptions
 - [ ] Deploy
 - [ ] Create collections
 - [ ] Film site intro video

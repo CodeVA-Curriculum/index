@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "applications/start-a-story.md",
+                "file": "projects/your-first-story/index.md",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "start-a-story"
+              "title": "index"
             }
           }
         ]
@@ -185,6 +185,14 @@
   },
   "active": "c2b9c6359207a8b5",
   "lastOpenFiles": [
+    "projects/primary-documents/index.md",
+    "projects/oral-history/index.md",
+    "projects/counting-web/index.md",
+    "projects/conversation-web/index.md",
+    "projects/breakout-box/index.md",
+    "projects/archeological-puzzle/index.md",
+    "meta.md",
+    "applications/start-a-story.md",
     "applications/reveal-text.md",
     "applications/making-recordings.md",
     "applications/image-formatting.md",
@@ -203,14 +211,6 @@
     "concepts/embedding-with-variables.md",
     "concepts/embedding-passages.md",
     "concepts/css.md",
-    "concepts/create-passage.md",
-    "concepts/conditions-variables.md",
-    "concepts/branching-paths.md",
-    "concepts/arithmetic-expressions.md",
-    "applications/story-with-multiple-endings.md",
-    "applications/story-with-counting-landmark.md",
-    "applications/story-with-conversations-landmark.md",
-    "applications/start-a-story.md",
     "map.canvas"
   ]
 }

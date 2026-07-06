@@ -1,0 +1,225 @@
+{
+  "main": {
+    "id": "a3c31db0c11bf599",
+    "type": "split",
+    "children": [
+      {
+        "id": "0926c0c7a1bd7da4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6b2a7e121f6d514c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "meta.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "meta"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "719849a92c601068",
+    "type": "split",
+    "children": [
+      {
+        "id": "b71b2589ff3155ff",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5043faf1876590ff",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "824e3faa6fbd2e05",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "bd9cf3263911886f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "5e96b3436ba15cbc",
+    "type": "split",
+    "children": [
+      {
+        "id": "1d17d02ecf5cba65",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0db45a7a7422e60c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "meta.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for meta"
+            }
+          },
+          {
+            "id": "1993be573ebb19e6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "meta.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from meta"
+            }
+          },
+          {
+            "id": "4bd2a0cfcf0a5fc1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a0f8197cd8519de3",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "5dba906a7d25e294",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "meta.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of meta"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "6b2a7e121f6d514c",
+  "lastOpenFiles": [
+    "map.canvas",
+    "projects/scene-animation/index.mdn5pqES.bck",
+    "concepts/object-basics.md",
+    "applications/other-shapes.md",
+    "projects/scene-animation/scene-animation-project.md",
+    "projects/scene-design/index.md7IhMoq.bck",
+    "projects/dino-game/index.mdsRJGO7.bck",
+    "projects/scene-animation/index.mdbddQsY.bck",
+    "projects/scene-design/index.mdSxtGh1.bck",
+    "projects/scene-animation/index.md",
+    "projects/scene-animation/planning-animations.md",
+    "concepts/random-numbers.md",
+    "concepts/manipulating-variables.md",
+    "concepts/variables-types.md",
+    "projects/dino-game/index.md",
+    "projects/dino-game/dino-input.md",
+    "applications/keyboard-input.md",
+    "concepts/if-statements.md",
+    "concepts/logic-operators.md",
+    "concepts/booleans-comparisons.md",
+    "projects/dino-game/dino-collision-2.md",
+    "projects/dino-game/dino-collision-1.md",
+    "projects/dino-game/dino-animations.md",
+    "concepts/draw-method.md",
+    "meta.md",
+    "projects/scene-animation/icon.png",
+    "projects/dino-game/icon.png",
+    "projects/dino-game/dino-scene.md",
+    "projects/scene-design/index.md",
+    "projects/scene-design/scene-design-project.md",
+    "projects/dino-game",
+    "projects/scene-design/copy-scene.md",
+    "concepts/readable-code.md",
+    "applications/adding-images.md",
+    "applications",
+    "projects/scene-animation"
+  ]
+}
