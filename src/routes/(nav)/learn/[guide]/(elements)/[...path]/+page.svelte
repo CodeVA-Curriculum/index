@@ -1,15 +1,18 @@
 <script lang='ts'>
   import { Node } from '$lib/components/guide/Node.svelte'
+  import { Project } from '$lib/components/guide/Project.svelte'
   import ProjectView from '$lib/components/guide/ProjectView.svelte'
   import NodeView from '$lib/components/guide/NodeView.svelte'
  import { onMount } from 'svelte'
  import * as components from '$lib/components/guide/directives' // This is what enables custom elements in tutorial bodies
+  import { Map } from '$lib/components/guide/Map.svelte'
+
   let { data } = $props()
-  let nodeObj:Node = data.node ? new Node(data.node) : null
+  let nodeObj:Node = data.node ?  new Node(data.node) : null
 
 </script>
 <div class='element'>
-  {#if data.type == "project"}
+  {#if data.project}
   <ProjectView project={data.project} map={data.map} />
   {:else}
   <div class='container'>

@@ -107,6 +107,10 @@ export class Project {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
     return this.getGroupByPath(path).getNext(path)
   }
+  getPrevious(path="default") {
+    if(path=="default") { return null}
+    return this.getGroupByPath(path).getPrevious(path)
+  }
   getGroupByPath(path:string) {
     return this.nodeGroups[this.groupsPathMap[path]]
   }
@@ -188,6 +192,23 @@ class Group {
       }
     }
     return s
+  }
+  getPrevious(path = "default") {
+    let s = []
+    if(path == "default") { return [] }
+    let pos = this.nodes.findIndex((n) => n.db.path == path)
+    for(let i=pos-1; i<this.nodes.length&&i>=0;i++) {
+      s.push({
+        path: this.nodes[i].db.path,
+        title: this.nodes[i].db.title,
+        optional: this.nodeMask[i]
+      })
+      if(!this.nodeMask[i]) {
+        break
+      }
+    }
+    const res = s.filter((o) => !o.optional)
+    return res.length >= 1 ? res[0].path : null
   }
   addEdges(edges:Edge[], order:object, elementsByPath:any) {
     // TODO: Find the edge between each consecutive node in `this.nodes` and add it to `this.edges`

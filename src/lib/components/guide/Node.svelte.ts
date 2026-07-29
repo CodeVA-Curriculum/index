@@ -46,7 +46,7 @@ export class Node {
     this.highlight.stroke(HIGHLIGHT_COLOR)
     this.highlight.strokeWeight(STROKE_WEIGHT * 2)
     this.highlight.circle(this.highlight.width/2, this.highlight.width/2, Math.round(this.width))
-    if(this.db.status.date) { this.lastUpdated = this.db.status.date }
+    if(this.db.status?.date) { this.lastUpdated = this.db.status.date }
     // make shadow
     // this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
   }

@@ -94,7 +94,6 @@
     justify-content: center;
     gap: 12px;
     * {
-      border-radius: 0;
       width: 100%;
       flex: 1;
       // background-color: white;

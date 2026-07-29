@@ -17,7 +17,7 @@ import Help from '$lib/components/Help.svelte'
     <span>{#if obj.grades.length > 1}GRADES {/if} {obj.gradesAbbr}</span>
   </div>
   <div class='thumbnail {locked ? "locked" : "unlocked"}'>
-    <img src="{obj.image}" >
+    <img class="has-shadow" src="{obj.image}" >
     {#if locked}
     <div>
     <span class='icon'><Fa size='4x' icon={faKey} /></span>

@@ -1,10 +1,11 @@
 <script lang='ts'>
+  import { Project } from '$lib/components/guide/Project.svelte'
   import QuickTake from '$lib/components/guide/QuickTake.svelte'
   import DetailsIcons from '$lib/components/guide/DetailsIcons.svelte'
   import { ElementType } from '$lib/components/guide/DetailsIcons.svelte'
   import Video from '$lib/components/Video.svelte'
  import CodeAndImage from '$lib/components/guide/CodeAndImage.svelte'
-  let { obj } = $props()
+  let { obj, eltype=1 } = $props()
 </script>
 <div class='nodeview'>
   <header>
@@ -15,7 +16,7 @@
     {/if}
     <div class='info'>
       <h1>{obj.db.title}</h1>
-      <DetailsIcons eltype={ElementType.Tutorial} obj={obj} />
+      <DetailsIcons eltype={obj instanceof Project ? 0 : 1} obj={obj} />
       <p>{obj.db.long}</p>
     </div>
   </header>

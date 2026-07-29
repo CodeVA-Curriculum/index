@@ -4,7 +4,7 @@
   let interact = $state(false)
 </script>
 <div class='minimap' onmouseenter={() => interact = true} onmouseleave={() => interact=false}>
-<InteractiveMap bind:selected interact={interact} view={view} {...map} map={map} height={248} width={248*(16/9)} />
+<InteractiveMap bind:selected legend={false} interact={interact} view={view} {...map} map={map} height={248} width={248*(16/9)} />
 </div>
 <dialog>
   <article>

@@ -6,6 +6,7 @@
   import Pill from '$lib/components/Pill.svelte'
   import { getGradeStyle } from "$lib"
   import LockedElementCTAModal from '$lib/components/LockedElementCTAModal.svelte'
+  import Standard from '$lib/components/Standard.svelte'
   let { data } = $props()
   const styles = '<style type="text/css">'+data.styles+'</style>'
   let s = "background-color: red;"
@@ -27,13 +28,17 @@
 <div class='element-view'>
   <aside class='info has-shadow'>
     <header>
+      <div>
+      <img class='thumbnail has-shadow' src={data.element.image} />
       <h1>{data.element.title}</h1>
       <p class='subtitle'>by {data.element.authors}</p>
-      <p>{data.element.short}</p>
       <div class='stats'>
         <p>Grades: <Pill style={getGradeStyle(data.element) + " medium"}>{data.element.gradesAbbr}</Pill></p>
         <p>Subjects: {#each data.element.subjects as subj, i}<span>{i > 0 ? ", " + subj.abbr : subj.abbr}</span>{/each}</p>
       </div>
+      </div>
+      <p>{data.element.short}</p>
+      {#if data.element.children?.length > 0}
           <table class='related'>
             <colgroup>
               <col>
@@ -54,6 +59,7 @@
               {/each}
             </tbody>
           </table>
+          {/if}
     </header>
     <h2>Standards</h2>
     <table>
@@ -71,7 +77,7 @@
         {#each data.element.subjects as subj}
           <tr>
             <td>{subj.title}</td>
-            <td>Lorem ipsum</td>
+            <td>{#each data.element.standards.filter((o) => o.subjectId == subj.id) as sol}<Standard obj={sol} />{/each}</td>
           </tr>
         {/each}
       </tbody>
@@ -83,7 +89,7 @@
         <LockedElementCTAModal obj={data.element} />
       </div>
     {/if}
-    {#if data.element.children}
+    {#if data.element.children?.length > 0}
       <article class='instructions'>
         <h2>View this Resource on Google Drive!</h2>
         <p>This resource is a collection of several items. To view them, click the link below!</p>
@@ -113,10 +119,10 @@
     z-index: 90;
   }
   .doc-wrap {
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
+    // -moz-filter: blur(5px);
+    // -o-filter: blur(5px);
+    // -ms-filter: blur(5px);
+    // filter: blur(5px);
     background-color: #transparent;
   }
   .element-view {
@@ -157,6 +163,12 @@
   table.related {
     @import "$lib/styles/table";
     @include hoverable;
+  }
+  .thumbnail {
+    float: left;
+    height: 7rem;
+    margin: 0;
+    margin-right: 2rem;
   }
 </style>
 

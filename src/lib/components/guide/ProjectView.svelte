@@ -1,4 +1,6 @@
 <script lang='ts'>
+  import Fa from 'svelte-fa'
+  import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import NodeView from './NodeView.svelte'
   import ProjectNodeAccordion from './ProjectNodeAccordion.svelte'
   import ProjectListItem from './ProjectListItem.svelte'
@@ -12,16 +14,18 @@
   let { map } = $props()
   let mapObj:Map = new Map(map)
   let loaded:boolean = $state(false)
-  const p = $derived.by(() => map.projects[0] )
+  const p = $derived.by(() => mapObj.projects[0] )
   let nextUp = $state([])
+  let back = null
   let pathParam = $state(null)
 
   let project = $state()
   onMount(() => {
     loaded = true;
     pathParam = $page.url.searchParams.get("view")
-    // let next = project.getNext()
-    // nextUp = [...nextUp, ...next]
+    nextUp =  mapObj.projects[0].getNext(pathParam ? mapObj.elementsByPath[pathParam].db.path : "default")   // let next = project.getNext()
+    let res = mapObj.projects[0].getPrevious(pathParam)
+    back = res.length > 0 ? "?view=" + res : null
   })
   $effect(() => {
     pathParam = $page.url.searchParams.get("view")
@@ -39,7 +43,7 @@
       <details class='nomark'>
         <summary>
           <h1>{p.title}</h1>
-          <DetailsIcons eltype={0} />
+          <DetailsIcons eltype={0} obj={p} />
         </summary>
         {#if p.video}
         <Video id={p.video}/>
@@ -52,9 +56,13 @@
       {#await loadMap then { default: MiniMap }}
       <Minimap view={pathParam} bind:map={mapObj} />
       <div class='selected-node'>
+      {#if back}
+        <div><a role="button" href={back}><span><Fa icon={faChevronLeft} /></span></a></div>
+        {/if}
         {#if pathParam}
         <ProjectListItem obj={mapObj.elementsByPath[pathParam]} />
         {/if}
+        <div><a role="button" disabled={nextUp.length == 0} href="?view={nextUp[0].path}"><span><Fa icon={faChevronRight} /></span></a></div>
       </div>
       <h2>Next Up</h2>
       <div class='buttons'>
@@ -95,7 +103,16 @@
   .selected-node {
     border: 3px dashed black;
     margin-bottom: 1rem;
-    & > * { margin: 0; padding: 0; text-align: center; }
+    display: flex;
+    align-items: stretch;
+    &  * { display: flex; flex: 1; margin: 0; padding: 0; text-align: center; }
+    a {
+    color: $text;
+      align-items: center;
+      padding: 12px;
+      background-color: white;
+      flex: 0 1;
+    }
   }
   .buttons {
     display: flex;

@@ -95,7 +95,9 @@ export const projectRelations = {
 }
 export const getProjectRelations = (userId:number) => {
   let t = {...projectRelations }
-  t.status.where = { userId: userId }
+  if(userId) {
+    t.status.where = { userId: userId ? userId : null }
+  }
   return t
 }
 export async function getDbStandardsFromAbbrList(abbrs:string[]) {

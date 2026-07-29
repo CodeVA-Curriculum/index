@@ -15,7 +15,7 @@
   let tick = 0
   let start = "twine/applications/start-a-story.md"
 
-  let { view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
+  let { legend = true, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
 
 
@@ -212,7 +212,9 @@
 
 <div class='interactive-map'>
   <P5 sketch={sketch} />
+  {#if legend}
   <Legend />
+  {/if}
   <div class='debug'>
     {#each Object.entries(debug) as entry}
     <p>{entry}{debug[entry]}</p>

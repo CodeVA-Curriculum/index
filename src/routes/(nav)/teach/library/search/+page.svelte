@@ -25,7 +25,7 @@
       <ElementTable elements={data.elements} user={data.user} />
       {#if data.elements.length == 0}
       <div class='no-elements'>
-        <p><i>Search above for CS lessons and resources!</i></p>
+        <p><i>Search above for CS lessons and resources, or click here to <a href="/teach/library/browse">browse the whole library</a></i></p>
       </div>
       {/if}
     </section>
@@ -76,7 +76,6 @@
     // position: relative;
     // right: 0;
     padding: 0;
-    background-color: pink;
   }
   .selected { position: relative; & > td { padding: 1rem 0; background-color: whitesmoke; padding-left: 1rem; padding-right: 1rem; } }
 
@@ -97,10 +96,9 @@
     justify-content: center;
     gap: 12px;
     * {
-      border-radius: 0;
+      border-radius: 12px;
       width: 100%;
       flex: 1;
-      // background-color: white;
       font-size: 11pt;
     }
   }
