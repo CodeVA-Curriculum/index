@@ -52,7 +52,7 @@ export async function validateSessionToken(token: string) {
 		// console.log("Failed to validate token")
 		return { session: null, user: null, accessCode: null };
 	}
-	console.log(result)
+	// console.log(result)
 	const { session, user, accessCode } = result
 
 	// console.log("validating token with accessCode", accessCode.alias)

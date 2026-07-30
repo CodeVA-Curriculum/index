@@ -76,18 +76,18 @@ export const logInWithPortal = async (event) => {
     .where(eq(tables.user.email, res.email ? res.email : "test@test.com"))
     console.log("Logging user in", result)
     if(!result) {
-      throw new Error("Did not find valid user!")
-      // const user = await db.insert(tables.user).values({
-      //   username: res.email ? res.email : "test_user",
-      //   email: res.email ? res.email : "test@test.com",
-      //   password_hash: '0000'
-      // }).returning()
-      // const accessCode = await db.insert(tables.accessCode).values({
-      //   alias: "NULL",
-      //   owner: user.id,
-      //   check: user.email
-      // }).returning()
-      // await db.update(tables.user).set({ codeId: accessCode.id }).where(eq(tables.user.id, user.id))
+      // throw new Error("Did not find valid user!")
+      const [user] = await db.insert(tables.user).values({
+        username: res.email ? res.email : "test_user",
+        email: res.email ? res.email : "test@test.com",
+        password_hash: '0000'
+      }).returning()
+      const [accessCode] = await db.insert(tables.accessCode).values({
+        alias: "NULL",
+        owner: 0,
+        check: user.email
+      }).returning()
+      await db.update(tables.user).set({ codeId: accessCode.id }).where(eq(tables.user.id, user.id))
       // user gets also gets their account accessCode, which tracks their account permissions.
       // when the user logs in with their portal account, their session gets associated with this accessCode
       // the accessCode, not the session, governs the page permissions each user enjoys.

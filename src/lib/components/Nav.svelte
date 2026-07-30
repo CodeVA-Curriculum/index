@@ -10,7 +10,7 @@
 {/snippet}
 <nav>
   <ul>
-    <li><img alt="CodeVA logo" src="/images/wordmark.png"></li>
+    <li><a href="/"><img alt="CodeVA logo" src="/images/wordmark.png"></a></li>
   </ul>
   <ul>
     <li><a href="/teach">Teach</a></li>
@@ -18,6 +18,7 @@
       {@render navLink("Learn", "/learn")}
     </li>
     <li><a href="/teach/library">Library</a></li>
+    <li><LogInButton user={user} session={session}/></li>
   </ul>
 </nav>
 

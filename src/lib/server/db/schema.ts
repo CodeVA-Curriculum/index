@@ -9,7 +9,7 @@ import { sql } from "drizzle-orm";
 export const accessCode = sqliteTable('access_code', {
 	id: integer('id').primaryKey(),
 	alias: text(),
-	active: text({ mode: "boolean"}),
+	active: integer({ mode: "boolean"}).default(0),
 	scope: text({ mode: "json" }),
 	owner: integer().references(() => user.id),
 	created: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`),

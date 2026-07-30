@@ -20,7 +20,7 @@
           </label>
         </fieldset>
         <fieldset class='grid'>
-          <input name="avatar" id="avatar" type="text" >
+          <input placeholder="Set an optional nickname" name="avatar" id="avatar" type="text" >
           <input disabled={!emailConfirm} type="submit" value="Log In" >
         </fieldset>
       </form>

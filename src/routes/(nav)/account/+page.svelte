@@ -5,8 +5,7 @@
   import { dashboardURL } from '$lib'
   let { data, form } = $props()
   let value = $state(generate())
-  let accountOwner = data.user.id == data.accessCode.owner
-  console.log(accountOwner)
+  let accountOwner = data.user.id && data.accessCode.owner == 0
   function generate() {
     const a = "ABCDEFGHOJKLMNOPQRSTUVWXYZ1234567890"
     let code = ""
@@ -18,7 +17,21 @@
     }
     return code
   }
+  const noReset = () => {  
+    return async ({ update }) => {  
+      update({ reset: false });  
+    };  
+  }
 </script>
+
+{#snippet feedback(form)}
+{#if form?.res}
+<article class='feedback'>
+  <p>{form.res}</p>
+</article>
+{/if}
+{/snippet}
+
 <div class='account'>
 {#if data.user && data.session}
 <aside>
@@ -27,9 +40,6 @@
     <hr>
     <ul>
       <li><a href={dashboardURL} target="_blank">Homepage</a></li>
-      {#if accountOwner}
-      <li><a href="/account/library">Manage Access Codes</a></li>
-      {/if}
       <li>
         <form method="POST" action='?/logout'>
           <button>Sign Out</button>
@@ -48,7 +58,7 @@
   {:else}
   <section>
   <h1>Hello, { data.user.username}!</h1>
-  {#if data.user.id != data.accessCode.owner}
+  {#if data.user && data.accessCode.alias != "NULL"}
   <p>You are logged in with under access code {data.accessCode.alias}.</p>
   {/if}
   </section>
@@ -59,36 +69,31 @@
     <p>Create a new access code:</p>
     <form method='POST' action="?/code" use:enhance>
       <fieldset role='group'>
-        <input id="code" type="text" name="code" bind:value={value}>
+        <input id="code" type="text" name="alias" bind:value={value}>
         <input type="submit" value="Create Code">
       </fieldset>
     </form>
   </div>
 
-  {#if form?.goodId}
-  <div class='success callout'>
-    Created a new access code!
-  </div>
-  {/if}
+  {@render feedback(form)}
 
-  {#if form?.goodId == false}
-  <div class='fail callout'>
-    Failed to create a new access code; try a different one.
-  </div>
-  {/if}
       <div class='access-cards'>
-        {#each data.accessCodes as code}
+        {#each data.codes as code}
           <article>
-            <p>{code.code}</p>
+            <p>{code.alias}</p>
+            <div>
+              <span class='tag {code.active ? "active" : "inactive"}'>{code.active ? "Active" : "Inactive"}</span>
+            </div>
             <footer>
               <div class='buttons'>
-                <form method="POST" action="/?power" use:enhance>
+                <form method="POST" action="?/power" use:enhance={noReset}>
                   <input type="text" name="id" value={code.id} >
+                  <input type="text" name="status" value={!code.active} >
                   <button type="submit">
                     <Fa size="0.75x" icon={faPowerOff} />
                   </button>
                 </form>
-                <form method="POST" action="?/delete" use:enhance>
+                <form method="POST" action="?/delete" use:enhance={noReset}>
                   <input type="text" name="id" value={code.id} >
                   <button class='danger' type="submit">
                     <Fa size="0.75x"icon={faTrash} />
@@ -105,6 +110,7 @@
 </div>
 </div>
 <style lang='scss'>
+  @use "$lib/styles/theme.scss";
   .account {
     display: grid;
     grid-template-columns: auto auto auto;
@@ -140,6 +146,13 @@
       font-weight: bold;
       padding: 0;
       margin: 0;
+    }
+    div {
+      display: flex;
+      margin-bottom: .5rem;
+      & * { flex: 1; }
+      .active { background-color: theme.$highlight-green; }
+      .inactive { background-color: theme.$orange; }
     }
   }
   #refresh {
