@@ -69,6 +69,8 @@ mkdir data
 yarn && yarn db:push && yarn db:seed
 ```
 
+If you're starting from a development repo, kill all the `session`, `access_code`, and `user` records.
+
 Then, build the docker image, replacing the version number in the command below:
 
 ```
@@ -94,10 +96,16 @@ sudo docker save index:latest > index-new.tar
 Transfer the compressed image to the VPS, along with the database and PDF documents.
 
 ```
-  TODO:
+sftp
 ```
 
 Configure the server to run the app image on startup if that hasn't already been done, and verify that the application is running correctly on port 3000 on the VPS.
+
+The DNS and HTTPS support are provided by [caddy](TODO). The configuration for caddy is at `/etc/caddy/Caddyfile`.
+
+### Deployment Troubleshooting
+
+- **Site available at static IP on port 3000, but not at the configured DNS subdomain:** The problem is with caddy. Check the `journalctl` logs, or restart the service with `sudo systemctl restart caddy`
 
 ## Site Map
 

@@ -8,10 +8,11 @@
     <li>{guide.title}</li>
   </ul>
   <ul>
-    <li><a href="/learn/{guide.pathTitle}">{guide.pathTitle.charAt(0).toUpperCase() + guide.pathTitle.slice(1)} Map</a></li>
     <li><a href="/learn/{guide.pathTitle}/about">About</a></li>
+    <li><a href="/learn/{guide.pathTitle}">{guide.pathTitle.charAt(0).toUpperCase() + guide.pathTitle.slice(1)} Map</a></li>
     <li><a href="/learn/{guide.pathTitle}/projects">Projects</a></li>
     <li><a href="/learn/{guide.pathTitle}/tutorials">Tutorials</a></li>
+    <li><LogInButton session={session} user={user} />
   </ul>
 </nav>
 <style lang='scss'>
