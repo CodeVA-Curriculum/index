@@ -5,7 +5,7 @@ import { db } from '$lib/server/db'
 import * as schema from '$lib/server/db/schema'
 import { fail, redirect } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
-import { logUserOut, logInWithCode } from '$lib/server'
+import { logUserOut, logInWithCode, logInWithPortal } from '$lib/server'
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({locals}) => {
@@ -24,12 +24,19 @@ export const load: PageServerLoad = async ({locals}) => {
   // }
   return {
     user: user,
+    accessCode: locals.accessCode,
     session: locals.session,
     codes: userCodes
   }
 };
 
 export const actions: Actions = {
+  portalLogin: async (event) => { 
+    console.log("Triggered portal login") 
+    return await logInWithPortal(event)
+  },
+  codeLogin: async (event ) => {},
+  validateCode: async (event) => {},
   logout: async (event) => await logUserOut(event),
   code: async (event) => {
     console.log("Creating new code!")

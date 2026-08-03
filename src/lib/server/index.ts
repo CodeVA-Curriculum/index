@@ -54,7 +54,7 @@ export const logInWithPortal = async (event) => {
   const form = await event.request.formData();
   // console.log(form)
   const auth_token = form.get("session_token")
-  // console.log("Temporary Token:", auth_token)
+  console.log("Temporary Token:", auth_token)
   const validation = await (await fetch('https://portal.codevirginia.org/auth/api/validate-session', {
     method: 'POST',
     body: JSON.stringify({ token: auth_token }),
@@ -62,10 +62,11 @@ export const logInWithPortal = async (event) => {
       'content-type': 'application/json'
     }
   }))
-  // console.log(validation)
   const res = await validation.json()
-  if(res.valid || TESTING) {
+  console.log(res)
+  if(res.valid || false) {
     console.log("Got user")
+    console.log(res)
     // Log the user in to our side of things, which means adding a session to the database and making a cookie for it.
     const token = auth.generateSessionToken()
     let [result] = await db.select({
@@ -101,6 +102,9 @@ export const logInWithPortal = async (event) => {
     auth.setSessionTokenCookie(event, token, session.expiresAt)
     event.locals.user = user
     event.locals.session = session
+  } else {
+    console.log("Response invalid")
+    console.log(res)
   }
 }
 export const logInUser = async (event) => {

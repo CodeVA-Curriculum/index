@@ -96,7 +96,19 @@ sudo docker save index:latest > index-new.tar
 Transfer the compressed image to the VPS, along with the database and PDF documents.
 
 ```
-sftp
+sftp ubuntu@[static ip] -i /path/to/keyfile
+put index-new.tar index-new.tar
+exit
+```
+
+Then shell into the VPS, load the new image, and run it:
+
+```
+ssh ubuntu@[static ip] -i /path/to/keyfile
+sudo docker image load -i index-new.tar
+sudo docker run -d -p 3000:3000 \
+  --mount type=bind,source="$(pwd)"/data,target=/app/data \
+  index:latest
 ```
 
 Configure the server to run the app image on startup if that hasn't already been done, and verify that the application is running correctly on port 3000 on the VPS.
@@ -105,7 +117,7 @@ The DNS and HTTPS support are provided by [caddy](TODO). The configuration for c
 
 ### Deployment Troubleshooting
 
-- **Site available at static IP on port 3000, but not at the configured DNS subdomain:** The problem is with caddy. Check the `journalctl` logs, or restart the service with `sudo systemctl restart caddy`
+- **Site available at static IP on port 3000, but not at the configured DNS subdomain:** The problem is with caddy or with the Cloudflare DNS A record pointing to the VPS static IP. Verify that Cloudflare is connecting to the VPS, check the `journalctl` logs on the VPS, or restart the `caddy` service with `sudo systemctl restart caddy`
 
 ## Site Map
 

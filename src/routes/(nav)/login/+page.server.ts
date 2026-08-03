@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm'
 import type { Actions } from './$types'
 import { logInWithCode, validateCode, logInWithPortal, isLoggedIn } from '$lib/server'
 
-const TESTING = true;
+// const TESTING = true;
 
 interface FormData { session_token:string }
 interface ValidationResponse { valid:boolean }
