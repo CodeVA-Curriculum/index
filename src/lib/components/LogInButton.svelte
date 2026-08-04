@@ -37,8 +37,9 @@
 <div class='login'>
 {#if !session}
   {@render button(redirect)}
+  {@render codeForm()}
 {:else}
-  <a role="button" href={dashboardURL}>{session.alias} | {user.username} </a>
+  <a role="button" href={dashboardURL}>{user.username? user.username : session.alias } </a>
 {/if}
 </div>
 <style lang='scss'>

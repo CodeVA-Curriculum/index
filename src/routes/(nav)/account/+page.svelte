@@ -4,8 +4,9 @@
   import { faTrash, faRefresh, faPowerOff } from'@fortawesome/free-solid-svg-icons'
   import { dashboardURL } from '$lib'
   let { data, form } = $props()
+  console.log(data.user)
   let value = $state(generate())
-  let accountOwner = data.user.id && data.accessCode.owner == 0
+  let accountOwner = data.user?.id && data.session?.alias == "NULL"
   function generate() {
     const a = "ABCDEFGHOJKLMNOPQRSTUVWXYZ1234567890"
     let code = ""
@@ -57,9 +58,9 @@
   </section>
   {:else}
   <section>
-  <h1>Hello, { data.user.username}!</h1>
-  {#if data.user && data.accessCode.alias != "NULL"}
-  <p>You are logged in with under access code {data.accessCode.alias}.</p>
+  <h1>Hello, { data.user.username? data.user.username : "visitor" }!</h1>
+  {#if data.user && data.session?.alias != "NULL"}
+  <p>You are logged in with under access code {data.session?.alias}.</p>
   {/if}
   </section>
 {#if accountOwner}

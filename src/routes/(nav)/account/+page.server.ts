@@ -15,16 +15,8 @@ export const load: PageServerLoad = async ({locals}) => {
 	    owner: user.id
 	  }
 	})
-  // console.log(locals.user, locals.session)
-  // if(locals.user && !locals.session.codeId) {
-  //   console.log("Account logged in, getting access codes...")
-  //   userCodes = await db.query.accessCode.findMany()
-  // } else if(locals.session.codeId) {
-  //   let [res] = await db.select().from(schema.accessCode).where(eq(schema.accessCode.id, locals.session.codeId))
-  // }
   return {
     user: user,
-    accessCode: locals.accessCode,
     session: locals.session,
     codes: userCodes
   }

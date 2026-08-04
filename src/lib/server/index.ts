@@ -55,16 +55,15 @@ export const logInWithPortal = async (event) => {
   // console.log(form)
   const auth_token = form.get("session_token")
   console.log("Temporary Token:", auth_token)
-  const validation = await (await fetch('https://portal.codevirginia.org/auth/api/validate-session', {
+  const validation = await fetch('https://portal.codevirginia.org/auth/api/validate-session', {
     method: 'POST',
     body: JSON.stringify({ token: auth_token }),
     headers: {
       'content-type': 'application/json'
     }
-  }))
+  })
   const res = await validation.json()
-  console.log(res)
-  if(res.valid || false) {
+  if(res.valid) {
     console.log("Got user")
     console.log(res)
     // Log the user in to our side of things, which means adding a session to the database and making a cookie for it.
@@ -73,7 +72,7 @@ export const logInWithPortal = async (event) => {
      user: tables.user,
      accessCode: tables.accessCode 
     }).from(tables.user)
-    .innerJoin(tables.accessCode, and(eq(tables.user.codeId, tables.accessCode.id), eq(tables.user.id, tables.accessCode.owner)))
+    .innerJoin(tables.accessCode, and(eq(tables.user.codeId, tables.accessCode.id), eq(0, tables.accessCode.owner))) // 0 is the admin ID
     .where(eq(tables.user.email, res.email ? res.email : "test@test.com"))
     console.log("Logging user in", result)
     if(!result) {
