@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import PremiumCallout from '$lib/components/PremiumCallout.svelte'
   import Fa from 'svelte-fa'
   import QuickTake from '$lib/components/guide/QuickTake.svelte'
   import { faSave } from '@fortawesome/free-solid-svg-icons'
@@ -7,6 +8,7 @@
   let { obj, short } = $props()
   const tabs = [ "Overview", "Quick Take", "Questions", "Prompts" ]
   let active = $state("Overview")
+  let locked = obj?.locked
 
   function select(i:number) {
     active = tabs[i]
@@ -87,7 +89,11 @@
     </ul>
   </nav>
   <div class='body'>
+    {#if !locked}
     {@render sectionMap[active].snippet(obj)}
+    {:else}
+    <PremiumCallout />
+    {/if}
   </div>
   {#if !short}
   <div class='footer'>

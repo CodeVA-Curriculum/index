@@ -9,11 +9,14 @@
   import type { Project } from './Project.svelte'
   import { Cursor } from './Cursor.svelte'
   import { Camera } from './Camera.svelte'
+  import { onDestroy } from 'svelte'
+
 
   // let selected = $derived(page.url.searchParams.getAll('select'))
   let debug = $state({})
   let tick = 0
   let start = "twine/applications/start-a-story.md"
+  let instance = $state()
 
   let { legend = true, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
@@ -47,6 +50,7 @@
   })
 
 
+
   let cursor:Cursor
   let camera:Camera 
   let startImage:any
@@ -58,7 +62,7 @@
     }
     selected = []
   }
-  const sketch = (p5:any) => {
+  let sketch = (p5:any) => {
     p5.setup = async () => {
       p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
       // p5.imageMode(p5.CENTER)
@@ -168,7 +172,7 @@
       }
     }
     p5.mouseClicked = () => {
-      if(!interact) { return }
+      if(!interact || !camera || !cursor) { return }
       console.log(`Camera Location: ${camera.ix}, ${camera.iy}`)
       // console.log("Click!")
       const hoveredNodes = cursor.getHovered()
@@ -211,7 +215,7 @@
 </script>
 
 <div class='interactive-map'>
-  <P5 sketch={sketch} />
+  <P5 bind:this={instance} sketch={sketch} />
   {#if legend}
   <Legend />
   {/if}

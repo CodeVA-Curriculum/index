@@ -16,7 +16,6 @@
   let interactable = $state(true)
   function handleCapture(flag:boolean) {
     interactable = flag
-    console.log("Capture bump")
   }
 
   let panelOpen = $state(null)

@@ -65,9 +65,6 @@
 				console.log('p5 instance', instance);
 			}
 
-			// Set up a global object to capture this instance.
-			// @ts-ignore
-			window._p5Instance = instance;
 			return sketch(instance);
 		}, target);
 
@@ -76,6 +73,8 @@
 		dispatch.instance();
 	});
 	onDestroy(() => {
+		delete project.mouseClicked
+		delete project.mouseWheel
 		project = null
 		sketch = null
 	})

@@ -1,7 +1,8 @@
 <script lang='ts'>
   import Element from './Element.svelte'
-  let { elements, user } = $props()
+  let { elements, user, session } = $props()
   let selected = $state(-1)
+  let locked = $state(!elements[selected]?.path.includes(session?.scope))
   function sel(i:number) { selected = i; console.log("selected") }
 </script>
 <table>
@@ -27,13 +28,18 @@
       <tr class='selected'>
         <td>
           <div class='ui-buttons'>
+            {#if locked}
+            <a class='premium' href="https://codevirginia.org/" target="_blank" role="button">Access</a>
+            {/if}
             <a href="/teach/library/browse/{el.path}" target="_blank" role='button'>Open</a>
+            {#if !locked}
             <button disabled>Save</button>
+            {/if}
             <button onclick={()=>selected=-1} class='close'>Dismiss</button>
           </div>
         </td>
         <td colspan="5">
-          <Element user={user} obj={el} />
+          <Element session={session} user={user} obj={el} />
         </td>
       </tr>
     {:else}
@@ -61,6 +67,7 @@
 </tbody>
 </table>
 <style lang='scss'>
+  @use "$lib/styles/theme";
   table {
     @import "$lib/styles/table";
     @include hoverable;
@@ -105,5 +112,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .premium {
+    background-color: theme.$premium-light;
+    border-color: transparent;
+    color: white;
   }
 </style>

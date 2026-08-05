@@ -41,7 +41,7 @@
   </section>
   <section>
     <h2>Browse All Materials</h2>
-    <ElementTable elements={data.elements} user={data.user} />
+    <ElementTable session={data.session} elements={data.elements} user={data.user} />
   </section>
 </div>
 

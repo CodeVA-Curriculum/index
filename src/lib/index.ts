@@ -9,5 +9,6 @@ export function getGradeStyle(el) {
   if(el.grades.filter((grade) => ["3", "4", "5"].includes(String(grade.abbr))).length > 0) { return "g35" }
   if(el.grades.filter((grade) => ["6", "7", "8"].includes(String(grade.abbr))).length > 0) { return "g68" }
   if(el.grades.filter((grade) => ["9", "10", "11", "12"].includes(String(grade.abbr))).length > 0) { return "g912" }
+  return null
 }
 

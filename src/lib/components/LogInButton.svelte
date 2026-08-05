@@ -10,7 +10,7 @@
 {#snippet portalAuth()}
 <form action="https://portal.codevirginia.org/auth/redirect?redirect_url=http://localhost:5173/account?/portalLogin" method='POST'>
   <input style="display:none;" name="secret_key" id="secret_key" value={key}>
-  <input type="submit" value="Log In">
+  <input type="submit" value="Log In as Educator">
 </form>
 {/snippet}
 
@@ -36,10 +36,16 @@
 
 <div class='login'>
 {#if !session}
+  <div>
   {@render button(redirect)}
+  </div>
+  <div>
   {@render codeForm()}
+  </div>
 {:else}
+  <div>
   <a role="button" href={dashboardURL}>{user.username? user.username : session.alias } </a>
+  </div>
 {/if}
 </div>
 <style lang='scss'>
@@ -54,7 +60,17 @@
     display: flex;
   }
   
-  .login { flex: 1 1;}
+  .login { 
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    & > * {
+      flex: 1;
+    }
+    & * {
+      text-wrap: nowrap;
+    }
+  }
   fieldset { margin: 0; }
 </style>
 

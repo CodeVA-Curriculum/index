@@ -8,13 +8,13 @@ import Help from '$lib/components/Help.svelte'
     import { dbObjTitles } from '$lib/utils';
     import { faLock, faBookmark, faFolderOpen, faKey } from '@fortawesome/free-solid-svg-icons';
 
-  let { user, obj } = $props()
-  let locked = $state(user ? false : false)
+  let { user, session, obj } = $props()
+  let locked = $state(!obj.path.includes(session?.scope))
   let gradeStyle = getGradeStyle(obj)
 </script>
 <article class='card'>
-  <div class='grade-tab {gradeStyle}'>
-    <span>{#if obj.grades.length > 1}GRADES {/if} {obj.gradesAbbr}</span>
+  <div class='grade-tab {gradeStyle} {locked ? "locked" : "unlocked"}'>
+    <span>{#if obj.grades.length > 1}GRADES {:else}GRADE {/if} {obj.gradesAbbr}</span>
   </div>
   <div class='thumbnail {locked ? "locked" : "unlocked"}'>
     <img class="has-shadow" src="{obj.image}" >
@@ -24,9 +24,9 @@ import Help from '$lib/components/Help.svelte'
     </div>
     {/if}
   </div>
-  <div class='body'>
+  <div class='body {locked ? "locked" : "unlocked"}'>
     <h3>{obj.title}</h3>
-    <p class='subtitle'>{obj.gradesAbbr} {obj.types[0].title}</p>
+    <p class='subtitle'>Grade {obj.gradesAbbr} {obj.types[0].title}</p>
     <p>{obj.short}</p>
     {#if obj.children.length > 0}
     <details>
@@ -95,6 +95,10 @@ import Help from '$lib/components/Help.svelte'
       font-size: 11pt;
     }
   }
+  .locked, .locked > h3, .locked p {
+    color: gray;
+    font-style: italic;
+  }
   .thumbnail {
     flex: 1;
     align-items: center;
@@ -112,7 +116,9 @@ import Help from '$lib/components/Help.svelte'
       position: absolute;
     }
   }
-  // .thumbnail > img { width: 180px; }
+  .thumbnail.locked {
+    color: theme.$premium-light;
+  }
   .body {
     flex: 2 0 30%;
     padding-bottom: 0;
@@ -124,7 +130,6 @@ import Help from '$lib/components/Help.svelte'
   .stats {
     flex: 2;
     border-left: 1px solid whitesmoke;
-    // border-right: 1px solid whitesmoke;
     justify-content: flex-start;
     gap: 0.5rem;
     padding-left: 1rem;
@@ -145,14 +150,6 @@ import Help from '$lib/components/Help.svelte'
     span {
       font-size: 18pt;
     }
-    // a {
-    //   gap: 12px;
-    //   display: flex; flex: 1 1;
-    //   width: 100%;
-    //   margin: 0rem 0;
-    //   justify-content: center;
-    //   align-items: center;
-    //   margin-bottom: 0.8rem;
     a { gap: 20px; display: flex; flex: 1; width: 160px; margin: 0rem 0; justify-content: center; align-items: center; margin-bottom: 0.8rem;
     * {
       flex: 1;
@@ -179,5 +176,9 @@ import Help from '$lib/components/Help.svelte'
       z-index: 0;
       position: relative;
     }
+  }
+  .grade-tab.locked {
+    background-color: theme.$premium;
+    color: white;
   }
 </style>
