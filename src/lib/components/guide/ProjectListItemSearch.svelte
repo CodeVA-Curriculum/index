@@ -4,7 +4,7 @@
     $effect(() => {
       results = input.filter((o) => {
         return o.db.title.toLowerCase().includes(query)
-      }).sort((a,b) => a.db.difficulty -b.db.difficulty)
+      })
     })
   </script>
   <form>

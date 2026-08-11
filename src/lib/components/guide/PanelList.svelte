@@ -16,14 +16,12 @@
     if(!hoverList.includes(item.db.path)) {
       hoverList.push(item.db.path)
     }
-    console.log("hover in")
   }
 
   function mouseOut(item:Node|Project) {
     if(hoverList.includes(item.db.path)) {
       hoverList.splice(hoverList.findIndex((path) => path == item.db.path), 1)
     }
-    console.log("hoverout")
   }
 
   const modes = {
@@ -55,6 +53,9 @@
     if(history[history.length-1] != title) {
       history.push(title)
     }
+  })
+  $effect(() => {
+    res.sort((a,b) => !a.db.recommended && b.db.recommended ? 1 : a.locked && !b.locked ? 1 : 0)
   })
 </script>
 

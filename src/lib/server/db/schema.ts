@@ -238,6 +238,7 @@ export type Guide = typeof guide.$inferSelect;
 
 export const node = sqliteTable('node', {
 	id: integer('id').primaryKey(),
+	recommended: integer({ mode: 'boolean'}).default(false),
 	path: text(),
 	title: text('title'),
 	short: text(),
