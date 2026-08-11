@@ -20,6 +20,7 @@
     box-shadow: 0px 0px 38px 0px theme.$premium-light;
     border-color: fushcia;
     border-weight: 2px;
+    margin: 2rem 0;
   }
   .head {
     display: flex;

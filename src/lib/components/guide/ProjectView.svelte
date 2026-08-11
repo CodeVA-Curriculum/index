@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { goto } from '$app/navigation'
   import Fa from 'svelte-fa'
   import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import NodeView from './NodeView.svelte'
@@ -16,7 +17,7 @@
   let loaded:boolean = $state(false)
   const p = $derived.by(() => mapObj.projects[0] )
   let nextUp = $state([])
-  let back = null
+  let back = $state(null)
   let pathParam = $state(null)
 
   let project = $state()
@@ -24,11 +25,15 @@
     loaded = true;
     pathParam = $page.url.searchParams.get("view")
     nextUp =  mapObj.projects[0].getNext(pathParam ? mapObj.elementsByPath[pathParam].db.path : "default")   // let next = project.getNext()
-    let res = mapObj.projects[0].getPrevious(pathParam)
-    back = res.length > 0 ? "?view=" + res : null
+    let res = mapObj.projects[0].getPrevious(pathParam ? pathParam : "default")
+    back = res?.length > 0 ? "?view=" + res : null
+    if(!pathParam) { goto('?view=' + nextUp[0].path)}
   })
   $effect(() => {
     pathParam = $page.url.searchParams.get("view")
+    nextUp =  mapObj.projects[0].getNext(pathParam ? mapObj.elementsByPath[pathParam].db.path : "default")   // let next = project.getNext()
+    let res = mapObj.projects[0].getPrevious(pathParam ? pathParam : "default")
+    back = res?.length > 0 ? "?view=" + res : null
   })
   const loadMap = new Promise(async (resolve, reject) => {
     await import("./Minimap.svelte")
@@ -58,7 +63,7 @@
       <div class='selected-node'>
       {#if back}
         <div><a role="button" href={back}><span><Fa icon={faChevronLeft} /></span></a></div>
-        {/if}
+      {/if}
         {#if pathParam}
         <ProjectListItem obj={mapObj.elementsByPath[pathParam]} />
         {/if}

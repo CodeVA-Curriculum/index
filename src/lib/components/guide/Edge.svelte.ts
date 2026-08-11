@@ -58,30 +58,40 @@ export class Edge {
     this.highlight.stroke(HIGHLIGHT_COLOR) // highlight blue
     this.highlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
+    this.lockedHighlight = p5.createGraphics(w,h)
+    this.lockedHighlight.fill('rgba(0, 0, 0, 0)')
+    this.lockedHighlight.stroke('fuchsia') // premium
+    this.lockedHighlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
+    this.lockedHighlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
+
 
     this.points = { p0: p0, p1:p1, p2:p2, p3:p3}
     this.optionEdge = p5.createGraphics(w,h)
+    this.lockedOptionEdge = p5.createGraphics(w,h)
+
     this.generateOptionEdge(p5)
   }
   draw(p5) {
-    p5.image(this.highlighted?  this.highlight : this.shape, this.x, this.y)
+    p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
     // p5.image(this.highlight, this.x, this.y)
   }
   debug(p5){
     p5.text(this.db.uid, this.cx,  this.cy)
   }
-  projectDraw(p5) {
+  projectDraw(p5, locked=false) {
     // p5.text(this.db.uid, this.cx,  this.cy)
-    if(this.highlighted) { p5.image(this.optional ? this.optionEdge : this.highlight, this.x, this.y)}
+    const optionEdge = !locked ? this.optionEdge: this.lockedOptionEdge
+    const edge = locked ? this.lockedHighlight: this.highlight
+    if(this.highlighted) { p5.image(this.optional ? optionEdge : edge , this.x, this.y)}
   }
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')
-    this.optionEdge.stroke("#22A5E6") // highlight blue
+    this.optionEdge.stroke("#22A5E6") // premium or highlight blue
     this.optionEdge.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
-    // this.optionEdge.bezier(this.points.p0.x - this.x, this.points.p0.y - this.y, this.points.p1.x - this.x, this.points.p1.y - this.y, this.points.p2.x - this.x, this.points.p2.y - this.y, this.points.p3.x - this.x, this.points.p3.y - this.y)
-    // this.optionEdge.bezier()
-    // this.bezier(p5, this.points.p0.x-this.x, this.points.p0.y-this.y ,this.points.p1.x-this.x, this.points.p1.y-this.y ,this.points.p2.x-this.x, this.points.p2.y-this.y, this.points.p3.x-this.x, this.points.p3.y-this.y, 0.1)
-    const t = 0.1
+    this.lockedOptionEdge.fill('rgba(0, 0, 0, 0)')
+    this.lockedOptionEdge.stroke("fuchsia") // premium or highlight blue
+    this.lockedOptionEdge.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
+    let t = 0.1
     let o = 0
     for(let i=0;i<1.0001;i+=t) {
         let v = cubic(p5, this.points.p0,this.points.p1,this.points.p2,this.points.p3,i)
@@ -89,10 +99,14 @@ export class Edge {
             // console.log(`Begin ${v.x}, ${v.y}`)
             this.optionEdge.beginShape()
             this.optionEdge.vertex(v.x-this.x,v.y-this.y)
+            this.lockedOptionEdge.beginShape()
+            this.lockedOptionEdge.vertex(v.x-this.x,v.y-this.y)
         } else {
     //         console.log("end")
             this.optionEdge.vertex(v.x-this.x,v.y-this.y)
             this.optionEdge.endShape()
+            this.lockedOptionEdge.vertex(v.x-this.x,v.y-this.y)
+            this.lockedOptionEdge.endShape()
             // console.log(`End ${v.x}, ${v.y}`)
         }
         o++

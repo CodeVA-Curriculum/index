@@ -8,7 +8,7 @@ export const HOVER_COLOR = "ffffff"
 const SCALE = 1.5 // bigger = less spacing
 
 export class Node {
-  locked:boolean = false
+  locked:boolean 
   db:DbNode
   // status
   complete:boolean = $state(false)
@@ -27,6 +27,7 @@ export class Node {
     this.x = obj.x/SCALE
     this.y = obj.y/SCALE
     this.complete = obj.status?.length > 0 ? obj.status[0].complete : false
+    this.locked = obj.locked
   }
   async setup(p5, font) {
     const borderWeight = this.locked ? 8 : 8;
@@ -43,15 +44,15 @@ export class Node {
     }
     this.idle = p5.createGraphics(this.width*1.125, this.width*1.125)
     this.idle.strokeWeight(borderWeight)
-    this.idle.stroke(200)
+    this.idle.stroke(this.locked ? 200 : 0)
     this.idle.circle(this.idle.width/2, this.idle.width/2, Math.round(this.width))
     this.highlight = p5.createGraphics(this.width * 1.25, this.width * 1.25)
-    this.highlight.stroke(HIGHLIGHT_COLOR)
+    this.highlight.stroke(this.locked ? 'fuchsia' : HIGHLIGHT_COLOR)
     this.highlight.strokeWeight(borderWeight * 2)
     this.highlight.circle(this.highlight.width/2, this.highlight.width/2, Math.round(this.width))
     if(this.db.status?.date) { this.lastUpdated = this.db.status.date }
     // make shadow
-    this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
+    // this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
   }
   draw(p5:any) {
     this.radius.update(p5)
@@ -159,7 +160,7 @@ export class Node {
     
   }
   toggleSelect():boolean {
-    console.log("Selected", this.db.title)
+    console.log("Selected", this)
     this.selected = !this.selected
     return this.selected
   }

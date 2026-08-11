@@ -5,7 +5,7 @@
   import { page } from '$app/stores'
   import CompactTutorialListItem from '$lib/components/guide/CompactTutorialListItem.svelte'
   import Fa from 'svelte-fa'
-  import { faFire, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
+  import { faFire, faBoltLightning, faLocationDot, faCheck } from '@fortawesome/free-solid-svg-icons'
   import { ElementType } from './DetailsIcons.svelte'
 
   let { obj, map = false, close } = $props()
@@ -20,20 +20,25 @@
 
 <article class='card'>
     <heading class='card-heading'>
-      <a href={titleLink}><p>{obj.db.title}</p></a>
+      <a href={titleLink}>
+        {#if obj.locked}
+        <span class='premium'><Fa size=1.5x icon={faBoltLightning} /></span>
+        {/if}
+        <p>{obj.db.title}</p>
+      </a>
       <div>
         <DetailsIcons eltype={objType} obj={obj} />
       </div>
     </heading>
     <p>{obj.db.short ? obj.db.short : "No short description provided!"}</p>
     {#if "nodeGroups" in obj}
-    {#each Object.entries(obj.nodeGroups) as [k,v]}
+    {#each obj.nodeGroups as group}
     <details class='nomark'>
-      <summary><Fa icon={faLocationDot} /> {v.length} tutorials</summary>
+      <summary><Fa icon={faLocationDot} /> {group.nodes.length} tutorials</summary>
       <ol class='nodelist'>
-        {#each v as node}
+        {#each group.nodes as node, i}
         <li>
-          <CompactTutorialListItem node={node} />
+          <CompactTutorialListItem path={'?view=' + node.db.path} node={node} optional={group.nodeMask[i]} />
         </li>
         {/each}
       </ol>
@@ -41,11 +46,14 @@
     {/each}
     {/if}
     <footer>
-      {#if map }
-      <a href={titleLink} class='select' role="button">Select in Map</a>
+      {#if obj.locked}
+      <a role="button" href='https://codevirginia.org' class='premium-button'>Purchase Access</a>
       {/if}
-      <a href="/learn/{obj.db.path}" role="button">Open {noun}</a>
-      <a role="button">Save {noun}</a>
+      {#if map }
+      <a href={titleLink} class='select primary' role="button">Select in Map</a>
+      {/if}
+      <a class="secondary" href="/learn/{obj.db.path}" role="button">Open {noun}</a>
+      <a class="secondary" disabled role="button">Save {noun}</a>
       {@render close?.()}
     </footer>
 </article>
@@ -85,11 +93,6 @@
   }
   @import "$lib/styles/theme.scss";
   a {
-    background-color: white;
-    color: $text;
-    &.select { background-color: $dark-blue; color: white;  }
-  }
-  a {
     padding: 10px;
     font-size: $small;
   }
@@ -113,6 +116,13 @@
     margin: 0 0.5rem;
   }
   .nodelist > li {
-    list-style: none;
+    list-style: arabic;
+  }
+  .premium { color: $premium-light; }
+  .premium-button { color: white; background-color: $premium-light; border-color: transparent; }
+  .card-heading > a {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
   }
 </style>

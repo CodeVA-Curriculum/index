@@ -3,13 +3,13 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { faCircleDot, faEnvelope, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
-  let { node } = $props()
+  let { node, optional, path } = $props()
 </script>
 
 <span class='compact-item {{ italic: node.optional }}'>
-  <span class='check {{ show: node.obj.complete }}'><Fa icon={faSquareCheck} /></span>
-  <span>{node.obj.db.title}</span>
-  {#if node.optional}
+  <span class='check {{ show: node.complete }}'><Fa icon={faSquareCheck} /></span>
+  <a href={path ? path : '/learn/' + node.db.path}>{node.db.title}</a>
+  {#if optional}
     <span class='optional'>optional</span>
   {/if}
 </span>

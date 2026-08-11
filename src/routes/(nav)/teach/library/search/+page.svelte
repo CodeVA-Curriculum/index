@@ -20,13 +20,17 @@
       <h1>Search CS Lessons & Resources</h1>
       <p>Use the search bar and filters to browse our library of computer science resources!</p>
       <div class='sticky'>
-        <SearchBar filters={data.filters} />
+        <SearchBar filters={data.elements.length == 0} />
       </div>
-      <ElementTable elements={data.elements} user={data.user} />
+    </section>
+    <section>
       {#if data.elements.length == 0}
       <div class='no-elements'>
         <p><i>Search above for CS lessons and resources, or click here to <a href="/teach/library/browse">browse the whole library</a></i></p>
       </div>
+      {:else}
+      <h1>Results</h1>
+      <ElementTable elements={data.elements} user={data.user} filters={data.filters} />
       {/if}
     </section>
   </div>

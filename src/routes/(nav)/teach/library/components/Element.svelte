@@ -6,7 +6,7 @@
   import FilterAnchorPill from '$lib/components/FilterAnchorPill.svelte';
 import Help from '$lib/components/Help.svelte'
     import { dbObjTitles } from '$lib/utils';
-    import { faLock, faBookmark, faFolderOpen, faKey } from '@fortawesome/free-solid-svg-icons';
+    import { faLock, faBoltLightning, faBookmark, faFolderOpen}  from '@fortawesome/free-solid-svg-icons';
 
   let { user, session, obj } = $props()
   let locked = $state(!obj.path.includes(session?.scope))
@@ -16,11 +16,13 @@ import Help from '$lib/components/Help.svelte'
   <div class='grade-tab {gradeStyle} {locked ? "locked" : "unlocked"}'>
     <span>{#if obj.grades.length > 1}GRADES {:else}GRADE {/if} {obj.gradesAbbr}</span>
   </div>
+  <div class='beside-image'>
+    <div style='align-self: stretch;'>
   <div class='thumbnail {locked ? "locked" : "unlocked"}'>
     <img class="has-shadow" src="{obj.image}" >
     {#if locked}
     <div>
-    <span class='icon'><Fa size='4x' icon={faKey} /></span>
+    <span class='icon'><Fa size='4x' icon={faBoltLightning} /></span>
     </div>
     {/if}
   </div>
@@ -28,19 +30,21 @@ import Help from '$lib/components/Help.svelte'
     <h3>{obj.title}</h3>
     <p class='subtitle'>Grade {obj.gradesAbbr} {obj.types[0].title}</p>
     <p>{obj.short}</p>
-    {#if obj.children.length > 0}
-    <details>
-      <summary>
-        <i>View Items in {obj.types[0].title}</i>
-        <Pill>{obj.children.length}</Pill>
-      </summary>
-      <ol>
-        {#each obj.children as child}
-          <li><a href={child.path}>{child.title}</a></li>
-        {/each}
-      </ol>
-    </details>
-    {/if}
+  </div>
+  </div>
+  {#if obj.children.length > 0}
+  <details>
+    <summary>
+      <i>View Items in {obj.types[0].title}</i>
+      <Pill>{obj.children.length}</Pill>
+    </summary>
+    <ol>
+      {#each obj.children as child}
+        <li><a href={child.path}>{child.title}</a></li>
+      {/each}
+    </ol>
+  </details>
+  {/if}
   </div>
   <div class='stats'>
     <div class='subjects'>
@@ -63,6 +67,9 @@ import Help from '$lib/components/Help.svelte'
     </div>
     <div class='tags'>
       Tags:
+      {#each obj.tags as tag}
+        <span class='tag light'>{tag.title}</span>
+      {/each}
     </div>
   </div>
 </article>
@@ -100,7 +107,8 @@ import Help from '$lib/components/Help.svelte'
     font-style: italic;
   }
   .thumbnail {
-    flex: 1;
+    float:left;
+    width: 98px;
     align-items: center;
     position: relative;
     align-items: center;
@@ -120,12 +128,10 @@ import Help from '$lib/components/Help.svelte'
     color: theme.$premium-light;
   }
   .body {
-    flex: 2 0 30%;
+    flex: 2 0 70%;
+    padding-left: 1rem;
     padding-bottom: 0;
     font-size: 14pt;
-    details {
-      margin-bottom: 2px;
-    }
   }
   .stats {
     flex: 2;
@@ -180,5 +186,16 @@ import Help from '$lib/components/Help.svelte'
   .grade-tab.locked {
     background-color: theme.$premium;
     color: white;
+  }
+  .beside-image {
+    display: flex;
+    flex-direction:column;
+    width: 100%;
+    flex: 4;
+  }
+  details {
+    flex: 0 1;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
   }
 </style>

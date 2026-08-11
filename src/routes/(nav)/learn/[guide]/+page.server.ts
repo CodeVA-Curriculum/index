@@ -1,4 +1,5 @@
 import { loadNodesForGuide, projectRelations } from '$lib/server/db'
+import { getLocked } from '$lib/server'
 import { nodeRelations } from '$lib/server/db'
 import type {PageLoad} from './$types'
 import { Project } from '$lib/components/guide/Project.svelte.ts'
@@ -11,14 +12,13 @@ import { error } from '@sveltejs/kit'
 import { getGuideFromParam } from '$lib/server/db/utils'
 
 export const load:PageLoad = async ({ params, locals }) => {
-  console.log('Loading [guide]/+page.server.ts')
+  // console.log('Loading [guide]/+page.server.ts')
   const result:Guide = await getGuideFromParam(params.guide)
 
   const projects = await db.query.project.findMany({
     with: projectRelations,
     where: { guide: result.id }
   })
-  // const nodes = await db.select().from(schema.node).where(eq(schema.node.guide, result.id))
   const nodes = await loadNodesForGuide(db, result.id, locals.user)
   let nodeIds = []
   for(const n of nodes) {
@@ -34,6 +34,9 @@ export const load:PageLoad = async ({ params, locals }) => {
     }
   })
 
+  // await applyPermissions(nodes)
+  await applyPermissions(projects, nodes, locals.accessCode)
+
   return {
     guide: {
       ...result,
@@ -44,3 +47,22 @@ export const load:PageLoad = async ({ params, locals }) => {
     }
   }
 }
+
+async function applyPermissions(projects, nodes, accessCode) {
+  // apply default scopes
+  for(const el of projects) {
+    el.locked = getLocked(el.path, accessCode)
+    let projectNodes = []
+    console.log(el.nodeGroups)
+    for(const g of el.nodeGroups) {
+      projectNodes = [...projectNodes, ...g.nodes]
+    }
+    for(let i=0;i<projectNodes.length;i++) {
+      projectNodes[i] = projectNodes[i].path
+    }
+    for(const node of nodes) {
+      node.locked = !projectNodes.includes(node.path)
+    }
+  }
+}
+

@@ -34,4 +34,5 @@
     }
   }
   .medium { font-size: 14pt; }
+  .pill.light { background-color: gray; color: white; }
 </style>

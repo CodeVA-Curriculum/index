@@ -28,6 +28,7 @@ export class Project {
   size = 0
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
+    this.locked = i.locked
     this.db = i
     this.title = i.title
     this.short = i.short
@@ -97,7 +98,7 @@ export class Project {
   }
   draw(p5){
     for(const g of this.nodeGroups) {
-      g.draw(p5)
+      g.draw(p5, this.locked)
     }
     if(this.highlighted) {
       p5.circle(this.centerX, this.centerY, 40)
@@ -112,6 +113,7 @@ export class Project {
     return this.getGroupByPath(path).getPrevious(path)
   }
   getGroupByPath(path:string) {
+    console.log(path)
     return this.nodeGroups[this.groupsPathMap[path]]
   }
   getGroupNodeCount() {
@@ -158,9 +160,9 @@ class Group {
     }
     console.log("Group has edges", this.edges.length)
   }
-  draw(p5) {
+  draw(p5, locked=false) {
     for(const e of this.edges) {
-      e.projectDraw(p5)
+      e.projectDraw(p5, locked)
     }
   }
   getNodes() {

@@ -1,4 +1,7 @@
 <script lang='ts'>
+  import ElementTable from '../../components/ElementTable.svelte'
+  import PremiumCallout from '$lib/components/PremiumCallout.svelte'
+  import { faBoltLightning } from '@fortawesome/free-solid-svg-icons'
   import { pushState, goto } from "$app/navigation"
   import Fa from 'svelte-fa'
   import { page } from '$app/state'
@@ -7,19 +10,12 @@
   import { getGradeStyle } from "$lib"
   import LockedElementCTAModal from '$lib/components/LockedElementCTAModal.svelte'
   import Standard from '$lib/components/Standard.svelte'
+
   let { data } = $props()
+  const locked = data.element.locked
   const styles = '<style type="text/css">'+data.styles+'</style>'
   let s = "background-color: red;"
- // href={row.path.includes("/meta.md") ? "/teach/library/browse/" + row.path : '?view=' + row.path} console.log(data.element.children)
 
-  const locked = getLocked(data.element, data.user)
-  console.log(data.element)
-  // let driveId = data.element.db.link.substring(data.element.db.link.indexOf('/d/') + 3)
-  // driveId = driveId.substring(0, driveId.indexOf('/'))
-  
-  function getLocked(user, element) {
-    return true;
-  }
   function getRelatedCount() {
     // TODO: implement
     return "X"
@@ -30,14 +26,14 @@
     <header>
       <div>
       <img class='thumbnail has-shadow' src={data.element.image} />
-      <h1>{data.element.title}</h1>
+      <h1>{#if locked}<span><Fa icon={faBoltLightning} size="1.5" /></span>{/if}{data.element.title}</h1>
       <p class='subtitle'>by {data.element.authors}</p>
       <div class='stats'>
         <p>Grades: <Pill style={getGradeStyle(data.element) + " medium"}>{data.element.gradesAbbr}</Pill></p>
         <p>Subjects: {#each data.element.subjects as subj, i}<span>{i > 0 ? ", " + subj.abbr : subj.abbr}</span>{/each}</p>
       </div>
       </div>
-      <p>{data.element.short}</p>
+      <p>{data.element.long}</p>
       {#if data.element.children?.length > 0}
           <table class='related'>
             <colgroup>
@@ -52,8 +48,8 @@
             </thead>
             <tbody>
               {#each data.element.children as row}
-                <tr>
-                  <td><a href="/teach/library/browse/{row.path}">{row.title}</a></td>
+                <tr class='child'>
+                  <td><a href="/teach/library/browse/{row.path}">{#if row.locked}<span><Fa icon={faBoltLightning} /></span>{/if}{row.title}</a></td>
                   <td><Pill style={getGradeStyle(row)}>{row.gradesAbbr}</Pill></td>
                 </tr>
               {/each}
@@ -84,17 +80,16 @@
     </table>
   </aside>
   <div class='doc'>
-    {#if (locked || !data.user) && false }
+    {#if (locked || !data.user)}
       <div class='modal-wrap'>
         <LockedElementCTAModal obj={data.element} />
       </div>
     {/if}
     {#if data.element.children?.length > 0}
-      <article class='instructions'>
-        <h2>View this Resource on Google Drive!</h2>
-        <p>This resource is a collection of several items. To view them, click the link below!</p>
-          <a role='button' href={data.element.link}><span>View on Google Drive</span></a>
-      </article>
+    <section class='children modal-wrap'>
+      <h3>Search Items in This Group</h3>
+      <ElementTable elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session} />
+    </section>
     {:else}
     <div id="{data.element.id}" class='doc-wrap'>
       <object type="application/pdf" data="/documents/test/test.pdf">
@@ -113,30 +108,22 @@
     a { width: 100%; }
   }
   .modal-wrap {
-  margin: 0;
-    padding: 8rem;
-    position:absolute;
-    z-index: 90;
+    margin: 4rem 10rem;
   }
   .doc-wrap {
-    // -moz-filter: blur(5px);
-    // -o-filter: blur(5px);
-    // -ms-filter: blur(5px);
-    // filter: blur(5px);
     background-color: #transparent;
   }
   .element-view {
-    overflow-y: hidden;
     display: flex;
     & > * {
       flex: 1;
     }
-    height: 100%;
   }
   .info {
     overflow-y: scroll;
     padding: 2rem;
     flex: 1 1;
+    min-width: 586px;
   }
   .doc {
     flex: 2 1;
@@ -170,6 +157,7 @@
     margin: 0;
     margin-right: 2rem;
   }
+  h1 > span, .child span { color: fuchsia; margin-right: 12px; }
 </style>
 
 

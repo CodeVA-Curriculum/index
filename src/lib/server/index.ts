@@ -241,3 +241,17 @@ export const deleteAccessCode = async (event) => {
     return fail(401)
   }
 }
+export function getLocked(path, code) {
+  const free = [
+    "twine/projects/your-first-story",
+    "twine/applications/start-a-story.md",
+    "twine/concepts/create-passage.md",
+    "twine/concepts/link-passages.md",
+    "twine/concepts/branching-paths.md",
+    "twine/applications/story-with-multiple-endings.md",
+  ]
+  for(const p of free) {
+    if(path.includes(p)) { return false }
+  }
+  return true
+}

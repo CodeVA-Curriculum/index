@@ -6,6 +6,7 @@
   import { Map } from '$lib/components/guide/Map.svelte'
   let { data } = $props()
   const map = new Map(data.guide)
+  map.projects.sort((a,b) => a.db.recommended && !b.db.recommended ? -1 : 0 )
   let results = $state([])
 </script>
 <div class='container'>

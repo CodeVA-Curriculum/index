@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Pill from '$lib/components/Pill.svelte'
   import { enhance } from '$app/forms';
     import { faSliders} from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
@@ -22,15 +23,18 @@
     const query = $state(Object.create({
       text: ""
     }))
-    // load filters from API to preserve component portability
-    async function search() {
-      // form.submit()
-    //   console.log("Sending search..")
-  		// await fetch('/teach/library/search', {
-  		// 	method: 'POST',
-  		// 	body: JSON.stringify(query)
-  		// });
-    }
+  function getNumberChecked(list) {
+    const trues = list.filter((b)=> b)
+    return trues.length
+  }
+  let checks = $state({
+    "grade": [],
+    "audience": [],
+    "subject": [],
+    "type": [],
+    "tag": [],
+    "sol": []
+  })
 </script>
 {#snippet dropdown(label: string, list)}
 <div class='dropdown-wrap'>
@@ -38,13 +42,13 @@
   <details class="dropdown">
     <!-- svelte-ignore a11y_no_redundant_roles -->
     <summary class='dropdown-button secondary' role='button'>
-      Select one or more...
+      Select one or more...<Pill style='light'>{getNumberChecked(checks[dict[label]])}</Pill>
     </summary>
     <ul>
       {#each list as l}
       <li class='dropdown-item'>
         <label>
-          <input type="checkbox" name={dict[label]} value={l.id} />
+          <input bind:checked={checks[dict[label]]} type="checkbox" name={dict[label]} value={l.id} />
           {l.title}
         </label>
       </li>

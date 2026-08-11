@@ -73,8 +73,10 @@
 		dispatch.instance();
 	});
 	onDestroy(() => {
-		delete project.mouseClicked
-		delete project.mouseWheel
+		if(project) {
+			delete project.mouseClicked
+			delete project.mouseWheel
+		}
 		project = null
 		sketch = null
 	})

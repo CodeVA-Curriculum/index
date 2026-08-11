@@ -1,10 +1,12 @@
 <script lang='ts'>
+  import PremiumCallout from '$lib/components/PremiumCallout.svelte'
   import Fa from 'svelte-fa'
   import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
   import Video from '../Video.svelte'
   import { Project } from './Project.svelte'
   let { project } = $props()
   let { nodes, groups } = project.getGroupNodeCount();
+  let locked = project.locked
 </script>
 
 <div class='project-panel'>
@@ -14,8 +16,11 @@
     </div>
   {/if}
   <div class='description'>
-    <p>{project.db.short}</p>
+    <p>{project.db.long}</p>
   </div>
+  {#if locked}
+  <PremiumCallout />
+  {/if}
   <div class='nodeGroups'>
     <details>
       <summary>
@@ -50,5 +55,8 @@
   .project-panel {
     padding: 1rem;
     & > * { margin-bottom: 2rem; }
+  }
+  .nodeGroups {
+    margin-top:2rem;
   }
 </style>
