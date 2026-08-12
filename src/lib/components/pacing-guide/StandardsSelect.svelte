@@ -2,7 +2,7 @@
     import StandardInList from '$lib/components/pacing-guide/StandardInList.svelte'
     import { onMount } from "svelte";
     import Fa from 'svelte-fa'
-    import {faAdd, faHome, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
+    import {faAdd, faPlus, faHome, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
     import { getViewSelectedFields } from "drizzle-orm";
 
     let { selected = $bindable([]) } = $props()
@@ -67,14 +67,13 @@
     }
 </script>
 
-<button class='empty' onclick={edit}>
-    <Fa icon={faAdd} />
-    <span>Add</span>
-</button>
-<div class='tags'>
+<div class='standards-box'>
+<div class='pills'>
 {#each selected as obj, i}
-<span class='tag'><span>{obj.abbr}</span> <button onclick={() => remove(i)} class='icon'><Fa icon={faX}  /></button></span>
+<span class='tag'><span>{obj.abbr}</span> <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button></span>
 {/each}
+</div>
+<button class='empty' onclick={edit}><span><Fa icon={faPlus} /></span>Filter By Standard</button>
 </div>
 
 <dialog open={open}>
@@ -110,6 +109,7 @@
 
 
 <style lang='scss'>
+    .empty { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
     .bread {
         width:586px;
         margin-left: 1rem;
@@ -125,14 +125,6 @@
                 }
             }
         }
-    }
-    aside {
-        width: 0;
-        position: absolute;
-        left: 0;
-        top: 0;
-        overflow-y: scroll;
-        height: 95vh;
     }
     p {
         padding: 12px; margin: 0;
@@ -159,6 +151,7 @@
             padding: 0.5rem 0.5rem;
             background-color: white;
             color: black;
+            border-color: black;
             width: 100%;
             text-align: left;
             border: none;
@@ -202,11 +195,10 @@
         }
     }
     .tag {
+        align-self: shrink;
         border-radius: 8px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        span { flex: 1; margin-right: 12px; }
+        flex: 0 1;
+        span { flex: 0 1; margin-top: 12px; margin-right: 12px; }
         button {
             background-color: transparent;
             border: none;
@@ -214,12 +206,22 @@
             padding: 0;
             position: relative;
             top: 2px;
-            align-items: center;
         }
     }
-    .tags {
-        display: flex;
-        flex-direction: row;
+  .standards-box {
+    padding-top: 8px;
+    display:flex;
+    flex-direction: row;
+    .pills {
+        flex: 1 0;
+        background-color: whitesmoke;
+        margin-right: 12px;
+        padding-top: 6px;
+        .tag {
+            margin: 12px;
+        }
     }
+    button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
+  }
 </style>
 

@@ -73,6 +73,10 @@
           selectedSubjects.push(filters.subjects[i].id)
         }
       }
+      for(const s of checks["standard"]) {
+        flag=true
+      }
+
       if(!flag) { return true }
       let res = true
       if(selectedGrades.length > 0) {
@@ -97,6 +101,14 @@
         res = false
         for(const j of o.types) {
           if(selectedSubjects.includes(j.id)) { res = true }
+        }
+      }
+      if(checks['standard'].length > 0) {
+        res = false
+        for(const j of o.standards) {
+          if(checks['standard'].filter((o) => o.id == j.id).length > 0) {
+            res = true
+          }
         }
       }
       if(res) { return true }
@@ -143,16 +155,7 @@
     {@render dropdown("Resource Type(s)", filters.elementTypes)}
     {@render dropdown("Audience(s)", filters.audiences)}
 </div>
-<StandardsSelect />
-<div class='standards-box'>
-  <div class='pills'>
-    {#each checks['standard'] as sol}
-      <Standard obj={sol} />
-    {/each}
-  </div>
-
-  <button class='dropdown-button'><span><Fa icon={faPlus} /></span>Filter By Standard</button>
-</div>
+<StandardsSelect bind:selected={checks["standard"]} />
 {/if}
 
 <table>
@@ -312,16 +315,5 @@
     font-size: 12pt;
     padding: .5rem .5rem;
     padding-left: 1rem;
-  }
-  .standards-box {
-    padding-top: 8px;
-    display:flex;
-    flex-direction: row;
-    .pills {
-      flex: 1 0;
-      background-color: whitesmoke;
-      margin-right: 12px;
-    }
-    button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
   }
 </style>
