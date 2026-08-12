@@ -209,6 +209,7 @@
         }
     }
   .standards-box {
+    flex: 1;
     padding-top: 8px;
     display:flex;
     flex-direction: row;

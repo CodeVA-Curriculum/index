@@ -1,10 +1,17 @@
 <script lang='ts'>
+  import StandardsSelect from '$lib/components/pacing-guide/StandardsSelect.svelte'
   import Pill from '$lib/components/Pill.svelte'
   import { enhance } from '$app/forms';
-    import { faSliders} from "@fortawesome/free-solid-svg-icons";
+    import { faSliders, faX} from "@fortawesome/free-solid-svg-icons";
     import Fa from 'svelte-fa'
 
     let form = $state();
+    let tagSearch = $state('')
+    let filteredTags = $state([])
+    $effect(() => {
+      filteredTags = filters?.tags.filter((o) => o.title.includes(tagSearch))
+    })
+    let tagDisplay = $state(true);
 
     const dict = {
       "Grade(s)": "grade",
@@ -17,6 +24,7 @@
 
     let filterToggle = $state(false)
     let { filters } = $props()
+    console.log(filters)
 
 
 
@@ -33,8 +41,21 @@
     "subject": [],
     "type": [],
     "tag": [],
-    "sol": []
+    "standard": []
   })
+  
+  for(const g of filters.grades) {
+    checks["grade"] = [...checks["grade"], false]
+  }
+  for(const g of filters.audiences) {
+    checks["audience"].push(false)
+  }
+  for(const g of filters.elementTypes) {
+    checks["type"] = [...checks["type"], false]
+  }
+  for(const g of filters.subjects) {
+    checks["subject"] = [...checks["subject"], false]
+  }
 </script>
 {#snippet dropdown(label: string, list)}
 <div class='dropdown-wrap'>
@@ -45,10 +66,10 @@
       Select one or more...<Pill style='light'>{getNumberChecked(checks[dict[label]])}</Pill>
     </summary>
     <ul>
-      {#each list as l}
+      {#each list as l, i}
       <li class='dropdown-item'>
         <label>
-          <input bind:checked={checks[dict[label]]} type="checkbox" name={dict[label]} value={l.id} />
+          <input bind:checked={checks[dict[label]][i]} type="checkbox" name={dict[label]} value={l.id} />
           {l.title}
         </label>
       </li>
@@ -66,20 +87,54 @@
     <button onclick={() => filterToggle = !filterToggle}><Fa size=1.0x icon={faSliders} /> <span>Filters</span></button>
     {/if}
     <input class='search-button' type="submit" value="Search" />
+    {#each checks['tag'] as tag}
+      <input type='text' bind:value={tag.id} name="tag" style="visibility:hidden; position: absolute; width:0;height:0;" />
+    {/each}
   </fieldset>
   {#if filters}
-  <div class='filters {filterToggle? 'selected':''}'>
-      {@render dropdown("Grade(s)", filters.grades)}
-      {@render dropdown("Subject(s)", filters.subjects)}
-      {@render dropdown("Resource Type(s)", filters.elementTypes)}
-      {@render dropdown("Audience(s)", filters.audiences)}
+  <div class="filters {filterToggle? 'selected':''}">
+    {@render dropdown("Grade(s)", filters.grades)}
+    {@render dropdown("Subject(s)", filters.subjects)}
+    {@render dropdown("Resource Type(s)", filters.elementTypes)}
+    {@render dropdown("Audience(s)", filters.audiences)}
 
-  </div>
+      <div class='tag-select'>
+          <button class='tag-dropdown-button' role='button' >
+            <label>
+              Tag(s):
+              <div class='tag-input'>
+                <input bind:value={tagSearch} placeholder="Search tags..." type='text ' />
+                <input onclick={()=> {tagSearch=""}} type='button' class='secondary' value="x"/>
+              </div>
+            </label>
+          </button>
+          {#if tagDisplay}
+          <div class='tag-display has-shadow'>
+            <div class='selected-tags'>
+              {#each checks['tag'] as tag, i}
+                <span class='tag'>
+                  {tag.title}
+                  <button onclick={() => checks['tag'].splice(i, 1)}><Fa icon={faX} /></button>
+                </span>
+              {/each}
+            </div>
+            <hr>
+            <div class='all-tags'>
+            {#each filteredTags as tag}
+              <span class='tag'><a onclick={() => checks['tag'].push(tag)}>{tag.title}</a></span>
+            {/each}
+            </div>
+          </div>
+          {/if}
+      </div>
+    </div>
+    <StandardsSelect bind:selected={checks['standard']} />
   {/if}
 </form>
 </div>
 
 <style lang='scss'>
+  @use "$lib/styles/theme.scss";
   .search {
     display: flex;
     flex-direction: row;
@@ -95,9 +150,6 @@
     background-color: white; color: black;
     * { margin-left: 0.5rem; &:first-child { margin-left: 0; } }
   }
-  .dropdown {
-    // min-width: 180px;
-  }
   .dropdown-button {
     font-style: italic;
     padding: 0.5rem;
@@ -112,7 +164,8 @@
       height: 18px;
     }
   }
-  p.dropdown-label {
+  p.dropdown-label, label {
+    color: theme.$text;
    font-size: 12pt; 
    margin: 0 0;
    padding-bottom: 4px;
@@ -128,17 +181,55 @@
   }
   .filters { height: 0; transition: height 500ms ease-in; }
   .filters.selected { height: auto; overflow: clip;}
-  .tag-search {
-  // display: block;
-    font-size: 12pt;
-    input {
-      padding: 0.5rem;
-      font-size: 12pt;
-      height: 2.30rem;
-    }
-    
-  }
   .dropdown-wrap {
     flex: 1;
+  }
+  .tag-select {
+    flex: 1 1;
+    input { font-size: 12pt; height: 2.25rem;}
+    .tag-display {
+      padding: .5rem;
+      overflow-y:scroll;
+      position: relative;
+      z-index: 99;
+      background-color: white;
+      width: 100%;
+      height: 200px;
+      .all-tags, .selected-tags {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      }
+      & > * {
+        flex: 0 1;
+        a {
+        color: white;
+        text-decoration: none;
+        }
+        &:hover { cursor: pointer; }
+      }
+    }
+  }
+  button.tag-dropdown-button {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    border: none;
+    position: relative;
+    color: black;
+    background-color: transparent;
+    // display: none;
+  }
+  .tag-input {
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+    input { flex: 1 0; }
+    input[type="button"] { 
+      padding: 0;
+      margin: 0;
+      aspect-ratio: 1/1;
+      flex: 0 2; }
+
   }
 </style>
