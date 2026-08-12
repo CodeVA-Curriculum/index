@@ -28,6 +28,8 @@ export const load:PageLoad = async ({ url, params }) => {
   const audiencesFilter = getIdFilter(audiences)
   const subjectsFilter = getIdFilter(subjects)
   const typesFilter = getIdFilter(types)
+  const tagsFilter = getIdFilter(tags)
+  const solsFilter = getIdFilter(standards)
   if(query) {
     elements = await db.query.element.findMany({
       with: elementRelations,
@@ -50,8 +52,13 @@ export const load:PageLoad = async ({ url, params }) => {
         },
         types: {
           OR: typesFilter
+        },
+        standards: {
+          OR: solsFilter
+        },
+        tags: {
+          OR: tagsFilter
         }
-        // TODO: standards, tags
       }
     })
 
@@ -82,4 +89,20 @@ function getIdFilter(ids:string[]):Number[] {
     })
   }
   return filterIds
+}
+function getStandardsMap(standards) {
+  let map = {}
+  let grades:number[] = []
+  let subjects:number[] = []
+  for(const s of standards) {
+    if(!(s.grade.title in map)) {
+      map[s.grade.title] = {}
+    }
+    if(!(s.subject.title in map[s.grade.title])) {
+      map[s.grade.title][s.subject.title] = []
+    }
+    map[s.grade.title][s.subject.title].push(s) 
+  }
+  console.log(map)
+  return map
 }

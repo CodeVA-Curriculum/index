@@ -5,12 +5,17 @@
     import {faAdd, faHome, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
     import { getViewSelectedFields } from "drizzle-orm";
 
-    let { selected = $bindable([]), standards, map } = $props()
+    let { selected = $bindable([]) } = $props()
+
+    let workingMap = $state({})
+    onMount(async () => {
+        const { map } = await (await fetch("/api/v1/standards.json")).json()
+        workingMap = map
+    })
 
     const titles = [ "Grades", "Subjects", "Standards"]
     let breadcrumbs = $state([])
 
-    let workingMap = $state(map)
     let open = $state(false)
     function edit() { open = true }
     function close() { open = false }
@@ -72,7 +77,8 @@
 {/each}
 </div>
 
-<aside class='{open? "open" : ""} has-shadow'>
+<dialog open={open}>
+<article class='open'>
     <div class="list" >
     <div class='bread'>
         <nav aria-label="breadcrumb">
@@ -99,7 +105,8 @@
             {/if}
         {/each}
     </div>
-</aside>
+</article>
+</dialog>
 
 
 <style lang='scss'>
@@ -119,15 +126,6 @@
             }
         }
     }
-    div.list {
-        width: 586px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: white;
-        padding: 1rem;
-    }
-    div.list { position: relative; }
     aside {
         width: 0;
         position: absolute;
@@ -202,9 +200,6 @@
             border: none;
             color: black;
         }
-    }
-    aside.open {
-        width: 586px;
     }
     .tag {
         border-radius: 8px;

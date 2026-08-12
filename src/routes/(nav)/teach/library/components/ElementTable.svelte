@@ -1,7 +1,9 @@
 <script lang='ts'>
+  import StandardsSelect from '$lib/components/pacing-guide/StandardsSelect.svelte'
+  import Standard from '$lib/components/Standard.svelte'
   import { getGradeStyle } from '$lib'
   import Fa from 'svelte-fa'
-  import { faBoltLightning } from '@fortawesome/free-solid-svg-icons'
+  import { faBoltLightning, faPlus } from '@fortawesome/free-solid-svg-icons'
   import Element from './Element.svelte'
   import Pill from '$lib/components/Pill.svelte'
   let { elements, user, session, filters } = $props()
@@ -25,7 +27,7 @@
     "subject": [],
     "type": [],
     "tag": [],
-    "sol": []
+    "standard": []
   })
   for(const g of filters.grades) {
     checks["grade"] = [...checks["grade"], false]
@@ -140,7 +142,16 @@
     {@render dropdown("Subject(s)", filters.subjects)}
     {@render dropdown("Resource Type(s)", filters.elementTypes)}
     {@render dropdown("Audience(s)", filters.audiences)}
+</div>
+<StandardsSelect />
+<div class='standards-box'>
+  <div class='pills'>
+    {#each checks['standard'] as sol}
+      <Standard obj={sol} />
+    {/each}
+  </div>
 
+  <button class='dropdown-button'><span><Fa icon={faPlus} /></span>Filter By Standard</button>
 </div>
 {/if}
 
@@ -301,5 +312,16 @@
     font-size: 12pt;
     padding: .5rem .5rem;
     padding-left: 1rem;
+  }
+  .standards-box {
+    padding-top: 8px;
+    display:flex;
+    flex-direction: row;
+    .pills {
+      flex: 1 0;
+      background-color: whitesmoke;
+      margin-right: 12px;
+    }
+    button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
   }
 </style>
