@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Pill from '$lib/components/Pill.svelte'
   import Fa from 'svelte-fa'
   import {faX} from '@fortawesome/free-solid-svg-icons'
     let { filters, checks, selected=$bindable([])} = $props()
@@ -9,6 +10,9 @@
     })
     let tagDisplay = $state(true);
     $effect(() => console.log(checks))
+    function handleFocus(e) {
+      tagDisplay = true
+    }
 
 </script>
 <div class='tag-select'>
@@ -16,8 +20,13 @@
   <label>
     Tag(s):
     <div class='tag-input'>
-      <input bind:value={tagSearch} placeholder="Search tags..." type='text ' />
-      <input onclick={()=> {tagSearch=""}} type='button' class='secondary' value="x"/>
+      <input onfocus={handleFocus} bind:value={tagSearch} placeholder="Search tags..." type='text ' />
+      <span class='secondary' role="button" onclick={() => checks.splice(0, checks.length)}>
+        <Pill style='light'>{checks.length}</Pill>
+        {#if checks.length > 0}
+        <Fa onclick={() => tagDisplay = false} icon={faX} />
+        {/if}
+      </span>
     </div>
   </label>
 </button>
@@ -37,6 +46,10 @@
     <span class='tag'><a onclick={() => checks.push(tag)}>{tag.title}</a></span>
   {/each}
   </div>
+</div>
+<div class='tag-foot'>
+  <button onclick={() => tagDisplay = false}>Close</button>
+  <button onclick={() => checks.splice(0, checks.length)}>Clear</button>
 </div>
 {/if}
 </div>
@@ -85,14 +98,28 @@
   .tag-select {
     flex: 1 1;
     input { font-size: 12pt; height: 2.25rem;}
+    .tag-foot{
+      display: flex;
+      flex-direction: row;
+      height: 2rem;
+      padding: 0 4px;
+      position: relative;
+      top: -40px;
+      gap: 8px;
+      width: 100%;
+      align-items: flex-end;
+      padding-bottom: 4px;
+      background-color: white;
+      button { padding: 0; height: 1.5rem; font-size: 12pt; flex: 1; }
+    }
     .tag-display {
       padding: .5rem;
       overflow-y:scroll;
       position: relative;
-      z-index: 99;
+      z-index: 0;
       background-color: white;
       width: 100%;
-      height: 200px;
+      height: 280px;
       .all-tags, .selected-tags {
       display: flex;
       flex-direction: row;
@@ -123,11 +150,17 @@
     flex-direction: row;
     padding-top: 5px;
     input { flex: 1 0; }
-    input[type="button"] { 
-      padding: 0;
+    span[role="button"] { 
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      font-size: 12pt;
+      padding: 8px 8px;
       margin: 0;
-      aspect-ratio: 1/1;
-      flex: 0 2; }
+      flex: 0 2; 
+      margin-bottom: 1rem;
+    }
 
   }
   </style>
