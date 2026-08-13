@@ -1,4 +1,5 @@
 <script lang='ts'>
+    import Standard from '$lib/components/Standard.svelte'
     import StandardInList from '$lib/components/pacing-guide/StandardInList.svelte'
     import { onMount } from "svelte";
     import Fa from 'svelte-fa'
@@ -70,7 +71,9 @@
 <div class='standards-box'>
 <div class='pills'>
 {#each selected as obj, i}
-<span class='tag'><span>{obj.abbr}</span> <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button></span>
+    <Standard obj={obj}>
+        <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button>
+    </Standard>
 {/each}
 </div>
 <button class='empty' onclick={edit}><span><Fa icon={faPlus} /></span>Filter By Standard</button>
@@ -194,20 +197,6 @@
             color: black;
         }
     }
-    .tag {
-        align-self: shrink;
-        border-radius: 8px;
-        flex: 0 1;
-        span { flex: 0 1; margin-top: 12px; margin-right: 12px; }
-        button {
-            background-color: transparent;
-            border: none;
-            flex: 0 1;
-            padding: 0;
-            position: relative;
-            top: 2px;
-        }
-    }
   .standards-box {
     flex: 1;
     padding-top: 8px;
@@ -215,12 +204,11 @@
     flex-direction: row;
     .pills {
         flex: 1 0;
+        display: flex;
+        flex-direction:row;
         background-color: whitesmoke;
         margin-right: 12px;
         padding-top: 6px;
-        .tag {
-            margin: 12px;
-        }
     }
     button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
   }
