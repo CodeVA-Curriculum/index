@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import TagSearch from '$lib/components/TagSearch.svelte'
   import StandardsSelect from '$lib/components/pacing-guide/StandardsSelect.svelte'
   import Pill from '$lib/components/Pill.svelte'
   import { enhance } from '$app/forms';
@@ -6,12 +7,6 @@
     import Fa from 'svelte-fa'
 
     let form = $state();
-    let tagSearch = $state('')
-    let filteredTags = $state([])
-    $effect(() => {
-      filteredTags = filters?.tags.filter((o) => o.title.includes(tagSearch))
-    })
-    let tagDisplay = $state(true);
 
     const dict = {
       "Grade(s)": "grade",
@@ -43,18 +38,19 @@
     "tag": [],
     "standard": []
   })
-  
-  for(const g of filters.grades) {
-    checks["grade"] = [...checks["grade"], false]
-  }
-  for(const g of filters.audiences) {
-    checks["audience"].push(false)
-  }
-  for(const g of filters.elementTypes) {
-    checks["type"] = [...checks["type"], false]
-  }
-  for(const g of filters.subjects) {
-    checks["subject"] = [...checks["subject"], false]
+  if(filters) {
+    for(const g of filters.grades) {
+      checks["grade"] = [...checks["grade"], false]
+    }
+    for(const g of filters.audiences) {
+      checks["audience"].push(false)
+    }
+    for(const g of filters.elementTypes) {
+      checks["type"] = [...checks["type"], false]
+    }
+    for(const g of filters.subjects) {
+      checks["subject"] = [...checks["subject"], false]
+    }
   }
 </script>
 {#snippet dropdown(label: string, list)}
@@ -92,41 +88,12 @@
     {/each}
   </fieldset>
   {#if filters}
-  <div class="filters {filterToggle? 'selected':''}">
-    {@render dropdown("Grade(s)", filters.grades)}
-    {@render dropdown("Subject(s)", filters.subjects)}
-    {@render dropdown("Resource Type(s)", filters.elementTypes)}
-    {@render dropdown("Audience(s)", filters.audiences)}
-
-      <div class='tag-select'>
-          <button class='tag-dropdown-button' role='button' >
-            <label>
-              Tag(s):
-              <div class='tag-input'>
-                <input bind:value={tagSearch} placeholder="Search tags..." type='text ' />
-                <input onclick={()=> {tagSearch=""}} type='button' class='secondary' value="x"/>
-              </div>
-            </label>
-          </button>
-          {#if tagDisplay}
-          <div class='tag-display has-shadow'>
-            <div class='selected-tags'>
-              {#each checks['tag'] as tag, i}
-                <span class='tag'>
-                  {tag.title}
-                  <button onclick={() => checks['tag'].splice(i, 1)}><Fa icon={faX} /></button>
-                </span>
-              {/each}
-            </div>
-            <hr>
-            <div class='all-tags'>
-            {#each filteredTags as tag}
-              <span class='tag'><a onclick={() => checks['tag'].push(tag)}>{tag.title}</a></span>
-            {/each}
-            </div>
-          </div>
-          {/if}
-      </div>
+    <div class="filters {filterToggle? 'selected':''}">
+      {@render dropdown("Grade(s)", filters.grades)}
+      {@render dropdown("Subject(s)", filters.subjects)}
+      {@render dropdown("Resource Type(s)", filters.elementTypes)}
+      {@render dropdown("Audience(s)", filters.audiences)}
+    <TagSearch bind:checks={checks['tag']} filters={filters} />
     </div>
     <StandardsSelect bind:selected={checks['standard']} />
   {/if}

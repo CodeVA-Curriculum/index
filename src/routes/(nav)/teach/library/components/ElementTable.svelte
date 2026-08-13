@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import TagSearch from '$lib/components/TagSearch.svelte'
   import StandardsSelect from '$lib/components/pacing-guide/StandardsSelect.svelte'
   import Standard from '$lib/components/Standard.svelte'
   import { getGradeStyle } from '$lib'
@@ -73,9 +74,8 @@
           selectedSubjects.push(filters.subjects[i].id)
         }
       }
-      for(const s of checks["standard"]) {
-        flag=true
-      }
+      flag = checks['standard'].length > 0 
+      flag = checks['tag'].length > 0
 
       if(!flag) { return true }
       let res = true
@@ -111,6 +111,14 @@
           }
         }
       }
+      if(checks['tag'].length > 0) {
+        res = false
+        for(const j of o.tags) {
+          if(checks['tag'].filter((o) => o.id == j.id).length > 0) {
+            res = true
+          }
+        }
+      }
       if(res) { return true }
       return false
     })
@@ -126,7 +134,7 @@
   <details class="dropdown">
     <!-- svelte-ignore a11y_no_redundant_roles -->
     <summary class='dropdown-button' role='button'>
-      <span>Select one or more...<Pill style='light'><span style='font-style: normal;'>{getNumberChecked(checks[dict[label]])}</span></Pill></span>
+      <span>Select...<Pill style='light'><span style='font-style: normal;'>{getNumberChecked(checks[dict[label]])}</span></Pill></span>
     </summary>
     <ul>
       {#each list as l, i}
@@ -154,6 +162,7 @@
     {@render dropdown("Subject(s)", filters.subjects)}
     {@render dropdown("Resource Type(s)", filters.elementTypes)}
     {@render dropdown("Audience(s)", filters.audiences)}
+    <TagSearch filters={filters} bind:checks={checks['tag']}/>
 </div>
 <StandardsSelect bind:selected={checks["standard"]} />
 {/if}
