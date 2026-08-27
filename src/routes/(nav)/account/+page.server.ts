@@ -25,6 +25,7 @@ export const load: PageServerLoad = async ({locals}) => {
 export const actions: Actions = {
   portalLogin: async (event) => { 
     console.log("Triggered portal login") 
+    console.log(event.request)
     return await logInWithPortal(event)
   },
   codeLogin: async (event ) => {},
