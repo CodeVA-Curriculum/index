@@ -8,7 +8,7 @@
 </script>
 
 {#snippet portalAuth()}
-<form action="https://portal.codevirginia.org/auth/redirect?redirect_url=http://localhost:5173/account?/portalLogin" method='POST'>
+<form action="https://portal.codevirginia.org/auth/redirect?redirect_url=http://foundry.codevirginia.org/account?/portalLogin" method='POST'>
   <input style="display:none;" name="secret_key" id="secret_key" value={key}>
   <input type="submit" value="Log In as Educator">
 </form>
