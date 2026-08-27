@@ -4,7 +4,7 @@ RUN mkdir /app && mkdir /app/data
 
 COPY . /app
 
-RUN cd /app && yarn install && echo "DATABASE_URL=/app/data/local.db" > /app/.env && yarn build
+RUN cd /app && yarn install && echo "DATABASE_URL=/app/data/local.db\nORIGIN=https://foundry.codevirginia.org/" > /app/.env && yarn build
 
 FROM node:25-alpine
 
