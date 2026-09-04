@@ -10,42 +10,43 @@
   </section>
   <section class='guide-cards'>
     {#each data.guides as guide}
-      <div>
       <article class='card'>
         <div class='card-image'>
           <img src='/images/{guide.image}' alt="" />
         </div>
         <main class='card-body'>
           <h2>{guide.title}</h2>
-          <p>{guide.short ? guide.short : "No description provided!"}</p>
           <a role='button' href="/learn/{guide.path.replace("/meta.md", "")}">Open the Guide</a>
         </main>
       </article>
-      </div>
     {/each}
   </section>
 </div>
 
 <style lang='scss'>
-  article {
-    max-width: 70%;
-    padding: 1.5rem;
-    display: inline-flex;
-    flex-direction: row;
-    min-width: 400px;
-  }
   .card-image {
-    flex: 1 1;
-    margin-right: 2rem;
-    max-width: 200px;
-    img { aspect-ratio: 1/1; min-width: 200px; height: 200px; }
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
-  main {
-    // flex: 1 0;
-    // margin: 0 1.5rem;
+  .card {
+    a { width: 100%; }
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
   .guide-cards {
-    // display: inline-flex;
-    // flex-direction: column;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    & > * {
+      min-width: 14rem;
+      flex: 0 1;
+    }
+  }
+  .card-image {
+    flex: 1;
+    img { aspect-ratio: 1/1; min-width: 200px; height: 200px; }
   }
 </style>

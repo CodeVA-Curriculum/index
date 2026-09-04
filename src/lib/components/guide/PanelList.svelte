@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Video from '$lib/components/Video.svelte'
   import ProjectListItemSearch from './ProjectListItemSearch.svelte'
   import ProjectPanel from './ProjectPanel.svelte'
   import { Project } from './Project.svelte'
@@ -26,7 +27,8 @@
 
   const modes = {
     LIST: 0,
-    ELEMENT: 1
+    ELEMENT: 1,
+    ONBOARDING: 2
   }
 
   let list = $derived.by(() => {
@@ -41,6 +43,9 @@
     if(title == 'projects' || title == "tutorials") { 
       console.log("mode", modes.LIST)
       return modes.LIST }
+    else if(title == 'onboarding') {
+      return modes.ONBOARDING
+    }
     else {
       console.log("mode", modes.ELEMENT)
       return modes.ELEMENT
@@ -58,6 +63,25 @@
     res.sort((a,b) => !a.db.recommended && b.db.recommended ? 1 : a.locked && !b.locked ? 1 : 0)
   })
 </script>
+
+{#snippet onboarding()}
+  <h2>Using the Trail Guide</h2>
+  <p>The trail guide is a set of resources to help you learn. Follow the instructions below to get started!</p>
+  <Video />
+{/snippet}
+
+{#snippet onboardingBody()}
+  <div class='onboarding-wrap'>
+  <p>Trail guides are made up of <strong>tutorials</strong> (represented by the labeled circles on the map) and <strong>projects</strong>, which are collections of tutorials arranged in order to help you make something.</p>
+  <p>Click the "Open in Map" button below to open the first tutorial we think you should start with (click "back" to return here after you're done exploring):</p>
+  TODO: element card
+  <p>Each tutorial has a video, a full text version of the video for you to read, and practice questions/prompts to help you practice your skills.</p>
+  <p><strong>Projects</strong> provide you with details about which tutorials you might need to check out to learn how to make different kinds of work. You can view the path of our recommended "first project" by hovering over the card below. To lock the highlighted path color and view some details about the project, click "Open in Map" below (click "back" to return here).</p>
+  <p>
+  TODO: project card
+  <p>As you work through a project by viewing its connected tutorials, you can mark them as complete to save your progress. If you run into any issues, please let us know!</p>
+  </div>
+{/snippet}
 
 {#snippet listHeader(title)}
     <h2>{title.charAt(0).toUpperCase() + title.substring(1)}</h2>
@@ -97,6 +121,8 @@
       {@render listHeader(title)}
     {:else if mode == modes.ELEMENT || mode == modes.PROJECT}
       {@render elementHeader(map.elementsByPath[title])}
+    {:else if mode == modes.ONBOARDING}
+      {@render onboarding()}
     {/if}
   </div>
   <hr>
@@ -111,6 +137,8 @@
     </ul>
     {:else if mode == modes.ELEMENT}
       {@render elementContent(map.elementsByPath[title])}
+    {:else if mode == modes.ONBOARDING}
+      {@render onboardingBody()}
     {/if}
   </div>
 </div>
@@ -151,5 +179,8 @@
     & > * {
       padding: 0;
     }
+  }
+  .onboarding-wrap {
+    margin: 1rem 1rem;
   }
 </style>

@@ -20,10 +20,6 @@ export const load:PageLoad = async ({ params, locals }) => {
     where: { guide: result.id }
   })
   const nodes = await loadNodesForGuide(db, result.id, locals.user)
-  let nodeIds = []
-  for(const n of nodes) {
-    nodeIds.push(n.id)
-  }
   const edges = await db.query.edge.findMany({
     with: {
       toNode: true,
@@ -36,7 +32,6 @@ export const load:PageLoad = async ({ params, locals }) => {
 
   // await applyPermissions(nodes)
   await applyPermissions(projects, nodes, locals.accessCode)
-
   return {
     guide: {
       ...result,

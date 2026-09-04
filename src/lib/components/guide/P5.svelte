@@ -46,6 +46,7 @@
 	 * When the client loads, create the p5 instance
 	 */
 	onMount(async () => {
+		console.log("initializing p5js instance...")
 		const library = await import('p5');
 		const { default: p5 } = library;
 

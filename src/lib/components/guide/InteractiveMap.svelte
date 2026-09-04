@@ -22,7 +22,7 @@
   let oldList = $state([])
 
 
-  // hover visualization update
+  // // hover visualization update
   $effect(() => {
     const old = untrack(() => oldList)
     for(const path of hoverList) {
@@ -69,7 +69,7 @@
       camera = new Camera(p5, 1)
       cursor = new Cursor()
       map.setup(camera)
-      font = await p5.loadFont('/fonts/calibri-regular.ttf')
+      // font = await p5.loadFont('/fonts/calibri-regular.ttf')
       let maxX = 0; let maxY = 0; let minX = 0; let minY = 0
       const completeImage = getCompleteImage(p5, 200, 200)      
       const sw = 200; const sh=250;
@@ -92,7 +92,7 @@
       startImage.text("Start Here", sw/4, nodeWidth*1.5, 100)
 
       for(const node of nodes) {
-        await node.setup(p5, font)
+        node.setup(p5)
         maxX = node.x > maxX ? node.x : maxX;
         maxY = (node.y) > (maxY) ? node.y : maxY
         minX = (node.x) < (minX) ? node.x : minX;
@@ -216,9 +216,6 @@
 
 <div class='interactive-map'>
   <P5 bind:this={instance} sketch={sketch} />
-  {#if legend}
-  <Legend />
-  {/if}
   <div class='debug'>
     {#each Object.entries(debug) as entry}
     <p>{entry}{debug[entry]}</p>

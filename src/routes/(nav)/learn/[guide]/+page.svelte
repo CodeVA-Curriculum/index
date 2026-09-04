@@ -6,19 +6,23 @@
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
   import Fa from 'svelte-fa'
-  import { faX } from "@fortawesome/free-solid-svg-icons"
+  import { faX, faInfo } from "@fortawesome/free-solid-svg-icons"
   import type { PageProps } from './$types'
   let { data }:PageProps = $props()
   import { Map } from '$lib/components/guide/Map.svelte'
+  import { onMount } from 'svelte'
 
 
-  const map = new Map(data.guide)
+  let map = $state(false)
   let interactable = $state(true)
   function handleCapture(flag:boolean) {
     interactable = flag
   }
 
   let panelOpen = $state(null)
+  onMount(() => {
+    map = new Map(data.guide)
+  })
   $effect(() => {
     panelOpen = $page.url.searchParams.get('view')    
   })
@@ -52,7 +56,9 @@
 
 <div class='map-view'>
   <div class='map-wrap'>
+    {#if map}
     <InteractiveMap map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
+    {/if}
   </div>
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
@@ -62,6 +68,7 @@
       </Capture>
     </div>
     <div class='end'>
+        <a href="?view=onboarding" class='info-button' role="button"><Fa size=2x icon={faInfo} /></a>
     </div>
   </div>
   <div onmouseenter={() => interactable = false} onmouseleave={() => interactable = true} class='panel {panelOpen ? 'open': 'closed'}'>
@@ -144,9 +151,23 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    // background-color: powderblue;
+    background-color: #f6f6f6;
     width: 100vw;
     overflow-x: hidden;
+  }
+  .info-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & > * { margin: auto auto;}
+    border-radius: 4rem;
+    height: 4rem;
+    width: 4rem;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    border: 1px solid black;
+    color: black;
   }
   .close{ position: absolute; right: 0; top: 0; background-color: transparent; border: none; color: $text }
 </style>

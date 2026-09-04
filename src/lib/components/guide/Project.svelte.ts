@@ -25,6 +25,7 @@ export class Project {
   groupPos = $state(0)
   nodePos = $state(0)
   selected = $state(false)
+  icon = $state(false)
   size = 0
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
@@ -154,9 +155,15 @@ class Group {
       this.nodeMask.push(c.optional)
     }
   }
-  setup(p5) {
+  setup(p5, icon) {
     for(const e of this.edges) {
       e.setup(p5)
+    }
+    for(const node of this.nodes) {
+      if(node.db.type == 'cache') {
+        console.log("updated node icon")
+        node.icon = this.icon
+      }
     }
     console.log("Group has edges", this.edges.length)
   }

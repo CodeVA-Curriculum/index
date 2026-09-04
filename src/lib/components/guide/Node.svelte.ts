@@ -20,7 +20,7 @@ export class Node {
   width = 50
   hover = false
   scale = 1
-  icon:any = false;
+  icon:any = $state(false)
   stroke = STROKE_WEIGHT;
   constructor(obj:DbNode) {
     this.db = obj
@@ -29,61 +29,36 @@ export class Node {
     this.complete = obj.status?.length > 0 ? obj.status[0].complete : false
     this.locked = obj.locked
   }
-  async setup(p5, font) {
+  setup(p5) {
     const borderWeight = this.locked ? 8 : 8;
-    const fontData = this.getWidth(p5, font)
-    const minDiameter = fontData.lines * 20 + 175
-    let w = Math.ceil(fontData.w) > minDiameter ? Math.ceil(fontData.w) : minDiameter
-    this.width = w
+    // let { w }= this.getWidth(p5)
+    let w = 200
+    this.width = w   
     if(this.db.type == "cache") { w = 100 }
-    this.radius = new Lerp(Math.round(w*1.25), 5)
-    if(this.db.type == "cache") {
-       await p5.loadImage("/trail-guides/" + this.db.path.substring(0, this.db.path.lastIndexOf('/')) + "/icon.png").then((img) => {
-        this.icon = img
-      })
-    }
-    this.idle = p5.createGraphics(this.width*1.125, this.width*1.125)
-    this.idle.strokeWeight(borderWeight)
-    this.idle.stroke(this.locked ? 200 : 0)
-    this.idle.circle(this.idle.width/2, this.idle.width/2, Math.round(this.width))
-    this.highlight = p5.createGraphics(this.width * 1.25, this.width * 1.25)
-    this.highlight.stroke(this.locked ? 'fuchsia' : HIGHLIGHT_COLOR)
-    this.highlight.strokeWeight(borderWeight * 2)
-    this.highlight.circle(this.highlight.width/2, this.highlight.width/2, Math.round(this.width))
-    if(this.db.status?.date) { this.lastUpdated = this.db.status.date }
-    // make shadow
-    // this.shadow = makeShadow(p5, 100, 10, "#000000", 0.9)
+    this.radius = new Lerp(Math.round(w *1.25), 5)
   }
   draw(p5:any) {
     this.radius.update(p5)
     let w = this.radius.get()
     let x = this.x*this.scale
     let y = this.y*this.scale
-    let pastFill
-    let styleFlag = false
-    switch (this.highlighted) {
-      case true:
-        p5.image(this.highlight, x, y, w, w)
-        break
-      default:
-        p5.image(this.idle, x, y, w, w)
-    }
 
-    if(this.db.type == "cache" && this.icon) {
-      let iconScale = 0.50
-      if(this.hover) {
-        let ix = x + w/2 * Math.cos(45 * p5.PI/180)
-        let iy = y + w/2 * Math.sin(45 * p5.PI/180)
-        p5.circle(ix, iy, 100)
-        p5.text(this.db.title, x-150/2, y, 150)
-        // iconScale = 0.25
-        p5.image(this.icon, ix, iy, 100*iconScale, 100*iconScale)
-      } else {
-        p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
-      }
-    } else if(this.db.type != "cache" || (this.db.type == 'cache' && this.hover)) {
+    // if(this.db.type == "cache" && this.icon) {
+    //   let iconScale = 0.50
+    //   if(this.hover) {
+    //     let ix = x + w/2 * Math.cos(45 * p5.PI/180)
+    //     let iy = y + w/2 * Math.sin(45 * p5.PI/180)
+    //     p5.circle(ix, iy, 100)
+    //     p5.text(this.db.title, x-150/2, y, 150)
+    //     iconScale = 0.25
+    //     p5.image(this.icon, ix, iy, 100*iconScale, 100*iconScale)
+    //   } else {
+    //     p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
+    //   }
+    // } else if(this.db.type != "cache" || (this.db.type == 'cache' && this.hover)) {
+      p5.circle(x, y, w)
       p5.text(this.db.title, x-150/2, y, 150)
-    }
+    // }
     if(this.complete) {
       // Draw checkmark
       p5.image(this.completeImage, this.x, this.y)
@@ -112,15 +87,14 @@ export class Node {
       this.radius.setTarget(this.hover ? this.width * 1.5 : lowerTarget)
     }
   }
-  getWidth(p5:any, font:any) {
+  getWidth(p5:any) {
     // find the longest series of words that will be displayed on one line (<= 150px)
-    if(!this.db.title) { console.log(this)}
     let words = this.db.title.split(' ')
     const lengths:number[] = []
     let lineHeight = -1;
     for(let i=0;i<words.length;i++) {
       words[i] += ' '
-      let box = font.textBounds(words[i], this.x/2, this.y/2, 28)
+      let box = p5.textBounds(words[i], this.x/2, this.y/2, 28)
       lengths.push(box.w)
       if(box.h > lineHeight) { lineHeight = box.h * 2 }
     }
@@ -147,17 +121,15 @@ export class Node {
         index = i
       }
     }
+    maxLength += 60
 
     // width of longest word is in `maxLength`, now need to scale the width based on how high or low that word is in the circle using `index`
     const offsetY = (index - (lines.length -1) / 2) * lineHeight
     // console.log(this.frontmatter.title, offsetY)
     return {
       lines: lines.length,
-      w: Math.sqrt(offsetY*offsetY + (maxLength)*(maxLength)) + 30    
+      w: Math.sqrt(offsetY*offsetY + maxLength*maxLength) + (lines.length == 1 ? 48: 0)
     }
-  }
-  setFonts() {
-    
   }
   toggleSelect():boolean {
     console.log("Selected", this)
@@ -234,4 +206,6 @@ export function makeShadow(p5, radius, sigma, shadowColor, opacity) {
   
   // g.remove();
   return g;
+}
+function computeTextDimensions(p5, str, maxWidth) {
 }
