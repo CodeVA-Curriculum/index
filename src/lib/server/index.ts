@@ -62,6 +62,7 @@ export const logInWithPortal = async (event) => {
       'content-type': 'application/json'
     }
   })
+  console.log(validation)
   const res = await validation.json()
   if(res.valid) {
     console.log("Got user")

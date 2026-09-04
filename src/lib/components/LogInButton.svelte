@@ -1,14 +1,16 @@
 <script lang='ts'>
   import { dashboardURL } from '$lib'
+  import { page } from '$app/state'
   let { redirect, user, session } = $props()
   const key = 'V5QLBdKt5AYPU5Y7iMcDa5lQ1PLYYq7EdxfgjCP1sWcih1TGIl8vAYOLa7-vVr69dX_MNZirOMjUojYPd_4-BQ'
 
+  const redirectURL = page.url.origin+ '/account?/portalLogin'
   const button = portalAuth;
   let showForm =$state("hidden")
 </script>
 
 {#snippet portalAuth()}
-<form action="https://portal.codevirginia.org/auth/redirect?redirect_url=http://foundry.codevirginia.org/account?/portalLogin" method='POST'>
+<form action="https://portal.codevirginia.org/auth/redirect?redirect_url={redirectURL}" method='POST'>
   <input style="display:none;" name="secret_key" id="secret_key" value={key}>
   <input type="submit" value="Log In as Educator">
 </form>
