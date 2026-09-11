@@ -247,7 +247,7 @@ export function img(tree, path) {
         if(node.tagName == 'img') {
             // TODO: error reporting
             const alt = node.properties.alt ? node.properties.alt : "no alt text provided"
-            const src = node.properties.src ? node.properties.src : "no src provided"
+            let src = node.properties.src ? node.properties.src : "no src provided"
             
             // `<div class='has-text-centered' style='margin-left: auto; margin-right: auto;'>
             //     <figure class="image is-inline-block">
