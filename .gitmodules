@@ -7,3 +7,18 @@
 [submodule "static/trail-guides/twine"]
 	path = static/trail-guides/twine
 	url = https://github.com/codeva-curriculum/twine-vault
+[submodule "processing"]
+	path = static/trail-guides/processing
+	url = https://github.com/codeva-curriculum/java-vault
+[submodule "python"]
+	path = static/trail-guides/python
+	url = https://github.com/codeva-curriculum/python-vault
+[submodule "p5js"]
+	path = static/trail-guides/p5js
+	url = https://github.com/codeva-curriculum/p5js-vault
+[submodule "scratch"]
+	path = static/trail-guides/scratch
+	url = https://github.com/codeva-curriculum/scratch-vault
+[submodule "microbit"]
+	path = static/trail-guides/microbit
+	url = https://github.com/codeva-curriculum/microbit-vault
