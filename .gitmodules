@@ -4,3 +4,6 @@
 [submodule "static/library"]
 	path = static/library
 	url = https://github.com/codeva-curriculum/library
+[submodule "static/trail-guides/twine"]
+	path = static/trail-guides/twine
+	url = https://github.com/codeva-curriculum/twine-vault
