@@ -1,4 +1,5 @@
 import * as auth from '$lib/server/auth';
+import { requireLogin } from '$lib/server'
 import { makeCode } from '$lib/server/db'
 import { eq } from 'drizzle-orm'
 import { db } from '$lib/server/db'
@@ -18,7 +19,11 @@ export const load: PageServerLoad = async ({locals}) => {
   return {
     user: user,
     session: locals.session,
-    codes: userCodes
+    codes: userCodes,
+    elements: await db.query.element.findMany({
+      where: { id: 18 }
+    }),
+    guides: await db.query.guide.findMany()
   }
 };
 
@@ -72,11 +77,12 @@ export const actions: Actions = {
       // Pull all of the pivot tables between users and this code
       await db.delete(schema.userToAccessCode).where(eq(schema.userToAccessCode.codeId, id))
       await db.delete(schema.accessCode).where(eq(schema.accessCode.id, id))
-      return { res: `Deleted access code ${id}`}
     } catch(err) {
       console.log(err)
       return { res: "Failed to delete access code" }
     }
+    redirect(303, `/account?status="Deleted access code ${id}"`)
+    return { res: `Deleted access code ${id}`}
   }
 };
 function validate({requestedCode, locals}) {
@@ -84,11 +90,4 @@ function validate({requestedCode, locals}) {
 		requestedCode.length == 4 &&
 		locals.user && locals.session
 	return valid
-}
-function requireLogin() {
-  const { locals } = getRequestEvent();
-  if (!locals.user) {
-    return redirect(302, "/login");
-  }
-  return locals.user;
 }

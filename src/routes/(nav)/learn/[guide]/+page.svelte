@@ -63,8 +63,8 @@
   <div class='ui {panelOpen ? 'open': 'closed'}'>
     <div class='start'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
-        <a href="?view=projects" role="button">projects</a>
-        <a href="?view=tutorials" role="button">tutorials</a>
+        <a href="?view=projects" role="button">Projects</a>
+        <a href="?view=tutorials" role="button">Tutorials</a>
       </Capture>
     </div>
     <div class='end'>

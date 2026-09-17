@@ -11,19 +11,26 @@ import { requireLogin } from '$lib/server'
 
 export const load: PageServerLoad = async ({params, locals}) => {
 	const user = requireLogin()
-	const [userCode] = await db.query.accessCode.findMany({
+	const code = await db.query.accessCode.findFirst({
 	  where: {
-	    owner: user.id,
-	    alias: params.accessCode
-	  },
-	  with: {
-	    users: true
+	    alias: params.accessCode,
+	    owner: user.id
 	  }
 	})
-	if(!userCode) { fail(404) }
+	const [res] = await db.query.user.findMany({
+	  where: {
+	    username: params.userName,
+	    codeId: code.id
+	  }
+	  // with: {
+	  //   // TODO: add relations for analytics
+	  // }
+	})
+	if(!res) { fail(404) }
+	console.log(res)
   return {
     user: user,
+    res: res,
     session: locals.session,
-    code: userCode
   }
 };

@@ -6,6 +6,13 @@ import { db } from '$lib/server/db'
 import { fail, redirect } from '@sveltejs/kit'
 export const TESTING = true
 
+export function requireLogin() {
+  const { locals } = getRequestEvent();
+  if (!locals.user) {
+    return redirect(302, "/login");
+  }
+  return locals.user;
+}
 export function isLoggedIn(data) {
   return data.user && data.session
 }
@@ -187,6 +194,7 @@ export const registerNewUser = async (event) => {
 		return redirect(302, '/demo/lucia');
 	}
 export const logUserOut = async (event) => {
+  console.log("Logging out...")
 	if (!event.locals.session) {
 		return fail(401);
 	}

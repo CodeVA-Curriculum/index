@@ -1,10 +1,13 @@
 <script lang='ts'>
+  import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
 	import { enhance } from '$app/forms';
   import Fa from 'svelte-fa'
-  import { faTrash, faRefresh, faPowerOff } from'@fortawesome/free-solid-svg-icons'
+  import { faChartLine, faTrash, faRefresh, faPowerOff } from'@fortawesome/free-solid-svg-icons'
   import { dashboardURL } from '$lib'
   let { data, form } = $props()
-  console.log(data.user)
+  console.log(data.session)
+  console.log(data.accessCode)
+  console.log(data.elements)
   let value = $state(generate())
   let accountOwner = data.user?.id && data.session?.alias == "NULL"
   function generate() {
@@ -18,11 +21,6 @@
     }
     return code
   }
-  const noReset = () => {  
-    return async ({ update }) => {  
-      update({ reset: false });  
-    };  
-  }
 </script>
 
 {#snippet feedback(form)}
@@ -33,24 +31,6 @@
 {/if}
 {/snippet}
 
-<div class='account'>
-{#if data.user && data.session}
-<aside>
-  <nav>
-    <p>Settings</p>
-    <hr>
-    <ul>
-      <li><a href={dashboardURL} target="_blank">Homepage</a></li>
-      <li>
-        <form method="POST" action='?/logout'>
-          <button>Sign Out</button>
-        </form>
-      </li>
-    </ul>
-  </nav>
-</aside>
-{/if}
-<div class='container'>
 
   {#if !data.session}
   <section>
@@ -65,7 +45,9 @@
   </section>
 {#if accountOwner}
   <section>
+  <div class='heading-wrap'>
   <h2 id="library">Access Codes</h2>
+  </div>
   <div class='create-code'>
     <p>Create a new access code:</p>
     <form method='POST' action="?/code" use:enhance>
@@ -80,85 +62,71 @@
 
       <div class='access-cards'>
         {#each data.codes as code}
-          <article>
-            <p>{code.alias}</p>
-            <div>
-              <span class='tag {code.active ? "active" : "inactive"}'>{code.active ? "Active" : "Inactive"}</span>
-            </div>
-            <footer>
-              <div class='buttons'>
-                <form method="POST" action="?/power" use:enhance={noReset}>
-                  <input type="text" name="id" value={code.id} >
-                  <input type="text" name="status" value={!code.active} >
-                  <button type="submit">
-                    <Fa size="0.75x" icon={faPowerOff} />
-                  </button>
-                </form>
-                <form method="POST" action="?/delete" use:enhance={noReset}>
-                  <input type="text" name="id" value={code.id} >
-                  <button class='danger' type="submit">
-                    <Fa size="0.75x"icon={faTrash} />
-                  </button>
-                </form>
-              </div>
-            </footer>
-          </article>
+          <AccessCodeCard code={code} />
         {/each}
       </div>
 </section>
 {/if}
+
+  {#await data.guides}
+  {:then}
+<section>
+  <h2>Learning Resources</h2>
+  <p>TODO: completion stats</p>
+  {#each data.guides as guide}
+    <article>
+      <p>{guide.title}</p>
+    </article>
+  {/each}
+  <hr>
+</section>
+{/await}
+{#await data.elements}
+{:then}
+<section>
+  <h2>Teaching Resources</h2>
+  {#each data.elements as element}
+    <article>
+      <p>{element.title}</p>
+    </article>
+  {/each}
+  <hr>
+</section>
+{/await}
 {/if}
-</div>
-</div>
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
   .account {
     display: grid;
     grid-template-columns: auto auto auto;
   }
-  aside {
-    position: relative;
-    left: 0;
-    border-right: 1px solid whitesmoke;
-    box-shadow: 5px 5px 5px 0px grey;
-    height: 100vh;
-    overflow-y: hidden;
-    max-width: 18rem;
-    padding: 2rem;
-    gap: 1rem;
-  }
   footer { margin-top: 0; padding: 8px; }
 
   .access-cards {
     padding-top: 2rem;
-    article { padding-top: 8px; }
     text-align: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    & * { flex: 0 2; flex-basis: 6rem; }
     gap: 1rem;
-    form > button {
-      padding: 8px;
-      margin: 0;
-    }
-    p {
-      font-size: 200%;
-      font-weight: bold;
-      padding: 0;
-      margin: 0;
-    }
-    div {
-      display: flex;
-      margin-bottom: .5rem;
-      & * { flex: 1; }
-      .active { background-color: theme.$highlight-green; }
-      .inactive { background-color: theme.$orange; }
-    }
   }
   #refresh {
     background-color: white;
     color: black;
   }
-  .buttons { input { display: none;}}
+  .heading-wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    & h2 { flex: 1; }
+    & a {
+      flex: 0 1;
+      background-color: white;
+      border: 1px solid theme.$text;
+      color: theme.$text;
+      font-size: 14pt;
+      white-space: nowrap;
+    }
+  }
 </style>

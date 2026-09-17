@@ -8,9 +8,15 @@ import { sql } from "drizzle-orm";
 // userland
 export const accessCode = sqliteTable('access_code', {
 	id: integer('id').primaryKey(),
-	alias: text(),
+	alias: text().unique(),
 	active: integer({ mode: "boolean"}).default(0),
-	scope: text({ mode: "json" }),
+	scope: text({ mode: "json" }).default(`{[,
+    "twine/projects/your-first-story",
+    "twine/applications/start-a-story.md",
+    "twine/concepts/create-passage.md",
+    "twine/concepts/link-passages.md",
+    "twine/concepts/branching-paths.md",
+    "twine/applications/story-with-multiple-endings.md"]}`),
 	owner: integer().references(() => user.id),
 	created: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`),
 	check: text().default("No check text provided!")
