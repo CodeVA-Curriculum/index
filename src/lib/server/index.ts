@@ -69,7 +69,6 @@ export const logInWithPortal = async (event) => {
       'content-type': 'application/json'
     }
   })
-  console.log(validation)
   const res = await validation.json()
   if(res.valid) {
     console.log("Got user")
@@ -258,8 +257,15 @@ export function getLocked(path, code) {
     "twine/concepts/link-passages.md",
     "twine/concepts/branching-paths.md",
     "twine/applications/story-with-multiple-endings.md",
+    "k-8-lessons/test.md"
   ]
   for(const p of free) {
+    if(path.includes(p)) { return false }
+  }
+  for(const p of code.scope?.guides) {
+    if(path.includes(p)) { return false }
+  }
+  for(const p of code.scope?.library) {
     if(path.includes(p)) { return false }
   }
   return true

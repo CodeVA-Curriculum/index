@@ -23,6 +23,17 @@ export const accessCode = sqliteTable('access_code', {
 })
 export type AccessCode = typeof accessCode.$inferSelect;
 
+export const event = sqliteTable('event', {
+	id: text('id').primaryKey(),
+	timestamp: integer({mode: 'timestamp'}).defaultNow(),
+	navFrom: text(), // the URL the event was triggered from
+	navTo: text(), // the URL the event navigated the user to, if applicable
+	newData: text({ mode: 'json'}).default(`{"deleted": [], "created": [], "modified": []}`), // JSON representations of the new database objects created by the event, if applicable
+	sessionId: text().references(() => session.id),
+	userId: integer().references(() => user.id),
+	codeId: integer().references(() => accessCode.id)
+})
+
 
 
 export const user = sqliteTable('user', {

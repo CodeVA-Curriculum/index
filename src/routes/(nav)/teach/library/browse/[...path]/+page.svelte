@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import MarkdownLesson from '$lib/components/MarkdownLesson.svelte'
   import ElementTable from '../../components/ElementTable.svelte'
   import PremiumCallout from '$lib/components/PremiumCallout.svelte'
   import { faBoltLightning } from '@fortawesome/free-solid-svg-icons'
@@ -20,12 +21,15 @@
     // TODO: implement
     return "X"
   }
+  const showThumbnail = true
 </script>
 <div class='element-view'>
   <aside class='info has-shadow'>
     <header>
       <div>
+      {#if showThumbnail}
       <img class='thumbnail has-shadow' src={data.element.image} />
+      {/if}
       <h1>{#if locked}<span><Fa icon={faBoltLightning} size="1.5" /></span>{/if}{data.element.title}</h1>
       <p class='subtitle'>by {data.element.authors}</p>
       <div class='stats'>
@@ -90,6 +94,8 @@
       <h3>Search Items in This Group</h3>
       <ElementTable elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session} />
     </section>
+    {:else if !data.element.link}
+    <MarkdownLesson src={data.element.content} />
     {:else}
     <div id="{data.element.id}" class='doc-wrap'>
       <object type="application/pdf" data="/documents/test/test.pdf">
