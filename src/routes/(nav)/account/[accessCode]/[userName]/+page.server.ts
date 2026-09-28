@@ -19,15 +19,13 @@ export const load: PageServerLoad = async ({params, locals}) => {
 	})
 	const [res] = await db.query.user.findMany({
 	  where: {
-	    username: params.userName,
-	    codeId: code.id
+	    username: params.userName
+	  },
+	  with: {
+	  	events: true
 	  }
-	  // with: {
-	  //   // TODO: add relations for analytics
-	  // }
 	})
 	if(!res) { fail(404) }
-	console.log(res)
   return {
     user: user,
     res: res,

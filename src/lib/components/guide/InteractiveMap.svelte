@@ -82,14 +82,14 @@
       const nodeWidth = 50
       const radius = 125
       const length = 125
-      startImage.fill("#232323")
-      startImage.stroke(0)
-      startImage.strokeWeight(5)
-      startImage.triangle(sw/2-radius/2, nodeWidth*1.5, sw/2+radius/2, nodeWidth*1.5, sw/2, nodeWidth*1.5 + length)
-      startImage.circle(sw/2, nodeWidth*1.5, radius)
-      startImage.strokeWeight(1)
-      startImage.fill(255)
-      startImage.text("Start Here", sw/4, nodeWidth*1.5, 100)
+      // startImage.fill("#232323")
+      // startImage.stroke(0)
+      // startImage.strokeWeight(5)
+      // startImage.triangle(sw/2-radius/2, nodeWidth*1.5, sw/2+radius/2, nodeWidth*1.5, sw/2, nodeWidth*1.5 + length)
+      // startImage.circle(sw/2, nodeWidth*1.5, radius)
+      // startImage.strokeWeight(0)
+      // startImage.fill(255)
+      // startImage.text("Start Here", sw/4, nodeWidth*1.5, 100)
 
       for(const node of nodes) {
         node.setup(p5)
@@ -137,7 +137,11 @@
       // debug.selected = selected.length
       p5.background("#f5f5f5");
       // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
+        let startNode = false;
       camera.display(() => {
+        p5.fill('rgba(0, 0, 0, 0)')
+        p5.stroke(p5.color(0, 0, 0));
+        p5.strokeWeight(8)
         for(const edge of edges) {
           edge.draw(p5)
         }
@@ -148,24 +152,43 @@
 
         let pastStroke = p5.strokeWeight(8)
         p5.imageMode(p5.CENTER)
+        p5.fill('#fff')
         for(const node of nodes) {
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
           if(start == node.db.path) {
-            const floatDist = 24;
-            const rate = 0.5
-            const offsetY = (Math.floor(tick*rate) % floatDist * 2) - floatDist
-            p5.image(startImage, node.x- startImage.width/2, node.y - 18 - startImage.height + (Math.abs(offsetY)))
+          //   const floatDist = 24;
+          //   const rate = 0.5
+          //   const offsetY = (Math.floor(tick*rate) % floatDist * 2) - floatDist
+          //   p5.image(startImage, node.x+node.width/2- startImage.width/2, node.y - 18 - startImage.height + (Math.abs(offsetY)))
+            startNode = node
           }
           if(node.db.path == start && !node.complete) {
             let offsetY = Math.abs((tick/3) % 30 - 15)
-            // }
           }
         }
-        p5.imageMode(p5.CORNER)
         cursor.update(p5, camera.matrix)
       })
+      if(startNode) {
+        const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
+        const size = 20
+        p5.push()
+        let offsetY = 0
+        if(startNode.db.path == start && !startNode.complete) {
+          offsetY = Math.abs((tick/3) % 30 - 15)
+        }
+        p5.fill("#000")
+        p5.stroke(0)
+        p5.strokeWeight(5)
+        p5.triangle(x-size,y-size*2+offsetY, x+size,y-size*2+offsetY, x, y+offsetY)
+        p5.circle(x, y-size*2+offsetY, size*2.2)
+        p5.strokeWeight(0)
+        p5.fill(255)
+        p5.textSize(12)
+        p5.text("Start Here", x-24, y-40 + offsetY, 50)
+        p5.pop()
+      }
       const offsetCoords = cursor.getDrag(p5)
       if(interact) { 
         camera.offsetTransform(offsetCoords)

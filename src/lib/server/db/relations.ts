@@ -8,7 +8,16 @@ export const relations = defineRelations(schema, (r) => ({
 			to: r.user.codeId
 		})
 	},
-	user: {},
+	user: {
+		events: r.many.event({
+			from: r.user.id,
+			to: r.event.userId,
+		}),
+		lastEvent: r.one.event({
+			from: r.user.id,
+			to: r.event.userId
+		})
+	},
 	question: {
 		status: r.many.user_to_question({
 			from: r.question.id,

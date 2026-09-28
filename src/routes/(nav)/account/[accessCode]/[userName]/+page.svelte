@@ -1,7 +1,7 @@
 <script lang='ts'>
   import GroupStatsDash from '$lib/components/GroupStatsDash.svelte'
   let { data } = $props()
-  const analytics = [0, 0, 0, 0]
+  console.log(data)
 </script>
 <div class='user-page'>
   <section>
@@ -30,11 +30,11 @@
         </tr>
       </thead>
       <tbody>
-        {#each analytics as a}
+        {#each data.res.events as a}
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{a.timestamp.toUTCString()}</td>
+            <td><a href={a.navTo}>{a.navTo}</a></td>
+            <td><a href={a.navFrom}>{a.navFrom}</a></td>
           </tr>
         {/each}
       </tbody>

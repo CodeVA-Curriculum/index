@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
 	import { enhance } from '$app/forms';
   import Fa from 'svelte-fa'
@@ -40,9 +41,36 @@
   <section>
   <h1>Hello, { data.user.username? data.user.username : "visitor" }!</h1>
   {#if data.user && data.session?.alias != "NULL"}
-  <p>You are logged in with under access code {data.session?.alias}.</p>
+  <p>You are logged in with under access code {data.session?.alias}. You can browse the materials you have access to by viewing the list(s) below.</p>
+  {:else}
+  <p>You can browse the materials you've purchased access to by viewing the list(s) below. Create access codes to grant others access to your materials.</p>
   {/if}
   </section>
+
+  {#await data.guides}
+  {:then}
+<section>
+  <h2>Learning Resources</h2>
+  <p></p>
+  {#each data.guides as guide}
+    <GuideListItem long {guide} />
+  {/each}
+  <hr>
+</section>
+{/await}
+{#await data.elements}
+{:then}
+<section>
+  <h2>Teaching Resources</h2>
+  {#each data.elements as element}
+    <article>
+      <p>{element.title}</p>
+    </article>
+  {/each}
+  <hr>
+</section>
+{/await}
+{/if}
 {#if accountOwner}
   <section>
   <div class='heading-wrap'>
@@ -65,34 +93,8 @@
           <AccessCodeCard code={code} />
         {/each}
       </div>
+      <hr>
 </section>
-{/if}
-
-  {#await data.guides}
-  {:then}
-<section>
-  <h2>Learning Resources</h2>
-  <p>TODO: completion stats</p>
-  {#each data.guides as guide}
-    <article>
-      <p>{guide.title}</p>
-    </article>
-  {/each}
-  <hr>
-</section>
-{/await}
-{#await data.elements}
-{:then}
-<section>
-  <h2>Teaching Resources</h2>
-  {#each data.elements as element}
-    <article>
-      <p>{element.title}</p>
-    </article>
-  {/each}
-  <hr>
-</section>
-{/await}
 {/if}
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
@@ -129,4 +131,6 @@
       white-space: nowrap;
     }
   }
+  section { padding-right: 2rem; }
+  p { margin-bottom: 2rem; }
 </style>

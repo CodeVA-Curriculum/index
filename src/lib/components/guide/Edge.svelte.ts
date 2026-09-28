@@ -43,6 +43,7 @@ export class Edge {
     const p1 = p5.createVector(this.c1.x, this.c1.y)
     const p2 = p5.createVector(this.c2.x, this.c2.y)
     const p3 = p5.createVector(this.from.x, this.from.y)
+    this.points = { p0: p0, p1:p1, p2:p2, p3:p3}
 
     this.cx = this.x + w/2
     this.cy = this.y + h/2
@@ -53,27 +54,11 @@ export class Edge {
     this.shape.strokeWeight(STROKE_WEIGHT)
     this.shape.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
-    this.highlight = p5.createGraphics(w,h)
-    this.highlight.fill('rgba(0, 0, 0, 0)')
-    this.highlight.stroke(HIGHLIGHT_COLOR) // highlight blue
-    this.highlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
-    this.highlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
-    this.lockedHighlight = p5.createGraphics(w,h)
-    this.lockedHighlight.fill('rgba(0, 0, 0, 0)')
-    this.lockedHighlight.stroke('fuchsia') // premium
-    this.lockedHighlight.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
-    this.lockedHighlight.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
-
-
-    this.points = { p0: p0, p1:p1, p2:p2, p3:p3}
-    this.optionEdge = p5.createGraphics(w,h)
-    this.lockedOptionEdge = p5.createGraphics(w,h)
-
-    this.generateOptionEdge(p5)
   }
   draw(p5) {
-    p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
-    // p5.image(this.highlight, this.x, this.y)
+
+    p5.bezier(this.points.p0.x, this.points.p0.y,this.points.p1.x, this.points.p1.y,this.points.p2.x, this.points.p2.y, this.points.p3.x, this.points.p3.y)
+    // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
   }
   debug(p5){
     p5.text(this.db.uid, this.cx,  this.cy)

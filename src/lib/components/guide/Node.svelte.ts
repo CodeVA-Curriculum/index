@@ -31,7 +31,6 @@ export class Node {
   }
   setup(p5) {
     const borderWeight = this.locked ? 8 : 8;
-    // let { w }= this.getWidth(p5)
     let w = 200
     this.width = w   
     if(this.db.type == "cache") { w = 100 }
@@ -43,25 +42,17 @@ export class Node {
     let x = this.x*this.scale
     let y = this.y*this.scale
 
-    // if(this.db.type == "cache" && this.icon) {
-    //   let iconScale = 0.50
-    //   if(this.hover) {
-    //     let ix = x + w/2 * Math.cos(45 * p5.PI/180)
-    //     let iy = y + w/2 * Math.sin(45 * p5.PI/180)
-    //     p5.circle(ix, iy, 100)
-    //     p5.text(this.db.title, x-150/2, y, 150)
-    //     iconScale = 0.25
-    //     p5.image(this.icon, ix, iy, 100*iconScale, 100*iconScale)
-    //   } else {
-    //     p5.image(this.icon, x, y, 100*iconScale, 100*iconScale)
-    //   }
-    // } else if(this.db.type != "cache" || (this.db.type == 'cache' && this.hover)) {
-      p5.circle(x, y, w)
-      p5.text(this.db.title, x-150/2, y, 150)
-    // }
+    p5.circle(x, y, w)
+
+    p5.push()
+    p5.stroke('transparent')
+    p5.fill('black')
+    const offset = this.width*0.75
+    p5.text(this.db.title, this.x-(offset)/2, this.y, (offset))
+    p5.pop()
     if(this.complete) {
       // Draw checkmark
-      p5.image(this.completeImage, this.x, this.y)
+      p5.image(this.completeImage, this.x+(offset/2), this.y+offset/1.5)
     }
     // p5.image(this.shadow, x, y)
   }

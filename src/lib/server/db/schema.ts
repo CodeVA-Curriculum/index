@@ -8,15 +8,17 @@ import { sql } from "drizzle-orm";
 // userland
 export const accessCode = sqliteTable('access_code', {
 	id: integer('id').primaryKey(),
-	alias: text().unique(),
+	alias: text(),
 	active: integer({ mode: "boolean"}).default(0),
-	scope: text({ mode: "json" }).default(`{[,
+	scope: text({ mode: "json" }).default(`{
+		"guides": [
     "twine/projects/your-first-story",
     "twine/applications/start-a-story.md",
     "twine/concepts/create-passage.md",
     "twine/concepts/link-passages.md",
     "twine/concepts/branching-paths.md",
-    "twine/applications/story-with-multiple-endings.md"]}`),
+    "twine/applications/story-with-multiple-endings.md"],
+    "library:[]"}`),
 	owner: integer().references(() => user.id),
 	created: text( { mode: "timestamp" } ).default(sql`(CURRENT_TIMESTAMP)`),
 	check: text().default("No check text provided!")
@@ -29,7 +31,6 @@ export const event = sqliteTable('event', {
 	navFrom: text(), // the URL the event was triggered from
 	navTo: text(), // the URL the event navigated the user to, if applicable
 	newData: text({ mode: 'json'}).default(`{"deleted": [], "created": [], "modified": []}`), // JSON representations of the new database objects created by the event, if applicable
-	sessionId: text().references(() => session.id),
 	userId: integer().references(() => user.id),
 	codeId: integer().references(() => accessCode.id)
 })
@@ -248,7 +249,7 @@ export const guide = sqliteTable('guide', {
 	title: text('title'),
 	path: text('path'),
 	short: text('short'),
-	description: text('description'),
+	long: text('long'),
 	image: text('image')
 })
 export type Guide = typeof guide.$inferSelect;

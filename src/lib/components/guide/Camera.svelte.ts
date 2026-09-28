@@ -19,7 +19,7 @@ export class Camera {
         this.p5.push();
         this.p5.translate(this.transform.x, this.transform.y);
         this.p5.scale(this.transform.scale)
-        this.matrix = this.p5.drawingContext.getTransform()
+        this.matrix = p5.drawingContext.getTransform()
         this.p5.pop();
     }
 

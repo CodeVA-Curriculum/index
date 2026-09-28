@@ -5,6 +5,7 @@
   import { faUpload,faTrash, faPowerOff, faPencil } from '@fortawesome/free-solid-svg-icons'
   let { data } = $props()
   // TODO: add support for user roster upload
+  console.log(data.code.users)
 </script>
 
 <div class='code-page'>
@@ -41,9 +42,9 @@
     {#each data.code?.users as user}
       <tr>
         <td><a href="/account/{data.code?.alias}/{user?.username}">{user.username}</a></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{user.lastEvent.timestamp?.toUTCString()}</td>
+        <td>N/A</td>
+        <td><a href={user.lastEvent.navTo}>{user.lastEvent.navTo}</a></td>
       </tr>
     {/each}
   </tbody>

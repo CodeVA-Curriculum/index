@@ -42,9 +42,11 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	event.locals.session = session;
 	event.locals.accessCode = accessCode
 
-	newAnalytics.user = user
-	newAnalytics.session = session
-	newAnalytics.accessCode = accessCode
+	if(session) {
+		newAnalytics.userId = user.id
+		newAnalytics.sessionId = session.id
+		newAnalytics.accessCodeId = accessCode.id
+	}
 
 	db.insert(schema.event).values([newAnalytics]).returning().then(([res]) => {
 		console.log("Added new event", res)

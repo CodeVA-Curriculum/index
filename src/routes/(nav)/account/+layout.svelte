@@ -6,7 +6,7 @@
 {#if data.user && data.session}
 <aside>
   <nav>
-    <p>Hub Settings</p>
+    <p>Account Settings</p>
     <hr>
     <ul>
       <li><a href='/account'>Manage Library Access</a></li>

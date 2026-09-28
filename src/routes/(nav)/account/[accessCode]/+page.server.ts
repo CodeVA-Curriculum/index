@@ -17,10 +17,15 @@ export const load: PageServerLoad = async ({params, locals}) => {
 	    alias: params.accessCode
 	  },
 	  with: {
-	    users: true
+	    users: {
+	    	with: { lastEvent: {
+	    		limit: 1
+	    	}}
+  		}
 	  }
 	})
 	if(!userCode) { fail(404) }
+	console.log(user)
   return {
     user: user,
     session: locals.session,

@@ -11,7 +11,6 @@ export async function seedGuides(db:any, schema:any) {
 
   // First, add all the guides
   const guidePaths = paths.filter((p) => p.includes('meta.md'))
-  console.log(guidePaths)
   let els = await parseGuideFiles(guidePaths)
   const guides = await db.insert(schema.guide).values(els).returning()
 
