@@ -78,7 +78,7 @@ export async function seedGuides(db:any, schema:any) {
     for(const edge of canvas.edges) {
       const fromNode = (await db.select().from(schema.node).where(eq(schema.node.uid, edge.fromNode)))[0]
       const toNode = (await db.select().from(schema.node).where(eq(schema.node.uid, edge.toNode)))[0]
-      if(!fromNode || !toNode) { throw new Error(`Edge ${edge.id} in ${guideName} refers to node not present in database! From: ${edge.fromNode} To: ${edge.toNode}`)}
+      if(!fromNode || !toNode) { throw new Error(`Edge ${edge.id} in ${guideName} refers to node ${edge.toNode}, which is not present in database! From: ${edge.fromNode} To: ${edge.toNode}`)}
       await db.insert(schema.edge).values({
         uid: edge.id,
         from: fromNode.id,

@@ -11,6 +11,8 @@ import Help from '$lib/components/Help.svelte'
   let { user, session, obj } = $props()
   let locked = $state(!obj.path.includes(session?.scope))
   let gradeStyle = getGradeStyle(obj)
+
+  console.log(user)
 </script>
 <article class='card'>
   <div class='grade-tab {gradeStyle} {locked ? "locked" : "unlocked"}'>
@@ -197,5 +199,13 @@ import Help from '$lib/components/Help.svelte'
     flex: 0 1;
     margin-left: 1rem;
     margin-bottom: 1rem;
+  }
+  .sols {
+    max-height: 3rem;
+    max-width: 16rem;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: row;
   }
 </style>

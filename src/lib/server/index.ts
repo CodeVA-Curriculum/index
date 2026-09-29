@@ -262,12 +262,12 @@ export function getLocked(path, code) {
   for(const p of free) {
     if(path.includes(p)) { return false }
   }
-  if(code.scope?.guides && code.scope.guides.length > 0) {
+  if(code?.scope?.guides && code.scope?.guides?.length > 0) {
   for(const p of code.scope?.guides) {
     if(path.includes(p)) { return false }
   }
   }
-  if(code.scope.library) {
+  if(code?.scope?.library && code.scope.library?.length > 0) {
     for(const p of code.scope?.library) {
       if(path.includes(p)) { return false }
     }

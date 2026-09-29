@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Element from  '/home/apollo/GitHub/index/src/routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
 	import { enhance } from '$app/forms';
@@ -63,9 +64,7 @@
 <section>
   <h2>Teaching Resources</h2>
   {#each data.elements as element}
-    <article>
-      <p>{element.title}</p>
-    </article>
+    <Element accessCode={data.accessCode} user={data.user} session={data.session} obj={element} />
   {/each}
   <hr>
 </section>

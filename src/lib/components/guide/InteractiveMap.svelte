@@ -172,12 +172,12 @@
       })
       if(startNode) {
         const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
-        const size = 20
-        p5.push()
+        const size = camera.transform.scale < 1 ? 30 : camera.transform.scale * 30
         let offsetY = 0
         if(startNode.db.path == start && !startNode.complete) {
           offsetY = Math.abs((tick/3) % 30 - 15)
         }
+        p5.push()
         p5.fill("#000")
         p5.stroke(0)
         p5.strokeWeight(5)
@@ -185,8 +185,8 @@
         p5.circle(x, y-size*2+offsetY, size*2.2)
         p5.strokeWeight(0)
         p5.fill(255)
-        p5.textSize(12)
-        p5.text("Start Here", x-24, y-40 + offsetY, 50)
+        p5.textSize(size*0.65)
+        p5.text("Start Here", x-(size*2.2)/2, y-size*2 + offsetY, size*2.2)
         p5.pop()
       }
       const offsetCoords = cursor.getDrag(p5)

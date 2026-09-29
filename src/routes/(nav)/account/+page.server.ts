@@ -1,8 +1,8 @@
 import * as auth from '$lib/server/auth';
+import { db, elementRelations } from '$lib/server/db/index'
 import { requireLogin } from '$lib/server'
 import { makeCode } from '$lib/server/db'
 import { eq } from 'drizzle-orm'
-import { db } from '$lib/server/db'
 import * as schema from '$lib/server/db/schema'
 import { fail, redirect } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
@@ -16,13 +16,19 @@ export const load: PageServerLoad = async ({locals}) => {
 	    owner: user.id
 	  }
 	})
+  // const [accessCode] = await db.select().from(schema.accessCode).where(eq(schema.accessCode.id, user.codeId))
+  const permissions = { guides: [], library: ["k-8-lessons/test.md"] }
+  const elements = await db.query.element.findMany({
+    with: elementRelations,
+    where: {
+      path: { in: permissions.library }
+    }
+  })
   return {
     user: user,
     session: locals.session,
     codes: userCodes,
-    elements: await db.query.element.findMany({
-      where: { id: 18 }
-    }),
+    elements: elements,
     guides: await db.query.guide.findMany()
   }
 };
