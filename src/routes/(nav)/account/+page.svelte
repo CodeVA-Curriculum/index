@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { page } from '$app/navigation'
   import Element from  '/home/apollo/GitHub/index/src/routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
@@ -26,9 +27,10 @@
 </script>
 
 {#snippet feedback(form)}
-{#if form?.res}
+{#if form?.res || page.url.searchParams.get('m')}
 <article class='feedback'>
-  <p>{form.res}</p>
+  <p>{form?.res}</p>
+  <p>{page.url.searchParams.get('m')}</p>
 </article>
 {/if}
 {/snippet}

@@ -27,7 +27,7 @@
 {/snippet}
 
 {#snippet codeForm()}
-  <button onclick={() => showForm="visible"} class={showForm}>Log In With Code</button>
+  <input onclick={() => showForm="visible"} type="submit" class={showForm} value="Log In with Code"/>
   <form action="/login?/confirm" method="POST" class={showForm}>
     <fieldset role="group">
       <input type="text" id="session_token" name="session_token" value="ASDF" />
@@ -55,10 +55,10 @@
   form.hidden {
     display: none;
   }
-  button.visible {
+  input.visible {
     display: none;
   }
-  button.hidden {
+  input.hidden {
     display: flex;
   }
   

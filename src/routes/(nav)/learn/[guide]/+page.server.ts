@@ -30,6 +30,8 @@ export const load:PageLoad = async ({ params, locals }) => {
     }
   })
 
+  const [startNode] = nodes.filter((obj) => obj.recommended == true )
+
   // await applyPermissions(nodes)
   await applyPermissions(projects, nodes, locals.accessCode)
   return {
@@ -38,7 +40,8 @@ export const load:PageLoad = async ({ params, locals }) => {
       pathTitle: params.guide,
       nodes: nodes,
       edges: edges,
-      projects: projects
+      projects: projects,
+      start: startNode
     }
   }
 }

@@ -17,8 +17,6 @@
         /* height: 100%; */
         /* display: inline-block; */
         position: relative;
-        display: flex;
-        flex-direction: column;
         margin: 0 0;
         padding: 0 0;
     }

@@ -18,7 +18,7 @@
   let start = "twine/applications/start-a-story.md"
   let instance = $state()
 
-  let { legend = true, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
+  let {  startPath, legend = true, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
 
 
@@ -101,9 +101,10 @@
       }
       console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
       if(!view) {
-        
-        camera.moveCenterTo(maxX - (maxX - minX)/2, maxY - (maxY - minY)/2)
-        camera.zoom({x: camera.ix, y: camera.iy}, 0.25, true)
+        const startNode = map.elementsByPath[startPath]
+        const location = camera.getScreenCoords({x: startNode.x, y: startNode.y}, 0)
+        camera.moveCenterTo(location.x, location.y)
+        camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
       } else if(map.elementsByPath[view]){
         const loc = camera.getScreenCoords(map.elementsByPath[view], 0)
         camera.moveCenterTo(loc.x, loc.y)

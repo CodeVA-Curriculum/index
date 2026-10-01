@@ -1,16 +1,18 @@
 <script lang='ts'>
   import Capture from '$lib/components/Capture.svelte'
   import InteractiveMap from '$lib/components/guide/InteractiveMap.svelte'
-  import { page } from '$app/stores'
+  import { page } from '$app/state'
+  import { goto } from '$app/navigation'
   import GuideNav from '$lib/components/guide/GuideNav.svelte'
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
   import Fa from 'svelte-fa'
-  import { faX, faInfo } from "@fortawesome/free-solid-svg-icons"
+  import { faX, faCircleInfo, faRoute, faLocationDot } from "@fortawesome/free-solid-svg-icons"
   import type { PageProps } from './$types'
   let { data }:PageProps = $props()
   import { Map } from '$lib/components/guide/Map.svelte'
   import { onMount } from 'svelte'
+
 
 
   let map = $state(false)
@@ -20,11 +22,20 @@
   }
 
   let panelOpen = $state(null)
+  let firstLoad = $state(false)
   onMount(() => {
     map = new Map(data.guide)
+    // if(data.guide.start) {
+    //   page.url.searchParams.set('view', data.guide.start.path);
+    //   goto(page.url.toString(), { 
+    //     keepFocus: true, // Prevents losing input focus if user is typing
+    //     noScroll: true   // Prevents the page from jumping back to the top
+    //   });
+    //   firstLoad=true
+    // }
   })
   $effect(() => {
-    panelOpen = $page.url.searchParams.get('view')    
+    panelOpen = page.url.searchParams.get('view')    
   })
   let selected = $state([])
   let hoverList = $state([])
@@ -57,18 +68,20 @@
 <div class='map-view'>
   <div class='map-wrap'>
     {#if map}
-    <InteractiveMap map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap startPath={data.guide.start.path}  map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
     {/if}
   </div>
-  <div class='ui {panelOpen ? 'open': 'closed'}'>
+  <div class="ui {panelOpen ? 'open': 'closed'}">
     <div class='start'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
-        <a href="?view=projects" role="button">Projects</a>
-        <a href="?view=tutorials" role="button">Tutorials</a>
+        <a href="?view=projects" role="button"><span><Fa icon={faRoute} /></span>Projects</a>
+        <a href="?view=tutorials" role="button"><span><Fa icon={faLocationDot} /></span>Tutorials</a>
       </Capture>
     </div>
     <div class='end'>
-        <a href="?view=onboarding" class='info-button' role="button"><Fa size=2x icon={faInfo} /></a>
+      <Capture on:capture={(e) => handleCapture(e.detail)}>
+        <a href="?view=onboarding" class='secondary' role="button"><span><Fa icon={faCircleInfo} /></span> Help</a>
+      </Capture>
     </div>
   </div>
   <div onmouseenter={() => interactable = false} onmouseleave={() => interactable = true} class='panel {panelOpen ? 'open': 'closed'}'>
@@ -89,17 +102,12 @@
   @import "$lib/styles/theme.scss";
   .map-wrap {
     position: absolute;
-    // background-color: pink;
     width: 100%;
     height: 100%;
-    // z-index: -1;
-    // width: 100vw;
   }
   .panel {
-    // z-index: 99;
-    // position: absolute; top: 4.25rem;
     height: 100%;
-    &.open { width: 30rem; }
+    &.open { min-width: 30rem; }
     &.closed { width: 0rem; }
     position: absolute;
     -webkit-transition: width 0.25s ease-in-out;
@@ -107,9 +115,6 @@
     -o-transition: width 0.25s ease-in-out;
     transition: width 0.25s ease-in-out;
     overflow-y: scroll;
-    // &.closed { width: 0; }
-    // &.open { width: auto; }
-    // z-index: 99;
     box-shadow: 5px 5px 5px 0px grey;
     z-index: 98;
     background-color: white;
@@ -117,34 +122,32 @@
   .body {
     width: 100%;
     position: relative;
-    // background-color: white;
   }
   .ui {
     height: 100%;
     position: relative;
-    // position: fixed;
-    // top: 4.25rem;
-    // left: 1.25rem;
     width: 8rem;
     display: flex;
     flex-direction: column;
     .start {
       flex: 1;
       display: flex; flex-direction: column;
-      // background-color: lightgreen;
       justify-content: start;
     }
     .end {
       flex: 1;
       display: flex; flex-direction: column;
-      // background-color: pink;
       justify-content: end;
     }
     a[role="button"], button {
       margin: 1rem 1rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      gap: 6px;
     }
-    // .open { z-index: -99; }
-    // .closed { z-index: 99; }
   }
   .map-view {
     position: relative;
@@ -154,20 +157,6 @@
     background-color: #f6f6f6;
     width: 100vw;
     overflow-x: hidden;
-  }
-  .info-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    & > * { margin: auto auto;}
-    border-radius: 4rem;
-    height: 4rem;
-    width: 4rem;
-    background-color: white;
-    position: absolute;
-    bottom: 0;
-    border: 1px solid black;
-    color: black;
   }
   .close{ position: absolute; right: 0; top: 0; background-color: transparent; border: none; color: $text }
 </style>

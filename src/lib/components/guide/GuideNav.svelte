@@ -44,9 +44,5 @@
     width: 40px;
     aspect-ratio: 1/1;
     overflow: visible;
-    background-color: pink;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
   }  
 </style>

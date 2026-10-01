@@ -64,7 +64,7 @@
     display: none;
   }
   article {
-    max-width: 40rem;
+    margin-right: 2rem;
     margin-bottom: 0;
   }
   article > p {

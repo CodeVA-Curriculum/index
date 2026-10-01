@@ -51,17 +51,6 @@
       return modes.ELEMENT
     }
   })
-  let history:string[] = $state([])
-  $effect(() => {
-    // track panels during life of component
-    if(history.length == 0) { history.push(title); return }
-    if(history[history.length-1] != title) {
-      history.push(title)
-    }
-  })
-  $effect(() => {
-    res.sort((a,b) => !a.db.recommended && b.db.recommended ? 1 : a.locked && !b.locked ? 1 : 0)
-  })
 </script>
 
 {#snippet onboarding()}
@@ -103,19 +92,6 @@
 
 <div class='panel-list'>
   <div class='close'>{@render children?.()}</div>
-    {#if history.length > 1}
-    <nav aria-label="breadcrumb">
-      <ul class='subtitle'>
-        {#if history.length > 1}
-        {#each history as h, i}
-          {#if i > 0}
-          <li>{h == 'projects' || h == 'tutorials' ? h.charAt(0).toUpperCase() + h.substring(1) : map.elementsByPath[h].db.title}</li>
-          {/if}
-        {/each}
-        {/if}
-      </ul>
-    </nav>
-    {/if}
   <div class='head'>
     {#if mode == modes.LIST}
       {@render listHeader(title)}
@@ -161,8 +137,8 @@
     position: relative;
   }
   .panel-list {
-    padding: 0rem;
     height: 100%;
+    max-width: 30rem;
   }
   input {
   height: 2rem;
