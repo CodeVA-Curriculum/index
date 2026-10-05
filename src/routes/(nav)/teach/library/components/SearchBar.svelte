@@ -19,7 +19,9 @@
 
     let filterToggle = $state(false)
     let { filters } = $props()
-    console.log(filters)
+    $effect(() => {
+      console.log(checks)
+    })
 
 
 

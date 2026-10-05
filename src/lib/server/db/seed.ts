@@ -73,6 +73,7 @@ async function main() {
       path: path.replace("static/library/", ''),
       standardsAbrr: el.standards,
       hidden: el.hidden? true : false,
+      materials: el.materials? el.materials : JSON.stringify([]),
       image: img ? img : el.image ? '/images/' + el.image : '/images/default-thumbnail.png'
     }).returning({ id: schema.element.id }))[0] as any
     el.id = id
@@ -148,41 +149,36 @@ async function main() {
     }
 
  
-    // update tags (do not inherit)
-    // this is different bc it's not associating only--it's:
-    // first, split into valid [ "string" ] type, then:
-    // N: inherit
-    // el.types = inherit(el, 'types', )
-    // Y: split
+    // update tags
     el.tags = el.tags ? el.tags.split(', ') : []
-    // Y: Add unique values to database
     const tagRows = await db.select().from(schema.tag)
-    const uniqueTags = el.tags.filter((o) => {
-      const res = tagRows.filter((r) => r.title == o.title )
-      return res.length == 0 
-    })
-    const tagObjs = []
-    for(const tag of uniqueTags) {
-      tagObjs.push((await db.insert(schema.tag).values({
-        title: tag
-      }).returning({ id: schema.tag.id }))[0])
+    const newTags = []
+    for(const tag of el.tags) {
+      const [existingTag]= tagRows.filter((o) => tag == o.title)
+      if(newTags.filter((o) => o.title == tag).length == 0 && !existingTag)  {
+        // tag is new, add it to the database
+        let [newTag] = await db.insert(schema.tag).values({
+          title: tag
+        }).returning()
+        newTags.push(newTag)
+        await db.insert(schema.elementToTag).values({
+          elementId: el.id,
+          tagId: newTag.id
+        })
+      } else {
+        
+        await db.insert(schema.elementToTag).values({
+          elementId: el.id,
+          tagId: existingTag.id
+        })
+      }
     }
-    // Y: Associate all values with element
-    for(const tag of tagObjs) {
-      await db.insert(schema.elementToTag).values({
-        elementId: el.id,
-        tagId: tag.id
-      })
-    }
-    
     // Subjects
     // Simple comma split
     el.subjects = inherit(el, 'subjects', path, elsByPath)
     if(typeof(el.subjects) == typeof('string')) {
       el.subjects = el.subjects.split(', ')
     }
-    // console.log(el.subjects)
-    // return
     
     // Create an association row for each subject in the list
     const dbSubjs = await db.select().from(schema.subject)

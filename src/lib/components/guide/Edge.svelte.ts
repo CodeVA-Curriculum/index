@@ -48,15 +48,9 @@ export class Edge {
     this.cx = this.x + w/2
     this.cy = this.y + h/2
 
-    this.shape = p5.createGraphics(w, h)
-    this.shape.fill('rgba(0, 0, 0, 0)')
-    this.shape.stroke(this.shape.color(0, 0, 0));
-    this.shape.strokeWeight(STROKE_WEIGHT)
-    this.shape.bezier(p0.x-this.x, p0.y-this.y ,p1.x-this.x, p1.y-this.y ,p2.x-this.x, p2.y-this.y, p3.x-this.x, p3.y-this.y)
 
   }
   draw(p5) {
-
     p5.bezier(this.points.p0.x, this.points.p0.y,this.points.p1.x, this.points.p1.y,this.points.p2.x, this.points.p2.y, this.points.p3.x, this.points.p3.y)
     // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
   }
@@ -65,9 +59,36 @@ export class Edge {
   }
   projectDraw(p5, locked=false) {
     // p5.text(this.db.uid, this.cx,  this.cy)
-    const optionEdge = !locked ? this.optionEdge: this.lockedOptionEdge
-    const edge = locked ? this.lockedHighlight: this.highlight
-    if(this.highlighted) { p5.image(this.optional ? optionEdge : edge , this.x, this.y)}
+    const status = !locked ? 'unlocked': 'locked'
+    if(this.highlighted) {
+      p5.push()
+      p5.stroke(HIGHLIGHT_COLOR)
+      p5.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
+      p5.fill('transparent')
+      if(this.optional) {
+        this.drawOptionEdge(p5)
+      } else {
+        this.draw(p5)
+      }
+      p5.pop()
+    }
+  }
+  drawOptionEdge(p5) {
+    let t = 0.1
+    let o = 0
+    for(let i=0;i<1.0001;i+=t) {
+        let v = cubic(p5, this.points.p0,this.points.p1,this.points.p2,this.points.p3,i)
+        if(o % 2 == 0) {
+            // console.log(`Begin ${v.x}, ${v.y}`)
+            p5.beginShape()
+            p5.vertex(v.x,v.y)
+        } else {
+    //         console.log("end")
+            p5.vertex(v.x,v.y)
+            p5.endShape()
+        }
+        o++
+    }
   }
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')

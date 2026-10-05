@@ -257,7 +257,9 @@ export function getLocked(path, code) {
     "twine/concepts/link-passages.md",
     "twine/concepts/branching-paths.md",
     "twine/applications/story-with-multiple-endings.md",
-    "k-8-lessons/test.md"
+    "k-8-lessons/test.md",
+    "data-science/meta.md",
+    "data-science/unplugged.md"
   ]
   for(const p of free) {
     if(path.includes(p)) { return false }

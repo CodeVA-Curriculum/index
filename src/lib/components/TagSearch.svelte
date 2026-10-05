@@ -8,7 +8,7 @@
     $effect(() => {
       filteredTags = filters?.tags.filter((o) => o.title.includes(tagSearch))
     })
-    let tagDisplay = $state(true);
+    let tagDisplay = $state(false);
     $effect(() => console.log(checks))
     function handleFocus(e) {
       tagDisplay = true
@@ -48,8 +48,8 @@
   </div>
 </div>
 <div class='tag-foot'>
-  <button onclick={() => tagDisplay = false}>Close</button>
   <button onclick={() => checks.splice(0, checks.length)}>Clear</button>
+  <button onclick={() => tagDisplay = false}>Close</button>
 </div>
 {/if}
 </div>
@@ -124,6 +124,7 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      gap: 2px;
       }
       & > * {
         flex: 0 1;

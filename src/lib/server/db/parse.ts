@@ -4,6 +4,7 @@ import { getDbStandardsFromAbbrList } from '$lib/server/db'
 import { globby } from 'globby'
 import rehypeHighlight from 'rehype-highlight'
 import { codeAndImage } from '$lib/server/directives/codeAndImage'
+import { embeddedPDFs } from '$lib/server/directives/embeddedPDFs'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
 import remarkRehype from 'remark-rehype'
@@ -31,8 +32,6 @@ export async function fileToElementObj(path:string):Promise<any> {
     .use(remarkGfm)
     .use(remarkDirective)
     .use(remarkDirectiveRehype)
-    // .use(nsfDirective)
-    // .use(supporterDirective)
     .use(remarkRehype)
     .use(rehypeHighlight)
     .use(() => (tree:any) =>{
@@ -52,6 +51,9 @@ export async function fileToElementObj(path:string):Promise<any> {
     .use(() => (tree:any) => {
       codeAndImage(tree, path)
     })
+    .use(() => (tree:any) => {
+      embeddedPDFs(tree, path)
+    })
     .use(rehypeFormat)
     .use(rehypeStringify)
     .process(await read(path))
@@ -59,7 +61,15 @@ export async function fileToElementObj(path:string):Promise<any> {
     // TODO: make sure the file has frontmatter;
     // console.log(frontmatter)
     if(frontmatter && frontmatter.grades) { frontmatter.grades = String(frontmatter.grades)}
-    
+
+    if(path.includes('library')) {
+      frontmatter.materials = frontmatter.materials == undefined ? [] : frontmatter.materials
+      for(let i=0;i<frontmatter.materials.length;i++) {
+        const m = frontmatter.materials[i].replace('./', path.substring(0, path.lastIndexOf('/')+1)).replace('static', '')
+        frontmatter.materials[i] = m
+      }
+      frontmatter.materials = JSON.stringify(frontmatter.materials)
+    }
     return {
       ...frontmatter,
       hidden: path.includes('.meta.md'),

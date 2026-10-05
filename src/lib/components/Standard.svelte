@@ -22,6 +22,9 @@
   </article>
 </dialog>
 <style lang='scss'>
+  dialog {
+    font-size: 18pt;
+  }
   a {
     color: white;
     font-weight: bold;

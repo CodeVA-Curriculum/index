@@ -30,16 +30,16 @@
 </div>
 <style lang='scss'>
   .video {
+    flex: 1;
     font-size: 300%;
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 300px;
-    padding: 1rem;
-    & > * { position: absolute; }
+    position: relative;
   }
   .invisible { display: none; }
   .visible { display: block; }
-  iframe { display: flex; border-radius: 12px; aspect-ratio: 16 / 9; width: 92%; }
+  iframe { position: absolute; flex: 1; border-radius: 12px;width: 100%; height: 100%;  }
 </style>

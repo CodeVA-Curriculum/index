@@ -64,6 +64,7 @@
     }
   ]
 </script>
+<a href='?view=onboarding'>
 <div class='legend'>
   <h5>Legend</h5>
   <ul>
@@ -77,8 +78,9 @@
     {/each}
   </ul>
 </div>
+</a>
 <style lang='scss'>
-
+  li > span { color: black; }
   .legend {
     display: flex;
     flex-direction: column;
@@ -101,5 +103,7 @@
     border-radius: 1rem;
     padding-top: 1rem;
     padding-right: 1rem;
+  }:hover {
+    cursor: pointer;
   }
 </style>

@@ -21,23 +21,58 @@
     // TODO: implement
     return "X"
   }
+  const materials = JSON.parse(data.element.materials)
   const showThumbnail = true
+
+  let view = $state(data.element)
+  console.log(data.element)
+
+  $effect(() => {
+    let p = page.url.searchParams.get('view')
+    if(p && p.length > 0) {
+      let [res] = data.children.filter((o) => o.path == p)
+      if(res) { view = res } else { view = data.element }
+    } else {
+      view = data.element
+      console.log("loaded self")
+    }
+  })
 </script>
+
+
+{#snippet document(obj)}
+  <div class='doc'>
+    {#if obj.locked }
+      <div class='modal-wrap'>
+        <LockedElementCTAModal obj={obj} />
+      </div>
+    {:else}
+    <MarkdownLesson obj={obj} />
+    {/if}
+    {#if data.children?.length > 0 && (obj.locked || !page.url.searchParams.get('view')) }
+    <section class='children modal-wrap'>
+      <h3>Search Items in This Group</h3>
+      <ElementTable navTo={(path) => "/teach/library/browse/"+data.element.path+'?view='+path} elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session}
+       />
+    </section>
+    {/if}
+  </div>
+{/snippet}
+
+  
 <div class='element-view'>
-  <aside class='info has-shadow'>
+  <aside class='info'>
     <header>
       <div>
       {#if showThumbnail}
       <img class='thumbnail has-shadow' src={data.element.image} />
       {/if}
       <h1>{#if locked}<span><Fa icon={faBoltLightning} size="1.5" /></span>{/if}{data.element.title}</h1>
-      <p class='subtitle'>by {data.element.authors}</p>
       <div class='stats'>
-        <p>Grades: <Pill style={getGradeStyle(data.element) + " medium"}>{data.element.gradesAbbr}</Pill></p>
-        <p>Subjects: {#each data.element.subjects as subj, i}<span>{i > 0 ? ", " + subj.abbr : subj.abbr}</span>{/each}</p>
+        <div><span>Grades:</span><Pill style={getGradeStyle(data.element) + " medium"}>{data.element.gradesAbbr}</Pill></div>
+      <div><span>Subjects:</span><div class='tags'>{#each data.element.subjects as subj, i}<span class='tag'>{subj.abbr}</span>{/each}</div></div>
       </div>
       </div>
-      <p>{data.element.long}</p>
       {#if data.element.children?.length > 0}
           <table class='related'>
             <colgroup>
@@ -48,20 +83,23 @@
               <tr>
                 <th class='title' scope="col">Title</th>
                 <th scope="col">Grades</th>
+                <th scope='col'></th>
               </tr>
             </thead>
-            <tbody>
-              {#each data.element.children as row}
-                <tr class='child'>
-                  <td><a href="/teach/library/browse/{row.path}">{#if row.locked}<span><Fa icon={faBoltLightning} /></span>{/if}{row.title}</a></td>
+            <tbody class='child-rows'>
+              {#each data.element.children as row,i}
+                <tr class='child {row.path == view.path ? "selected" : "deselected"}'>
+                  <td><a href="/teach/library/browse/{data.element.path}?view={row.path}">{#if row.locked}<span><Fa icon={faBoltLightning} /></span>{/if}{row.title}</a></td>
                   <td><Pill style={getGradeStyle(row)}>{row.gradesAbbr}</Pill></td>
+                  <td><a class='close' href='/teach/library/browse/{data.element.path}'>Close</a></td>
                 </tr>
               {/each}
             </tbody>
           </table>
           {/if}
     </header>
-    <h2>Standards</h2>
+    <p class='description'>{data.element.long}</p>
+    <h2>Subjects & Standards</h2>
     <table>
       <colgroup>
         <col class='narrow'>
@@ -77,33 +115,20 @@
         {#each data.element.subjects as subj}
           <tr>
             <td>{subj.title}</td>
-            <td>{#each data.element.standards.filter((o) => o.subjectId == subj.id) as sol}<Standard obj={sol} />{/each}</td>
+            <td>
+              <div class='tags'>
+              {#each data.element.standards.filter((o) => o.subjectId == subj.id) as sol}
+                <Standard obj={sol} />
+              {/each}
+              </div>
+            </td>
           </tr>
         {/each}
       </tbody>
     </table>
   </aside>
-  <div class='doc'>
-    {#if (locked || !data.user)}
-      <div class='modal-wrap'>
-        <LockedElementCTAModal obj={data.element} />
-      </div>
-    {/if}
-    {#if data.element.children?.length > 0}
-    <section class='children modal-wrap'>
-      <h3>Search Items in This Group</h3>
-      <ElementTable elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session} />
-    </section>
-    {:else if !data.element.link}
-    <MarkdownLesson src={data.element.content} />
-    {:else}
-    <div id="{data.element.id}" class='doc-wrap'>
-      <object type="application/pdf" data="/documents/test/test.pdf">
-        <embed src="{data.element.link + "/pdf"}" type="application/pdf" >
-      </object>
-    </div>
-    {/if}
-  </div>
+  {@render document(view)}
+
 </div>
 
 <style lang='scss'>
@@ -113,25 +138,28 @@
     width: 38rem;
     a { width: 100%; }
   }
-  .modal-wrap {
-    margin: 4rem 10rem;
-  }
   .doc-wrap {
     background-color: #transparent;
   }
+
   .element-view {
+    overflow-y: hidden;
     display: flex;
     & > * {
       flex: 1;
     }
   }
   .info {
+    position: relative;
     overflow-y: scroll;
     padding: 2rem;
     flex: 1 1;
     min-width: 586px;
   }
   .doc {
+    background-color: whitesmoke;
+    padding: 4rem;
+    overflow-y: scroll;
     flex: 2 1;
   }
   object, embed {
@@ -144,10 +172,18 @@
   .stats {
     display: flex;
     flex-direction: row;
+    font-size: 14pt;
     justify-content: flex-start;
-    gap: 1rem;
+    gap: 12px;
+    * {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 8px;
+    }
   }
   header {
+    min-height: 7rem;
     margin-bottom: 2rem;
   }
   table {
@@ -164,6 +200,19 @@
     margin-right: 2rem;
   }
   h1 > span, .child span { color: fuchsia; margin-right: 12px; }
+  .tags {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .close {
+    visibility: hidden;
+  }
+  .selected {
+    background-color: whitesmoke;
+    border: 4px solid theme.$highlight-blue;
+    .close { visibility: visible }
+  }
 </style>
-
-

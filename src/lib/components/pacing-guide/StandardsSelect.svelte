@@ -6,7 +6,7 @@
     import {faAdd, faPlus, faHome, faArrowRotateLeft, faX} from '@fortawesome/free-solid-svg-icons'
     import { getViewSelectedFields } from "drizzle-orm";
 
-    let { selected = $bindable([]) } = $props()
+    let { selected = $bindable([]), onclose } = $props()
 
     let workingMap = $state({})
     onMount(async () => {
@@ -19,7 +19,7 @@
 
     let open = $state(false)
     function edit() { open = true }
-    function close() { open = false }
+    function close() { open = false; onclose(selected) }
     let menuIndex = $state(0)
     let lastMenu = $state("")
     function menuChange(clicked:string) {
@@ -51,7 +51,6 @@
                 const s = workingMap[i]
                 const index = Number(s.abbr.split('.')[3])
                 if(index == firstIndex) {
-                    console.log(index, firstIndex)
                     sortByIndex = false
                     break
                 }
@@ -65,6 +64,11 @@
     }
     function remove(i) {
         selected.splice(i, 1)
+    }
+    function addToSelected(obj) {
+        console.log("Adding to list of selected Standards")
+        selected.push(obj)
+        console.log(selected)
     }
 </script>
 
@@ -101,7 +105,7 @@
         <hr>
         {#each Object.entries(workingMap) as [k,v]}
             {#if menuIndex == 2}
-            <StandardInList bind:selected={selected} obj={v} />
+            <StandardInList onadd={(obj) => addToSelected(obj)} obj={v} />
             {:else}
             <p onclick={() => menuChange(k)}><a >{k}</a></p>
             {/if}
@@ -208,7 +212,8 @@
         flex-direction:row;
         background-color: whitesmoke;
         margin-right: 12px;
-        padding-top: 6px;
+        padding: 8px;
+
     }
     button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
   }

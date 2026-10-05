@@ -1,4 +1,5 @@
 import { visit, SKIP } from 'unist-util-visit'
+import * as fs from 'fs'
 import {toHtml} from 'hast-util-to-html'
 import {remove} from 'unist-util-remove'
 import {h} from 'hastscript'
@@ -242,7 +243,7 @@ export function quick_take(tree:any, path:string):string {
     return content
 }
 
-export function img(tree, path) {
+export async function img(tree, path) {
       visit(tree, function (node:object, index:number, parent:object):any {
         if(node.tagName == 'img') {
             // TODO: error reporting
@@ -262,10 +263,36 @@ export function img(tree, path) {
             // node.tagName = 'div'
             // node.properties.class = 'has-text-centered, parsed'
             // node.children = html.children
-            if(!src.charAt(0) == "/") { src = "/" + src }
-            let temp = path.substring("static/trail-guides/".length)
-            const guideTitle = temp.substring(0, temp.indexOf("/"))
-            node.properties.src = `/images/${guideTitle}${src}`
+            // if(!src.charAt(0) == "/") { src = "/" + src }
+            // let temp = path.substring("static/trail-guides/".length)
+            // const guideTitle = temp.substring(0, temp.indexOf("/"))
+
+            // Copy the image into the build directory
+            if(src.includes('data:image') || src.includes('http')) {
+                return
+            }
+            let sourcePath 
+            if(src.includes('./')) {
+                sourcePath = src.replace('./', path.substring(0, path.lastIndexOf('/'))+'/')
+            } else if(src.charAt(0) == '/' && path.includes('twine')) {
+                sourcePath = 'static/trail-guides/twine'+src
+            } else {
+                sourcePath = path+src
+            }
+            
+            if(sourcePath.length > 200) { throw new Error('Too long!' + ' ' + sourcePath.substring(100)) }
+            let buildPath = `static/build/${sourcePath.replaceAll('/', '_')}`
+
+            fs.copyFile(sourcePath, buildPath, (err) => {
+                if(err ) { console.log(`Failed to copy image from ${sourcePath} to ${buildPath}`); 
+                    // throw new Error(err) 
+                } else {
+                    console.log("Wrote image to", buildPath)
+                }
+            })
+            
+            // Give the src its new location in the build directory
+            node.properties.src = buildPath.replace('static/', '/')
             // return SKIP
         }
       })

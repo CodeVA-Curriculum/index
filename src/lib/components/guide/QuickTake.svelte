@@ -6,7 +6,7 @@
     shadow: 'none'
 }} />
 
-<div class='{boxed? "boxed":""}'>
+<div class='has-shadow {boxed? "boxed":""}'>
   <div class='quicktake'>
   {@html content}
   </div>
@@ -17,7 +17,6 @@
     border-radius: 1rem;
     padding: 1rem;
     margin: 1rem 0;
-    border: 1px solid black;
     position: relative;
   }
 </style>

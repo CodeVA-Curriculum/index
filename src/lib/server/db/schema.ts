@@ -91,7 +91,8 @@ export const element = sqliteTable('element', {
 	file: text(),
 	hidden: integer({ mode: 'boolean' }),
 	gradesAbbr: text(),
-	standardsAbbr: text()
+	standardsAbbr: text(),
+	materials: text().default('[]')
 })
 export type Element = typeof element.$inferSelect;
 

@@ -240,6 +240,7 @@
 
 <div class='interactive-map'>
   <P5 bind:this={instance} sketch={sketch} />
+  <Legend />
   <div class='debug'>
     {#each Object.entries(debug) as entry}
     <p>{entry}{debug[entry]}</p>

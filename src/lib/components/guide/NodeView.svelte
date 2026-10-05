@@ -51,4 +51,10 @@
       flex: 1;
     }
   }
+  .video-wrap {
+    display: flex;
+    padding: 0;
+    flex: 1;
+    height: 12rem;
+  }
 </style>

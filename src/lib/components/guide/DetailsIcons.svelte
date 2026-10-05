@@ -15,18 +15,21 @@
     Project:0,
     Tutorial:1
   }
-  let iconSnippet
-  let iconParams = []
-  if(eltype == 1) {
-    let completePrompts = obj.db.prompts.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
-    let completeQuestions = obj.db.questions.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
-    iconSnippet = elementIcons
-    iconParams = [completeQuestions.length, obj.db.questions.length, completePrompts.length, obj.db.prompts.length]
-  } else {
-    iconSnippet = projectIcons
-    iconParams = [obj.size, obj.db.difficulty, obj.getCompletePercent()]
-  }
-  async function update() {
+  let iconSnippet = $state()
+  let iconParams = $state([])
+  $effect(() => {
+    if(eltype == 1) {
+      let completePrompts = obj.db.prompts.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
+      let completeQuestions = obj.db.questions.filter((obj) => obj.status?.length > 0 && obj.status[0].complete)
+      iconSnippet = elementIcons
+      iconParams = [completeQuestions.length, obj.db.questions.length, completePrompts.length, obj.db.prompts.length]
+    } else {
+      iconSnippet = projectIcons
+      iconParams = [obj.size, obj.db.difficulty, obj.getCompletePercent()]
+    }
+  })  
+
+async function update() {
 		await fetch('/learn', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -65,7 +68,7 @@
       <input onchange={update} type="checkbox" bind:checked={obj.complete}>
       Mark Complete
     </div>
-    {@render iconSnippet(iconParams[0], iconParams[1], iconParams[2], iconParams.length == 4 ? iconParams[3] : null)}
+    {@render iconSnippet?.(iconParams[0], iconParams[1], iconParams[2], iconParams.length == 4 ? iconParams[3] : null)}
 </div>
 
 <style lang='scss'>

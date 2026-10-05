@@ -1,22 +1,23 @@
 <script lang='ts'>
   import Fa from 'svelte-fa'
   import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
-  let { selected = $bindable(), obj } = $props()
+  let { selected = $bindable([]), obj, onadd } = $props()
   let subs = JSON.parse(obj.subs)
   let alpha = "abcdefghijklmnopqrstuvwxyz"
 
   let selectedIds = $state([])
+  let selectedObjs = $state([])
 
   function add(obj) {
-    selectedIds.push(obj.id)
-    selected.push(obj)
-    console.log("Add", obj.id)
+    onadd(obj)
   }
   function remove(obj) {
     const i = selectedIds.indexOf(obj.id)
     selectedIds.splice(i, 1)
     selected.splice(i, 1)
+    selectedObjs.splice(i, 1)
   }
+
 </script>
 
 <article class='standard-in-list'>

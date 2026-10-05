@@ -50,39 +50,55 @@ import Help from '$lib/components/Help.svelte'
   </div>
   <div class='stats'>
     <div class='subjects'>
-      <span>Subjects:</span>
+      <div>Subjects:</div>
+      <div class='tags'>
       {#each obj.subjects as subj}
         {#if subj.abbr != 'CS'}
-      <span class='tag light'>{subj.abbr}</span>
-      {/if}
+        <span class='tag light'>{subj.abbr}</span>
+        {/if}
       {/each}      
+      </div>
     </div>
     <div class='sols'>
-      <span>SOLs:</span>
+      <div>SOLs:</div>
       {#if obj.standards.length > 15}
       {obj.standardsAbbr}
       {:else}
+      <div class='tags'>
       {#each obj.standards as s}
         <span class='tag light'>{s.abbr}</span>
       {/each}
+      </div>
       {/if}
     </div>
-    <div class='tags'>
+    <div>
+      <div>
       Tags:
-      {#each obj.tags as tag}
-        <span class='tag light'>{tag.title}</span>
-      {/each}
+      </div>
+      <div class='tags'>
+        {#each obj.tags as tag}
+          <span class='tag light'>{tag.title}</span>
+        {/each}
+      </div>
     </div>
   </div>
 </article>
 
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
-  // @use "$lib/styles/grades.scss" as g;
   $small: 11pt;
   $medium: 14pt;
   $large: 18pt;
   article { margin: 0; padding: 0; &:hover { cursor: auto; } }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    max-width: 10rem;
+    max-height: 4rem;
+    flex-direction: row;
+    gap: 4px;
+  }
   .card {
     display: flex;
     flex-direction: row;
@@ -136,7 +152,7 @@ import Help from '$lib/components/Help.svelte'
     font-size: 14pt;
   }
   .stats {
-    flex: 2;
+    flex: 0 1;
     border-left: 1px solid whitesmoke;
     justify-content: flex-start;
     gap: 0.5rem;
@@ -144,10 +160,11 @@ import Help from '$lib/components/Help.svelte'
     font-size: 11pt;
     flex-direction: column;
     * {
-      margin: 0 0;
-      padding: 0 0;
+      display:flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 0 4px;
       font-style: italic;
-      display: inline-block;
     }
   }
   .buttons {
@@ -172,7 +189,6 @@ import Help from '$lib/components/Help.svelte'
     @include gradeStyles;
     display: flex;
     flex-direction: column;
-    // background-color: pink;
     justify-content: center;
     align-items: center;
     width: 2rem;
@@ -199,13 +215,5 @@ import Help from '$lib/components/Help.svelte'
     flex: 0 1;
     margin-left: 1rem;
     margin-bottom: 1rem;
-  }
-  .sols {
-    max-height: 3rem;
-    max-width: 16rem;
-    overflow-x: scroll;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: row;
   }
 </style>

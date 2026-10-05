@@ -2,9 +2,10 @@
     import { Node } from './Node.svelte'
     let { query = $bindable(""), results=$bindable([]), input = [], filters=[] } = $props()
     $effect(() => {
-      results = input.filter((o) => {
+      const res = input.filter((o) => {
         return o.db.title.toLowerCase().includes(query)
       })
+      results = res.sort((a,b) => a.db.difficulty-b.db.difficulty)
     })
   </script>
   <form>

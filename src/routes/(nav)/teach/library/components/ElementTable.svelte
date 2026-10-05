@@ -7,12 +7,18 @@
   import { faBoltLightning, faPlus } from '@fortawesome/free-solid-svg-icons'
   import Element from './Element.svelte'
   import Pill from '$lib/components/Pill.svelte'
-  let { elements, user, session, filters } = $props()
+  let { elements, user, session, filters, navTo=(s) => '/teach/library/browse/'+s} = $props()
   let selected = $state(-1)
   let filteredElements = $state(elements)
   let locked = $state(!elements[selected]?.path.includes(session?.scope))
   function sel(i:number) { selected = i; console.log("selected") }
   let textSearch = $state();
+
+  function handleStandards(list) {
+    console.log('handling standards...')
+    checks['standard'] = list
+  }
+  
   let filterToggle = $state(false)
     const dict = {
       "Grade(s)": "grade",
@@ -42,87 +48,46 @@
   for(const g of filters.subjects) {
     checks["subject"] = [...checks["subject"], false]
   }
+  function isEmpty(checkList) {
+    for(const i of checkList) {
+      if(i) { return false }
+    }
+    return true
+  }
   $effect(() => {
     console.log("filtering..")
     filteredElements = elements.filter((o) => {
-      let flag = false
-      const selectedGrades = []
-      const selectedAudiences = []
-      const selectedTypes = []
-      const selectedSubjects = []
-      for(let i=0;i<checks["grade"].length;i++) {
-        if(checks["grade"][i]) {
-          flag=true // found checked filter, clear default results
-          selectedGrades.push(filters.grades[i].id)
-        }
-      }
-      for(let i=0;i<checks["audience"].length;i++) {
-        if(checks["audience"][i]) {
-          flag=true // found checked filter, clear default results
-          selectedAudiences.push(filters.audiences[i].id)
-        }
-      }
-      for(let i=0;i<checks["type"].length;i++) {
-        if(checks["type"][i]) {
-          flag=true // found checked filter, clear default results
-          selectedTypes.push(filters.elementTypes[i].id)
-        }
-      }
-      for(let i=0;i<checks["subject"].length;i++) {
-        if(checks["subject"][i]) {
-          flag=true // found checked filter, clear default results
-          selectedSubjects.push(filters.subjects[i].id)
-        }
-      }
-      flag = checks['standard'].length > 0 
-      flag = checks['tag'].length > 0
+      const criteria = [ // if all of these pass, the element passes
+        (overlap(checks['tag'], o.tags, filters['tags'])) || isEmpty(checks['tag']),
+        (overlap(checks['grade'], o.grades, filters['grades']) || isEmpty(checks['grade'])),
+        (overlap(checks['subject'], o.subjects, filters['subjects']) || isEmpty(checks['subject'])),
+        (overlap(checks['type'], o.types, filters['elementTypes']) || isEmpty(checks['type'])),
+        (overlap(checks['audience'], o.types, filters['audiences']) || isEmpty(checks['audience'])),
+        (overlapNoCheck(o.standards, checks['standard']) || checks['standard'].length == 0)
 
-      if(!flag) { return true }
+      ]
       let res = true
-      if(selectedGrades.length > 0) {
-        res = false
-        for(const grade of o.grades) {
-          if(selectedGrades.includes(grade.id)) { res = true}
-        }
+      for(const criterion of criteria) {
+        res = res && criterion
       }
-      if(selectedAudiences.length > 0) {
-        res = false
-        for(const j of o.audiences) {
-          if(selectedAudiences.includes(j.id)) { res = true }
-        }
-      }
-      if(selectedTypes.length > 0) {
-        res = false
-        for(const j of o.types) {
-          if(selectedTypes.includes(j.id)) { res = true }
-        }
-      }
-      if(selectedSubjects.length > 0) {
-        res = false
-        for(const j of o.types) {
-          if(selectedSubjects.includes(j.id)) { res = true }
-        }
-      }
-      if(checks['standard'].length > 0) {
-        res = false
-        for(const j of o.standards) {
-          if(checks['standard'].filter((o) => o.id == j.id).length > 0) {
-            res = true
-          }
-        }
-      }
-      if(checks['tag'].length > 0) {
-        res = false
-        for(const j of o.tags) {
-          if(checks['tag'].filter((o) => o.id == j.id).length > 0) {
-            res = true
-          }
-        }
-      }
-      if(res) { return true }
-      return false
+      return res
     })
   })
+  function overlap(checks,elList,wholeList) {
+    const selectedIds = []
+    for(let i=0;i<checks.length;i++) { if(checks[i]) { selectedIds.push(wholeList[i].id)}}
+    for(const l of elList) {
+      const matching = selectedIds.filter((id) => id == l.id)
+      if(matching.length > 0) { return true }
+    }
+    return false
+  }
+  function overlapNoCheck(elList,wholeList) {
+    for(const l of elList) {
+      const matching = wholeList.filter((o) => o.id == l.id)
+      if(matching.length > 0) { return true }
+    }
+  }
   function getNumberChecked(list) {
     const trues = list.filter((b)=> b)
     return trues.length
@@ -157,14 +122,14 @@
 {/if}
 
 {#if filters}
-<div class='filters {filterToggle? 'selected':''}'>
+<div class="filters {filterToggle? 'selected':''}">
     {@render dropdown("Grade(s)", filters.grades)}
     {@render dropdown("Subject(s)", filters.subjects)}
     {@render dropdown("Resource Type(s)", filters.elementTypes)}
     {@render dropdown("Audience(s)", filters.audiences)}
-    <TagSearch filters={filters} bind:checks={checks['tag']}/>
-</div>
-<StandardsSelect bind:selected={checks["standard"]} />
+    <TagSearch filters={filters} bind:checks={checks['tag']} />
+  </div>
+<StandardsSelect onclose={handleStandards} />
 {/if}
 
 <table>
@@ -191,9 +156,9 @@
         <td>
           <div class='ui-buttons'>
             {#if locked}
-            <a class='premium' href="https://codevirginia.org/" target="_blank" role="button">Access</a>
+            <a class='premium' href="https://codevirginia.org/" target="_blank" role="button">Sign In</a>
             {/if}
-            <a href="/teach/library/browse/{el.path}" target="_blank" role='button'>Open</a>
+            <a href={navTo(el.path)} target="_blank" role='button'>Open</a>
             {#if !locked}
             <button disabled>Save</button>
             {/if}
@@ -209,12 +174,14 @@
       <td ><Pill style={getGradeStyle(el) + ' medium'}>{el.gradesAbbr}</Pill></td>
       <td class=''>{#if el.locked}<span class='picon'><Fa icon={faBoltLightning} /></span>{/if}{el.title}</td>
       <td>{el.types[0].title}</td>
-      <td>
-        {#if el.subjects.length < 5}
-        {#each el.subjects.filter((o) => o.abbr != 'CS') as subj}
-          <span class='tag light'>{subj.abbr}</span>
-        {/each}
-        {/if}
+      <td class='tags'>
+        <div>
+          {#if el.subjects.length < 5}
+          {#each el.subjects.filter((o) => o.abbr != 'CS') as subj}
+            <span class='tag light'>{subj.abbr}</span>
+          {/each}
+          {/if}
+        </div>
       </td>
       <td class='tags'>
         <div>
@@ -242,6 +209,9 @@
     max-width: 200px;
     & > div {
       overflow-y: scroll;
+      display: flex;
+      flex-direction: row;
+      gap: 4px;
     }
   }
   .selected { position: relative; & > td { padding: 1rem 0; background-color: whitesmoke; padding-left: 1rem; padding-right: 1rem; } }

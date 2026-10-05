@@ -101,9 +101,6 @@ export class Project {
     for(const g of this.nodeGroups) {
       g.draw(p5, this.locked)
     }
-    if(this.highlighted) {
-      p5.circle(this.centerX, this.centerY, 40)
-    }
   }
   getNext(path = "default") {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
@@ -148,9 +145,6 @@ class Group {
     order.sort((a,b) => a.groupId == b.groupId ? a.index - b.index : a.groupId - b.groupId )
     for(const c of order) {
       let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
-      for(const n of db.nodes) {
-        if(n.id == 113) { console.log(n)}
-      }
       this.nodes.push(elementsByPath[node.path])
       this.nodeMask.push(c.optional)
     }
@@ -206,7 +200,7 @@ class Group {
     let s = []
     if(path == "default") { return [] }
     let pos = this.nodes.findIndex((n) => n.db.path == path)
-    for(let i=pos-1; i<this.nodes.length&&i>=0;i++) {
+    for(let i=pos-2; i<this.nodes.length&&i>=0;i++) {
       s.push({
         path: this.nodes[i].db.path,
         title: this.nodes[i].db.title,

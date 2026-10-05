@@ -37,7 +37,9 @@
 
 {#snippet overview(obj)}
   {#if obj.db.video}
+    <div class='video-wrap'>
   <Video id={obj.db.video} />
+  </div>
   {/if}
   {#if !short}
   <p>{obj.db.long ? obj.db.long : obj.db.short }</p>
@@ -156,5 +158,9 @@
     margin: 0 2px;
     position: relative;
     top: -2px;
+  }
+  .video-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
 </style>

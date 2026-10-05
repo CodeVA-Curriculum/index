@@ -14,16 +14,13 @@
     @import "$lib/styles/grades";
     @include gradeStyles;
     display: inline-block;
-    margin: auto auto;
     text-align: center;
     color: white;
     min-width: 1rem;
-    // background-color: theme.$dark-blue;
     position: relative;
-    top: -2px;
     background-color: theme.$dark;
     border-radius: 40px;
-    margin: 0 0.5rem;
+    margin: 0 0;
     font-size: 11pt;
     & > span {
     overflow-x:hidden;

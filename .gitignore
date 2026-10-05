@@ -9,6 +9,7 @@ scripts/*.json
 .wrangler
 /.svelte-kit
 /build
+/static/build
 
 # OS
 .DS_Store
