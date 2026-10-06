@@ -43,7 +43,7 @@
     const el = map.elementsByPath[view]
     if(camera && el) {
       const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
-      camera.moveCenterTo(location.x, location.y)
+      camera.moveCenterTo(location.x + selectOffset, location.y)
       let z = el.nodeGroups ? 0.25 : 1
       camera.zoom({x:camera.ix, y:camera.iy}, z, true)
     }
@@ -54,6 +54,7 @@
   let cursor:Cursor
   let camera:Camera 
   let startImage:any
+  let selectOffset = $state(0)
   let font:any
   export function deselect() {
     console.log("Deselecting...")
@@ -65,6 +66,7 @@
   let sketch = (p5:any) => {
     p5.setup = async () => {
       p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
+      selectOffset = -p5.displayWidth/12
       // p5.imageMode(p5.CENTER)
       camera = new Camera(p5, 1)
       cursor = new Cursor()
@@ -106,8 +108,8 @@
         camera.moveCenterTo(location.x, location.y)
         camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
       } else if(map.elementsByPath[view]){
-        const loc = camera.getScreenCoords(map.elementsByPath[view], 0)
-        camera.moveCenterTo(loc.x, loc.y)
+        const loc = camera.getScreenCoords(map.elementsByPath[view])
+        camera.moveCenterTo(loc.x+selectOffset, loc.y)
         let z = map.elementsByPath[view].nodeGroups ? 0.25 : 1
         camera.zoom({x: camera.ix, y: camera.iy}, z, true)
       }
@@ -171,7 +173,7 @@
         }
         cursor.update(p5, camera.matrix)
       })
-      if(startNode) {
+      if(startNode && !startNode.complete) {
         const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
         const size = camera.transform.scale < 1 ? 30 : camera.transform.scale * 30
         let offsetY = 0
@@ -240,7 +242,6 @@
 
 <div class='interactive-map'>
   <P5 bind:this={instance} sketch={sketch} />
-  <Legend />
   <div class='debug'>
     {#each Object.entries(debug) as entry}
     <p>{entry}{debug[entry]}</p>

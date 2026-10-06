@@ -138,7 +138,6 @@
   }
   .panel-list {
     height: 100%;
-    max-width: 30rem;
   }
   input {
   height: 2rem;
@@ -148,7 +147,7 @@
   padding: 0 0.5rem;
     background-color: $dark-blue;
   }
-  .close{ position: absolute; right: 0; top: 0;}
+  .close{ position: absolute; right: 0; top: 0; z-index:99;}
   nav { margin: 0 1.5rem; }
   .lists ul {
     overflow-y: scroll;

@@ -42,7 +42,13 @@ export class Node {
     let x = this.x*this.scale
     let y = this.y*this.scale
 
+    p5.push()
+    if(this.highlighted){
+      p5.strokeWeight(STROKE_WEIGHT * SCALE * 2)
+      p5.stroke(HIGHLIGHT_COLOR)
+    }
     p5.circle(x, y, w)
+    p5.pop()
 
     p5.push()
     p5.stroke('transparent')

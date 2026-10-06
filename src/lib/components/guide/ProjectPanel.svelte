@@ -7,6 +7,8 @@
   let { project } = $props()
   let { nodes, groups } = project.getGroupNodeCount();
   let locked = project.locked
+
+  console.log(project)
 </script>
 
 <div class='project-panel'>

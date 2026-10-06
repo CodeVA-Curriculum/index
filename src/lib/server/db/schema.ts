@@ -278,6 +278,7 @@ export const project = sqliteTable('project', {
 	hidden: integer({ mode: 'boolean' }).default(false),
 	title: text(),
 	content: text(), // HTML
+	video: text(),
 	short: text().default("No short description given!"),
 	long: text().default("No description given!"),
 	authors: text().default("CodeVA"),
