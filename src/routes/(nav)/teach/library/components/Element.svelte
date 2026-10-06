@@ -9,7 +9,7 @@ import Help from '$lib/components/Help.svelte'
     import { faLock, faBoltLightning, faBookmark, faFolderOpen}  from '@fortawesome/free-solid-svg-icons';
 
   let { user, session, obj } = $props()
-  let locked = $state(!obj.path.includes(session?.scope))
+  let locked = $state(obj.locked)
   let gradeStyle = getGradeStyle(obj)
 
   console.log(user)

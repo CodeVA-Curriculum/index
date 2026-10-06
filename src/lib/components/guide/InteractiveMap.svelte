@@ -18,7 +18,7 @@
   let start = "twine/applications/start-a-story.md"
   let instance = $state()
 
-  let {  startPath, legend = true, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
+  let {  legend=false,startPath, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
 
 
@@ -66,7 +66,7 @@
   let sketch = (p5:any) => {
     p5.setup = async () => {
       p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
-      selectOffset = -p5.displayWidth/12
+      // selectOffset = -p5.displayWidth/12
       // p5.imageMode(p5.CENTER)
       camera = new Camera(p5, 1)
       cursor = new Cursor()
@@ -242,6 +242,9 @@
 
 <div class='interactive-map'>
   <P5 bind:this={instance} sketch={sketch} />
+  {#if legend}
+  <Legend />
+  {/if}
   <div class='debug'>
     {#each Object.entries(debug) as entry}
     <p>{entry}{debug[entry]}</p>

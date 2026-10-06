@@ -68,7 +68,7 @@
 <div class='map-view'>
   <div class='map-wrap'>
     {#if map}
-    <InteractiveMap startPath={data.guide.start.path}  map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap legend={true} startPath={data.guide.start.path}  map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
     {/if}
   </div>
   <div class="ui {panelOpen ? 'open': 'closed'}">
