@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { page } from '$app/state'
   import TagSearch from '$lib/components/TagSearch.svelte'
   import StandardsSelect from '$lib/components/pacing-guide/StandardsSelect.svelte'
   import Pill from '$lib/components/Pill.svelte'
@@ -80,7 +81,7 @@
 <form method="GET" action="/teach/library/search">
   <!-- svelte-ignore a11y_no_redundant_roles -->
   <fieldset role="group" >
-    <input name="q" id="q" type="text" placeholder="Search for lessons..." />
+    <input value={page.url.searchParams.get('q')} name="q" id="q" type="text" placeholder="Search for lessons..." />
     {#if filters }
     <button onclick={() => filterToggle = !filterToggle}><Fa size=1.0x icon={faSliders} /> <span>Filters</span></button>
     {/if}

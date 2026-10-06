@@ -42,7 +42,7 @@ import Help from '$lib/components/Help.svelte'
     </summary>
     <ol>
       {#each obj.children as child}
-        <li><a href={child.path}>{child.title}</a></li>
+        <li><a href='/teach/library/browse/{child.path}'>{child.title}</a></li>
       {/each}
     </ol>
   </details>
