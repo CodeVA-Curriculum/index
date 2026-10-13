@@ -24,7 +24,8 @@ const config = {
 		},
 		alias: {
 			$content: "./static/library",
-			'$standards': "./static/standards"
+			'$standards': "./static/standards",
+			$routes: "./src/routes"
 		}
 	}
 };

@@ -13,6 +13,8 @@
   import { Map } from '$lib/components/guide/Map.svelte'
   import { onMount } from 'svelte'
 
+  console.log("Start:", data.start)
+
 
 
   let map = $state(false)

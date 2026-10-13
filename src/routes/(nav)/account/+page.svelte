@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { page } from '$app/state'
-  import Element from  '/home/apollo/GitHub/index/src/routes/(nav)/teach/library/components/Element.svelte'
+  import Element from  '$routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
 	import { enhance } from '$app/forms';

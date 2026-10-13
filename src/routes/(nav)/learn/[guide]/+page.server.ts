@@ -30,7 +30,8 @@ export const load:PageLoad = async ({ params, locals }) => {
     }
   })
 
-  const [startNode] = nodes.filter((obj) => obj.recommended == true )
+  const startNodes = nodes.filter((obj) => obj.recommended == true )
+  if(startNodes.length == 0) { throw new Error("no start node! ")}
 
   // await applyPermissions(nodes)
   await applyPermissions(projects, nodes, locals.accessCode)
@@ -41,7 +42,7 @@ export const load:PageLoad = async ({ params, locals }) => {
       nodes: nodes,
       edges: edges,
       projects: projects,
-      start: startNode
+      start: startNodes[0]
     }
   }
 }

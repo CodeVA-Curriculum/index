@@ -112,7 +112,6 @@
 <style lang='scss'>
   @import "$lib/styles/theme.scss";
   .footer {
-    // height: 4rem;
     position: sticky;
     bottom: 0;
     background-color: white;
@@ -126,9 +125,6 @@
         margin:  16px 8px;
         justify-content: center;
       }
-      // &:first-child {
-      //   margin-left: 8px;
-      // }
     }
   }
   .deselect { background-color: whitesmoke; color: $text; border-color: white; }
@@ -140,6 +136,7 @@
       flex: 1 0 1;
       padding: 0;
       margin: 0 2px;
+      button { white-space: nowrap; }
     }
     ul { width: 100%; margin: 0; margin-bottom: 1rem;  }
     justify-content: center;
