@@ -11,11 +11,12 @@ export const POST: RequestHandler = async ( { request, locals } ) => {
 	if(!user) { return json({
 		"Status": "Not logged in!"
 	})}
+	let res
 	switch(req.type) {
 		case "question":
 		case "prompt":
 			const table = req.type == "question" ? schema.user_to_question: schema.userToPrompt
-			let res = await db.insert(table).values({
+			res = await db.insert(table).values({
 				itemId: Number(req.itemId),
 				userId: user.id,
 				answer: req.answer,

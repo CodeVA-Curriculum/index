@@ -2,6 +2,16 @@ import * as schema from './schema'
 import { defineRelations } from 'drizzle-orm';
 
 export const relations = defineRelations(schema, (r) => ({
+	guide:{
+		locations: r.many.node({
+			from: r.guide.id,
+			to: r.node.guide
+		}),
+		projects: r.many.project({
+			from: r.guide.id,
+			to: r.project.guide
+		})
+	},
 	accessCode: {
 		users: r.many.user({
 			from: r.accessCode.id,

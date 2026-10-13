@@ -33,7 +33,7 @@ export class Node {
     const borderWeight = this.locked ? 8 : 8;
     let w = 200
     this.width = w   
-    if(this.db.type == "cache") { w = 100 }
+    if(this.db.type == 'cache') { w = 100 }
     this.radius = new Lerp(Math.round(w *1.25), 5)
   }
   draw(p5:any) {
@@ -51,10 +51,16 @@ export class Node {
     p5.pop()
 
     p5.push()
-    p5.stroke('transparent')
-    p5.fill('black')
     const offset = this.width*0.75
-    p5.text(this.db.title, this.x-(offset)/2, this.y, (offset))
+    if(this.selected || this.hover || this.db.type != 'cache') {
+      p5.stroke('transparent')
+      p5.fill('black')
+      p5.text(this.db.title, this.x-(offset)/2, this.y, (offset))
+    } else if(this.icon) {
+        p5.imageMode(p5.CENTER)
+        p5.image(this.icon, this.x, this.y, 75, 75)
+      // p5.text(this.icon, this.x-(offset)/2, this.y)
+    }
     p5.pop()
     if(this.complete) {
       // Draw checkmark

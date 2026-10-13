@@ -2,6 +2,7 @@
   let { guide, long=false } = $props()
   import Fa from 'svelte-fa'
   import { faUser, faRoute, faLocationDot } from '@fortawesome/free-solid-svg-icons'
+  console.log(guide)
 </script>
 
 <article class='card'>
@@ -18,9 +19,8 @@
   </main>
   {#if long}
   <div class='stats'>
-    <div><Fa icon={faUser} /> {99}</div>
-    <div><Fa icon={faRoute} /> {4} / {10}</div>
-    <div><Fa icon={faLocationDot} /> {99} / {100}</div>
+    <div><Fa icon={faLocationDot} /> {guide.locations.filter((o) => o.status.length > 0).length} / {guide.locations.length}</div>
+    <div><Fa icon={faRoute} /> {guide.projects.filter((o) => o.status.length > 0).length} / {guide.projects.length}</div>
   </div>
   {/if}
 </article>

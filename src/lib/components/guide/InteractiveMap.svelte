@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { drawPin } from '$lib/components/guide/Project.svelte'
   import Legend from '$lib/components/guide/Legend.svelte'
   import { makeShadow, getCompleteImage } from '$lib/components/guide/Node.svelte.ts'
   import { untrack } from 'svelte'
@@ -140,7 +141,8 @@
       // debug.selected = selected.length
       p5.background("#f5f5f5");
       // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
-        let startNode = false;
+      let startNode = false;
+        let pins = []
       camera.display(() => {
         p5.fill('rgba(0, 0, 0, 0)')
         p5.stroke(p5.color(0, 0, 0));
@@ -151,6 +153,9 @@
         cursor.hovering = []
         for(const project of projects) {
           project.draw(p5)
+          if(project.highlighted) {
+            pins = project.getPins()
+          }
         }
 
         let pastStroke = p5.strokeWeight(8)
@@ -172,8 +177,13 @@
           }
         }
         cursor.update(p5, camera.matrix)
+        if(pins.length > 0) {
+          for(const node of pins) {
+            drawPin(p5, node)
+          }
+        }
       })
-      if(startNode && !startNode.complete) {
+      if(startNode && !startNode.complete && pins.length == 0) {
         const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
         const size = camera.transform.scale < 1 ? 30 : camera.transform.scale * 30
         let offsetY = 0

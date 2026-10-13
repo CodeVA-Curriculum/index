@@ -1,5 +1,6 @@
 <script lang='ts'>
   import MarkdownLesson from '$lib/components/MarkdownLesson.svelte'
+  import GDoc from '$lib/components/GDoc.svelte'
   import ElementTable from '../../components/ElementTable.svelte'
   import PremiumCallout from '$lib/components/PremiumCallout.svelte'
   import { faBoltLightning } from '@fortawesome/free-solid-svg-icons'
@@ -41,22 +42,28 @@
 
 
 {#snippet document(obj)}
+{#if obj.locked}
   <div class='doc'>
-    {#if obj.locked }
       <div class='modal-wrap'>
         <LockedElementCTAModal obj={obj} />
       </div>
-    {:else}
-    <MarkdownLesson obj={obj} />
-    {/if}
-    {#if data.children?.length > 0 && (obj.locked || !page.url.searchParams.get('view')) }
-    <section class='children modal-wrap'>
-      <h3>Search Items in This Group</h3>
-      <ElementTable navTo={(path) => "/teach/library/browse/"+data.element.path+'?view='+path} elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session}
-       />
-    </section>
-    {/if}
   </div>
+{:else}
+    {#if obj.link}
+      <GDoc url={obj.link} />
+    {:else}
+    <div class='doc'>
+      <MarkdownLesson obj={obj} />
+      {#if data.children?.length > 0 && (obj.locked || !page.url.searchParams.get('view')) }
+      <section class='children modal-wrap'>
+        <h3>Search Items in This Group</h3>
+        <ElementTable navTo={(path) => "/teach/library/browse/"+data.element.path+'?view='+path} elements={data.children} filters={{...data.filters, text: true}} user={data.user} session={data.session}
+         />
+      </section>
+      {/if}
+    </div>
+    {/if}
+{/if}
 {/snippet}
 
   

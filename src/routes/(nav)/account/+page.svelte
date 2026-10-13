@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { page } from '$app/navigation'
+  import { page } from '$app/state'
   import Element from  '/home/apollo/GitHub/index/src/routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
@@ -8,9 +8,6 @@
   import { faChartLine, faTrash, faRefresh, faPowerOff } from'@fortawesome/free-solid-svg-icons'
   import { dashboardURL } from '$lib'
   let { data, form } = $props()
-  console.log(data.session)
-  console.log(data.accessCode)
-  console.log(data.elements)
   let value = $state(generate())
   let accountOwner = data.user?.id && data.session?.alias == "NULL"
   function generate() {
@@ -27,7 +24,7 @@
 </script>
 
 {#snippet feedback(form)}
-{#if form?.res || page.url.searchParams.get('m')}
+{#if form?.res || page?.url.searchParams.get('m')}
 <article class='feedback'>
   <p>{form?.res}</p>
   <p>{page.url.searchParams.get('m')}</p>

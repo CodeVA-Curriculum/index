@@ -1,14 +1,13 @@
 <script lang='ts'>
   import PremiumCallout from '$lib/components/PremiumCallout.svelte'
   import Fa from 'svelte-fa'
-  import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
+  import { faLocationDot, faCircleCheck} from '@fortawesome/free-solid-svg-icons'
   import Video from '../Video.svelte'
   import { Project } from './Project.svelte'
   let { project } = $props()
   let { nodes, groups } = project.getGroupNodeCount();
   let locked = project.locked
 
-  console.log(project)
 </script>
 
 <div class='project-panel'>
@@ -24,7 +23,7 @@
   <PremiumCallout />
   {/if}
   <div class='nodeGroups'>
-    <details>
+    <details open>
       <summary>
         <Fa icon={faLocationDot}/>
         <span>Browse {nodes} tutorials across {groups} group(s)</span>
@@ -36,7 +35,7 @@
         {/if}
         <ol>
           {#each group.nodes as node}
-          <li><a href="?view={node.db.path}">{node.db.title}</a></li>
+          <li><a href="?view={node.db.path}"><span class='{node.db.status.length > 0 ? "visible" : "invisible"} check'><Fa icon={faCircleCheck} /></span>{node.db.title}</a></li>
           {/each}
         </ol>
       </div>
@@ -49,6 +48,7 @@
   </div>
 </div>
 <style lang='scss'>
+  @use "$lib/styles/theme.scss";
   .buttons {
     display: flex;
     gap: 1rem;
@@ -60,5 +60,15 @@
   }
   .nodeGroups {
     margin-top:2rem;
+  }
+  .check {
+    color: theme.$highlight-green;
+    padding-right: 8px;
+  }
+  .invisible {
+    visibility: hidden;
+  }
+  .visible {
+    visibility: visible;
   }
 </style>

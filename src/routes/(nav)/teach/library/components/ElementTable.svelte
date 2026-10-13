@@ -222,20 +222,15 @@
     overflow-x: hidden;
   }
   .ui-buttons {
-    margin-top: 1rem;
-    position: absolute;
-    top: 0;
+  gap: 8px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     font-size: 11pt;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
     * {
       width: 100%;
       flex: 1;
-      // background-color: white;
       font-size: 11pt;
     }
   }

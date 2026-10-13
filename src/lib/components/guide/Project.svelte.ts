@@ -26,6 +26,8 @@ export class Project {
   nodePos = $state(0)
   selected = $state(false)
   icon = $state(false)
+  nextNode = $state()
+  lastNode = $state()
   size = 0
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
@@ -52,7 +54,10 @@ export class Project {
     let { x, y } = this.findCenter()
     this.x = x; this.y = y
     // console.log(`Found center for ${this.db.path} at ${x}, ${y}`)
-    
+
+  }
+  getPins():Node[2] {
+    return [ this.nextNode, this.lastNode ]
   }
   private findCenter() {
     let minX = 0; let minY = 0; let maxX = 0; let maxY = 0;
@@ -70,13 +75,7 @@ export class Project {
     }
   }
   getCompletePercent() {
-    let count = 0
-    for(const group of this.nodeGroups) {
-      const groupNodes = group.getNodes()
-      const completeNodes = groupNodes.filter((obj) => obj.complete)
-      count += completeNodes.length
-    }
-    return count
+    return 0
   }
   highlight() {
     this.highlighted = true
@@ -93,14 +92,41 @@ export class Project {
   toggleComplete() { this.complete = !this.complete }
   markComplete() { this.complete = true }
   setup(p5) {
+    // Find initial start/end pin locations
+    this.nextNode = this.nodeGroups[0].nodes[0]
+    this.lastNode = this.nodeGroups[this.nodeGroups.length-1].nodes[this.nodeGroups[this.nodeGroups.length-1].nodes.length-1]
+
     for(const g of this.nodeGroups) {
       g.setup(p5)
     }
+
+      p5.loadImage('/trail-guides/'+this.db.path.replace('index.md', 'icon.png'))
+        .catch((err) => {
+          console.log("Could not load image for", this.db.path)
+        }).then((img) => {
+          this.icon = img
+          console.log("Loaded project image", this.db.path)
+          for(const node of this.getNodes()) {
+            if(node.db.type == 'cache') {
+              console.log("Applying icon to", node.db.path)
+              node.icon = img
+            }
+          }
+        })
+
   }
   draw(p5){
+    // Display start and end pins
     for(const g of this.nodeGroups) {
       g.draw(p5, this.locked)
     }
+  }
+  getNodes() {
+    let nodes = []
+    for(const g of this.nodeGroups) {
+      nodes = [...nodes, ...g.getNodes()]
+    }
+    return nodes
   }
   getNext(path = "default") {
     if(path == "default") { return [ ...this.nodeGroups[0].getNext(path) ] }
@@ -153,13 +179,6 @@ class Group {
     for(const e of this.edges) {
       e.setup(p5)
     }
-    for(const node of this.nodes) {
-      if(node.db.type == 'cache') {
-        console.log("updated node icon")
-        node.icon = this.icon
-      }
-    }
-    console.log("Group has edges", this.edges.length)
   }
   draw(p5, locked=false) {
     for(const e of this.edges) {
@@ -268,3 +287,19 @@ class Group {
   }
 }
 
+export function drawPin(p5, node ) {
+  const pinLength = node.width
+  const pinHeight = node.width
+  const pinWidth = node.width/3 * 2
+  p5.push()
+  p5.applyMatrix(1, 0, 0, 1, node.x, node.y);
+  p5.rotate(.25)
+  p5.noStroke()
+  p5.fill('gray')
+  p5.rect(0-10, 0-pinLength, 20, 200)
+  p5.fill("#75bc4a")
+  p5.rect(0-node.width/2,0-pinLength,node.width, 50, 20)
+  p5.rect(0-node.width/2,0-pinLength-pinHeight,node.width, 50, 20)
+  p5.rect(-1-pinWidth/2,0-node.width*2,pinWidth, pinHeight+2)
+  p5.pop()
+}

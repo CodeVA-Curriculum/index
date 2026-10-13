@@ -24,12 +24,22 @@ export const load: PageServerLoad = async ({locals}) => {
       path: { in: permissions.library }
     }
   })
+  let guides = await db.query.guide.findMany({
+    with: { 
+      locations: { with: {
+        status: true      
+      }},
+      projects: { with: {
+        status: true
+      }}
+    }
+  })
   return {
     user: user,
     session: locals.session,
     codes: userCodes,
     elements: elements,
-    guides: await db.query.guide.findMany()
+    guides: guides
   }
 };
 
