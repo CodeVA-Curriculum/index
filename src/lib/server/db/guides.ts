@@ -5,7 +5,7 @@ import * as schema from './schema'
 import { fileToElementObj, parseGuideFiles, parseProjectFile, parseNodeFile } from './parse'
 
 export async function seedGuides(db:any, schema:any) {
-  let paths = await globby(['static/trail-guides', '!static/trail-guides/README.md'], {
+  let paths = await globby(['static/trail-guides', '!static/trail-guides/README.md', '!static/trail-guides/**/README.md'], {
     expandDirectories: { files: ['*.md'] }
   })
 
