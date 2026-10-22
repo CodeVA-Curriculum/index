@@ -68,6 +68,9 @@ export class Node {
     }
     // p5.image(this.shadow, x, y)
   }
+  getClick() {
+    return this.db.path
+  }
   debug(p5:any) {
     
     if(this.x && this.y) {
@@ -137,7 +140,7 @@ export class Node {
   toggleSelect():boolean {
     console.log("Selected", this)
     this.selected = !this.selected
-    return this.selected
+    return { status: this.selected, obj: this }
   }
   setSelect(status:boolean) {
     this.selected = status

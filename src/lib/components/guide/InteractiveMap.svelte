@@ -43,8 +43,7 @@
   $effect(() => {
     const el = map.elementsByPath[view]
     let flag = false
-    if(el || view == 'projects' || view == 'tutorials') {
-      flag = true
+    if(view && view.length > 0) {
       selectOffset = -100
     }
     if(camera && el) {
@@ -52,10 +51,7 @@
       camera.moveCenterTo(location.x + selectOffset, location.y)
       let z = el.nodeGroups ? 0.25 : 1
       camera.zoom({x:camera.ix, y:camera.iy}, z, true)
-    } else if(selectOffset == -100 && !flag) {
-      selectOffset = 0
-    }
-    console.log("Updated selectOffset", selectOffset)
+    }    console.log("Updated selectOffset", selectOffset)
   })
 
 
@@ -156,10 +152,13 @@
         p5.fill('rgba(0, 0, 0, 0)')
         p5.stroke(p5.color(0, 0, 0));
         p5.strokeWeight(8)
+        cursor.hovering = []
         for(const edge of edges) {
           edge.draw(p5)
+          if((edge.to.selected || edge.from.selected) && cursor.over(edge.getHoverable(p5))) {
+            cursor.hovering = [ edge ]
+          }
         }
-        cursor.hovering = []
         for(const project of projects) {
           project.draw(p5)
           if(project.highlighted) {
@@ -224,17 +223,18 @@
       // console.log("Click!")
       const hoveredNodes = cursor.getHovered()
       if(hoveredNodes.length > 0) {
-        const status = hoveredNodes[0].toggleSelect()
+        const {status,obj}= hoveredNodes[0].toggleSelect()
         selected = []
         if(status) {
-          selected = hoveredNodes
+          selected = [ obj ]
+          obj.setSelect(true)
           // zoom in
           // const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
           // camera.moveCenterTo(location.x, location.y)
           // camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
 
           // Write to url
-          goto("?view="+selected[0].db.path)
+          goto("?view="+obj.db.path)
         } else {
           // zoom out & deselect
           camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)

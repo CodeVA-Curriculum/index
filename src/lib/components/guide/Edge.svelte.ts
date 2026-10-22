@@ -72,7 +72,7 @@ export class Edge {
     p5.push()
     p5.angleMode(p5.DEGREES)
     const r = 60
-    const a = p5.atan((selected.y-other.y)/(selected.x-other.x))
+    const a = p5.atan((selected.y-other.y)/(selected.x-other.x)) + (x <= selected.x ? 180 : 0)
     p5.fill(0)
     p5.stroke('#f5f5f5')
     p5.triangle(
@@ -124,6 +124,27 @@ export class Edge {
         }
         o++
     }
+  }
+  getClick() {
+    let res = ""
+    if(this.to.selected) { res = this.to.db.path }
+    if(this.from.selected) { res = this.from.db.path }
+    return res
+  }
+  toggleSelect() {
+    return { status: this.to.selected || this.from.selected, obj: this.to.selected ? this.from : this.to}
+  }
+  getHoverable(p5:any) {
+    const selected = this.to.selected ? this.to : this.from
+    const other = this.to.selected ? this.from : this.to
+
+    const offset = Math.sin((this.tick % 400)/25) * 10
+    const radius = selected.radius.get() / 2 + 100 + offset
+    const dist = p5.dist(this.points.p0.x, this.points.p0.y, this.points.p3.x, this.points.p3.y)
+    const ratio = radius / dist
+    const x = p5.lerp(selected.x, other.x, ratio)
+    const y = p5.lerp(selected.y, other.y, ratio)
+    return { x: x, y: y, radius: selected.radius }
   }
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')
