@@ -28,7 +28,6 @@ export class Lerp {
   }
   update(p5:any) {
     if(this.offset < 1) {
-      // console.log(this.value, this.target)
       this.offset += 1/this.frames // 0.02
       this.value = p5.lerp(this.previous, this.target, this.offset)
     } else {
@@ -37,6 +36,9 @@ export class Lerp {
       this.offset = 1
       this.value = this.target
     }
+  }
+  isBusy():boolean {
+      return this.value == this.target
   }
   setTarget(t:number) {
     this.previous = this.target

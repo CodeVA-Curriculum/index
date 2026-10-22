@@ -1,4 +1,5 @@
 import type { Edge as DbEdge } from '$lib/server/db/schema'
+import { Lerp } from '$lib/utils'
 
 const STROKE_WEIGHT = 8;
 const SELECT_FACTOR = 3
@@ -9,6 +10,7 @@ interface ControlPoint {
   y:number
 }
 export class Edge {
+  tick=0
   points:object
   db:DbEdge;
   optional:boolean = false
@@ -51,8 +53,41 @@ export class Edge {
 
   }
   draw(p5) {
+    this.tick++
     p5.bezier(this.points.p0.x, this.points.p0.y,this.points.p1.x, this.points.p1.y,this.points.p2.x, this.points.p2.y, this.points.p3.x, this.points.p3.y)
     // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
+
+    // Draw arrows if one of connected nodes is selected
+    if(!this.to.selected && !this.from.selected) { return }
+
+    const offset = Math.sin((this.tick % 400)/25) * 10
+    const selected = this.to.selected ? this.to : this.from
+    const other = this.to.selected ? this.from : this.to
+
+    const radius = selected.radius.get() / 2 + 100 + offset
+    const dist = p5.dist(this.points.p0.x, this.points.p0.y, this.points.p3.x, this.points.p3.y)
+    const ratio = radius / dist
+    const x = p5.lerp(selected.x, other.x, ratio)
+    const y = p5.lerp(selected.y, other.y, ratio)
+    p5.push()
+    p5.angleMode(p5.DEGREES)
+    const r = 60
+    const a = p5.atan((selected.y-other.y)/(selected.x-other.x))
+    p5.fill(0)
+    p5.stroke('#f5f5f5')
+    p5.triangle(
+      x+p5.cos(0+a) * r,
+      y+p5.sin(0+a) * r,
+      x+p5.cos(120+a) * r,
+      y+p5.sin(120+a) * r,
+      x+p5.cos(240+a) * r,
+      y+p5.sin(240+a) * r
+    )
+    p5.stroke(0)
+    p5.fill(255)
+    p5.textSize(14)
+    p5.text(other.db.title, x-50, y, 100)
+    p5.pop()
   }
   debug(p5){
     p5.text(this.db.uid, this.cx,  this.cy)
