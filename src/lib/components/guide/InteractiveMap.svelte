@@ -42,13 +42,22 @@
   // Camera movement on param update
   $effect(() => {
     const el = map.elementsByPath[view]
+    let flag = false
+    if(el || view == 'projects' || view == 'tutorials') {
+      flag = true
+      selectOffset = -100
+    }
     if(camera && el) {
       const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
       camera.moveCenterTo(location.x + selectOffset, location.y)
       let z = el.nodeGroups ? 0.25 : 1
       camera.zoom({x:camera.ix, y:camera.iy}, z, true)
+    } else if(selectOffset == -100 && !flag) {
+      selectOffset = 0
     }
+    console.log("Updated selectOffset", selectOffset)
   })
+
 
 
 
@@ -162,6 +171,8 @@
         p5.imageMode(p5.CENTER)
         p5.fill('#fff')
         for(const node of nodes) {
+          // turn off orphaned selected nodes
+          if(selected.length > 0 && view != node.db.path) { node.setSelect(false) }
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
@@ -214,6 +225,7 @@
       const hoveredNodes = cursor.getHovered()
       if(hoveredNodes.length > 0) {
         const status = hoveredNodes[0].toggleSelect()
+        selected = []
         if(status) {
           selected = hoveredNodes
           // zoom in
@@ -225,7 +237,6 @@
           goto("?view="+selected[0].db.path)
         } else {
           // zoom out & deselect
-          selected = []
           camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
           // Write to url
           goto("?")

@@ -1,3 +1,4 @@
+import { Lerp } from '$lib/utils'
 export class Camera {
     
     p5:any
@@ -12,8 +13,8 @@ export class Camera {
 
     constructor(p5:any, scale:number) {
         this.p5 = p5;
-        this.ix = this.p5.width/2
-        this.iy = this.p5.height/2
+        this.ix = this.p5.windowWidth/2
+        this.iy = this.p5.windowHeight/2
         // this.setCenter(1)
 
         this.p5.push();
