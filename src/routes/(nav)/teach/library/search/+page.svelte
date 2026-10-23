@@ -7,6 +7,7 @@
   import ElementTable from '../components/ElementTable.svelte'
   import Fa from 'svelte-fa'
   import { faX } from '@fortawesome/free-solid-svg-icons'
+  import { page } from '$app/state'
 
   let { data } = $props();
 
@@ -14,6 +15,17 @@
 
   function sel(i:number) { selected = i; console.log("selecte") }
 </script>
+
+{#snippet warning(params, results)}
+<article class='marquee'>
+{#if results.length == 0 && params.get('q')}
+  <p>No elements found! Use different search terms and try again.</p>
+{:else if results.length == 0}
+  <p><i>Search above for CS lessons and resources, or click here to <a href="/teach/library/browse">browse the whole library</a></i></p>
+{/if}
+</article>
+{/snippet}
+
 <div class='page'>
   <div class='results container'>
     <section class='long'>
@@ -26,7 +38,7 @@
     <section>
       {#if data.elements.length == 0}
       <div class='no-elements'>
-        <p><i>Search above for CS lessons and resources, or click here to <a href="/teach/library/browse">browse the whole library</a></i></p>
+        {@render warning(page.url.searchParams, data.elements)}
       </div>
       {:else}
       <h1>Results</h1>
@@ -39,6 +51,7 @@
 </div>
 
 <style lang='scss'>
+  @use '$lib/styles/theme.scss';
   // tr { display: flex; }
   table {
     @import "$lib/styles/table";
@@ -111,5 +124,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .marquee {
+    width: 100%;
+    background-color: theme.$warning;
   }
 </style>
