@@ -5,18 +5,22 @@
   let subs = JSON.parse(obj.subs)
   let alpha = "abcdefghijklmnopqrstuvwxyz"
 
-  let selectedIds = $state([])
-  let selectedObjs = $state([])
 
   function add(obj) {
     onadd(obj)
   }
   function remove(obj) {
     const i = selectedIds.indexOf(obj.id)
-    selectedIds.splice(i, 1)
     selected.splice(i, 1)
-    selectedObjs.splice(i, 1)
   }
+  let selectedIds = $derived.by(() => {
+    let res = []
+    for(const s of selected)    {
+      res.push(s.id)
+    }
+    return res
+  })
+
 
 </script>
 

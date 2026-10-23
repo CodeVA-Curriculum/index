@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Pill from '$lib/components/Pill.svelte'
     import Standard from '$lib/components/Standard.svelte'
     import StandardInList from '$lib/components/pacing-guide/StandardInList.svelte'
     import { onMount } from "svelte";
@@ -9,9 +10,11 @@
     let { selected = $bindable([]), onclose } = $props()
 
     let workingMap = $state({})
+    let wholeMap = $state({})
     onMount(async () => {
         const { map } = await (await fetch("/api/v1/standards.json")).json()
         workingMap = map
+        wholeMap = workingMap
     })
 
     const titles = [ "Grades", "Subjects", "Standards"]
@@ -23,6 +26,7 @@
     let menuIndex = $state(0)
     let lastMenu = $state("")
     function menuChange(clicked:string) {
+        console.log("click", clicked)
         if(clicked && workingMap[clicked]) {
             console.log("nav forward")
             workingMap = workingMap[clicked] // pass the next object in the map to the workingMap
@@ -33,13 +37,14 @@
                 console.log("nav back")
                 // try to go back
                 const key = breadcrumbs[0]
-                console.log(map[key])
-                workingMap = map[key]
+                console.log(key)
+                console.log("breadcrumbs", breadcrumbs)
+                workingMap = wholeMap[key]
                 menuIndex--
                 breadcrumbs = [ breadcrumbs[0] ]
             } else {
                 console.log("reset")
-                workingMap = map // reset to home nav
+                workingMap = wholeMap // reset to home nav
                 menuIndex = 0
                 breadcrumbs = []
             }
@@ -70,45 +75,99 @@
         selected.push(obj)
         console.log(selected)
     }
+    function getAll(map) {
+        if(map[0]) {
+            return map
+        } else {
+            let all = []
+            for(const [k,v] of Object.entries(map)) {
+                all = [...all, ...getAll(v)]
+            }
+            return all
+        }
+    }
+    function count(map) {
+        if(map[0]) {
+            return map.length
+        } else {
+            let total = 0
+            for(const [k,v] of Object.entries(map)) {
+                total += count(v)
+            }
+            return total
+        }
+    }
+    function addAll(map) {
+        const objs = getAll(map)
+        selected.push(...objs)
+    }
 </script>
 
-<div class='standards-box'>
+{#snippet selectedStandardsBox(selected)}
 <div class='pills'>
-{#each selected as obj, i}
+    {#each selected as obj, i}
     <Standard obj={obj}>
-        <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button>
+    <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button>
     </Standard>
-{/each}
+    {/each}
 </div>
-<button class='empty' onclick={edit}><span><Fa icon={faPlus} /></span>Filter By Standard</button>
+{/snippet}
+
+
+<div class='standards-box'>
+    {@render selectedStandardsBox(selected)}
+    <button class='empty' onclick={edit}><span><Fa icon={faPlus} /></span>Filter By Standard</button>
 </div>
 
 <dialog open={open}>
 <article class='open'>
+    <button class='close' onclick={close}>
+    </button>
     <div class="list" >
     <div class='bread'>
         <nav aria-label="breadcrumb">
             <ul>
                 <li><a onclick={() => menuChange()}><Fa icon={faHome} /></a></li>
                 {#each breadcrumbs as bc, i}
-                    <li><a onclick={() => menuChange(i == 0 ? null : bc)}>{bc}</a></li>
+                    <li>
+                        {#if i < breadcrumbs.length - 1}
+                        <a onclick={() => menuChange(bc)}>{bc}</a>
+                        {:else}
+                        <span>{bc}</span>
+                        {/if}
+                    </li>
                 {/each}
             </ul>
         </nav>
     </div>
         <div class='heading'>
-        <h3>Select SOLs</h3>
-        <button onclick={close}>
-            <Fa icon={faX} />
-        </button>
+
+            <p>Select standards from the list below. Confirm your choices by clicking the button below or closing this window.</p>
+            <div style='padding-left: 0.5rem;'>
+            {@render selectedStandardsBox(selected)}
+            <div class='confirm'>
+                <button onclick={close} class='success'>Confirm</button>
+                <button onclick={() => { selected = [] }} class='secondary'>Clear</button>
+            </div>
+            </div>
+
         </div>
         <hr>
         {#each Object.entries(workingMap) as [k,v]}
+            <div class='list-item'>
             {#if menuIndex == 2}
-            <StandardInList onadd={(obj) => addToSelected(obj)} obj={v} />
+            <StandardInList selected={selected} onadd={(obj) => addToSelected(obj)} obj={v} />
             {:else}
             <p onclick={() => menuChange(k)}><a >{k}</a></p>
+            <div class='ui'>
+                <button onclick={() => addAll(v)}>
+                    <Fa icon={faPlus} />
+                    <span>Add All</span>
+                    <Pill>{count(v)}</Pill>
+                </button>
+            </div>
             {/if}
+            </div>
         {/each}
     </div>
 </article>
@@ -116,6 +175,44 @@
 
 
 <style lang='scss'>
+    .list-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        & p { flex: 1; }
+        .ui { visibility: hidden; flex: 0 1; 
+            button {
+                margin: 8px 12px;
+                display: flex;
+                flex-direction: row;
+                gap: 8px;
+                align-items: center;
+                white-space: nowrap;
+                font-size: 14pt;
+                background-color: white;
+                font-style: italic;
+                color: black;
+                border-color: black;
+                padding: 4px 12px;
+            }
+        }
+        &:hover {
+            background-color: whitesmoke;
+          .ui { visibility: visible; }  
+        }
+    }
+    .open {
+        position: relative;
+        button.close {
+            margin: 0;
+            background-color: white;
+            flex: 0 1;
+            border: none;
+            color: black;
+            position: absolute;
+            right: 1rem;
+        }
+    }
     .empty { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
     .bread {
         width:586px;
@@ -124,18 +221,17 @@
             ul {
                 display: flex;
                 li { position: relative; }
-                li::after {
-                    display: flex;
-                    position: absolute;
-                    right: -1.25rem;
-                    top: 0.5rem;
-                }
+                // li::after {
+                //     display: flex;
+                //     position: absolute;
+                //     right: -1.25rem;
+                //     top: 0.5rem;
+                // }
             }
         }
     }
     p {
         padding: 12px; margin: 0;
-        &:hover { background-color: whitesmoke; cursor: pointer;  }
     }
     .empty {
         background-color: white;
@@ -189,16 +285,16 @@
         }
     }
     .heading {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        h3 { flex: 1 0; }
+        width: 100%;
+        position: relative;
+        text-align: right;
+        p { text-align: left; }
+        .confirm { font-size: 14pt; color: white; padding-right: 12px; padding-top: 12px;}
         button {
-            margin: 0;
-            background-color: white;
+            margin: 0 4px;
+            padding: 4px 24px;
             flex: 0 1;
             border: none;
-            color: black;
         }
     }
   .standards-box {
@@ -206,16 +302,18 @@
     padding-top: 8px;
     display:flex;
     flex-direction: row;
+    button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
+  }
     .pills {
+        min-height: 3rem;
         flex: 1 0;
         display: flex;
         flex-direction:row;
+        flex-wrap: wrap;
         background-color: whitesmoke;
         margin-right: 12px;
         padding: 8px;
-
+        gap: 4px;
     }
-    button { flex: 0 1; span { margin-right: 8px; } white-space: nowrap; }
-  }
 </style>
 
