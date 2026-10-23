@@ -33,10 +33,6 @@
 
   border: 1px solid rgba(0, 0, 0, 0.13);
   }
-  .materials {
-    height: 20rem;
-    background-color: pink;
-  }
   .doc-wrap {
     width: 100%;
     margin: 2rem 0;
