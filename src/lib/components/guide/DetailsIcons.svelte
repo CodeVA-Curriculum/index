@@ -97,7 +97,6 @@ async function update() {
     min-width: fit-content;
     max-width: fit-content;
     padding: 8px 12px;
-    font-size: 11pt;
     border-radius: 4px;
     font-size: 10pt;
     background-color: whitesmoke;

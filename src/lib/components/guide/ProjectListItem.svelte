@@ -47,13 +47,13 @@
     {/if}
     <footer>
       {#if obj.locked}
-      <a role="button" href='https://codevirginia.org' class='premium-button'>Purchase Access</a>
+      <a role="button" href='https://codevirginia.org' class='premium-button'>Purchase</a>
       {/if}
       {#if map }
-      <a href={titleLink} class='select primary' role="button">Select in Map</a>
+      <a href={titleLink} class='select primary' role="button">Select</a>
       {/if}
-      <a class="secondary" href="/learn/{obj.db.path}" role="button">Open {noun}</a>
-      <a class="secondary" disabled role="button">Save {noun}</a>
+      <a class="secondary" href="/learn/{obj.db.path}" role="button">Open</a>
+      <a class="secondary" disabled role="button">Save</a>
       {@render close?.()}
     </footer>
 </article>
@@ -64,8 +64,8 @@
     display: none;
   }
   article {
-    margin-right: 2rem;
-    margin-bottom: 0;
+    margin: 0 0;
+    width: 100%;
   }
   article > p {
     margin-top: 1rem;
@@ -75,7 +75,7 @@
     & p {
       font-family: Poppins;
       font-weight: bold;
-      font-size: 18pt;
+      font-size: 14pt;
       margin: 0;
       color: $text;
       &:hover { text-decoration: underline; }
@@ -93,8 +93,8 @@
   }
   @import "$lib/styles/theme.scss";
   a {
-    padding: 10px;
-    font-size: $small;
+    padding: 8px;
+    font-size: 11pt;
   }
   .icons { position: absolute; top: 0; right: -6px;
     & > span {
@@ -123,6 +123,6 @@
   .card-heading > a {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 4px;
   }
 </style>

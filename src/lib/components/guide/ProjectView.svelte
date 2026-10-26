@@ -107,12 +107,13 @@
   }
   .selected-node {
     border: 3px dashed black;
+    width: 24rem;
     margin-bottom: 1rem;
     display: flex;
     align-items: stretch;
     &  * { display: flex; flex: 1; margin: 0; padding: 0; text-align: center; }
     a {
-    color: $text;
+      color: $text;
       align-items: center;
       padding: 12px;
       background-color: white;
@@ -146,7 +147,6 @@
     height: 100vh;
   }
   aside {
-  min-width: 24rem;
     border: 1px solid whitesmoke;
     position: relative;
     // height: 100%;

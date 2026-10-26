@@ -102,15 +102,15 @@
     {/if}
   </div>
   <hr>
-  <div class='lists'>
+  <div>
     {#if mode == modes.LIST}
-    <ul>
+      <div class='lists'>
       {#each res as item}
         <div on:mouseenter={() => mouseIn(item)} on:mouseleave={() => mouseOut(item)} class='hover-bound'>
           <ProjectListItem map={true} obj={item} />
         </div>
       {/each}
-    </ul>
+      </div>
     {:else if mode == modes.ELEMENT}
       {@render elementContent(map.elementsByPath[title])}
     {:else if mode == modes.ONBOARDING}
@@ -149,10 +149,14 @@
   }
   .close{ position: absolute; right: 0; top: 0; z-index:99;}
   nav { margin: 0 1.5rem; }
-  .lists ul {
-    overflow-y: scroll;
+  .lists {
+    display: grid; 
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    // overflow-y: scroll;
+    padding: 0 1rem;
     & > * {
-      padding: 0;
+      margin: 0 0;
     }
   }
   .onboarding-wrap {

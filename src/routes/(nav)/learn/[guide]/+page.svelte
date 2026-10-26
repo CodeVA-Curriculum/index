@@ -109,7 +109,9 @@
   }
   .panel {
     height: 100%;
-    &.open { width: 28rem;  }
+    &.open {
+      width: auto;
+    }
     &.closed { width: 0rem; }
     position: absolute;
     -webkit-transition: width 0.25s ease-in-out;
