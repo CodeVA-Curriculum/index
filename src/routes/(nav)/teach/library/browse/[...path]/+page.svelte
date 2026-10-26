@@ -19,14 +19,12 @@
   let s = "background-color: red;"
 
   function getRelatedCount() {
-    // TODO: implement
     return "X"
   }
   const materials = JSON.parse(data.element.materials)
   const showThumbnail = true
 
   let view = $state(data.element)
-  console.log(data.element)
 
   $effect(() => {
     let p = page.url.searchParams.get('view')

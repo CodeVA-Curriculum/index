@@ -5,6 +5,7 @@ import { globby } from 'globby'
 import rehypeHighlight from 'rehype-highlight'
 import { codeAndImage } from '$lib/server/directives/codeAndImage'
 import { embeddedPDFs } from '$lib/server/directives/embeddedPDFs'
+import { downloadLink } from '$lib/server/directives/downloadLink'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
 import remarkRehype from 'remark-rehype'
@@ -36,23 +37,14 @@ export async function fileToElementObj(path:string):Promise<any> {
     .use(rehypeHighlight)
     .use(() => (tree:any) =>{
       img(tree, path)
-    })
-    .use(() => (tree:any) => {
-        qt = quick_take(tree, path)
-    })
-    .use(() => (tree:any) => {
-        const q = practice(tree, path)
-        qs.push(...q)
-    })
-    .use(() => (tree:any) => {
+      qt = quick_take(tree, path)
+      const q = practice(tree, path)
+      qs.push(...q)
       const p = prompt(tree, path)
       ps.push(...p)
-    })
-    .use(() => (tree:any) => {
       codeAndImage(tree, path)
-    })
-    .use(() => (tree:any) => {
       embeddedPDFs(tree, path)
+      downloadLink(tree,path)
     })
     .use(rehypeFormat)
     .use(rehypeStringify)

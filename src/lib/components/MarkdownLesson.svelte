@@ -1,8 +1,10 @@
 <script lang='ts'>
   import PDF from '$lib/components/PDF.svelte'
+  import Download from '$lib/components/Download.svelte'
   let { obj } = $props()
-  const materials = JSON.parse(obj.materials)
+  const materials = [] //JSON.parse(obj.materials)
 </script>
+
 {#snippet document(url)}
   <div id="pdf" class='doc-wrap'>
     <object type="application/pdf" data="{url}">
@@ -14,6 +16,7 @@
 <div class='markdown-lesson'>
 {@html obj.content}
 </div>
+
 <div class='materials'>
   {#each materials as material}
     {@render document(material)}

@@ -27,7 +27,7 @@ export async function seedGuides(db:any, schema:any) {
   // Next, all the nodes
   const nodePaths = await paths.filter((p) => !projectPaths.includes(p) && !guidePaths.includes(p))
   for(const path of nodePaths) {
-    console.log("Rendering node", path)
+    // console.log("Rendering node", path)
     let mapPath = path.replace('static/trail-guides/', '')
     const guideName = mapPath.substring(0, mapPath.indexOf('/'))
     const mapFile = (await read("static/trail-guides/"+guideName+"/map.canvas")).toString()
@@ -45,7 +45,7 @@ export async function seedGuides(db:any, schema:any) {
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
 
     const { id } = (await db.insert(schema.node).values(file).returning())[0]
-    console.log(`Added ${path} to database with uid ${file.uid}`)
+    // console.log(`Added ${path} to database with uid ${file.uid}`)
 
     // Add and associate questions
     for(const question of file.questions) {
