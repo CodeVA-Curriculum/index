@@ -69,6 +69,7 @@
   }
   article > p {
     margin-top: 1rem;
+    font-size: 80%;
   }
   heading {
     & > span { margin-left: 1rem;}

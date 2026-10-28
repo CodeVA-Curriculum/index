@@ -78,16 +78,20 @@
 {/snippet}
 
 {#snippet elementHeader(obj)}
+  <div class='element-content'>
     <h2>{obj.db.title}</h2>
     <DetailsIcons obj={obj} eltype={obj instanceof Project ? 0 : 1} />
+  </div>
 {/snippet}
 
 {#snippet elementContent(obj)}
+  <div class='element-content'>
   {#if obj instanceof Node}
   <ElementTabs {obj} />
   {:else if obj instanceof Project}
   <ProjectPanel project={obj} />
   {/if}
+  </div>
 {/snippet}
 
 <div class='panel-list'>
@@ -137,6 +141,7 @@
     position: relative;
   }
   .panel-list {
+    position: relative;
     height: 100%;
   }
   input {
@@ -147,7 +152,11 @@
   padding: 0 0.5rem;
     background-color: $dark-blue;
   }
-  .close{ position: absolute; right: 0; top: 0; z-index:99;}
+  .close {
+  right: 0.5rem;
+  top: -2rem;
+    position: absolute;    
+  }
   nav { margin: 0 1.5rem; }
   .lists {
     display: grid; 
@@ -158,8 +167,13 @@
     & > * {
       margin: 0 0;
     }
+    max-width: 786px;
   }
   .onboarding-wrap {
     margin: 1rem 1rem;
+  }
+  .element-content {
+    max-width: 600px;
+    padding-right: 1rem;
   }
 </style>

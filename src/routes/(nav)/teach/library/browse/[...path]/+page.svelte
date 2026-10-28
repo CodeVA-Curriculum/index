@@ -40,7 +40,7 @@
 
 
 {#snippet document(obj)}
-{#if obj.locked}
+{#if false && obj.locked}
   <div class='doc'>
       <div class='modal-wrap'>
         <LockedElementCTAModal obj={obj} />

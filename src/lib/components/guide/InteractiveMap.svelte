@@ -16,7 +16,6 @@
   // let selected = $derived(page.url.searchParams.getAll('select'))
   let debug = $state({})
   let tick = 0
-  let start = "twine/applications/start-a-story.md"
   let instance = $state()
 
   let {  legend=false,startPath, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
@@ -44,7 +43,7 @@
     const el = map.elementsByPath[view]
     let flag = false
     if(view && view.length > 0) {
-      selectOffset = -100
+      selectOffset = -300
     }
     if(camera && el) {
       const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
@@ -110,6 +109,7 @@
       console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
       if(!view) {
         const startNode = map.elementsByPath[startPath]
+        console.log(startNode)
         const location = camera.getScreenCoords({x: startNode.x, y: startNode.y}, 0)
         camera.moveCenterTo(location.x, location.y)
         camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
@@ -175,14 +175,14 @@
           const hovering = cursor.over(node)
           node.setHover(hovering)
           node.draw(p5)
-          if(start == node.db.path) {
+          if(startPath == node.db.path) {
           //   const floatDist = 24;
           //   const rate = 0.5
           //   const offsetY = (Math.floor(tick*rate) % floatDist * 2) - floatDist
           //   p5.image(startImage, node.x+node.width/2- startImage.width/2, node.y - 18 - startImage.height + (Math.abs(offsetY)))
             startNode = node
           }
-          if(node.db.path == start && !node.complete) {
+          if(node.db.path == startPath && !node.complete) {
             let offsetY = Math.abs((tick/3) % 30 - 15)
           }
         }
@@ -197,7 +197,7 @@
         const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
         const size = camera.transform.scale < 1 ? 30 : camera.transform.scale * 30
         let offsetY = 0
-        if(startNode.db.path == start && !startNode.complete) {
+        if(startNode.db.path == startPath && !startNode.complete) {
           offsetY = Math.abs((tick/3) % 30 - 15)
         }
         p5.push()

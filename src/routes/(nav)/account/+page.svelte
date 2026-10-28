@@ -62,6 +62,7 @@
 {:then}
 <section>
   <h2>Teaching Resources</h2>
+  TODO: elementtable
   {#each data.elements as element}
     <Element accessCode={data.accessCode} user={data.user} session={data.session} obj={element} />
   {/each}
