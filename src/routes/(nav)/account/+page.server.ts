@@ -10,6 +10,20 @@ import { logUserOut, logInWithCode, logInWithPortal } from '$lib/server'
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({locals}) => {
+  const grades = await db.select().from(schema.grade)
+  const audiences = await db.select().from(schema.audience)
+  const subjects = await db.select().from(schema.subject)
+  const tags = await db.select().from(schema.tag)
+  const elementTypes = await db.select().from(schema.elementType)
+
+  
+  const filters = {
+    grades: grades,
+    audiences: audiences,
+    subjects: subjects,
+    tags: tags,
+    elementTypes: elementTypes
+  }
 	const user = requireLogin()
 	const userCodes = await db.query.accessCode.findMany({
 	  where: {
@@ -35,6 +49,7 @@ export const load: PageServerLoad = async ({locals}) => {
     }
   })
   return {
+    filters: filters,
     user: user,
     session: locals.session,
     codes: userCodes,

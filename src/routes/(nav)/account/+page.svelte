@@ -2,6 +2,7 @@
   import { page } from '$app/state'
   import Element from  '$routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
+  import ElementTable from '$routes/(nav)/teach/library/components/ElementTable.svelte'
   import AccessCodeCard from '$lib/components/AccessCodeCard.svelte'
 	import { enhance } from '$app/forms';
   import Fa from 'svelte-fa'
@@ -52,21 +53,40 @@
 <section>
   <h2>Learning Resources</h2>
   <p></p>
+  <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+  <thead>
+    <tr>
+      <th class='title' scope="col">Title</th>
+      <th scope="col">Completed Tutorials</th>
+      <th scope="col">Completed Projects</th>
+    </tr>
+  </thead>
+  <tbody>
   {#each data.guides as guide}
-    <GuideListItem long {guide} />
+    <tr>
+      <td>{guide.title}</td>
+      <td>0 / 0</td>
+      <td>0 / 0</td>
+    </tr>
   {/each}
-  <hr>
+  </tbody>
+  </table>
 </section>
 {/await}
 {#await data.elements}
 {:then}
 <section>
+  <details open>
+    <summary>
   <h2>Teaching Resources</h2>
-  TODO: elementtable
-  {#each data.elements as element}
-    <Element accessCode={data.accessCode} user={data.user} session={data.session} obj={element} />
-  {/each}
-  <hr>
+  </summary>
+  <ElementTable {...data} />
+    </details>
 </section>
 {/await}
 {/if}
@@ -132,4 +152,12 @@
   }
   section { padding-right: 2rem; }
   p { margin-bottom: 2rem; }
+  details { position: relative; }
+  details > summary::after {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    
+  }
 </style>
