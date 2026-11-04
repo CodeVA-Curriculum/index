@@ -46,7 +46,7 @@ export class Node {
     if(this.locked) {
       p5.stroke(200) // gray out
     }
-    if(this.selected){
+    if(this.selected || this.highlighted){
       p5.strokeWeight(STROKE_WEIGHT * SCALE * 2)
       p5.stroke(HIGHLIGHT_COLOR) // select overrides locked for the circle
     }

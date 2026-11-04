@@ -26,14 +26,6 @@
   let firstLoad = $state(false)
   onMount(() => {
     map = new Map(data.guide)
-    // if(data.guide.start) {
-    //   page.url.searchParams.set('view', data.guide.start.path);
-    //   goto(page.url.toString(), { 
-    //     keepFocus: true, // Prevents losing input focus if user is typing
-    //     noScroll: true   // Prevents the page from jumping back to the top
-    //   });
-    //   firstLoad=true
-    // }
   })
   $effect(() => {
     panelOpen = page.url.searchParams.get('view')    
@@ -68,7 +60,7 @@
 <div class='map-view'>
   <div class='map-wrap'>
     {#if map}
-    <InteractiveMap legend={true} startPath={data.guide.start.path}  map={map} bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap legend={true} startPath={data.guide.start.path}  map={map} bind:hoverList={hoverList} bind:selected interact={interactable} {...map} />
     {/if}
   </div>
   <div class="ui {panelOpen ? 'open': 'closed'}">
@@ -101,7 +93,7 @@
 
 
 <style lang='scss'>
-  @import "$lib/styles/theme.scss";
+  @use"$lib/styles/theme.scss";
   .map-wrap {
     position: absolute;
     width: 100%;
@@ -162,5 +154,10 @@
     width: 100vw;
     overflow-x: hidden;
   }
-  .close{ position: absolute; right: 0; top: 0; background-color: transparent; border: none; color: $text }
+  .close{ position: absolute; right: 0; top: 0; background-color: transparent; border: none; color: theme.$text }
+  .map-nav {
+    background-color: white;
+    color: theme.$text;
+    border-color: gray;
+  }
 </style>

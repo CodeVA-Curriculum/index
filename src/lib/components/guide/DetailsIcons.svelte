@@ -73,6 +73,7 @@ async function update() {
 
 <style lang='scss'>
   .details-icons {
+    font-size: 90%;
     margin: 0.5rem 0;
     display: flex;
     flex-direction: row;

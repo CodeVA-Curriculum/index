@@ -12,13 +12,15 @@
   let objType = $derived("nodeGroups" in obj ? ElementType.Project : ElementType.Tutorial)
   let noun = $derived(objType == ElementType.Project ? "Project":"Tutorial")
 
+  let flexWidth = $derived($page.url.searchParams.get('view') ? 'full' : 'compact')
+
   function toggle() {}
   let param = obj.db.path
   let mapBase = `/learn/${obj.db.path.substring(0, obj.db.path.indexOf('/'))}`
   let titleLink = map ? `${mapBase}?view=${param}` : `/learn/${obj.db.path}`
 </script>
 
-<article class='card'>
+<article class='card {flexWidth}'>
     <heading class='card-heading'>
       <a href={titleLink}>
         {#if obj.locked}
@@ -65,7 +67,7 @@
   }
   article {
     margin: 0 0;
-    width: 100%;
+    flex: 0 1;
   }
   article > p {
     margin-top: 1rem;

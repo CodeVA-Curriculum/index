@@ -43,8 +43,8 @@
     </details>
   </div>
   <div class='buttons'>
-    <a role="button" href="/learn/{project.db.path}">Open Project</a>
-    <a role="button"  href="learn/{project.db.path}">Save Project</a>
+    <a role="button" href="/learn/{project.db.path}">Begin Project</a>
+    <a role="button" disabled  href="learn/{project.db.path}">Save Project</a>
   </div>
 </div>
 <style lang='scss'>

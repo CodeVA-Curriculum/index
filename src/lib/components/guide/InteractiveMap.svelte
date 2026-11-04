@@ -24,47 +24,49 @@
   let view = $state()
 
   // // hover visualization update
-  // $effect(() => {
-  //   const old = untrack(() => oldList)
-  //   for(const path of hoverList) {
-  //     if(!old.includes(path)) {
-  //       elementsByPath[path].highlight()
-  //     }
-  //   }
-  //   for(const path of old) {
-  //     if(!hoverList.includes(path)) {
-  //       elementsByPath[path].dehighlight()
-  //     }
-  //   }
-  //   oldList = [...hoverList]
-  // })
+  $effect(() => {
+    const old = untrack(() => oldList)
+    for(const path of hoverList) {
+      if(!old.includes(path)) {
+        map.elementsByPath[path].highlight()
+      }
+    }
+    for(const path of old) {
+      if(!hoverList.includes(path)) {
+        map.elementsByPath[path].dehighlight()
+      }
+    }
+    oldList = [...hoverList]
+  })
 
   // Camera movement on param update
   $effect(() => {
+    console.log("updating from params..")
     view = page.url.searchParams.get('view')    
-    const el = map.elementsByPath[view]
-    let flag = false
-    if(camera && el) {
-      const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
-      // camera.moveCenterTo(location.x + selectOffset, location.y)
-      let z = el.nodeGroups ? 0.25 : 1
-      // camera.zoom({x:camera.ix, y:camera.iy}, z, true)
-    }
+    // updating stuff down here was polluting the camera somehow, so its wrapped in `untrack` until I can figure out why
+    untrack(() => {
+      const el = map.elementsByPath[view]
+      if(camera && el) {
+        const location = camera.getScreenCoords({x: el.x, y: el.y})
+        camera.moveCenterTo(location.x, location.y)
+        let z = el.nodeGroups ? 0.25 : 1
+        camera.zoom({x:camera.ix, y:camera.iy}, z, true)
+        el.setSelect(true)
+      } else if(camera){
+        // birds eye view
+        console.log("birds eye")
+        const location = camera.getScreenCoords({ x: map.centerX, y: map.centerY})
+        camera.moveCenterTo(location.x, location.y+camera.p5.displayHeight/2)
+        camera.zoom({x:camera.ix, y:camera.iy}, 0.25, true)
+      }
+    })
   })
 
 
   let cursor:Cursor
   let camera:Camera 
   let startImage:any
-  let selectOffset = -300
   let font:any
-  export function deselect() {
-    console.log("Deselecting...")
-    for(const el of selected) {
-      el.setSelect(false)
-    }
-    selected = []
-  }
 
   let sketch = (p5:any) => {
     p5.setup = async () => {
@@ -98,24 +100,23 @@
 
       for(const node of nodes) {
         node.setup(p5)
-        maxX = node.x > maxX ? node.x : maxX;
-        maxY = (node.y) > (maxY) ? node.y : maxY
-        minX = (node.x) < (minX) ? node.x : minX;
-        minY = (node.y) < (minY) ? node.y : minY
         node.completeImage = completeImage
       }
-      console.log(`Map boundaries are ${minX}, ${minY}; ${maxX}, ${maxY}`)
+
+      console.log(`Map center is at ${map.centerX}, ${map.centerY}`)
       if(!view) {
         const startNode = map.elementsByPath[startPath]
         console.log(startNode)
         const location = camera.getScreenCoords({x: startNode.x, y: startNode.y}, 0)
         camera.moveCenterTo(location.x, location.y)
-        camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
+        // camera.zoom({x: camera.ix, y: camera.iy}, 1, true)
       } else if(map.elementsByPath[view]){
+        const el = map.elementsByPath[view]
         const loc = camera.getScreenCoords(map.elementsByPath[view])
-        camera.moveCenterTo(loc.x+selectOffset, loc.y)
+        camera.moveCenterTo(el.x, el.y)
         let z = map.elementsByPath[view].nodeGroups ? 0.25 : 1
-        camera.zoom({x: camera.ix, y: camera.iy}, z, true)
+        // camera.zoom({x: camera.ix, y: camera.iy}, z, true)
+        map.elementsByPath[view].setSelect(true)
       }
 
       for(const edge of edges) {
@@ -146,7 +147,7 @@
       // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
       let startNode = false;
         let pins = []
-      camera.display(() => {
+      camera.display(p5, () => {
         p5.fill('rgba(0, 0, 0, 0)')
         p5.stroke(p5.color(0, 0, 0));
         p5.strokeWeight(8)
@@ -174,10 +175,6 @@
           node.setHover(hovering)
           node.draw(p5)
           if(startPath == node.db.path) {
-          //   const floatDist = 24;
-          //   const rate = 0.5
-          //   const offsetY = (Math.floor(tick*rate) % floatDist * 2) - floatDist
-          //   p5.image(startImage, node.x+node.width/2- startImage.width/2, node.y - 18 - startImage.height + (Math.abs(offsetY)))
             startNode = node
           }
           if(node.db.path == startPath && !node.complete) {
@@ -269,6 +266,7 @@
   </div>
 </div>
 <style lang='scss'>
+  @use "$lib/styles/theme.scss";
   .debug { position: absolute; right: 2rem; display: none; }
   .interactive-map {
     display: flex;

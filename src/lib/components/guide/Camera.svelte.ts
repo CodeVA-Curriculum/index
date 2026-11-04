@@ -15,7 +15,6 @@ export class Camera {
         this.p5 = p5;
         this.ix = this.p5.windowWidth/2
         this.iy = this.p5.windowHeight/2
-        // this.setCenter(1)
 
         this.p5.push();
         this.p5.translate(this.transform.x, this.transform.y);
@@ -30,24 +29,19 @@ export class Camera {
         return false
     }
 
-    display(cb:any) {
+    display(p5, cb:any) {
         this.lerpTransform = {
             x: this.lerpTransform.x + ((this.transform.x - this.lerpTransform.x)/4),
             y: this.lerpTransform.y + ((this.transform.y - this.lerpTransform.y)/4),
             scale: this.lerpTransform.scale + ((this.transform.scale - this.lerpTransform.scale)/4)
         }
-        this.p5.push()
-        this.p5.translate(-this.lerpTransform.x, -this.lerpTransform.y)
-        this.p5.scale(this.lerpTransform.scale)
+        p5.push()
+        p5.translate(-this.lerpTransform.x, -this.lerpTransform.y)
+        p5.scale(this.lerpTransform.scale)
         cb();
-        this.matrix = this.p5.drawingContext.getTransform()
-        this.p5.pop()
+        this.matrix = p5.drawingContext.getTransform()
+        p5.pop()
 
-        // this.p5.fill('rgba(0, 0, 0, 0')
-        // this.p5.circle(this.p5.width/2, this.p5.height/2, 10)
-        // this.p5.line(this.p5.width/2, this.p5.height/2 - 15, this.p5.width/2, this.p5.height/2 + 15)
-        // this.p5.line(this.p5.width/2 + 15, this.p5.height/2, this.p5.width/2 - 15, this.p5.height/2)
-        // this.p5.fill(0)
     }
     zoom(absoluteLocation:Coords, deltaZoom:number, absolute:boolean) {
         let factor;

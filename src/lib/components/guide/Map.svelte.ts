@@ -15,13 +15,21 @@ export class Map {
   edges:Edge[] = []
   elementsByPath:any = {}
   camera:Camera|null = null
+  centerX:number = 0
+  centerY:number = 0
   constructor(map:Input) {
-    console.log(map)
+    let maxX = 0; let maxY = 0; let minX = 0; let minY = 0
     for(const node of map.nodes) {
+      maxX = node.x > maxX ? node.x : maxX;
+      maxY = (node.y) > (maxY) ? node.y : maxY
+      minX = (node.x) < (minX) ? node.x : minX;
+      minY = (node.y) < (minY) ? node.y : minY
       const obj = new Node(node)
       this.nodes.push(obj)
       this.elementsByPath[node.path] = obj
     }
+    this.centerX = (maxX - minX)/2 + minX
+    this.centerY = (maxY - minY)/2 + minY
     for(const edge of map.edges) {
       const obj = new Edge(edge, this.elementsByPath)
       this.edges.push(obj)

@@ -12,7 +12,7 @@
       }
     },
     {
-      label: "Connected Tutorials",
+      label: "Related Tutorials",
       img: (p5:any) => {
         p5.setup = async () => {
           p5.createCanvas(50,50)
@@ -41,7 +41,7 @@
         p5.setup = async () => {
           p5.createCanvas(50,50)
           p5.strokeWeight(2)
-          p5.stroke(255, 0, 0)
+          p5.stroke("#22A5E6")
           p5.fill('rgba(0, 0, 0, 0)')
           p5.bezier(15, 15, 50, 15, 0, 35, 35, 35);
           p5.fill(255)
@@ -55,7 +55,7 @@
       img: (p5:any) => {
         p5.setup = async () => {
           p5.createCanvas(50,50)
-          p5.stroke(255, 0, 0)
+          p5.stroke("#22A5E6")
           p5.strokeWeight(8)
           p5.drawingContext.setLineDash([8,15])
           p5.line(0, 25, 50, 25)
@@ -81,6 +81,7 @@
 </a>
 <style lang='scss'>
   li > span { color: black; }
+  h5 { font-size: 14pt;}
   .legend {
     display: flex;
     flex-direction: column;
@@ -97,7 +98,7 @@
       padding: 0;
       margin: 0;
       gap: 1rem;
-      max-width: 9rem;
+      max-width: 7rem;
     }
     background-color: white;
     border-radius: 1rem;
@@ -105,5 +106,8 @@
     padding-right: 1rem;
   }:hover {
     cursor: pointer;
+  }
+  span {
+    font-size: 12pt;
   }
 </style>

@@ -52,16 +52,19 @@ export class Edge {
 
 
   }
-  draw(p5) {
+  draw(p5, arrow=true) {
     this.tick++
     p5.push()
     p5.stroke(this.to.locked || this.from.locked ? 200 : 0)
+    if(this.highlighted) {
+      p5.stroke(HIGHLIGHT_COLOR)
+    }
     p5.bezier(this.points.p0.x, this.points.p0.y,this.points.p1.x, this.points.p1.y,this.points.p2.x, this.points.p2.y, this.points.p3.x, this.points.p3.y)
     p5.pop()
     // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
 
     // Draw arrows if one of connected nodes is selected
-    if(!this.to.selected && !this.from.selected) { return }
+    if((!this.to.selected && !this.from.selected) || !arrow) { return }
 
     const offset = Math.sin((this.tick % 400)/25) * 10
     const selected = this.to.selected ? this.to : this.from
@@ -101,16 +104,16 @@ export class Edge {
     // p5.text(this.db.uid, this.cx,  this.cy)
     const status = !locked ? 'unlocked': 'locked'
     if(this.highlighted) {
-      p5.push()
-      p5.stroke(HIGHLIGHT_COLOR)
-      p5.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
-      p5.fill('transparent')
-      if(this.optional) {
-        this.drawOptionEdge(p5)
-      } else {
-        this.draw(p5)
-      }
-      p5.pop()
+    p5.push()
+    p5.stroke(HIGHLIGHT_COLOR)
+    p5.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
+    p5.fill('transparent')
+    if(this.optional) {
+      this.drawOptionEdge(p5)
+    } else {
+      this.draw(p5, false)
+    }
+    p5.pop()
     }
   }
   drawOptionEdge(p5) {

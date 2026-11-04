@@ -75,7 +75,12 @@ export class Project {
     }
   }
   getCompletePercent() {
-    return 0
+    let complete= 0
+    const nodes = this.getNodes()
+    for(const node of nodes) {
+      complete += node.complete ? 1 : 0
+    }
+    return Math.round(complete / nodes.length * 100)
   }
   highlight() {
     this.highlighted = true
