@@ -26,6 +26,7 @@
 <style lang='scss'>
   $PAGE_MARGIN: 3rem;
   .markdown-lesson {
+    width: auto;
     background-color: white;
     // border: 1px solid black;
     padding: $PAGE_MARGIN;

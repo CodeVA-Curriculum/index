@@ -18,48 +18,45 @@
   let tick = 0
   let instance = $state()
 
-  let {  legend=false,startPath, view, hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
+  let {  legend=false,startPath,  hoverList = $bindable([]), selected = $bindable([]), elementsByPath, nodes, edges, projects, interact, width=-1, height=-1, map } = $props()
   let oldList = $state([])
 
+  let view = $state()
 
   // // hover visualization update
-  $effect(() => {
-    const old = untrack(() => oldList)
-    for(const path of hoverList) {
-      if(!old.includes(path)) {
-        elementsByPath[path].highlight()
-      }
-    }
-    for(const path of old) {
-      if(!hoverList.includes(path)) {
-        elementsByPath[path].dehighlight()
-      }
-    }
-    oldList = [...hoverList]
-  })
+  // $effect(() => {
+  //   const old = untrack(() => oldList)
+  //   for(const path of hoverList) {
+  //     if(!old.includes(path)) {
+  //       elementsByPath[path].highlight()
+  //     }
+  //   }
+  //   for(const path of old) {
+  //     if(!hoverList.includes(path)) {
+  //       elementsByPath[path].dehighlight()
+  //     }
+  //   }
+  //   oldList = [...hoverList]
+  // })
 
   // Camera movement on param update
   $effect(() => {
+    view = page.url.searchParams.get('view')    
     const el = map.elementsByPath[view]
     let flag = false
-    if(view && view.length > 0) {
-      selectOffset = -300
-    }
     if(camera && el) {
       const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
-      camera.moveCenterTo(location.x + selectOffset, location.y)
+      // camera.moveCenterTo(location.x + selectOffset, location.y)
       let z = el.nodeGroups ? 0.25 : 1
-      camera.zoom({x:camera.ix, y:camera.iy}, z, true)
-    }    console.log("Updated selectOffset", selectOffset)
+      // camera.zoom({x:camera.ix, y:camera.iy}, z, true)
+    }
   })
-
-
 
 
   let cursor:Cursor
   let camera:Camera 
   let startImage:any
-  let selectOffset = $state(0)
+  let selectOffset = -300
   let font:any
   export function deselect() {
     console.log("Deselecting...")
@@ -68,6 +65,7 @@
     }
     selected = []
   }
+
   let sketch = (p5:any) => {
     p5.setup = async () => {
       p5.createCanvas(width < 0 ? p5.displayWidth : width,height < 0? p5.displayHeight*.8 : height)
@@ -226,20 +224,13 @@
         const {status,obj}= hoveredNodes[0].toggleSelect()
         selected = []
         if(status) {
-          selected = [ obj ]
-          obj.setSelect(true)
-          // zoom in
-          // const location = camera.getScreenCoords({x: hoveredNodes[0].x, y: hoveredNodes[0].y + 100}, 0)
-          // camera.moveCenterTo(location.x, location.y)
-          // camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
-
           // Write to url
           goto("?view="+obj.db.path)
         } else {
           // zoom out & deselect
-          camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
+          // camera.zoom({x:camera.ix, y:camera.iy}, 0.5, true)
           // Write to url
-          goto("?")
+          goto('?')
         }
       }
     }

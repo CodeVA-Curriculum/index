@@ -54,7 +54,10 @@ export class Edge {
   }
   draw(p5) {
     this.tick++
+    p5.push()
+    p5.stroke(this.to.locked || this.from.locked ? 200 : 0)
     p5.bezier(this.points.p0.x, this.points.p0.y,this.points.p1.x, this.points.p1.y,this.points.p2.x, this.points.p2.y, this.points.p3.x, this.points.p3.y)
+    p5.pop()
     // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
 
     // Draw arrows if one of connected nodes is selected
@@ -69,6 +72,8 @@ export class Edge {
     const ratio = radius / dist
     const x = p5.lerp(selected.x, other.x, ratio)
     const y = p5.lerp(selected.y, other.y, ratio)
+    
+    // draw the triangle link for the adjacent node
     p5.push()
     p5.angleMode(p5.DEGREES)
     const r = 60

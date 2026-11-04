@@ -8,7 +8,11 @@
   let { obj, short } = $props()
   const tabs = [ "Overview", "Quick Take", "Questions", "Prompts" ]
   let active = $state("Overview")
-  let locked = obj?.locked
+
+  let locked = $state(true)
+  $effect(() => {
+    locked = obj ? obj.locked : true
+  })
 
   function select(i:number) {
     active = tabs[i]

@@ -17,6 +17,7 @@ export async function getGuideFromParam(param:string){
   return result[0]
 }
 
+
 export async function getProjectsFromGuide(guideId:number) {
   return await db.query.project.findMany({
     with: projectRelations,

@@ -1,7 +1,6 @@
 <script lang='ts'>
   import FilterAnchorPill from '$lib/components/FilterAnchorPill.svelte'
   import { dbObjTitles } from '$lib/utils'
-  import ElementPanel from '../components/ElementPanel.svelte'
   import Element from '../components/Element.svelte'
   import SearchBar from '../components/SearchBar.svelte'
   import ElementTable from '../components/ElementTable.svelte'

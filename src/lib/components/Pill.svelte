@@ -10,6 +10,11 @@
 
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
+  $SMALL: 11pt;
+  $MED: 14pt;
+  $LARGE: 18pt;
+  $SIZE: $SMALL;
+
   .pill {
     @import "$lib/styles/grades";
     @include gradeStyles;
@@ -21,15 +26,29 @@
     background-color: theme.$dark;
     border-radius: 40px;
     margin: 0 0;
-    font-size: 11pt;
+    font-size: $SIZE;
     & > span {
     overflow-x:hidden;
     white-space:nowrap;
       position: relative;
       top: 1px;
-      padding: 4px;
+      padding: $SIZE / 2;
+      line-height: $SIZE * 1.5;
     }
   }
-  .medium { font-size: 14pt; }
   .pill.light { background-color: gray; color: white; }
+  .pill.medium {
+    font-size: $MED;
+    & > span {
+      padding: $MED/ 2;
+      line-height: $MED * 1.5;
+    }
+  }
+  .pill.large{
+    font-size: $LARGE;
+    & > span {
+      padding: $LARGE/ 2;
+      line-height: $LARGE* 1.5;
+    }
+  }
 </style>

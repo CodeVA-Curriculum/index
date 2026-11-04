@@ -3,7 +3,7 @@
   import GDoc from '$lib/components/GDoc.svelte'
   import ElementTable from '../../components/ElementTable.svelte'
   import PremiumCallout from '$lib/components/PremiumCallout.svelte'
-  import { faBoltLightning } from '@fortawesome/free-solid-svg-icons'
+  import { faBoltLightning, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
   import { pushState, goto } from "$app/navigation"
   import Fa from 'svelte-fa'
   import { page } from '$app/state'
@@ -70,7 +70,7 @@
     <header>
       <div>
       {#if showThumbnail}
-      <img class='thumbnail has-shadow' src={data.element.image} />
+      <img class='thumbnail' src={data.element.image} />
       {/if}
       <h1>{#if locked}<span><Fa icon={faBoltLightning} size="1.5" /></span>{/if}{data.element.title}</h1>
       <div class='stats'>
@@ -80,22 +80,20 @@
       </div>
       {#if data.element.children?.length > 0}
           <table class='related'>
-            <colgroup>
-              <col>
-              <col>
-            </colgroup>
             <thead>
               <tr>
                 <th class='title' scope="col">Title</th>
                 <th scope="col">Grades</th>
+                <th scope='col'></th>
                 <th scope='col'></th>
               </tr>
             </thead>
             <tbody class='child-rows'>
               {#each data.element.children as row,i}
                 <tr class='child {row.path == view.path ? "selected" : "deselected"}'>
-                  <td><a href="/teach/library/browse/{data.element.path}?view={row.path}">{#if row.locked}<span><Fa icon={faBoltLightning} /></span>{/if}{row.title}</a></td>
+                  <td><a href="/teach/library/browse/{data.element.path}?view={row.path}">{#if row.locked}<span class='premium'><Fa icon={faBoltLightning} /></span>{/if}{row.title}</a></td>
                   <td><Pill style={getGradeStyle(row)}>{row.gradesAbbr}</Pill></td>
+                  <td><a class='open' href='/teach/library/browse/{row.path}'><span>Open</span><Fa icon={faUpRightFromSquare} /></a></td>
                   <td><a class='close' href='/teach/library/browse/{data.element.path}'>Close</a></td>
                 </tr>
               {/each}
@@ -104,7 +102,7 @@
           {/if}
     </header>
     <p class='description'>{data.element.long}</p>
-    <h2>Subjects & Standards</h2>
+    <h3>Subjects & Standards</h3>
     <table>
       <colgroup>
         <col class='narrow'>
@@ -122,6 +120,9 @@
             <td>{subj.title}</td>
             <td>
               <div class='tags'>
+              {#if data.element.standards.filter((o) => o.subjectId == subj.id).length == 0}
+                <p>None explicitly referenced</p>
+              {/if}
               {#each data.element.standards.filter((o) => o.subjectId == subj.id) as sol}
                 <Standard obj={sol} />
               {/each}
@@ -187,6 +188,9 @@
       gap: 8px;
     }
   }
+  .description {
+    font-size: 14pt;
+  }
   header {
     min-height: 7rem;
     margin-bottom: 2rem;
@@ -197,27 +201,39 @@
   table.related {
     @import "$lib/styles/table";
     @include hoverable;
+    margin-top: 1rem;
   }
+  // tr:hover {
+    // .open { visibility: visible; }
+  // }
   .thumbnail {
     float: left;
     height: 7rem;
     margin: 0;
     margin-right: 2rem;
   }
-  h1 > span, .child span { color: fuchsia; margin-right: 12px; }
+  h1 > span, .child span { margin-right: 12px; }
+  span.premium { color: theme.$premium-light; }
   .tags {
+    p {
+      font-style: italic;
+    }
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 4px;
   }
-  .close {
+  .close, .open {
     visibility: hidden;
   }
   .selected {
     background-color: whitesmoke;
     border: 4px solid theme.$highlight-blue;
-    .close { visibility: visible }
+    .close, .open { visibility: visible }
+  }
+  h3 {
+    font-size: 18pt;
+    font-weight: normal;
   }
 </style>

@@ -7,7 +7,7 @@
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import PanelList from '$lib/components/guide/PanelList.svelte'
   import Fa from 'svelte-fa'
-  import { faX, faCircleInfo, faRoute, faLocationDot } from "@fortawesome/free-solid-svg-icons"
+  import { faX, faCircleInfo, faRoute, faLocationDot, faLocationCrosshairs, faLocation } from "@fortawesome/free-solid-svg-icons"
   import type { PageProps } from './$types'
   let { data }:PageProps = $props()
   import { Map } from '$lib/components/guide/Map.svelte'
@@ -47,7 +47,6 @@
   }
   function toggle(title:string) {
     panelOpen = title ? title : false;
-    console.log(selected)
     if(!title) {
       hoverList = []
       for(const el of selected) {
@@ -69,7 +68,7 @@
 <div class='map-view'>
   <div class='map-wrap'>
     {#if map}
-    <InteractiveMap legend={true} startPath={data.guide.start.path}  map={map} view={panelOpen} bind:hoverList bind:selected interact={interactable} {...map} />
+    <InteractiveMap legend={true} startPath={data.guide.start.path}  map={map} bind:hoverList bind:selected interact={interactable} {...map} />
     {/if}
   </div>
   <div class="ui {panelOpen ? 'open': 'closed'}">
@@ -81,6 +80,8 @@
     </div>
     <div class='end'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
+        <a href="?view={data.guide.start.path}&open={false}" class='map-nav' role='button'><span><Fa icon={faLocationDot} /></span> Find Start</a>
+        <a href="?view" class='map-nav' role='button'><span><Fa icon={faLocationCrosshairs} /></span> Reset View</a>
         <a href="?view=onboarding" class='secondary' role="button"><span><Fa icon={faCircleInfo} /></span> Help</a>
       </Capture>
     </div>

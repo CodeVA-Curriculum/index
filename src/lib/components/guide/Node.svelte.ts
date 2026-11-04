@@ -43,9 +43,12 @@ export class Node {
     let y = this.y*this.scale
 
     p5.push()
-    if(this.highlighted){
+    if(this.locked) {
+      p5.stroke(200) // gray out
+    }
+    if(this.selected){
       p5.strokeWeight(STROKE_WEIGHT * SCALE * 2)
-      p5.stroke(HIGHLIGHT_COLOR)
+      p5.stroke(HIGHLIGHT_COLOR) // select overrides locked for the circle
     }
     p5.circle(x, y, w)
     p5.pop()
@@ -54,10 +57,13 @@ export class Node {
     const offset = this.width*0.75
     if(this.selected || this.hover || this.db.type != 'cache') {
       p5.stroke('transparent')
-      p5.fill('black')
+      p5.fill(this.locked ? 200 : 0)
       p5.text(this.db.title, this.x-(offset)/2, this.y, (offset))
     } else if(this.icon) {
         p5.imageMode(p5.CENTER)
+        if(this.locked) {
+          p5.tint(255, 60)
+        }
         p5.image(this.icon, this.x, this.y, 75, 75)
       // p5.text(this.icon, this.x-(offset)/2, this.y)
     }

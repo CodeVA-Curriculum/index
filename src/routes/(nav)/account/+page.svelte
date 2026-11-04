@@ -1,4 +1,6 @@
 <script lang='ts'>
+  import Pill from '$lib/components/Pill.svelte'
+  import { getCompleted } from '$lib/utils'
   import { page } from '$app/state'
   import Element from  '$routes/(nav)/teach/library/components/Element.svelte'
   import GuideListItem from '$lib/components/guide/GuideListItem.svelte'
@@ -48,53 +50,17 @@
   {/if}
   </section>
 
-  {#await data.guides}
-  {:then}
-<section>
-  <h2>Learning Resources</h2>
-  <p></p>
-  <table>
-    <colgroup>
-      <col>
-      <col>
-      <col>
-    </colgroup>
-  <thead>
-    <tr>
-      <th class='title' scope="col">Title</th>
-      <th scope="col">Completed Tutorials</th>
-      <th scope="col">Completed Projects</th>
-    </tr>
-  </thead>
-  <tbody>
-  {#each data.guides as guide}
-    <tr>
-      <td>{guide.title}</td>
-      <td>0 / 0</td>
-      <td>0 / 0</td>
-    </tr>
-  {/each}
-  </tbody>
-  </table>
-</section>
-{/await}
-{#await data.elements}
-{:then}
-<section>
-  <details open>
-    <summary>
-  <h2>Teaching Resources</h2>
-  </summary>
-  <ElementTable {...data} />
-    </details>
-</section>
-{/await}
-{/if}
 {#if accountOwner}
   <section>
-  <div class='heading-wrap'>
-  <h2 id="library">Access Codes</h2>
-  </div>
+  <details open>
+    <summary>
+    <div class='heading-wrap'>
+      <h2 id="library">Access Codes </h2>
+      <div>
+      <Pill style='large'>{data.codes?.length}</Pill>
+      </div>
+    </div>
+  </summary>
   <div class='create-code'>
     <p>Create a new access code:</p>
     <form method='POST' action="?/code" use:enhance>
@@ -112,8 +78,55 @@
           <AccessCodeCard code={code} />
         {/each}
       </div>
-      <hr>
+    </details>
 </section>
+{/if}
+
+  {#await data.guides}
+  {:then}
+<section>
+  <details open>
+    <summary>
+    <h2>Learning Resources</h2>
+    </summary>
+  <p></p>
+  <table>
+    <colgroup>
+      <col>
+      <col>
+      <col>
+    </colgroup>
+  <thead>
+    <tr>
+      <th class='title' scope="col">Title</th>
+      <th scope="col">Completed Tutorials</th>
+      <th scope="col">Completed Projects</th>
+    </tr>
+  </thead>
+  <tbody>
+  {#each data.guides as guide}
+    <tr>
+      <td><a href="/learn/{guide.path.substring(0,guide.path.indexOf('/'))}">{guide.title}</a></td>
+      <td>{getCompleted(guide.locations)} / {guide.locations.length}</td>
+      <td>{getCompleted(guide.projects)} / {guide.projects.length}</td>
+    </tr>
+  {/each}
+  </tbody>
+  </table>
+  </details>
+</section>
+{/await}
+{#await data.elements}
+{:then}
+<section>
+  <details open>
+    <summary>
+  <h2>Teaching Resources</h2>
+  </summary>
+  <ElementTable {...data} />
+    </details>
+</section>
+{/await}
 {/if}
 <style lang='scss'>
   @use "$lib/styles/theme.scss";
@@ -136,11 +149,16 @@
     color: black;
   }
   .heading-wrap {
+    div {
+      display: flex;
+      flex: 1 0;
+      align-items: center;
+    }
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    & h2 { flex: 1; }
+    & h2 { position: relative; margin-bottom: 0; margin-right: 12px; flex: 0 1; white-space: nowrap;  align-items: center; }
     & a {
       flex: 0 1;
       background-color: white;
@@ -153,11 +171,16 @@
   section { padding-right: 2rem; }
   p { margin-bottom: 2rem; }
   details { position: relative; }
-  details > summary::after {
+  details > summary{
+    padding-left: 2rem;
+    font-size: 70pt;
+    h2 {
+      font-size: 24pt;
+    }
+  }::after {
     position: absolute;
-    right: 0;
-    top: 0;
-    display: none;
+    left: 0;
+    top: 0.25rem;
     
   }
 </style>

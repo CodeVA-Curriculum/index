@@ -13,6 +13,13 @@ export function dbObjTitles(objs:any[]):string {
   return s
 }
 
+export function getCompleted(objs) {
+  let count = 0
+  for(const o of objs) {
+    count += o.status?.length > 0 && o.status[0].complete ? 1 : 0
+  }
+  return count
+}
 export class Lerp {
   private value = 0
   private previous = 0

@@ -53,7 +53,6 @@ async function applyPermissions(projects, nodes, accessCode) {
   for(const el of projects) {
     el.locked = getLocked(el.path, accessCode)
     let projectNodes = []
-    console.log(el.nodeGroups)
     for(const g of el.nodeGroups) {
       projectNodes = [...projectNodes, ...g.nodes]
     }
