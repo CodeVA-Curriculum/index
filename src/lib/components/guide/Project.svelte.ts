@@ -173,8 +173,8 @@ class Group {
   x = 0; y = 0
   constructor(db:any, order:string[], elementsByPath:any) {
     this.title = db.alias
-    order.sort((a,b) => a.groupId == b.groupId ? a.index - b.index : a.groupId - b.groupId )
-    for(const c of order) {
+    const groupOrder = order.sort((a,b) => a.groupId == b.groupId ? a.index - b.index : a.groupId - b.groupId ).filter((o) => o.groupId == db.id)
+    for(const c of groupOrder) {
       let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
       this.nodes.push(elementsByPath[node.path])
       this.nodeMask.push(c.optional)
