@@ -1,7 +1,7 @@
 import type { Project as DbProject } from '$lib/server/db/schema'
 import type { Map } from "./Map.svelte"
 import type { Node } from './Node.svelte'
-import { Edge } from './Edge.svelte'
+import { Edge, getEdgeBetween } from './Edge.svelte'
 import { NodeInGroup } from './Node.svelte'
 
 interface Input {
@@ -18,7 +18,8 @@ export class Project {
   short:string = "No description provided!"
   difficulty:integer = 0
   complete:boolean = $state(false)
-  edges:Edge[] = [] 
+  edges:Set = new Set() // this set references the memory locations of the edges from the global map 
+  nodeMask:boolean[] = []
   nodeGroups:Group = []
   highlighted = $state(false)
   groups:number = -1
@@ -31,6 +32,7 @@ export class Project {
   size = 0
   // need live nodes and edges before building reactive Project
   constructor(i:Input, elementsByPath:any, allEdges:Edge[]) {
+    let optionalNodes = new Set()
     this.locked = i.locked
     this.db = i
     this.title = i.title
@@ -43,6 +45,7 @@ export class Project {
     for(const g of i.nodeGroups) {
       let group = new Group(g, i.pivot, elementsByPath)
       group.addEdges(allEdges, i.pivot, elementsByPath)
+      optionalNodes = optionalNodes.union(group.optionalNodes)
       const paths = group.getPaths()
       this.size += paths.length
       this.nodeGroups.push(group)
@@ -50,6 +53,28 @@ export class Project {
         this.groupsPathMap[path] = this.nodeGroups.length-1
       }
     }
+
+    // build edges between node groups
+    let ends = new Set()
+    for(let i=0;i<this.nodeGroups.length;i++) {
+      const res = this.nodeGroups[i].getEnds()
+      for(const r of res) {
+        ends.add(r)
+      }
+    }
+    for(const node1 of ends) {
+      for(const node2 of ends) {
+        let e = getEdgeBetween(node1, node2, allEdges)
+        let g = this.getGroupByPath(node1.db.path)
+        if(e) {
+          const edge = new Edge(e.db, elementsByPath)
+          edge.optional = optionalNodes.has(edge.to.db.id) || optionalNodes.has(edge.from.db.id)
+          g.edges.push(edge)
+          console.log(`Added new edge between ${edge.to.db.path} and ${edge.from.db.path}. Optional: ${edge.optional}`)
+        }
+      }
+    }
+    
     // Find center
     let { x, y } = this.findCenter()
     this.x = x; this.y = y
@@ -121,9 +146,10 @@ export class Project {
 
   }
   draw(p5){
-    // Display start and end pins
-    for(const g of this.nodeGroups) {
-      g.draw(p5, this.locked)
+    if(this.highlighted) {
+      for(const g of this.nodeGroups) {
+        g.draw(p5, this.locked)
+      }
     }
   }
   getNodes() {
@@ -142,7 +168,6 @@ export class Project {
     return this.getGroupByPath(path).getPrevious(path)
   }
   getGroupByPath(path:string) {
-    console.log(path)
     return this.nodeGroups[this.groupsPathMap[path]]
   }
   getGroupNodeCount() {
@@ -160,6 +185,7 @@ export class Project {
     this.selected = !this.selected
   }
   setSelect(status:boolean) {
+    console.log(`Setting status of project ${this.db.title} to ${status}`)
     this.selected = status
     if(status) { this.highlight() } else { this.dehighlight() }
   }
@@ -170,6 +196,7 @@ class Group {
   nodes:Node[] = []
   nodeMask:boolean = []
   edges:Edge[] = []
+  optionalNodes = new Set()
   x = 0; y = 0
   constructor(db:any, order:string[], elementsByPath:any) {
     this.title = db.alias
@@ -177,7 +204,7 @@ class Group {
     for(const c of groupOrder) {
       let node = (db.nodes.filter((o) => o.id == c.nodeId))[0]
       this.nodes.push(elementsByPath[node.path])
-      this.nodeMask.push(c.optional)
+      if(c.optional) { this.optionalNodes.add(c.nodeId) }
     }
   }
   setup(p5, icon) {
@@ -186,8 +213,9 @@ class Group {
     }
   }
   draw(p5, locked=false) {
-    for(const e of this.edges) {
-      e.projectDraw(p5, locked)
+    for(let i=0;i<this.edges.length;i++) {
+      const e = this.edges[i]
+      e.projectDraw(p5, locked, e.optional)
     }
   }
   getNodes() {
@@ -199,6 +227,22 @@ class Group {
       paths.push(n.db.path)
     }
     return paths
+  }
+  getEnds() {
+    let res = []
+    for(let i=0;i<this.nodes.length;i++) {
+      res.push(this.nodes[i])
+      if(this.optionalNodes.has(this.nodes[i].db.id)) {
+        break  
+      }
+    }
+    for(let i=this.nodes.length-1;i>-1;i--) {
+      res.push(this.nodes[i])
+      if(this.optionalNodes.has(this.nodes[i].db.id)) {
+        break  
+      }
+    }
+    return res
   }
   getNext(path = "default") {
     let s = []
@@ -243,28 +287,27 @@ class Group {
     for(const node of this.nodes) {
       ids.push(node.db.id)
     }
-    const e = edges.filter((o) => ids.includes(o.toNode.id) && ids.includes(o.fromNode.id) && Math.abs(ids.indexOf(o.fromNode.id) - ids.indexOf(o.toNode.id)) == 1)
+    const e = edges.filter((o) => ids.includes(o.to.db.id) && ids.includes(o.from.db.id) && Math.abs(ids.indexOf(o.from.db.id) - ids.indexOf(o.to.db.id)) == 1)
     // console.log(`Found ${e.length} edges for group ${this.title} in project ${parent.path}`)
-    for(const dbEdge of e) {
-      const o = new Edge(dbEdge, elementsByPath)
-
-      const node0optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.to.db.id)]
-      const node1optional = this.nodeMask[this.nodes.findIndex((n) => n.db.id == o.from.db.id)]
-      o.optional = node0optional || node1optional
+    for(const edgeObj of e) {
+      const o = new Edge(edgeObj.db, elementsByPath)
+      o.optional = this.optionalNodes.has(o.to.db.id) || this.optionalNodes.has(o.from.db.id)
       this.edges.push(o)
     }
     // add edges between non-optional nodes
     let pairs = []
     let lastFalse:number = 0
     let inCut:boolean = false
-    for(let i=0;i<this.nodeMask.length;i++) {
-      inCut = this.nodeMask[i]
+    for(let i=0;i<this.nodes.length;i++) {
+      const n = this.nodes[i]
+      inCut = this.optionalNodes.has(n.db.id)
       if(!inCut && i-lastFalse > 1) {
         // console.log(`Need edge between ${i} and ${lastFalse}`)
-        const e = edges.filter((o) => (o.toNode.id == this.nodes[i].db.id && o.fromNode.id == this.nodes[lastFalse].db.id) || (o.fromNode.id == this.nodes[lastFalse].db.id && o.toNode.id == this.nodes[i].db.id))[0]
+        const e = getEdgeBetween(this.nodes[i], this.nodes[lastFalse], edges)
+        // const e = edges.filter((o) => (o.to.db.id == this.nodes[i].db.id && o.from.db.id == this.nodes[lastFalse].db.id) || (o.from.db.id == this.nodes[lastFalse].db.id && o.to.db.id == this.nodes[i].db.id))[0]
         // console.log(`Found ${e.length} edges to base new Edge off of`)
         if(e) {
-        const o = new Edge(e, elementsByPath)
+        const o = new Edge(e.db, elementsByPath)
         o.optional = false
         this.edges.push(o)
         } else {

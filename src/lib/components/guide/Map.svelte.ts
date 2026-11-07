@@ -31,12 +31,13 @@ export class Map {
     this.centerX = (maxX - minX)/2 + minX
     this.centerY = (maxY - minY)/2 + minY
     for(const edge of map.edges) {
+      // these are the plain edges. we can de-duplicate them if we want
       const obj = new Edge(edge, this.elementsByPath)
       this.edges.push(obj)
       this.elementsByPath[obj.db.uid] = obj
     }
     for(const project of map.projects) {
-      const obj = new Project(project, this.elementsByPath, map.edges)
+      const obj = new Project(project, this.elementsByPath, this.edges)
       this.projects.push(obj)
       this.elementsByPath[project.path] = obj
     }

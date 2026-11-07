@@ -13,7 +13,6 @@ export class Edge {
   tick=0
   points:object
   db:DbEdge;
-  optional:boolean = false
   optionEdge:any 
   shape:any
   highlight:any
@@ -24,6 +23,7 @@ export class Edge {
   cx:number = 0
   cy:number = 0
   highlighted:boolean = $state(false)
+  optionIndex = {}
   constructor(obj:DbEdge, elementsByPath:any) {
     // console.log("Setting up edge", obj.uid)
     // console.log(obj.toNode.path)
@@ -100,18 +100,17 @@ export class Edge {
   debug(p5){
     p5.text(this.db.uid, this.cx,  this.cy)
   }
-  projectDraw(p5, locked=false) {
-    // p5.text(this.db.uid, this.cx,  this.cy)
+  projectDraw(p5, locked=false, optional=false) {
     const status = !locked ? 'unlocked': 'locked'
     if(this.highlighted) {
     p5.push()
     p5.stroke(HIGHLIGHT_COLOR)
     p5.strokeWeight(STROKE_WEIGHT * SELECT_FACTOR)
     p5.fill('transparent')
-    if(this.optional) {
+    if(optional) {
       this.drawOptionEdge(p5)
     } else {
-      this.draw(p5, false)
+      this.draw(p5, locked)
     }
     p5.pop()
     }
@@ -184,6 +183,14 @@ export class Edge {
   }
 }
 
+export function getEdgeBetween(node1, node2, edges) {
+  // console.log(node1.db.id, node2.db.id)
+  // console.log(edges[0].to.db.id)
+  const e = edges.filter((o) => (o.to.db.id == node1.db.id && o.from.db.id == node2.db.id) || (o.to.db.id == node2.db.id && o.from.db.id == node1.db.id))
+  // console.log(e)
+  if(e.length > 0 ) { return e[0] } else { return null }
+  return e[0]
+}
 export function quadratic(p5:any, p0:Coords, p1:Coords, p2:Coords, t:number):Coords {
     const x1 = p5.lerp(p0.x, p1.x, t)
     const y1 = p5.lerp(p0.y, p1.y, t)

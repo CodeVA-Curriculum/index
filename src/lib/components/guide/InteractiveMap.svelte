@@ -55,8 +55,6 @@
       } else if(camera){
         // birds eye view
         console.log("birds eye")
-        const location = camera.getScreenCoords({ x: map.centerX, y: map.centerY})
-        camera.moveCenterTo(location.x, location.y+camera.p5.displayHeight/2)
         camera.zoom({x:camera.ix, y:camera.iy}, 0.25, true)
       }
     })
@@ -115,8 +113,7 @@
         const loc = camera.getScreenCoords(map.elementsByPath[view])
         camera.moveCenterTo(el.x, el.y)
         let z = map.elementsByPath[view].nodeGroups ? 0.25 : 1
-        // camera.zoom({x: camera.ix, y: camera.iy}, z, true)
-        map.elementsByPath[view].setSelect(true)
+        camera.zoom({x: camera.ix, y: camera.iy}, z, true)
       }
 
       for(const edge of edges) {
@@ -128,7 +125,6 @@
       p5.textSize(28)
       p5.textWrap('WORD')
       p5.textAlign(p5.CENTER, p5.CENTER)
-      // projects[0].highlight()
     }
     p5.draw = () => {
       tick++
@@ -136,15 +132,8 @@
       if(selected.length == 0 && el){
         selected = [ el ]
         el.setSelect(true)
-        // const location = camera.getScreenCoords({x: el.x, y: el.y}, 0)
-        // camera.moveCenterTo(location.x - p5.displayWidth * 0.1, location.y)
-        // camera.zoom({x:camera.ix, y:camera.iy}, 1, true)
       }
-      // debug.cursor = cursor.mx + ', ' + cursor.my
-      // debug.local = cursor.localX + ', ' + cursor.localY
-      // debug.selected = selected.length
       p5.background("#f5f5f5");
-      // p5.text(view, p5.displayWidth/2, p5.displayHeight/2)
       let startNode = false;
         let pins = []
       camera.display(p5, () => {
