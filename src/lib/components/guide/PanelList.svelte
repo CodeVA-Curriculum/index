@@ -10,6 +10,7 @@
   import ProjectListItem from '$lib/components/guide/ProjectListItem.svelte'
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
+  import { page } from '$app/state'
   import { faX } from '@fortawesome/free-solid-svg-icons'
   let { hoverList = $bindable([]), title, map, children} = $props()
 
@@ -73,7 +74,26 @@
 {/snippet}
 
 {#snippet listHeader(title)}
-    <h2>{title.charAt(0).toUpperCase() + title.substring(1)}</h2>
+    <nav id="header-tabs">
+      <ul>
+        <li>
+          <a role='button' href='?view=projects'
+            class:select={page.url.searchParams.get('view').toLowerCase().includes('projects')}
+            class:deselect={!page.url.searchParams.get('view').toLowerCase().includes('projects')}
+          >
+            <span>Projects</span>
+          </a>
+        </li>
+        <li>
+          <a role='button' href="?view=tutorials"
+            class:select={page.url.searchParams.get('view').toLowerCase().includes('tutorials')}
+            class:deselect={!page.url.searchParams.get('view').toLowerCase().includes('tutorials')}
+          >
+            <span>Tutorials</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <ProjectListItemSearch input={list} bind:results={res} />
 {/snippet}
 
@@ -124,16 +144,24 @@
 </div>
 
 <style lang='scss'>
-  @import "$lib/styles/theme.scss";
+  @use "$lib/styles/theme.scss";
+  @use "$lib/styles/layout.scss";
+
+  #header-tabs {
+    @extend .tabs;
+    width: 100%;
+    li{
+      flex: 1 0;
+    }
+    a[role='button'] {
+      width: 100%;
+    }
+  }
   .hover-bound {
     margin: 1rem 0;
   }
   .subtitle {
     font-size: 0.75rem;
-  }
-  nav {
-    position: absolute;
-    top: 0;
   }
   .head {
     margin: 0 1rem;
@@ -150,14 +178,13 @@
   }
   .filter {
   padding: 0 0.5rem;
-    background-color: $dark-blue;
+    background-color: theme.$dark-blue;
   }
   .close {
   right: 0.5rem;
-  top: -2rem;
+  top: -2.5rem;
     position: absolute;    
   }
-  nav { margin: 0 1.5rem; }
   .lists {
     display: grid; 
     grid-template-columns: 1fr 1fr;

@@ -1,4 +1,5 @@
 @use 'media-queries.scss' as *;
+@use "./theme.scss";
 
 $section-gap: 4rem;
 $section-margin: 2rem;
@@ -32,6 +33,20 @@ section { margin: $section-gap 0rem; }
   span {
     margin-left: 12px;
   }
+}
+
+.tabs {
+  display: flex;
+  & li {
+    flex: 1 0 1;
+    padding: 0;
+    margin: 0 2px;
+    button, a[role='button'] { white-space: nowrap; }
+  }
+  ul { width: 100%; margin: 0; margin-bottom: 1rem;  }
+  justify-content: center;
+  button.deselect, a[role='button'].deselect { background-color: whitesmoke; color: theme.$text; border-color: white; }
+  button.select, a[role='button'].select { background-color: gray; color: white; border-color: transparent; }
 }
 
 

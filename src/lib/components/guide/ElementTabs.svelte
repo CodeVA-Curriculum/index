@@ -79,6 +79,7 @@
   <span class='numberpill'>{a} / {b}</span>
 {/snippet}
 
+
 <div class='element-tabs'>
   <nav>
     <ul>
@@ -114,7 +115,8 @@
 </div>
 
 <style lang='scss'>
-  @import "$lib/styles/theme.scss";
+  @use "$lib/styles/theme.scss";
+  @use "$lib/styles/layout.scss";
   .footer {
     position: sticky;
     bottom: 0;
@@ -131,19 +133,20 @@
       }
     }
   }
-  .deselect { background-color: whitesmoke; color: $text; border-color: white; }
+  .deselect { background-color: whitesmoke; color: theme.$text; border-color: white; }
   .select { background-color: gray; color: white; border-color: transparent; }
   nav {
+    @extend .tabs;
     
-    display: flex;
-    & li {
-      flex: 1 0 1;
-      padding: 0;
-      margin: 0 2px;
-      button { white-space: nowrap; }
-    }
-    ul { width: 100%; margin: 0; margin-bottom: 1rem;  }
-    justify-content: center;
+    // display: flex;
+    // & li {
+    //   flex: 1 0 1;
+    //   padding: 0;
+    //   margin: 0 2px;
+    //   button { white-space: nowrap; }
+    // }
+    // ul { width: 100%; margin: 0; margin-bottom: 1rem;  }
+    // justify-content: center;
     margin: 0 1rem;
   }
   .body {
