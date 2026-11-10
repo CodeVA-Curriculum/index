@@ -136,6 +136,7 @@ export class Project {
         }).then((img) => {
           this.icon = img
           console.log("Loaded project image", this.db.path)
+          console.log(this.getNodes())
           for(const node of this.getNodes()) {
             if(node.db.type == 'cache') {
               console.log("Applying icon to", node.db.path)

@@ -177,7 +177,7 @@
           }
         }
       })
-      if(startNode && !startNode.complete && pins.length == 0) {
+      if(startNode && !startNode.complete && pins.length == 0 && selected.length == 0) {
         const {x,y}= camera.getScreenCoords({x: startNode.x, y: startNode.y-startNode.radius.get()/2}, 0)
         const size = camera.transform.scale < 1 ? 30 : camera.transform.scale * 30
         let offsetY = 0

@@ -25,7 +25,7 @@ export async function seedGuides(db:any, schema:any) {
   }
 
   // Next, all the nodes
-  const nodePaths = await paths.filter((p) => !projectPaths.includes(p) && !guidePaths.includes(p))
+  const nodePaths = await paths.filter((p) => !guidePaths.includes(p))
   for(const path of nodePaths) {
     // console.log("Rendering node", path)
     let mapPath = path.replace('static/trail-guides/', '')
@@ -44,8 +44,12 @@ export async function seedGuides(db:any, schema:any) {
     file.guide = getGuideIdFromPath(path, guides)
     file.type = path.includes('projects/') ? 'cache' : 'tutorial'
 
+    if(file.path.includes('index.md')) {
+      file.title = file.title + ' Trailhead'
+      file.path = file.path.replace('index.md', 'trailhead.md')
+    }
+
     const { id } = (await db.insert(schema.node).values(file).returning())[0]
-    // console.log(`Added ${path} to database with uid ${file.uid}`)
 
     // Add and associate questions
     for(const question of file.questions) {
@@ -96,7 +100,7 @@ export async function seedGuides(db:any, schema:any) {
     console.log("Assembling project graph for ", project.path)
     const guide = (await db.select().from(schema.guide).where(eq(schema.guide.id, project.guide)))[0]
     const pathStem = guide.path.replace('meta.md', '')
-      // the nodes are grouped
+
     let groups = []
     for(const [k,v] of Object.entries(project.nodes)) {
       groups = [...groups, ...(await db.insert(schema.nodeGroup).values({
@@ -108,6 +112,7 @@ export async function seedGuides(db:any, schema:any) {
     let aliasToLastNode = {}
     for(const group of groups) {
       const nodeList = project.nodes[group.alias]
+      console.log(nodeList)
       let { unprocessed, lastNode} = await groupNodes(db, group, project, nodeList, pathStem)
       aliasToLastNode[group.alias] = lastNode.id
       toProcess.push( { data: unprocessed, alias: group.alias })
@@ -123,12 +128,7 @@ export async function seedGuides(db:any, schema:any) {
       })
     }
 
-
   }
-  // for(const node of projects.nodes) {
-  //   console.log(node)
-  //   const o = (await db.select().from(schema.node).where(eq(schema.node.path, node)))
-  // }
 }
 
 function getGuideIdFromPath(path:string, guides:any[]):number {
