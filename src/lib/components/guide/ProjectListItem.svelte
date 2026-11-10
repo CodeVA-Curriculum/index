@@ -15,9 +15,9 @@
   let flexWidth = $derived($page.url.searchParams.get('view') ? 'full' : 'compact')
 
   function toggle() {}
-  let param = obj.db.path
-  let mapBase = `/learn/${obj.db.path.substring(0, obj.db.path.indexOf('/'))}`
-  let titleLink = map ? `${mapBase}?view=${param}` : `/learn/${obj.db.path}`
+  let param = $derived(obj.db.path)
+  let mapBase = $derived(`/learn/${obj.db.path.substring(0, obj.db.path.indexOf('/'))}`)
+  let titleLink = $derived(map ? `${mapBase}?view=${param}` : `/learn/${obj.db.path}`)
 </script>
 
 <article class='card {flexWidth}'>

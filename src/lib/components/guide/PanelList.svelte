@@ -11,7 +11,7 @@
   import { onMount } from 'svelte'
   import Fa from 'svelte-fa'
   import { page } from '$app/state'
-  import { faX } from '@fortawesome/free-solid-svg-icons'
+  import { faX, faRoute, faLocationDot } from '@fortawesome/free-solid-svg-icons'
   let { hoverList = $bindable([]), title, map, children} = $props()
 
   function mouseIn(item:Node|Project) {
@@ -81,7 +81,7 @@
             class:select={page.url.searchParams.get('view').toLowerCase().includes('projects')}
             class:deselect={!page.url.searchParams.get('view').toLowerCase().includes('projects')}
           >
-            <span>Projects</span>
+            <span><Fa icon={faRoute} /></span>Projects
           </a>
         </li>
         <li>
@@ -89,7 +89,7 @@
             class:select={page.url.searchParams.get('view').toLowerCase().includes('tutorials')}
             class:deselect={!page.url.searchParams.get('view').toLowerCase().includes('tutorials')}
           >
-            <span>Tutorials</span>
+            <span><Fa icon={faLocationDot} /></span>Tutorials
           </a>
         </li>
       </ul>
@@ -115,7 +115,9 @@
 {/snippet}
 
 <div class='panel-list'>
-  <div class='close'>{@render children?.()}</div>
+  <div class='nav-wrap'>
+    <div class='close'>{@render children?.()}</div>
+  </div>
   <div class='head'>
     {#if mode == modes.LIST}
       {@render listHeader(title)}
@@ -155,6 +157,7 @@
     }
     a[role='button'] {
       width: 100%;
+      span { margin-right: 8px;}
     }
   }
   .hover-bound {
@@ -165,7 +168,6 @@
   }
   .head {
     margin: 0 1rem;
-    margin-top: 3rem;
     position: relative;
   }
   .panel-list {
@@ -173,17 +175,19 @@
     height: 100%;
   }
   input {
-  height: 2rem;
-  padding: 0;
+    height: 2rem;
+    padding: 0;
   }
   .filter {
-  padding: 0 0.5rem;
+    padding: 0 0.5rem;
     background-color: theme.$dark-blue;
   }
-  .close {
-  right: 0.5rem;
-  top: -2.5rem;
-    position: absolute;    
+  .nav-wrap {
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    margin: 1rem 1rem;
   }
   .lists {
     display: grid; 
