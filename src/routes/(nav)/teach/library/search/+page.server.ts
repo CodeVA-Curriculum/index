@@ -29,7 +29,17 @@ export const load:PageLoad = async ({ url, params }) => {
   const subjectsFilter = getIdFilter(subjects)
   const typesFilter = getIdFilter(types)
   const tagsFilter = getIdFilter(tags)
-  const solsFilter = getIdFilter(standards)
+  const standardsFilter = getIdFilter(standards)
+
+  const filterObj = {}
+  if(grades.length > 0) { filterObj.grades = { OR: gradesFilter }}
+  if(subjects.length > 0) { filterObj.subjects = { OR: subjectsFilter }}
+  if(audiences.length > 0) { filterObj.audiences = { OR: audiencesFilter }}
+  if(types.length > 0) { filterObj.types = { OR: typesFilter }}
+  if(standards.length > 0) { filterObj.standards = { OR: standardsFilter }}
+  if(tags.length > 0) { filterObj.tags = { OR: tagsFilter }}
+  if(types.length > 0) { filterObj.types = { OR: typesFilter }}
+
   if(query) {
     elements = await db.query.element.findMany({
       with: elementRelations,
@@ -41,24 +51,22 @@ export const load:PageLoad = async ({ url, params }) => {
           { long: { like: `%${query}%`}},
           { content: { like: `%${query}%`}}
         ],
-        grades: {
-          OR: gradesFilter
-        },
-        subjects: {
-          OR: subjectsFilter
-        },
-        audiences: {
-          OR: audiencesFilter 
-        },
-        types: {
-          OR: typesFilter
-        },
-        standards: {
-          OR: solsFilter
-        },
-        tags: {
-          OR: tagsFilter
-        }
+        ...filterObj
+        // subjects: {
+        //   OR: subjects.length > 0 ? subjectsFilter : []
+        // },
+        // audiences: {
+        //   OR: audiences.length > 0 ? audiencesFilter : []
+        // },
+        // types: {
+        //   OR: types.length > 0 ? typesFilter : []
+        // },
+        // standards: {
+        //   OR: standards.length > 0 ? solsFilter : []
+        // },
+        // // tags: {
+        // //   OR: tags.length > 0 ? tagsFilter : []
+        // // }
       }
     })
 
