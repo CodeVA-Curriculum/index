@@ -912,7 +912,7 @@
   resolved "https://registry.npmjs.org/@types/resolve/-/resolve-1.20.2.tgz"
   integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
 
-"@types/unist@*", "@types/unist@^3.0.0":
+"@types/unist@*", "@types/unist@^3.0.0", "@types/unist@^3.0.3":
   version "3.0.3"
   resolved "https://registry.npmjs.org/@types/unist/-/unist-3.0.3.tgz"
   integrity sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==
@@ -3763,7 +3763,15 @@ unist-util-find-after@^5.0.0:
     "@types/unist" "^3.0.0"
     unist-util-is "^6.0.0"
 
-unist-util-is@^6.0.0:
+unist-util-find-between@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/unist-util-find-between/-/unist-util-find-between-1.2.3.tgz#283c66e4762d3749362baed2b163251f2b7d430d"
+  integrity sha512-hYC0ZwhbhILhk0LybBY5HUAtSimHPVW4SbizSnJ2yd7yFP3oSyLQG9Rx+xjuN25kurERTQATozxsam21qYRi0w==
+  dependencies:
+    "@types/unist" "^3.0.3"
+    unist-util-is "^6.0.1"
+
+unist-util-is@^6.0.0, unist-util-is@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/unist-util-is/-/unist-util-is-6.0.1.tgz"
   integrity sha512-LsiILbtBETkDz8I9p1dQ0uyRUWuaQzd/cuEeS1hoRSyW5E5XGmTzlwY1OrNzzakGowI9Dr/I8HVaw4hTtnxy8g==
@@ -3777,6 +3785,13 @@ unist-util-map@^4.0.0:
   dependencies:
     "@types/unist" "^3.0.0"
 
+unist-util-parents@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/unist-util-parents/-/unist-util-parents-3.0.0.tgz#d1c746031168627ea17ae666f5dcbb5d66d3ec2d"
+  integrity sha512-3DVSfp+MkJhcJbGn/W7aOlZYVpsMQQ054cpfbPHZAqYPu/lvu5rCdzjuIt4eEMriLkCWLcnJjax97Awm1Bkhtg==
+  dependencies:
+    "@types/unist" "^3.0.0"
+
 unist-util-position@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/unist-util-position/-/unist-util-position-5.0.0.tgz"
@@ -3786,7 +3801,7 @@ unist-util-position@^5.0.0:
 
 unist-util-remove@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npmjs.org/unist-util-remove/-/unist-util-remove-4.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/unist-util-remove/-/unist-util-remove-4.0.0.tgz#94b7d6bbd24e42d2f841e947ed087be5c82b222e"
   integrity sha512-b4gokeGId57UVRX/eVKej5gXqGlc9+trkORhFJpu9raqZkZhU0zm8Doi05+HaiBsMEIJowL+2WtQ5ItjsngPXg==
   dependencies:
     "@types/unist" "^3.0.0"

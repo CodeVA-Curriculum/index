@@ -5,6 +5,7 @@ import { globby } from 'globby'
 import rehypeHighlight from 'rehype-highlight'
 import { codeAndImage } from '$lib/server/directives/codeAndImage'
 import { embeddedPDFs } from '$lib/server/directives/embeddedPDFs'
+import { lessonPlan } from '$lib/server/directives/lessonPlan'
 import { downloadLink } from '$lib/server/directives/downloadLink'
 import remarkFrontmatter from 'remark-frontmatter'
 import { unified } from 'unified'
@@ -45,6 +46,7 @@ export async function fileToElementObj(path:string):Promise<any> {
       codeAndImage(tree, path)
       embeddedPDFs(tree, path)
       downloadLink(tree,path)
+      lessonPlan(tree, path, frontmatter)
     })
     .use(rehypeFormat)
     .use(rehypeStringify)
@@ -54,14 +56,14 @@ export async function fileToElementObj(path:string):Promise<any> {
     // console.log(frontmatter)
     if(frontmatter && frontmatter.grades) { frontmatter.grades = String(frontmatter.grades)}
 
-    if(path.includes('library')) {
-      frontmatter.materials = frontmatter.materials == undefined ? [] : frontmatter.materials
-      for(let i=0;i<frontmatter.materials.length;i++) {
-        const m = frontmatter.materials[i].replace('./', path.substring(0, path.lastIndexOf('/')+1)).replace('static', '')
-        frontmatter.materials[i] = m
-      }
-      frontmatter.materials = JSON.stringify(frontmatter.materials)
-    }
+    // if(path.includes('library')) {
+    //   frontmatter.materials = frontmatter.materials == undefined ? [] : frontmatter.materials
+    //   for(let i=0;i<frontmatter.materials.length;i++) {
+    //     const m = frontmatter.materials[i].replace('./', path.substring(0, path.lastIndexOf('/')+1)).replace('static', '')
+    //     frontmatter.materials[i] = m
+    //   }
+    //   frontmatter.materials = JSON.stringify(frontmatter.materials)
+    // }
     return {
       ...frontmatter,
       hidden: path.includes('.meta.md'),

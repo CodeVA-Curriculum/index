@@ -26,6 +26,7 @@ table.hoverable {
   }
 }
 
+
 pre.hidden { display: none; }
 pre.visible { display: block; }
 
@@ -106,10 +107,4 @@ pre.visible { display: block; }
       font-weight: bold;
     }
   }
-  /* td { */
-    /* background-color: red; */
-    /* &:hover { */
-      /* background-color: red; */
-    /* } */
-  /* } */
 }

@@ -101,7 +101,6 @@
           </table>
           {/if}
     </header>
-    <p class='description'>{data.element.long}</p>
     <h3>Subjects & Standards</h3>
     <table>
       <colgroup>
