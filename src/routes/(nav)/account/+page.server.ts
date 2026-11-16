@@ -7,61 +7,12 @@ import * as schema from '$lib/server/db/schema'
 import { fail, redirect } from '@sveltejs/kit';
 import { getRequestEvent } from '$app/server';
 import { logUserOut, logInWithCode, logInWithPortal } from '$lib/server'
-import type { Actions, PageServerLoad } from './$types';
-
-export const load: PageServerLoad = async ({locals}) => {
-  const grades = await db.select().from(schema.grade)
-  const audiences = await db.select().from(schema.audience)
-  const subjects = await db.select().from(schema.subject)
-  const tags = await db.select().from(schema.tag)
-  const elementTypes = await db.select().from(schema.elementType)
-
-  
-  const filters = {
-    grades: grades,
-    audiences: audiences,
-    subjects: subjects,
-    tags: tags,
-    elementTypes: elementTypes
-  }
-	const user = requireLogin()
-	const userCodes = await db.query.accessCode.findMany({
-	  where: {
-	    owner: user.id
-	  }
-	})
-  // const [accessCode] = await db.select().from(schema.accessCode).where(eq(schema.accessCode.id, user.codeId))
-  const permissions = { guides: [], library: ["k-8-lessons/test.md"] }
-  const elements = await db.query.element.findMany({
-    with: elementRelations,
-    where: {
-      path: { in: permissions.library }
-    }
-  })
-  let guides = await db.query.guide.findMany({
-    with: { 
-      locations: { with: {
-        status: true      
-      }},
-      projects: { with: {
-        status: true
-      }}
-    }
-  })
-  return {
-    filters: filters,
-    user: user,
-    session: locals.session,
-    codes: userCodes,
-    elements: elements,
-    guides: guides
-  }
-};
+import type { Actions, LayoutServerLoad} from './$types';
 
 export const actions: Actions = {
   portalLogin: async (event) => { 
-    console.log("Triggered portal login") 
-    console.log(event.request)
+    // console.log("Triggered portal login") 
+    // console.log(event.request)
     return await logInWithPortal(event)
   },
   codeLogin: async (event ) => {},

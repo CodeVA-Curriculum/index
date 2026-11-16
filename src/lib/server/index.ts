@@ -261,6 +261,7 @@ export function getLocked(path, code) {
     "data-science/meta.md",
     "data-science/unplugged.md"
   ]
+  return false // TODO: this is a crime
   for(const p of free) {
     if(path.includes(p)) { return false }
   }

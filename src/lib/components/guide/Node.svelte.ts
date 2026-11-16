@@ -27,7 +27,7 @@ export class Node {
     this.x = obj.x/SCALE
     this.y = obj.y/SCALE
     this.complete = obj.status?.length > 0 ? obj.status[0].complete : false
-    this.locked = obj.locked
+    this.locked = false // obj.locked
   }
   setup(p5) {
     const borderWeight = this.locked ? 8 : 8;

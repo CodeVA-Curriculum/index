@@ -4,13 +4,14 @@
   import Standard from '$lib/components/Standard.svelte'
   import { getGradeStyle } from '$lib'
   import Fa from 'svelte-fa'
-  import { faBoltLightning, faPlus } from '@fortawesome/free-solid-svg-icons'
+  import { faSave, faBoltLightning, faPlus, faX, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
   import Element from './Element.svelte'
   import Pill from '$lib/components/Pill.svelte'
   let { elements, user, session, filters, navTo=(s) => '/teach/library/browse/'+s} = $props()
   let selected = $state(-1)
   let filteredElements = $state(elements)
-  let locked = $state(!elements[selected]?.path.includes(session?.scope))
+  let locked = $state(selected >= 0 ? elements[selected].locked : false)
+  // let locked = $state(!elements[selected]?.path.includes(session?.scope))
   function sel(i:number) { selected = i; console.log("selected") }
   let textSearch = $state();
 
@@ -158,12 +159,12 @@
             {#if locked}
             <a class='premium' href="https://codevirginia.org/" target="_blank" role="button">Sign In</a>
             {/if}
-            <a href={navTo(el.path)} target="_blank" role='button'>Open</a>
+            <a href={navTo(el.path)} target="_blank" role='button' >Open</a>
             {#if !locked}
-            <button disabled>Save</button>
+            <button disabled>Save </button>
             {/if}
-            <button onclick={()=>selected=-1} class='close'>Dismiss</button>
-          </div>
+            <button onclick={()=>selected=-1} class='close secondary '>Dismiss </button>
+        </div>
         </td>
         <td colspan="5">
           <Element session={session} user={user} obj={el} />
@@ -221,16 +222,34 @@
     width: 50px;
     overflow-x: hidden;
   }
+  td {
+    vertical-align: top;
+  }
+  .selected > td {
+    height: 100%;
+  }
+  a[role='button'] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .ui-buttons {
-  gap: 8px;
+    // gap: 8px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    font-size: 11pt;
-    align-items: center;
-    * {
-      width: 100%;
-      flex: 1;
+    gap: 8px;
+    // background-color: pink;
+    // padding: 0;
+    // align-self: stretch;
+    // height: 100%;
+    & > * {
+    //   width: 100%;
+      // padding: 0;
+    //   flex: 1;
+    //   margin: 0 0;
+      align-items: center;
+      padding: 0;
+      height: 2rem;
       font-size: 11pt;
     }
   }

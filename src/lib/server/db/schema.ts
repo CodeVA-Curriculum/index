@@ -293,10 +293,11 @@ export type Project = InferSelectModel<typeof project>
 export const pivotUserProject = sqliteTable('pivot_user_project', {
 	id: integer().primaryKey(),
 	userId: integer('user_id').references(() => user.id),
-	itemId: integer().references(() => user.id),
+	itemId: integer().references(() => project.id),
 	complete: integer({ mode: 'boolean' }).default(false),
 	date: text({ mode: "timestamp"}).default(sql`(CURRENT_TIMESTAMP)`)
-}
+},
+	(t) => [primaryKey({ columns: [t.userId, t.itemId]})]
 )
 
 export const pivotNodeProject = sqliteTable('pivot_node_project', {

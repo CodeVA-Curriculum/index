@@ -73,7 +73,6 @@
     <div class='end'>
       <Capture on:capture={(e) => handleCapture(e.detail)}>
         <a href="?view={data.guide.start.path}&open={false}" class='map-nav' role='button'><span><Fa icon={faLocationDot} /></span> Find Start</a>
-        <a href="?view" class='map-nav' role='button'><span><Fa icon={faLocationCrosshairs} /></span> Reset View</a>
         <a href="?view=onboarding" class='secondary' role="button"><span><Fa icon={faCircleInfo} /></span> Help</a>
       </Capture>
     </div>

@@ -73,7 +73,6 @@
     function addToSelected(obj) {
         console.log("Adding to list of selected Standards")
         selected.push(obj)
-        console.log(selected)
     }
     function getAll(map) {
         if(map[0]) {
@@ -101,15 +100,22 @@
         const objs = getAll(map)
         selected.push(...objs)
     }
+
+    function clear() {
+        selected = []
+    }
 </script>
 
-{#snippet selectedStandardsBox(selected)}
+{#snippet selectedStandardsBox(selected, showClear=true)}
 <div class='pills'>
     {#each selected as obj, i}
     <Standard obj={obj}>
-    <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button>
+        <button onclick={() => remove(i)} class='icon'><Fa size=.75x icon={faX}  /></button>
     </Standard>
     {/each}
+    {#if selected.length > 0 && showClear}
+    <button class='clear secondary' onclick={clear}>Clear All</button>
+    {/if}
 </div>
 {/snippet}
 
@@ -144,10 +150,10 @@
 
             <p>Select standards from the list below. Confirm your choices by clicking the button below or closing this window.</p>
             <div style='padding-left: 0.5rem;'>
-            {@render selectedStandardsBox(selected)}
+            {@render selectedStandardsBox(selected, false)}
             <div class='confirm'>
                 <button onclick={close} class='success'>Confirm</button>
-                <button onclick={() => { selected = [] }} class='secondary'>Clear</button>
+                <button onclick={clear} class='secondary'>Clear</button>
             </div>
             </div>
 
@@ -290,13 +296,15 @@
         text-align: right;
         p { text-align: left; }
         .confirm { font-size: 14pt; color: white; padding-right: 12px; padding-top: 12px;}
-        button {
+    }
+
+        .heading button, button.clear {
             margin: 0 4px;
             padding: 4px 24px;
             flex: 0 1;
             border: none;
         }
-    }
+        button.clear { height: 1.5rem; padding: 0 24px; align-items: center; }
   .standards-box {
     flex: 1;
     padding-top: 8px;

@@ -19,9 +19,11 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		event.locals.user = null;
 		event.locals.session = null;
 		event.locals.accessCode = null;
-		db.insert(schema.event).values([newAnalytics]).returning().then(([res]) => {
-			console.log("Added new event", res)
-		})
+		if(!newAnalytics.navTo.includes('.png')) {
+			db.insert(schema.event).values([newAnalytics]).returning().then(([res]) => {
+				console.log("Added new event", res)
+			})
+		}
 
 		return resolve(event, {
 			preload: ({ type }) => type === 'font' || type === 'js' || type === 'css'

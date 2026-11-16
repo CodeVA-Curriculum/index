@@ -2,6 +2,7 @@
   import License from '$lib/components/License.svelte'
   import PDF from '$lib/components/PDF.svelte'
   import Download from '$lib/components/Download.svelte'
+  import Supporter from '$lib/components/Supporter.svelte'
   let { obj } = $props()
   const materials = [] //JSON.parse(obj.materials)
 </script>
@@ -15,7 +16,7 @@
 {/snippet}
 
 <div class='markdown-lesson'>
-{@html obj.content}
+  {@html obj.content}
   <License element={obj} />
 </div>
 

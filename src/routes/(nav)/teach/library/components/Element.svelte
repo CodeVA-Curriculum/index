@@ -20,14 +20,14 @@ import Help from '$lib/components/Help.svelte'
   </div>
   <div class='beside-image'>
     <div style='align-self: stretch;'>
-  <div class='thumbnail {locked ? "locked" : "unlocked"}'>
-    <img class="has-shadow" src="{obj.image}" >
-    {#if locked}
-    <div>
-    <span class='icon'><Fa size='4x' icon={faBoltLightning} /></span>
-    </div>
-    {/if}
-  </div>
+      <div class='thumbnail {locked ? "locked" : "unlocked"}'>
+        <img class="has-shadow" src="{obj.image}" >
+        {#if locked}
+          <div>
+            <span class='icon'><Fa size='4x' icon={faBoltLightning} /></span>
+          </div>
+        {/if}
+      </div>
   <div class='body {locked ? "locked" : "unlocked"}'>
     <h3>{obj.title}</h3>
     <p class='subtitle'>Grade {obj.gradesAbbr} {obj.types[0].title}</p>
@@ -109,7 +109,6 @@ import Help from '$lib/components/Help.svelte'
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
-    margin-left: 1rem;
     h3 {
       margin-bottom: 0;
       font-size: 18pt;
@@ -125,6 +124,7 @@ import Help from '$lib/components/Help.svelte'
     font-style: italic;
   }
   .thumbnail {
+    display: none; // NOTE: disabled
     float:left;
     width: 98px;
     align-items: center;
@@ -149,10 +149,10 @@ import Help from '$lib/components/Help.svelte'
     flex: 2 0 70%;
     padding-left: 1rem;
     padding-bottom: 0;
+    margin-bottom: 0;
     font-size: 14pt;
   }
   .stats {
-    flex: 0 1;
     border-left: 1px solid whitesmoke;
     justify-content: flex-start;
     gap: 0.5rem;

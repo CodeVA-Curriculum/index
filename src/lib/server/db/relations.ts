@@ -26,6 +26,14 @@ export const relations = defineRelations(schema, (r) => ({
 		lastEvent: r.one.event({
 			from: r.user.id,
 			to: r.event.userId
+		}),
+		completedProjects: r.many.project({
+			from: r.user.id.through(r.pivotUserProject.userId),
+			to: r.project.id.through(r.pivotUserProject.itemId)
+		}),
+		completedNodes: r.many.node({
+			from: r.user.id.through(r.user_to_node.userId),
+			to: r.node.id.through(r.user_to_node.itemId)
 		})
 	},
 	question: {
@@ -119,10 +127,6 @@ export const relations = defineRelations(schema, (r) => ({
 			from: r.project.id,
 			to: r.nodeToNodeGroup.projectId
 		}),
-		// order: r.many.nodeToNodeGroup({
-		// 	from: r.project.id,
-		// 	to: r.nodeToNodeGroup.projectId
-		// }),
 		guideObj: r.one.guide({
 			from: r.project.guide,
 			to: r.guide.id

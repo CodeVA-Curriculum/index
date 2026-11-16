@@ -32,7 +32,6 @@ export const load:PageLoad = async ({ params, locals }) => {
 
   const startNodes = nodes.filter((obj) => obj.recommended == true )
   if(startNodes.length == 0) { throw new Error("no start node! ")}
-  console.log(startNodes[0].path)
 
   // await applyPermissions(nodes)
   await applyPermissions(projects, nodes, locals.accessCode)

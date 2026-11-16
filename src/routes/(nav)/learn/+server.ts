@@ -7,7 +7,7 @@ import type { RequestHandler } from './$types';
 export const POST: RequestHandler = async ( { request, locals } ) => {
 	console.log("Got request to update data")
 	const req = await request.json()
-	const user = locals.user
+	const user = locals.session.userId
 	if(!user) { return json({
 		"Status": "Not logged in!"
 	})}
@@ -18,7 +18,7 @@ export const POST: RequestHandler = async ( { request, locals } ) => {
 			const table = req.type == "question" ? schema.user_to_question: schema.userToPrompt
 			res = await db.insert(table).values({
 				itemId: Number(req.itemId),
-				userId: user.id,
+				userId: user,
 				answer: req.answer,
 				complete: Boolean(req.complete)
 			}).returning()
@@ -29,7 +29,7 @@ export const POST: RequestHandler = async ( { request, locals } ) => {
 			const elTable = req.type == "node" ? schema.user_to_node : schema.pivotUserProject
 			res = await db.insert(elTable).values({
 				itemId: Number(req.itemId),
-				userId: user.id,
+				userId: user,
 				complete: Boolean(req.complete),
 			}).returning()
 			console.log("Added project/node", res)

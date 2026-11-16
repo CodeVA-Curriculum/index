@@ -4,6 +4,7 @@ import { getDbStandardsFromAbbrList } from '$lib/server/db'
 import { globby } from 'globby'
 import rehypeHighlight from 'rehype-highlight'
 import { codeAndImage } from '$lib/server/directives/codeAndImage'
+import { supporterCallout } from '$lib/server/directives/supporter.ts'
 import { embeddedPDFs } from '$lib/server/directives/embeddedPDFs'
 import { lessonPlan } from '$lib/server/directives/lessonPlan'
 import { downloadLink } from '$lib/server/directives/downloadLink'
@@ -25,6 +26,7 @@ export async function fileToElementObj(path:string):Promise<any> {
   let qt:string = ''
   let qs:object[] = []
   let ps:object[] = []
+  let supporters = []
   const file = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ['yaml'])
@@ -46,6 +48,7 @@ export async function fileToElementObj(path:string):Promise<any> {
       codeAndImage(tree, path)
       embeddedPDFs(tree, path)
       downloadLink(tree,path)
+      supporterCallout(tree, path)
       lessonPlan(tree, path, frontmatter)
     })
     .use(rehypeFormat)

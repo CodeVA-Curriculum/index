@@ -83,25 +83,13 @@
       startImage.textWrap('WORD')
       startImage.textAlign(p5.CENTER, p5.CENTER)
 
-      // Generate the startImage
-      const nodeWidth = 50
-      const radius = 125
-      const length = 125
-      // startImage.fill("#232323")
-      // startImage.stroke(0)
-      // startImage.strokeWeight(5)
-      // startImage.triangle(sw/2-radius/2, nodeWidth*1.5, sw/2+radius/2, nodeWidth*1.5, sw/2, nodeWidth*1.5 + length)
-      // startImage.circle(sw/2, nodeWidth*1.5, radius)
-      // startImage.strokeWeight(0)
-      // startImage.fill(255)
-      // startImage.text("Start Here", sw/4, nodeWidth*1.5, 100)
 
       for(const node of nodes) {
         node.setup(p5)
         node.completeImage = completeImage
       }
 
-      console.log(`Map center is at ${map.centerX}, ${map.centerY}`)
+      // console.log(`Map center is at ${map.centerX}, ${map.centerY}`)
       if(!view) {
         const startNode = map.elementsByPath[startPath]
         console.log(startNode)
