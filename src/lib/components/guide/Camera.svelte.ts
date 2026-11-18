@@ -79,7 +79,7 @@ export class Camera {
     }
     setCenter(factor:number) {
         this.ix = this.p5.displayWidth * factor
-        this.iy = this.p5.displayHeight * factor
+        this.iy = this.p5.displayHeight * 0.4
     }
 }
 

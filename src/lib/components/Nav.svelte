@@ -1,6 +1,5 @@
 <script lang='ts'>
   import LogInButton from '$lib/components/LogInButton.svelte'
-  import { dashboardURL } from '$lib'
   import { page } from '$app/state'
   let { session, user} = $props();
   let url = page.url.toString()

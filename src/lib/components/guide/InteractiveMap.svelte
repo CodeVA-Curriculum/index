@@ -47,6 +47,7 @@
     untrack(() => {
       const el = map.elementsByPath[view]
       if(camera && el) {
+        camera.setCenter(0.6)
         const location = camera.getScreenCoords({x: el.x, y: el.y})
         camera.moveCenterTo(location.x, location.y)
         let z = el.nodeGroups ? 0.25 : 1
@@ -72,6 +73,7 @@
       // selectOffset = -p5.displayWidth/12
       // p5.imageMode(p5.CENTER)
       camera = new Camera(p5, 1)
+      camera.setCenter(view ? 0.6 : 0.5)
       cursor = new Cursor()
       map.setup(camera)
       // font = await p5.loadFont('/fonts/calibri-regular.ttf')

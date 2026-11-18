@@ -1,5 +1,4 @@
 <script lang='ts'>
-  import { dashboardURL } from '$lib'
   import { page } from '$app/state'
   let { redirect, user, session } = $props()
   const key = 'V5QLBdKt5AYPU5Y7iMcDa5lQ1PLYYq7EdxfgjCP1sWcih1TGIl8vAYOLa7-vVr69dX_MNZirOMjUojYPd_4-BQ'
@@ -46,7 +45,7 @@
   </div>
 {:else}
   <div>
-  <a role="button" href={dashboardURL}>{user.username? user.username : session.alias } </a>
+  <a role="button" href="/account">{user.username? user.username : session.alias } </a>
   </div>
 {/if}
 </div>
