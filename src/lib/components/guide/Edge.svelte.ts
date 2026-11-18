@@ -52,7 +52,10 @@ export class Edge {
 
 
   }
-  draw(p5, arrow=true) {
+  draw(p5, config={
+    arrow: true,
+    hovering: false
+  }) {
     this.tick++
     p5.push()
     p5.stroke(this.to.locked || this.from.locked ? 200 : 0)
@@ -64,7 +67,7 @@ export class Edge {
     // p5.image(this.highlighted?  this.highlight: this.shape, this.x, this.y)
 
     // Draw arrows if one of connected nodes is selected
-    if((!this.to.selected && !this.from.selected) || !arrow) { return }
+    if((!this.to.selected && !this.from.selected) || !config.arrow) { return }
 
     const offset = Math.sin((this.tick % 400)/25) * 10
     const selected = this.to.selected ? this.to : this.from
@@ -82,7 +85,7 @@ export class Edge {
     const r = 60
     const a = p5.atan((selected.y-other.y)/(selected.x-other.x)) + (x <= selected.x ? 180 : 0)
     p5.fill(0)
-    p5.stroke('#f5f5f5')
+    p5.stroke(config.hovering ? '#cfedff' : '#f5f5f5')
     p5.triangle(
       x+p5.cos(0+a) * r,
       y+p5.sin(0+a) * r,
@@ -151,7 +154,8 @@ export class Edge {
     const ratio = radius / dist
     const x = p5.lerp(selected.x, other.x, ratio)
     const y = p5.lerp(selected.y, other.y, ratio)
-    return { x: x, y: y, radius: selected.radius }
+    const r = new Lerp(60)
+    return { x: x, y: y, radius: r}
   }
   generateOptionEdge(p5) {
     this.optionEdge.fill('rgba(0, 0, 0, 0)')

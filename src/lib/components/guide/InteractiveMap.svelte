@@ -130,10 +130,15 @@
         p5.strokeWeight(8)
         cursor.hovering = []
         for(const edge of edges) {
-          edge.draw(p5)
+          let hovering = false
           if((edge.to.selected || edge.from.selected) && cursor.over(edge.getHoverable(p5))) {
             cursor.hovering = [ edge ]
-          }
+            hovering = true
+          } 
+          edge.draw(p5, {
+            arrow: true,
+            hovering: hovering
+          })
         }
         for(const project of projects) {
           project.draw(p5)

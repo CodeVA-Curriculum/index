@@ -49,3 +49,8 @@ section { margin: $section-gap 0rem; }
   button.select, a[role='button'].select { background-color: gray; color: white; border-color: transparent; }
 }
 
+.two-column-list {
+    display: grid; 
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}

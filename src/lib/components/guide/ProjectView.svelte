@@ -61,13 +61,15 @@
       {#await loadMap then { default: MiniMap }}
       <Minimap view={pathParam} bind:map={mapObj} />
       <div class='selected-node'>
-      {#if back}
-        <div><a role="button" href={back}><span><Fa icon={faChevronLeft} /></span></a></div>
-      {/if}
-        {#if pathParam}
-        <ProjectListItem obj={mapObj.elementsByPath[pathParam]} />
+        {#if back}
+          <div class='btn-wrap'><a role="button" href={back}><span><Fa icon={faChevronLeft} /></span></a></div>
         {/if}
-        <div><a role="button" disabled={nextUp.length == 0} href="?view={nextUp[0].path}"><span><Fa icon={faChevronRight} /></span></a></div>
+        {#if pathParam}
+        <div>
+          <ProjectListItem obj={mapObj.elementsByPath[pathParam]} />
+        </div>
+        {/if}
+        <div class='btn-wrap'><a role="button" disabled={nextUp.length == 0} href="?view={nextUp[0].path}"><span><Fa icon={faChevronRight} /></span></a></div>
       </div>
       <h2>Next Up</h2>
       <div class='buttons'>
@@ -107,13 +109,16 @@
   }
   .selected-node {
     border: 3px dashed black;
-    width: 24rem;
     margin-bottom: 1rem;
     display: flex;
     align-items: stretch;
-    &  * { display: flex; flex: 1; margin: 0; padding: 0; text-align: center; }
+    &  * { display: flex; flex: 1; margin: 0; padding: 0; }
+    .btn-wrap {
+      flex: 0 1;
+    }
     a {
       color: $text;
+      margin: 0;
       align-items: center;
       padding: 12px;
       background-color: white;
@@ -149,7 +154,8 @@
   aside {
     border: 1px solid whitesmoke;
     position: relative;
-    // height: 100%;
+    width: 24rem;
+    height: 100%;
   }
   details.nomark > summary::after {
     display: none;

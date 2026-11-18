@@ -71,8 +71,8 @@ export const logInWithPortal = async (event) => {
   })
   const res = await validation.json()
   if(res.valid) {
-    console.log("Got user")
-    console.log(res)
+    console.log(`Got user ${res.email}`)
+    console.dir(res.products)
     // Log the user in to our side of things, which means adding a session to the database and making a cookie for it.
     const token = auth.generateSessionToken()
     let [result] = await db.select({
@@ -91,7 +91,7 @@ export const logInWithPortal = async (event) => {
       }).returning()
       const [accessCode] = await db.insert(tables.accessCode).values({
         alias: "NULL",
-        owner: 0,
+        owner: 0, // admin user
         check: user.email
       }).returning()
       await db.update(tables.user).set({ codeId: accessCode.id }).where(eq(tables.user.id, user.id))

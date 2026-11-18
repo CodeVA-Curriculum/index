@@ -23,7 +23,7 @@
   ]} />
   {/if}
 </section>
-<section>
+<section class='list'>
   {#each results as node}
     <div class='node'>
     <ProjectListItem map obj={node} />
@@ -32,8 +32,9 @@
 </section>
 </div>
 <style lang='scss'>
-  .node {
-    margin: 1rem 0;
+  @use "$lib/styles/layout.scss";
+  .list {
+    @extend .two-column-list;
   }
   .container {
     max-width: 786px;

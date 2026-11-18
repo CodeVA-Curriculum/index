@@ -67,7 +67,6 @@
   }
   article {
     margin: 0 0;
-    flex: 0 1;
   }
   article > p {
     margin-top: 1rem;

@@ -46,6 +46,9 @@ export async function seedGuides(db:any, schema:any) {
 
     if(file.path.includes('index.md')) {
       file.title = file.title + ' Trailhead'
+      if(canvas.nodes.filter(o => guideName + "/" + o.file == file.path).length == 0) {
+        throw new Error(`${file.path.replace('trailhead.md', 'index.md')} is not present in map!`)
+      }
       file.path = file.path.replace('index.md', 'trailhead.md')
     }
 

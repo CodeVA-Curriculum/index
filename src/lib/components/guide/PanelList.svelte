@@ -190,9 +190,7 @@
     margin: 1rem 1rem;
   }
   .lists {
-    display: grid; 
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    @extend .two-column-list;
     // overflow-y: scroll;
     padding: 0 1rem;
     & > * {
